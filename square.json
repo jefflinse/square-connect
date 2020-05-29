@@ -259,7 +259,7 @@
           "V1Employees"
         ],
         "summary": "ListEmployees",
-        "operationId": "ListEmployees",
+        "operationId": "V1ListEmployees",
         "description": "Provides summary information for all of a business\u0027s employees.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
@@ -396,7 +396,7 @@
           "V1Employees"
         ],
         "summary": "RetrieveEmployee",
-        "operationId": "RetrieveEmployee",
+        "operationId": "V1RetrieveEmployee",
         "description": "Provides the details for a single employee.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
@@ -481,7 +481,7 @@
           "V1Locations"
         ],
         "summary": "ListLocations",
-        "operationId": "ListLocations",
+        "operationId": "V1ListLocations",
         "description": "Provides details for all business locations associated with a Square\naccount, including the Square-assigned object ID for the location.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-locations)\n\n---",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
@@ -1032,7 +1032,7 @@
           "V1Transactions"
         ],
         "summary": "ListBankAccounts",
-        "operationId": "ListBankAccounts",
+        "operationId": "V1ListBankAccounts",
         "description": "Provides non-confidential details for all of a location\u0027s associated bank accounts. This endpoint does not provide full bank account numbers, and there is no way to obtain a full bank account number with the Connect API.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-bankaccounts)\n\n---",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
@@ -1125,7 +1125,7 @@
           "V1Employees"
         ],
         "summary": "ListCashDrawerShifts",
-        "operationId": "ListCashDrawerShifts",
+        "operationId": "V1ListCashDrawerShifts",
         "description": "Provides the details for all of a location\u0027s cash drawer shifts during a date range. The date range you specify cannot exceed 90 days.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-cashdrawershifts)\n\n---",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
@@ -1193,7 +1193,7 @@
           "V1Employees"
         ],
         "summary": "RetrieveCashDrawerShift",
-        "operationId": "RetrieveCashDrawerShift",
+        "operationId": "V1RetrieveCashDrawerShift",
         "description": "Provides the details for a single cash drawer shift, including all events that occurred during the shift.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-cashdrawershifts)\n\n---",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
@@ -3138,7 +3138,7 @@
           "V1Transactions"
         ],
         "summary": "UpdateOrder",
-        "operationId": "UpdateOrder",
+        "operationId": "V1UpdateOrder",
         "description": "Updates the details of an online store order. Every update you perform on an order corresponds to one of three actions:",
         "x-release-status": "PUBLIC",
         "x-visibility": "SDK_ONLY",
@@ -3512,7 +3512,7 @@
           "V1Transactions"
         ],
         "summary": "ListPayments",
-        "operationId": "ListPayments",
+        "operationId": "V1ListPayments",
         "description": "Provides summary information for all payments taken for a given\nSquare account during a date range. Date ranges cannot exceed 1 year in\nlength. See Date ranges for details of inclusive and exclusive dates.\n\n*Note**: Details for payments processed with Square Point of Sale while\nin offline mode may not be transmitted to Square for up to 72 hours.\nOffline payments have a `created_at` value that reflects the time the\npayment was originally processed, not the time it was subsequently\ntransmitted to Square. Consequently, the ListPayments endpoint might\nlist an offline payment chronologically between online payments that\nwere seen in a previous request.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
@@ -3642,7 +3642,7 @@
           "V1Transactions"
         ],
         "summary": "ListRefunds",
-        "operationId": "ListRefunds",
+        "operationId": "V1ListRefunds",
         "description": "Provides the details for all refunds initiated by a merchant or any of the merchant\u0027s mobile staff during a date range. Date ranges cannot exceed one year in length.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
@@ -3717,7 +3717,7 @@
           "V1Transactions"
         ],
         "summary": "CreateRefund",
-        "operationId": "CreateRefund",
+        "operationId": "V1CreateRefund",
         "description": "Issues a refund for a previously processed payment. You must issue\na refund within 60 days of the associated payment.\n\nYou cannot issue a partial refund for a split tender payment. You must\ninstead issue a full or partial refund for a particular tender, by\nproviding the applicable tender id to the V1CreateRefund endpoint.\nIssuing a full refund for a split tender payment refunds all tenders\nassociated with the payment.\n\nIssuing a refund for a card payment is not reversible. For development\npurposes, you can create fake cash payments in Square Point of Sale and\nrefund them.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [

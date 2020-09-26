@@ -6,8 +6,10 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ListDisputesRequest Defines request parameters for the ListDisputes endpoint.
@@ -25,6 +27,8 @@ type ListDisputesRequest struct {
 	// the endpoint returns all open disputes
 	// (dispute status is not `INQUIRY_CLOSED`, `WON`, or
 	// `LOST`) associated with all locations.
+	// Max Length: 40
+	// Min Length: 1
 	LocationID string `json:"location_id,omitempty"`
 
 	// The dispute states to filter the result.
@@ -37,6 +41,32 @@ type ListDisputesRequest struct {
 
 // Validate validates this list disputes request
 func (m *ListDisputesRequest) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateLocationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListDisputesRequest) validateLocationID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.LocationID) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("location_id", "body", string(m.LocationID), 1); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 40); err != nil {
+		return err
+	}
+
 	return nil
 }
 

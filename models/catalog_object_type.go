@@ -57,11 +57,17 @@ const (
 	// CatalogObjectTypeMEASUREMENTUNIT captures enum value "MEASUREMENT_UNIT"
 	CatalogObjectTypeMEASUREMENTUNIT CatalogObjectType = "MEASUREMENT_UNIT"
 
+	// CatalogObjectTypeSUBSCRIPTIONPLAN captures enum value "SUBSCRIPTION_PLAN"
+	CatalogObjectTypeSUBSCRIPTIONPLAN CatalogObjectType = "SUBSCRIPTION_PLAN"
+
 	// CatalogObjectTypeITEMOPTION captures enum value "ITEM_OPTION"
 	CatalogObjectTypeITEMOPTION CatalogObjectType = "ITEM_OPTION"
 
 	// CatalogObjectTypeITEMOPTIONVAL captures enum value "ITEM_OPTION_VAL"
 	CatalogObjectTypeITEMOPTIONVAL CatalogObjectType = "ITEM_OPTION_VAL"
+
+	// CatalogObjectTypeCUSTOMATTRIBUTEDEFINITION captures enum value "CUSTOM_ATTRIBUTE_DEFINITION"
+	CatalogObjectTypeCUSTOMATTRIBUTEDEFINITION CatalogObjectType = "CUSTOM_ATTRIBUTE_DEFINITION"
 
 	// CatalogObjectTypeQUICKAMOUNTSSETTINGS captures enum value "QUICK_AMOUNTS_SETTINGS"
 	CatalogObjectTypeQUICKAMOUNTSSETTINGS CatalogObjectType = "QUICK_AMOUNTS_SETTINGS"
@@ -72,7 +78,7 @@ var catalogObjectTypeEnum []interface{}
 
 func init() {
 	var res []CatalogObjectType
-	if err := json.Unmarshal([]byte(`["ITEM","IMAGE","CATEGORY","ITEM_VARIATION","TAX","DISCOUNT","MODIFIER_LIST","MODIFIER","PRICING_RULE","PRODUCT_SET","TIME_PERIOD","MEASUREMENT_UNIT","ITEM_OPTION","ITEM_OPTION_VAL","QUICK_AMOUNTS_SETTINGS"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["ITEM","IMAGE","CATEGORY","ITEM_VARIATION","TAX","DISCOUNT","MODIFIER_LIST","MODIFIER","PRICING_RULE","PRODUCT_SET","TIME_PERIOD","MEASUREMENT_UNIT","SUBSCRIPTION_PLAN","ITEM_OPTION","ITEM_OPTION_VAL","CUSTOM_ATTRIBUTE_DEFINITION","QUICK_AMOUNTS_SETTINGS"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

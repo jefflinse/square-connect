@@ -29,6 +29,8 @@ type Client struct {
 type ClientService interface {
 	BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveOrdersOK, error)
 
+	CalculateOrder(params *CalculateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateOrderOK, error)
+
 	CreateOrder(params *CreateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CreateOrderOK, error)
 
 	PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInfoWriter) (*PayOrderOK, error)
@@ -56,7 +58,7 @@ func (a *Client) BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "BatchRetrieveOrders",
 		Method:             "POST",
-		PathPattern:        "/v2/locations/{location_id}/orders/batch-retrieve",
+		PathPattern:        "/v2/orders/batch-retrieve",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -80,6 +82,43 @@ func (a *Client) BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo
 }
 
 /*
+  CalculateOrder calculates order
+
+  Calculates an [Order](#type-order).
+*/
+func (a *Client) CalculateOrder(params *CalculateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateOrderOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCalculateOrderParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "CalculateOrder",
+		Method:             "POST",
+		PathPattern:        "/v2/orders/calculate",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CalculateOrderReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CalculateOrderOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CalculateOrder: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   CreateOrder creates order
 
   Creates a new [Order](#type-order) which can include information on products for
@@ -89,9 +128,6 @@ To pay for a created order, please refer to the [Pay for Orders](/orders-api/pay
 guide.
 
 You can modify open orders using the [UpdateOrder](#endpoint-orders-updateorder) endpoint.
-
-To learn more about the Orders API, see the
-[Orders API Overview](/orders-api/what-it-does).
 */
 func (a *Client) CreateOrder(params *CreateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CreateOrderOK, error) {
 	// TODO: Validate the params before sending
@@ -102,7 +138,7 @@ func (a *Client) CreateOrder(params *CreateOrderParams, authInfo runtime.ClientA
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "CreateOrder",
 		Method:             "POST",
-		PathPattern:        "/v2/locations/{location_id}/orders",
+		PathPattern:        "/v2/orders",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -142,8 +178,6 @@ Any approved payments that reference the same `order_id` not specified in the
 `payment_ids` will be canceled.
 - Be approved with [delayed capture](/payments-api/take-payments#delayed-capture).
 Using a delayed capture payment with PayOrder will complete the approved payment.
-
-Learn how to [pay for orders with a single payment using the Payments API](/orders-api/pay-for-orders).
 */
 func (a *Client) PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInfoWriter) (*PayOrderOK, error) {
 	// TODO: Validate the params before sending
@@ -247,9 +281,6 @@ being applied to.
 identifying fields to clear.
 
 To pay for an order, please refer to the [Pay for Orders](/orders-api/pay-for-orders) guide.
-
-To learn more about the Orders API, see the
-[Orders API Overview](/orders-api/what-it-does).
 */
 func (a *Client) UpdateOrder(params *UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateOrderOK, error) {
 	// TODO: Validate the params before sending
@@ -260,7 +291,7 @@ func (a *Client) UpdateOrder(params *UpdateOrderParams, authInfo runtime.ClientA
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "UpdateOrder",
 		Method:             "PUT",
-		PathPattern:        "/v2/locations/{location_id}/orders/{order_id}",
+		PathPattern:        "/v2/orders/{order_id}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

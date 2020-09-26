@@ -49,7 +49,7 @@ type BatchRetrieveOrdersOK struct {
 }
 
 func (o *BatchRetrieveOrdersOK) Error() string {
-	return fmt.Sprintf("[POST /v2/locations/{location_id}/orders/batch-retrieve][%d] batchRetrieveOrdersOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /v2/orders/batch-retrieve][%d] batchRetrieveOrdersOK  %+v", 200, o.Payload)
 }
 
 func (o *BatchRetrieveOrdersOK) GetPayload() *models.BatchRetrieveOrdersResponse {

@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ListPaymentsRequest Retrieves a list of refunds taken by the account making the request.
+// ListPaymentsRequest Retrieves a list of payments taken by the account making the request.
 //
 // Max results per page: 100
 //
@@ -40,8 +40,16 @@ type ListPaymentsRequest struct {
 	// The last 4 digits of `Payment` card.
 	Last4 string `json:"last_4,omitempty"`
 
+	// Maximum number of results to be returned in a single page.
+	// It is possible to receive fewer results than the specified limit on a given page.
+	//
+	// If the supplied value is greater than 100, at most 100 results will be returned.
+	//
+	// Default: `100`
+	Limit int64 `json:"limit,omitempty"`
+
 	// Limit results to the location supplied. By default, results are returned
-	// for all locations associated with the merchant.
+	// for the default (main) location associated with the merchant.
 	LocationID string `json:"location_id,omitempty"`
 
 	// The order in which results are listed.

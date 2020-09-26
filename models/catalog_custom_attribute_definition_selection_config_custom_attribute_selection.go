@@ -18,7 +18,6 @@ import (
 type CatalogCustomAttributeDefinitionSelectionConfigCustomAttributeSelection struct {
 
 	// Selection name, unique within `allowed_selections`.
-	// Required. Min length of 1, max length of 255.
 	// Required: true
 	// Max Length: 255
 	// Min Length: 1

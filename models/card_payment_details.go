@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // CardPaymentDetails Reflects the current status of a card payment.
@@ -19,20 +20,25 @@ import (
 type CardPaymentDetails struct {
 
 	// For EMV payments, the cryptogram generated for the payment.
+	// Max Length: 16
 	ApplicationCryptogram string `json:"application_cryptogram,omitempty"`
 
 	// For EMV payments, identifies the EMV application used for the payment.
+	// Max Length: 32
 	ApplicationIdentifier string `json:"application_identifier,omitempty"`
 
 	// For EMV payments, the human-readable name of the EMV application used for the payment.
+	// Max Length: 16
 	ApplicationName string `json:"application_name,omitempty"`
 
 	// Status code returned by the card issuer that describes the payment's
 	// authorization status.
+	// Max Length: 10
 	AuthResultCode string `json:"auth_result_code,omitempty"`
 
 	// Status code returned from the Address Verification System (AVS) check. Can be
 	// `AVS_ACCEPTED`, `AVS_REJECTED`, `AVS_NOT_CHECKED`.
+	// Max Length: 50
 	AvsStatus string `json:"avs_status,omitempty"`
 
 	// The credit card's non-confidential details.
@@ -40,6 +46,7 @@ type CardPaymentDetails struct {
 
 	// Status code returned from the Card Verification Value (CVV) check. Can be
 	// `CVV_ACCEPTED`, `CVV_REJECTED`, `CVV_NOT_CHECKED`.
+	// Max Length: 50
 	CvvStatus string `json:"cvv_status,omitempty"`
 
 	// Details about the device that took the payment.
@@ -47,27 +54,36 @@ type CardPaymentDetails struct {
 
 	// The method used to enter the card's details for the payment.  Can be
 	// `KEYED`, `SWIPED`, `EMV`, `ON_FILE`, or `CONTACTLESS`.
+	// Max Length: 50
 	EntryMethod string `json:"entry_method,omitempty"`
 
 	// Information on errors encountered during the request.
 	Errors []*Error `json:"errors"`
 
+	// Whether or not the card is required to be physically present in order for the payment to
+	// be refunded.  If true, the card is required to be present.
+	RefundRequiresCardPresence bool `json:"refund_requires_card_presence,omitempty"`
+
 	// The statement description sent to the card networks.
 	//
 	// Note: The actual statement description will vary and is likely to be truncated and appended with
 	// additional information on a per issuer basis.
+	// Max Length: 50
 	StatementDescription string `json:"statement_description,omitempty"`
 
 	// The card payment's current state. It can be one of: `AUTHORIZED`, `CAPTURED`, `VOIDED`,
 	// `FAILED`.
+	// Max Length: 50
 	Status string `json:"status,omitempty"`
 
 	// For EMV payments, method used to verify the cardholder's identity.  Can be one of
 	// `PIN`, `SIGNATURE`, `PIN_AND_SIGNATURE`, `ON_DEVICE`, or `NONE`.
+	// Max Length: 50
 	VerificationMethod string `json:"verification_method,omitempty"`
 
 	// For EMV payments, the results of the cardholder verification.  Can be one of
 	// `SUCCESS`, `FAILURE`, or `UNKNOWN`.
+	// Max Length: 50
 	VerificationResults string `json:"verification_results,omitempty"`
 }
 
@@ -75,7 +91,31 @@ type CardPaymentDetails struct {
 func (m *CardPaymentDetails) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateApplicationCryptogram(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateApplicationIdentifier(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateApplicationName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAuthResultCode(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAvsStatus(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCard(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCvvStatus(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -83,13 +123,98 @@ func (m *CardPaymentDetails) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateEntryMethod(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateErrors(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStatementDescription(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStatus(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVerificationMethod(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVerificationResults(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CardPaymentDetails) validateApplicationCryptogram(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ApplicationCryptogram) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("application_cryptogram", "body", string(m.ApplicationCryptogram), 16); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateApplicationIdentifier(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ApplicationIdentifier) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("application_identifier", "body", string(m.ApplicationIdentifier), 32); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateApplicationName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ApplicationName) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("application_name", "body", string(m.ApplicationName), 16); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateAuthResultCode(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.AuthResultCode) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("auth_result_code", "body", string(m.AuthResultCode), 10); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateAvsStatus(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.AvsStatus) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("avs_status", "body", string(m.AvsStatus), 50); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -111,6 +236,19 @@ func (m *CardPaymentDetails) validateCard(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *CardPaymentDetails) validateCvvStatus(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CvvStatus) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("cvv_status", "body", string(m.CvvStatus), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *CardPaymentDetails) validateDeviceDetails(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.DeviceDetails) { // not required
@@ -124,6 +262,19 @@ func (m *CardPaymentDetails) validateDeviceDetails(formats strfmt.Registry) erro
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateEntryMethod(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.EntryMethod) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("entry_method", "body", string(m.EntryMethod), 50); err != nil {
+		return err
 	}
 
 	return nil
@@ -149,6 +300,58 @@ func (m *CardPaymentDetails) validateErrors(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateStatementDescription(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.StatementDescription) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("statement_description", "body", string(m.StatementDescription), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateStatus(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Status) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("status", "body", string(m.Status), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateVerificationMethod(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.VerificationMethod) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("verification_method", "body", string(m.VerificationMethod), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *CardPaymentDetails) validateVerificationResults(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.VerificationResults) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("verification_results", "body", string(m.VerificationResults), 50); err != nil {
+		return err
 	}
 
 	return nil

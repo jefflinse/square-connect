@@ -116,8 +116,7 @@ func (a *Client) ListPaymentRefunds(params *ListPaymentRefundsParams, authInfo r
   RefundPayment refunds payment
 
   Refunds a payment. You can refund the entire payment amount or a
-portion of it. For more information, see
-[Payments and Refunds Overview](/payments-api/overview).
+portion of it.
 */
 func (a *Client) RefundPayment(params *RefundPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*RefundPaymentOK, error) {
 	// TODO: Validate the params before sending

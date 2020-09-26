@@ -27,15 +27,11 @@ type Shift struct {
 	// A read-only timestamp in RFC 3339 format; presented in UTC.
 	CreatedAt string `json:"created_at,omitempty"`
 
-	// The ID of the employee this shift belongs to.
-	// Required: true
-	// Min Length: 1
-	EmployeeID *string `json:"employee_id"`
+	// The ID of the employee this shift belongs to. DEPRECATED at version 2020-08-26. Use `team_member_id` instead
+	EmployeeID string `json:"employee_id,omitempty"`
 
 	// RFC 3339; shifted to timezone + offset. Precision up to the minute is
-	// respected; seconds are truncated. The `end_at` minute is not
-	// counted when the shift length is calculated. For example, a shift from `00:00`
-	// to `08:01` is considered an 8 hour shift (midnight to 8am).
+	// respected; seconds are truncated.
 	EndAt string `json:"end_at,omitempty"`
 
 	// UUID for this object
@@ -55,6 +51,9 @@ type Shift struct {
 	// Describes working state of the current `Shift`.
 	// See [ShiftStatus](#type-shiftstatus) for possible values
 	Status string `json:"status,omitempty"`
+
+	// The ID of the team member this shift belongs to. Replaced `employee_id` at version "2020-08-26"
+	TeamMemberID string `json:"team_member_id,omitempty"`
 
 	// Read-only convenience value that is calculated from the location based
 	// on `location_id`. Format: the IANA Timezone Database identifier for the
@@ -81,10 +80,6 @@ func (m *Shift) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateBreaks(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateEmployeeID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -126,19 +121,6 @@ func (m *Shift) validateBreaks(formats strfmt.Registry) error {
 			}
 		}
 
-	}
-
-	return nil
-}
-
-func (m *Shift) validateEmployeeID(formats strfmt.Registry) error {
-
-	if err := validate.Required("employee_id", "body", m.EmployeeID); err != nil {
-		return err
-	}
-
-	if err := validate.MinLength("employee_id", "body", string(*m.EmployeeID), 1); err != nil {
-		return err
 	}
 
 	return nil

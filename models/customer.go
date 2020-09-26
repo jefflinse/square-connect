@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // Customer Represents a Square customer profile, which can have one or more
@@ -36,8 +35,7 @@ type Customer struct {
 	CompanyName string `json:"company_name,omitempty"`
 
 	// The timestamp when the customer profile was created, in RFC 3339 format.
-	// Required: true
-	CreatedAt *string `json:"created_at"`
+	CreatedAt string `json:"created_at,omitempty"`
 
 	// A creation source represents the method used to create the
 	// customer profile.
@@ -56,12 +54,11 @@ type Customer struct {
 	// The IDs of customer groups the customer belongs to.
 	GroupIds []string `json:"group_ids"`
 
-	// The customer groups and segments the customer belongs to. This deprecated field is replaced with dedicated `group_ids` for customer groups and `segment_ids` for customer segments.
+	// The customer groups and segments the customer belongs to. This deprecated field has been replaced with  the dedicated `group_ids` for customer groups and the dedicated `segment_ids` field for customer segments. You can retrieve information about a given customer group and segment respectively using the Customer Groups API and Customer Segments API.
 	Groups []*CustomerGroupInfo `json:"groups"`
 
 	// A unique Square-assigned ID for the customer profile.
-	// Required: true
-	ID *string `json:"id"`
+	ID string `json:"id,omitempty"`
 
 	// A nickname for the customer profile.
 	Nickname string `json:"nickname,omitempty"`
@@ -83,8 +80,7 @@ type Customer struct {
 	SegmentIds []string `json:"segment_ids"`
 
 	// The timestamp when the customer profile was last updated, in RFC 3339 format.
-	// Required: true
-	UpdatedAt *string `json:"updated_at"`
+	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 // Validate validates this customer
@@ -99,23 +95,11 @@ func (m *Customer) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateCreatedAt(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateGroups(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateID(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validatePreferences(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateUpdatedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -168,15 +152,6 @@ func (m *Customer) validateCards(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Customer) validateCreatedAt(formats strfmt.Registry) error {
-
-	if err := validate.Required("created_at", "body", m.CreatedAt); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (m *Customer) validateGroups(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Groups) { // not required
@@ -202,15 +177,6 @@ func (m *Customer) validateGroups(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Customer) validateID(formats strfmt.Registry) error {
-
-	if err := validate.Required("id", "body", m.ID); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (m *Customer) validatePreferences(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Preferences) { // not required
@@ -224,15 +190,6 @@ func (m *Customer) validatePreferences(formats strfmt.Registry) error {
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *Customer) validateUpdatedAt(formats strfmt.Registry) error {
-
-	if err := validate.Required("updated_at", "body", m.UpdatedAt); err != nil {
-		return err
 	}
 
 	return nil

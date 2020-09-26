@@ -34,6 +34,7 @@ type AdditionalRecipient struct {
 	LocationID *string `json:"location_id"`
 
 	// The unique ID for this `AdditionalRecipientReceivable`, assigned by the server.
+	// Max Length: 192
 	ReceivableID string `json:"receivable_id,omitempty"`
 }
 
@@ -50,6 +51,10 @@ func (m *AdditionalRecipient) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateLocationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateReceivableID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -105,6 +110,19 @@ func (m *AdditionalRecipient) validateLocationID(formats strfmt.Registry) error 
 	}
 
 	if err := validate.MaxLength("location_id", "body", string(*m.LocationID), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *AdditionalRecipient) validateReceivableID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ReceivableID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("receivable_id", "body", string(m.ReceivableID), 192); err != nil {
 		return err
 	}
 

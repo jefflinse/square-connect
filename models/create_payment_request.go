@@ -80,9 +80,8 @@ type CreatePaymentRequest struct {
 	// Max Length: 255
 	BuyerEmailAddress string `json:"buyer_email_address,omitempty"`
 
-	// The ID of the customer associated with the payment.
-	// Required if the `source_id` refers to a card on file created using the
-	// Customers API.
+	// The `Customer` ID of the customer associated with the payment.
+	// Required if the `source_id` refers to a card on file created using the Customers API.
 	CustomerID string `json:"customer_id,omitempty"`
 
 	// The duration of time after the payment's creation when Square automatically cancels the
@@ -106,6 +105,9 @@ type CreatePaymentRequest struct {
 	// but must be unique for every CreatePayment request.
 	//
 	// Max: 45 characters
+	//
+	// Note: The number of allowed characters might be less than the stated maximum, if multi-byte
+	// characters are used.
 	//
 	// See [Idempotency keys](https://developer.squareup.com/docs/basics/api101/idempotency) for more information.
 	// Required: true
@@ -147,9 +149,7 @@ type CreatePaymentRequest struct {
 	// as part of statement description. This can be, for example, an invoice number, ticket number,
 	// or short description that uniquely identifies the purchase.
 	//
-	// Limit 20 characters.
-	//
-	// Note that the statement_description_identifier may get truncated on the statement description
+	// Note that the `statement_description_identifier` may get truncated on the statement description
 	// to fit the required information including the Square identifier (SQ *) and name of the
 	// merchant taking the payment.
 	// Max Length: 20

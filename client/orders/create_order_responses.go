@@ -49,7 +49,7 @@ type CreateOrderOK struct {
 }
 
 func (o *CreateOrderOK) Error() string {
-	return fmt.Sprintf("[POST /v2/locations/{location_id}/orders][%d] createOrderOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /v2/orders][%d] createOrderOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateOrderOK) GetPayload() *models.CreateOrderResponse {

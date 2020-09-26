@@ -11,50 +11,60 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CatalogQuery A query to be applied to a `SearchCatalogObjectsRequest`.
-// Only one query field may be present.
+// CatalogQuery A query composed of one or more different types of filters to narrow the scope of targeted objects when calling the `SearchCatalogObjects` endpoint.
 //
-// Where an attribute name is required, it should be specified as the name of any field
-// marked "searchable" from the structured data types for the desired result object type(s)
-// (`CatalogItem`, `CatalogItemVariation`, `CatalogCategory`, `CatalogTax`,
-// `CatalogDiscount`, `CatalogModifierList`, `CatalogModifier`).
+// Although a query can have multiple filters, only one query is allowed per call to [SearchCatalogObjects](#endpoint-Catalog-SearchCatalogObjects).
 //
-// For example, a query that should return Items may specify attribute names from
-// any of the searchable fields of the `CatalogItem` data type, namely
-// `"name"`, `"description"`, and `"abbreviation"`.
+// When a query filter is based on an attribute, the attribute must be searchable.
+// Searchable attributes are listed as follows, along their parent types that can be searched for with applicable query filters.
+//
+// Searchable attribute and objects queryable by searchable attributes **
+// - `name`:  `CatalogItem`, `CatalogItemVariation`, `CatelogCatogry`, `CatalogTax`, `CatalogDiscount`, `CatalogModifier`, 'CatalogModifierList`, `CatalogItemOption`, `CatalogItemOptionValue`
+// - `description`: `CatalogItem`, `CatalogItemOptionValue`
+// - `abbreviation`: `CatalogItem`
+// - `upc`: `CatalogItemVariation`
+// - `sku`: `CatalogItemVariation`
+// - `caption`: `CatalogImage`
+// - `display_name`: `CatalogItemOption`
+//
+// For example, to search for [CatalogItem](#type-CatalogItem) objects by searchable attributes, you can use
+// the `"name"`, `"description"`, or `"abbreviation"` attribute in an applicable query filter.
 //
 // swagger:model CatalogQuery
 type CatalogQuery struct {
 
-	// A query that returns only objects for which the given (string-valued) attribute has the
-	// given case-insensitive value.
+	// An exact query expression to return objects with attribute name and value
+	// matching the specified attribute name and value exactly. Value matching is case insensitive.
 	ExactQuery *CatalogQueryExact `json:"exact_query,omitempty"`
 
-	// A query that returns all `CatalogItemVariation`s that have all of the given `CatalogItemOption` values.
+	// A query expression to return item variations (of the `CatalogItemVariation` that
+	// contain all of the specified `CatalogItemOption` IDs.
 	ItemVariationsForItemOptionValuesQuery *CatalogQueryItemVariationsForItemOptionValues `json:"item_variations_for_item_option_values_query,omitempty"`
 
-	// A query that returns all `CatalogItem`s that have all of the given `CatalogItemOption`s.
+	// A query expression to return items that contains the specified item options (as identified the corresponding `CatalogItemOption` IDs).
 	ItemsForItemOptionsQuery *CatalogQueryItemsForItemOptions `json:"items_for_item_options_query,omitempty"`
 
-	// A query that returns all `CatalogItem`s that have any of the given `CatalogModifierList`s enabled.
+	// A query expression to return items that have any of the given modifier list (as identifieid by the coresponding `CatalogModifierList`s IDs) enabled.
 	ItemsForModifierListQuery *CatalogQueryItemsForModifierList `json:"items_for_modifier_list_query,omitempty"`
 
-	// A query that returns all `CatalogItem`s that have any of the given `CatalogTax`es enabled.
+	// A query expression to return items that have any of the specified taxes (as identified by the corresponding `CatalogTax` object IDs) enabled.
 	ItemsForTaxQuery *CatalogQueryItemsForTax `json:"items_for_tax_query,omitempty"`
 
-	// A query that returns only objects for which the given (string-valued) attribute has the
-	// given case-insensitive prefix.
+	// A prefix query expression to return objects with attribute values
+	// that have a prefix matching the specified string value. Value maching is case insensitive.
 	PrefixQuery *CatalogQueryPrefix `json:"prefix_query,omitempty"`
 
-	// A query that returns only objects for which the given (integer-valued) attribute lies in the given range.
+	// A range query expression to return objects with numberic values
+	// that lie in the specified range.
 	RangeQuery *CatalogQueryRange `json:"range_query,omitempty"`
 
-	// A query that returns all objects, sorted by the given attribute.
+	// A query expression to sort returned query result by the given attribute.
 	SortedAttributeQuery *CatalogQuerySortedAttribute `json:"sorted_attribute_query,omitempty"`
 
-	// A query that returns only objects whose searchable attributes contain all of the given
-	// keywords as prefixes. For example, if a `CatalogItem` contains attributes `{"name": "t-shirt"}` and
-	// `{"description": "Small, Purple"}`, it will be matched by the query `{"keywords": ["shirt", "sma", "purp"]}`.
+	// A text query expression to return objectd whose searchable attributes contain all of the given
+	// keywords, irrespective of their order. For example, if a `CatalogItem` contains custom attribute values of
+	// `{"name": "t-shirt"}` and `{"description": "Small, Purple"}`, the query filter of `{"keywords": ["shirt", "sma", "purp"]}`
+	// returns this item.
 	TextQuery *CatalogQueryText `json:"text_query,omitempty"`
 }
 

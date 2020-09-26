@@ -22,7 +22,7 @@ type OrderFulfillmentShipmentDetails struct {
 	CancelReason string `json:"cancel_reason,omitempty"`
 
 	// The [timestamp](#workingwithdates) indicating the shipment was canceled.
-	// Must be in RFC3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
+	// Must be in RFC 3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
 	CanceledAt string `json:"canceled_at,omitempty"`
 
 	// The shipping carrier being used to ship this fulfillment
@@ -31,12 +31,12 @@ type OrderFulfillmentShipmentDetails struct {
 	Carrier string `json:"carrier,omitempty"`
 
 	// The [timestamp](#workingwithdates) indicating when the shipment is
-	// expected to be delivered to the shipping carrier. Must be in RFC3339 timestamp
+	// expected to be delivered to the shipping carrier. Must be in RFC 3339 timestamp
 	// format, e.g., "2016-09-04T23:59:33.123Z".
 	ExpectedShippedAt string `json:"expected_shipped_at,omitempty"`
 
 	// The [timestamp](#workingwithdates) indicating when the shipment
-	// failed to be completed. Must be in RFC3339 timestamp format, e.g.,
+	// failed to be completed. Must be in RFC 3339 timestamp format, e.g.,
 	// "2016-09-04T23:59:33.123Z".
 	FailedAt string `json:"failed_at,omitempty"`
 
@@ -46,16 +46,16 @@ type OrderFulfillmentShipmentDetails struct {
 
 	// The [timestamp](#workingwithdates) indicating when this fulfillment was
 	// moved to the `RESERVED` state. Indicates that preparation of this shipment has begun.
-	// Must be in RFC3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
+	// Must be in RFC 3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
 	InProgressAt string `json:"in_progress_at,omitempty"`
 
 	// The [timestamp](#workingwithdates) indicating when this fulfillment
 	// was moved to the `PREPARED` state. Indicates that the fulfillment is packaged.
-	// Must be in RFC3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
+	// Must be in RFC 3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
 	PackagedAt string `json:"packaged_at,omitempty"`
 
 	// The [timestamp](#workingwithdates) indicating when the shipment was
-	// requested. Must be in RFC3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
+	// requested. Must be in RFC 3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
 	PlacedAt string `json:"placed_at,omitempty"`
 
 	// Information on the person meant to receive this shipment fulfillment.
@@ -63,7 +63,7 @@ type OrderFulfillmentShipmentDetails struct {
 
 	// The [timestamp](#workingwithdates) indicating when this fulfillment
 	// was moved to the `COMPLETED`state. Indicates that the fulfillment has been given
-	// to the shipping carrier. Must be in RFC3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
+	// to the shipping carrier. Must be in RFC 3339 timestamp format, e.g., "2016-09-04T23:59:33.123Z".
 	ShippedAt string `json:"shipped_at,omitempty"`
 
 	// A note with additional information for the shipping carrier.

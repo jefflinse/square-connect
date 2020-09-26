@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewListPaymentRefundsParams creates a new ListPaymentRefundsParams object
@@ -82,8 +83,19 @@ type ListPaymentRefundsParams struct {
 
 	*/
 	EndTime *string
+	/*Limit
+	  Maximum number of results to be returned in a single page.
+	It is possible to receive fewer results than the specified limit on a given page.
+
+	If the supplied value is greater than 100, at most 100 results will be returned.
+
+	Default: `100`
+
+	*/
+	Limit *int64
 	/*LocationID
-	  ID of location associated with payment.
+	  Limit results to the location supplied. By default, results are returned
+	for all locations associated with the merchant.
 
 	*/
 	LocationID *string
@@ -183,6 +195,17 @@ func (o *ListPaymentRefundsParams) SetEndTime(endTime *string) {
 	o.EndTime = endTime
 }
 
+// WithLimit adds the limit to the list payment refunds params
+func (o *ListPaymentRefundsParams) WithLimit(limit *int64) *ListPaymentRefundsParams {
+	o.SetLimit(limit)
+	return o
+}
+
+// SetLimit adds the limit to the list payment refunds params
+func (o *ListPaymentRefundsParams) SetLimit(limit *int64) {
+	o.Limit = limit
+}
+
 // WithLocationID adds the locationID to the list payment refunds params
 func (o *ListPaymentRefundsParams) WithLocationID(locationID *string) *ListPaymentRefundsParams {
 	o.SetLocationID(locationID)
@@ -277,6 +300,22 @@ func (o *ListPaymentRefundsParams) WriteToRequest(r runtime.ClientRequest, reg s
 		qEndTime := qrEndTime
 		if qEndTime != "" {
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if o.Limit != nil {
+
+		// query param limit
+		var qrLimit int64
+		if o.Limit != nil {
+			qrLimit = *o.Limit
+		}
+		qLimit := swag.FormatInt64(qrLimit)
+		if qLimit != "" {
+			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}

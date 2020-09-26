@@ -69,11 +69,6 @@ type CreateOrderParams struct {
 
 	*/
 	Body *models.CreateOrderRequest
-	/*LocationID
-	  The ID of the business location to associate the order with.
-
-	*/
-	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -124,17 +119,6 @@ func (o *CreateOrderParams) SetBody(body *models.CreateOrderRequest) {
 	o.Body = body
 }
 
-// WithLocationID adds the locationID to the create order params
-func (o *CreateOrderParams) WithLocationID(locationID string) *CreateOrderParams {
-	o.SetLocationID(locationID)
-	return o
-}
-
-// SetLocationID adds the locationId to the create order params
-func (o *CreateOrderParams) SetLocationID(locationID string) {
-	o.LocationID = locationID
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *CreateOrderParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -147,11 +131,6 @@ func (o *CreateOrderParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
 		}
-	}
-
-	// path param location_id
-	if err := r.SetPathParam("location_id", o.LocationID); err != nil {
-		return err
 	}
 
 	if len(res) > 0 {

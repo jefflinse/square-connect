@@ -27,15 +27,18 @@ type Refund struct {
 	// Required: true
 	AmountMoney *Money `json:"amount_money"`
 
-	// The time when the refund was created, in RFC 3339 format.
+	// The timestamp for when the refund was created, in RFC 3339 format.
+	// Max Length: 32
 	CreatedAt string `json:"created_at,omitempty"`
 
 	// The refund's unique ID.
 	// Required: true
+	// Max Length: 255
 	ID *string `json:"id"`
 
 	// The ID of the refund's associated location.
 	// Required: true
+	// Max Length: 50
 	LocationID *string `json:"location_id"`
 
 	// The amount of Square processing fee money refunded to the *merchant*.
@@ -43,6 +46,7 @@ type Refund struct {
 
 	// The reason for the refund being issued.
 	// Required: true
+	// Max Length: 192
 	Reason *string `json:"reason"`
 
 	// The current status of the refund (`PENDING`, `APPROVED`, `REJECTED`,
@@ -53,10 +57,12 @@ type Refund struct {
 
 	// The ID of the refunded tender.
 	// Required: true
+	// Max Length: 192
 	TenderID *string `json:"tender_id"`
 
 	// The ID of the transaction that the refunded tender is part of.
 	// Required: true
+	// Max Length: 192
 	TransactionID *string `json:"transaction_id"`
 }
 
@@ -69,6 +75,10 @@ func (m *Refund) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateAmountMoney(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -149,9 +159,26 @@ func (m *Refund) validateAmountMoney(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Refund) validateCreatedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 32); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Refund) validateID(formats strfmt.Registry) error {
 
 	if err := validate.Required("id", "body", m.ID); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("id", "body", string(*m.ID), 255); err != nil {
 		return err
 	}
 
@@ -161,6 +188,10 @@ func (m *Refund) validateID(formats strfmt.Registry) error {
 func (m *Refund) validateLocationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("location_id", "body", m.LocationID); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("location_id", "body", string(*m.LocationID), 50); err != nil {
 		return err
 	}
 
@@ -191,6 +222,10 @@ func (m *Refund) validateReason(formats strfmt.Registry) error {
 		return err
 	}
 
+	if err := validate.MaxLength("reason", "body", string(*m.Reason), 192); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -209,12 +244,20 @@ func (m *Refund) validateTenderID(formats strfmt.Registry) error {
 		return err
 	}
 
+	if err := validate.MaxLength("tender_id", "body", string(*m.TenderID), 192); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (m *Refund) validateTransactionID(formats strfmt.Registry) error {
 
 	if err := validate.Required("transaction_id", "body", m.TransactionID); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("transaction_id", "body", string(*m.TransactionID), 192); err != nil {
 		return err
 	}
 

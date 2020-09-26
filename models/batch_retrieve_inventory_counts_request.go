@@ -15,8 +15,8 @@ import (
 // swagger:model BatchRetrieveInventoryCountsRequest
 type BatchRetrieveInventoryCountsRequest struct {
 
-	// Filters results by `CatalogObject` ID.
-	// Only applied when set. Default: unset.
+	// The filter to return results by `CatalogObject` ID.
+	// The filter is applicable only when set.  The default is null.
 	CatalogObjectIds []string `json:"catalog_object_ids"`
 
 	// A pagination cursor returned by a previous call to this endpoint.
@@ -25,13 +25,19 @@ type BatchRetrieveInventoryCountsRequest struct {
 	// See the [Pagination](https://developer.squareup.com/docs/working-with-apis/pagination) guide for more information.
 	Cursor string `json:"cursor,omitempty"`
 
-	// Filters results by `Location` ID. Only
-	// applied when set. Default: unset.
+	// The filter to return results by `Location` ID.
+	// This filter is applicable only when set. The default is null.
 	LocationIds []string `json:"location_ids"`
 
-	// Provided as an RFC 3339 timestamp. Returns results whose
-	// `calculated_at` value is after the given time. Default: UNIX epoch
-	// (`1970-01-01T00:00:00Z`).
+	// The filter to return results by `InventoryState`. The filter is only applicable when set.
+	// Ignored are untracked states of `NONE`, `SOLD`, and `UNLINKED_RETURN`.
+	// The default is null.
+	// See [InventoryState](#type-inventorystate) for possible values
+	States []string `json:"states"`
+
+	// The filter to return results with their `calculated_at` value
+	// after the given time as specified in an RFC 3339 timestamp.
+	// The default value is the UNIX epoch of (`1970-01-01T00:00:00Z`).
 	UpdatedAfter string `json:"updated_after,omitempty"`
 }
 

@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CustomerSortField Indicates the sort criteria for a list of Customers.
+// CustomerSortField Specifies customer attributes as the sort key to customer profiles returned from a search.
 //
 // swagger:model CustomerSortField
 type CustomerSortField string

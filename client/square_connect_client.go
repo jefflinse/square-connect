@@ -22,15 +22,18 @@ import (
 	"github.com/jefflinse/square-connect/client/disputes"
 	"github.com/jefflinse/square-connect/client/employees"
 	"github.com/jefflinse/square-connect/client/inventory"
+	"github.com/jefflinse/square-connect/client/invoices"
 	"github.com/jefflinse/square-connect/client/labor"
 	"github.com/jefflinse/square-connect/client/locations"
+	"github.com/jefflinse/square-connect/client/loyalty"
 	"github.com/jefflinse/square-connect/client/merchants"
 	"github.com/jefflinse/square-connect/client/mobile_authorization"
 	"github.com/jefflinse/square-connect/client/o_auth"
 	"github.com/jefflinse/square-connect/client/orders"
 	"github.com/jefflinse/square-connect/client/payments"
 	"github.com/jefflinse/square-connect/client/refunds"
-	"github.com/jefflinse/square-connect/client/reporting"
+	"github.com/jefflinse/square-connect/client/subscriptions"
+	"github.com/jefflinse/square-connect/client/team"
 	"github.com/jefflinse/square-connect/client/terminal"
 	"github.com/jefflinse/square-connect/client/transactions"
 	"github.com/jefflinse/square-connect/client/v1_employees"
@@ -93,15 +96,18 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SquareConn
 	cli.Disputes = disputes.New(transport, formats)
 	cli.Employees = employees.New(transport, formats)
 	cli.Inventory = inventory.New(transport, formats)
+	cli.Invoices = invoices.New(transport, formats)
 	cli.Labor = labor.New(transport, formats)
 	cli.Locations = locations.New(transport, formats)
+	cli.Loyalty = loyalty.New(transport, formats)
 	cli.Merchants = merchants.New(transport, formats)
 	cli.MobileAuthorization = mobile_authorization.New(transport, formats)
 	cli.OAuth = o_auth.New(transport, formats)
 	cli.Orders = orders.New(transport, formats)
 	cli.Payments = payments.New(transport, formats)
 	cli.Refunds = refunds.New(transport, formats)
-	cli.Reporting = reporting.New(transport, formats)
+	cli.Subscriptions = subscriptions.New(transport, formats)
+	cli.Team = team.New(transport, formats)
 	cli.Terminal = terminal.New(transport, formats)
 	cli.Transactions = transactions.New(transport, formats)
 	cli.V1Employees = v1_employees.New(transport, formats)
@@ -176,9 +182,13 @@ type SquareConnect struct {
 
 	Inventory inventory.ClientService
 
+	Invoices invoices.ClientService
+
 	Labor labor.ClientService
 
 	Locations locations.ClientService
+
+	Loyalty loyalty.ClientService
 
 	Merchants merchants.ClientService
 
@@ -192,7 +202,9 @@ type SquareConnect struct {
 
 	Refunds refunds.ClientService
 
-	Reporting reporting.ClientService
+	Subscriptions subscriptions.ClientService
+
+	Team team.ClientService
 
 	Terminal terminal.ClientService
 
@@ -224,15 +236,18 @@ func (c *SquareConnect) SetTransport(transport runtime.ClientTransport) {
 	c.Disputes.SetTransport(transport)
 	c.Employees.SetTransport(transport)
 	c.Inventory.SetTransport(transport)
+	c.Invoices.SetTransport(transport)
 	c.Labor.SetTransport(transport)
 	c.Locations.SetTransport(transport)
+	c.Loyalty.SetTransport(transport)
 	c.Merchants.SetTransport(transport)
 	c.MobileAuthorization.SetTransport(transport)
 	c.OAuth.SetTransport(transport)
 	c.Orders.SetTransport(transport)
 	c.Payments.SetTransport(transport)
 	c.Refunds.SetTransport(transport)
-	c.Reporting.SetTransport(transport)
+	c.Subscriptions.SetTransport(transport)
+	c.Team.SetTransport(transport)
 	c.Terminal.SetTransport(transport)
 	c.Transactions.SetTransport(transport)
 	c.V1Employees.SetTransport(transport)

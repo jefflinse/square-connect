@@ -12,17 +12,18 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQueryExact catalog query exact
+// CatalogQueryExact The query filter to return the serch result by exact match of the specified attribute name and value.
 //
 // swagger:model CatalogQueryExact
 type CatalogQueryExact struct {
 
-	// The name of the attribute to be searched.
+	// The name of the attribute to be searched. Matching of the attribute name is exact.
 	// Required: true
 	// Min Length: 1
 	AttributeName *string `json:"attribute_name"`
 
-	// The desired value of the search attribute.
+	// The desired value of the search attribute. Matching of the attribute value is case insensitive and can be partial.
+	// For example, if a specified value of "sma", objects with the named attribute value of "Small", "small" are both matched.
 	// Required: true
 	AttributeValue *string `json:"attribute_value"`
 }

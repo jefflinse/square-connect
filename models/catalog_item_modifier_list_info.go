@@ -14,8 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogItemModifierListInfo Controls the properties of a `CatalogModifierList` as it applies to
-// this `CatalogItem`.
+// CatalogItemModifierListInfo Options to control the properties of a `CatalogModifierList` applied to a `CatalogItem` instance.
 //
 // swagger:model CatalogItemModifierListInfo
 type CatalogItemModifierListInfo struct {

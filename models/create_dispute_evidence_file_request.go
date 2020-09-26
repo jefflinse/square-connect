@@ -19,6 +19,8 @@ type CreateDisputeEvidenceFileRequest struct {
 
 	// The MIME type of the uploaded file.
 	// One of image/heic, image/heif, image/jpeg, application/pdf,  image/png, image/tiff.
+	// Max Length: 40
+	// Min Length: 1
 	ContentType string `json:"content_type,omitempty"`
 
 	// The type of evidence you are uploading.
@@ -37,6 +39,10 @@ type CreateDisputeEvidenceFileRequest struct {
 func (m *CreateDisputeEvidenceFileRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateContentType(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateIdempotencyKey(formats); err != nil {
 		res = append(res, err)
 	}
@@ -44,6 +50,23 @@ func (m *CreateDisputeEvidenceFileRequest) Validate(formats strfmt.Registry) err
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CreateDisputeEvidenceFileRequest) validateContentType(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ContentType) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("content_type", "body", string(m.ContentType), 1); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("content_type", "body", string(m.ContentType), 40); err != nil {
+		return err
+	}
+
 	return nil
 }
 

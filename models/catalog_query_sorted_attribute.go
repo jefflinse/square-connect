@@ -12,12 +12,12 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQuerySortedAttribute catalog query sorted attribute
+// CatalogQuerySortedAttribute The query expression to specify the key to sort search results.
 //
 // swagger:model CatalogQuerySortedAttribute
 type CatalogQuerySortedAttribute struct {
 
-	// The attribute whose value should be used as the sort key.
+	// The attribute whose value is used as the sort key.
 	// Required: true
 	// Min Length: 1
 	AttributeName *string `json:"attribute_name"`

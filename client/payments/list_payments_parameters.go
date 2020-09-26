@@ -92,9 +92,19 @@ type ListPaymentsParams struct {
 
 	*/
 	Last4 *string
+	/*Limit
+	  Maximum number of results to be returned in a single page.
+	It is possible to receive fewer results than the specified limit on a given page.
+
+	If the supplied value is greater than 100, at most 100 results will be returned.
+
+	Default: `100`
+
+	*/
+	Limit *int64
 	/*LocationID
 	  Limit results to the location supplied. By default, results are returned
-	for all locations associated with the merchant.
+	for the default (main) location associated with the merchant.
 
 	*/
 	LocationID *string
@@ -202,6 +212,17 @@ func (o *ListPaymentsParams) WithLast4(last4 *string) *ListPaymentsParams {
 // SetLast4 adds the last4 to the list payments params
 func (o *ListPaymentsParams) SetLast4(last4 *string) {
 	o.Last4 = last4
+}
+
+// WithLimit adds the limit to the list payments params
+func (o *ListPaymentsParams) WithLimit(limit *int64) *ListPaymentsParams {
+	o.SetLimit(limit)
+	return o
+}
+
+// SetLimit adds the limit to the list payments params
+func (o *ListPaymentsParams) SetLimit(limit *int64) {
+	o.Limit = limit
 }
 
 // WithLocationID adds the locationID to the list payments params
@@ -319,6 +340,22 @@ func (o *ListPaymentsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		qLast4 := qrLast4
 		if qLast4 != "" {
 			if err := r.SetQueryParam("last_4", qLast4); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if o.Limit != nil {
+
+		// query param limit
+		var qrLimit int64
+		if o.Limit != nil {
+			qrLimit = *o.Limit
+		}
+		qLimit := swag.FormatInt64(qrLimit)
+		if qLimit != "" {
+			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}

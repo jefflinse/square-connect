@@ -21,7 +21,7 @@ type ListEmployeesResponse struct {
 	// The token to be used to retrieve the next page of results.
 	Cursor string `json:"cursor,omitempty"`
 
-	// List of employees returned from the request.
+	// employees
 	Employees []*Employee `json:"employees"`
 
 	// Any errors that occurred during the request.

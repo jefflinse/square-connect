@@ -6,8 +6,10 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DisputeEvidenceFile A file to be uploaded as dispute evidence.
@@ -16,14 +18,65 @@ import (
 type DisputeEvidenceFile struct {
 
 	// The file name including the file extension. For example: "receipt.tiff".
+	// Max Length: 40
+	// Min Length: 1
 	Filename string `json:"filename,omitempty"`
 
 	// Dispute evidence files must one of application/pdf, image/heic, image/heif, image/jpeg, image/png, image/tiff formats.
+	// Max Length: 40
+	// Min Length: 1
 	Filetype string `json:"filetype,omitempty"`
 }
 
 // Validate validates this dispute evidence file
 func (m *DisputeEvidenceFile) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateFilename(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateFiletype(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DisputeEvidenceFile) validateFilename(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Filename) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("filename", "body", string(m.Filename), 1); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("filename", "body", string(m.Filename), 40); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DisputeEvidenceFile) validateFiletype(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Filetype) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("filetype", "body", string(m.Filetype), 1); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("filetype", "body", string(m.Filetype), 40); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -61,7 +61,8 @@ for the retrieve merchant operation typically these are written to a http.Reques
 type RetrieveMerchantParams struct {
 
 	/*MerchantID
-	  The ID of the merchant to retrieve.
+	  The ID of the merchant to retrieve. If the string "me" is supplied as the ID,
+	then retrieve the merchant that is currently accessible to this call.
 
 	*/
 	MerchantID string

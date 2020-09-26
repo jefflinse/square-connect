@@ -40,6 +40,7 @@ type Payment struct {
 	BillingAddress *Address `json:"billing_address,omitempty"`
 
 	// The buyer's e-mail address
+	// Max Length: 255
 	BuyerEmailAddress string `json:"buyer_email_address,omitempty"`
 
 	// Non-confidential details about the source. Only populated if the
@@ -47,9 +48,11 @@ type Payment struct {
 	CardDetails *CardPaymentDetails `json:"card_details,omitempty"`
 
 	// Timestamp of when the payment was created, in RFC 3339 format.
+	// Max Length: 32
 	CreatedAt string `json:"created_at,omitempty"`
 
-	// An optional customer_id to be entered by the developer when creating a payment.
+	// The `Customer` ID of the customer associated with the payment.
+	// Max Length: 191
 	CustomerID string `json:"customer_id,omitempty"`
 
 	// The action to be applied to the payment when the `delay_duration` has elapsed. This field
@@ -84,6 +87,7 @@ type Payment struct {
 	DelayedUntil string `json:"delayed_until,omitempty"`
 
 	// An optional ID of the employee associated with taking this payment.
+	// Max Length: 192
 	EmployeeID string `json:"employee_id,omitempty"`
 
 	// Unique ID for the payment.
@@ -91,12 +95,15 @@ type Payment struct {
 	ID string `json:"id,omitempty"`
 
 	// ID of the location associated with the payment.
+	// Max Length: 50
 	LocationID string `json:"location_id,omitempty"`
 
 	// An optional note to include when creating a payment
+	// Max Length: 500
 	Note string `json:"note,omitempty"`
 
 	// ID of the order associated with this payment.
+	// Max Length: 192
 	OrderID string `json:"order_id,omitempty"`
 
 	// Processing fees and fee adjustments assessed by Square on this payment.
@@ -104,14 +111,17 @@ type Payment struct {
 
 	// The payment's receipt number.
 	// The field will be missing if a payment is CANCELED
+	// Max Length: 4
 	ReceiptNumber string `json:"receipt_number,omitempty"`
 
 	// The URL for the payment's receipt.
 	// The field will only be populated for COMPLETED payments.
+	// Max Length: 255
 	ReceiptURL string `json:"receipt_url,omitempty"`
 
 	// An optional ID that associates this payment with an entity in
 	// another system.
+	// Max Length: 40
 	ReferenceID string `json:"reference_id,omitempty"`
 
 	// List of `refund_id`s identifying refunds for this payment.
@@ -127,19 +137,20 @@ type Payment struct {
 
 	// The source type for this payment
 	//
-	// Current values include:
-	// `CARD`
+	// Current values include: `CARD`.
+	// Max Length: 50
 	SourceType string `json:"source_type,omitempty"`
 
 	// Additional payment information that gets added on the customer's card statement
 	// as part of the statement description.
 	//
-	// Note that the statement_description_identifier may get truncated on the statement description
+	// Note that the `statement_description_identifier` may get truncated on the statement description
 	// to fit the required information including the Square identifier (SQ *) and name of the
 	// merchant taking the payment.
 	StatementDescriptionIdentifier string `json:"statement_description_identifier,omitempty"`
 
 	// Indicates whether the payment is `APPROVED`, `COMPLETED`, `CANCELED`, or `FAILED`.
+	// Max Length: 50
 	Status string `json:"status,omitempty"`
 
 	// The amount designated as a tip. Specified in the
@@ -153,6 +164,7 @@ type Payment struct {
 	TotalMoney *Money `json:"total_money,omitempty"`
 
 	// Timestamp of when the payment was last updated, in RFC 3339 format.
+	// Max Length: 32
 	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
@@ -172,7 +184,23 @@ func (m *Payment) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateBuyerEmailAddress(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCardDetails(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCustomerID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEmployeeID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -180,7 +208,31 @@ func (m *Payment) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateLocationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNote(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOrderID(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateProcessingFee(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateReceiptNumber(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateReceiptURL(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateReferenceID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -192,11 +244,23 @@ func (m *Payment) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateSourceType(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStatus(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateTipMoney(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateTotalMoney(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUpdatedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -260,6 +324,19 @@ func (m *Payment) validateBillingAddress(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Payment) validateBuyerEmailAddress(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.BuyerEmailAddress) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("buyer_email_address", "body", string(m.BuyerEmailAddress), 255); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Payment) validateCardDetails(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.CardDetails) { // not required
@@ -278,6 +355,45 @@ func (m *Payment) validateCardDetails(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Payment) validateCreatedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 32); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateCustomerID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CustomerID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("customer_id", "body", string(m.CustomerID), 191); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateEmployeeID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.EmployeeID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("employee_id", "body", string(m.EmployeeID), 192); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Payment) validateID(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.ID) { // not required
@@ -285,6 +401,45 @@ func (m *Payment) validateID(formats strfmt.Registry) error {
 	}
 
 	if err := validate.MaxLength("id", "body", string(m.ID), 192); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateLocationID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.LocationID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateNote(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Note) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("note", "body", string(m.Note), 500); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateOrderID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.OrderID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("order_id", "body", string(m.OrderID), 192); err != nil {
 		return err
 	}
 
@@ -311,6 +466,45 @@ func (m *Payment) validateProcessingFee(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *Payment) validateReceiptNumber(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ReceiptNumber) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("receipt_number", "body", string(m.ReceiptNumber), 4); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateReceiptURL(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ReceiptURL) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("receipt_url", "body", string(m.ReceiptURL), 255); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateReferenceID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ReferenceID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("reference_id", "body", string(m.ReferenceID), 40); err != nil {
+		return err
 	}
 
 	return nil
@@ -352,6 +546,32 @@ func (m *Payment) validateShippingAddress(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Payment) validateSourceType(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.SourceType) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("source_type", "body", string(m.SourceType), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Payment) validateStatus(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Status) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("status", "body", string(m.Status), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Payment) validateTipMoney(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.TipMoney) { // not required
@@ -383,6 +603,19 @@ func (m *Payment) validateTotalMoney(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *Payment) validateUpdatedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.UpdatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("updated_at", "body", string(m.UpdatedAt), 32); err != nil {
+		return err
 	}
 
 	return nil

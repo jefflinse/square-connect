@@ -10,12 +10,12 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CatalogV1ID An Items Connect V1 object ID along with its associated location ID.
+// CatalogV1ID A Square API V1 identifier of an item, including the object ID and its associated location ID.
 //
 // swagger:model CatalogV1Id
 type CatalogV1ID struct {
 
-	// The ID for an object in Connect V1, if different from its Connect V2 ID.
+	// The ID for an object used in the Square API V1, if the object ID differs from the Square API V2 object ID.
 	CatalogV1ID string `json:"catalog_v1_id,omitempty"`
 
 	// The ID of the `Location` this Connect V1 ID is associated with.

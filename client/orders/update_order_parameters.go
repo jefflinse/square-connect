@@ -69,11 +69,6 @@ type UpdateOrderParams struct {
 
 	*/
 	Body *models.UpdateOrderRequest
-	/*LocationID
-	  The ID of the order's associated location.
-
-	*/
-	LocationID string
 	/*OrderID
 	  The ID of the order to update.
 
@@ -129,17 +124,6 @@ func (o *UpdateOrderParams) SetBody(body *models.UpdateOrderRequest) {
 	o.Body = body
 }
 
-// WithLocationID adds the locationID to the update order params
-func (o *UpdateOrderParams) WithLocationID(locationID string) *UpdateOrderParams {
-	o.SetLocationID(locationID)
-	return o
-}
-
-// SetLocationID adds the locationId to the update order params
-func (o *UpdateOrderParams) SetLocationID(locationID string) {
-	o.LocationID = locationID
-}
-
 // WithOrderID adds the orderID to the update order params
 func (o *UpdateOrderParams) WithOrderID(orderID string) *UpdateOrderParams {
 	o.SetOrderID(orderID)
@@ -163,11 +147,6 @@ func (o *UpdateOrderParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
 		}
-	}
-
-	// path param location_id
-	if err := r.SetPathParam("location_id", o.LocationID); err != nil {
-		return err
 	}
 
 	// path param order_id

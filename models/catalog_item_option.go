@@ -20,10 +20,10 @@ type CatalogItemOption struct {
 
 	// The item option's human-readable description. Displayed in the Square
 	// Point of Sale app for the seller and in the Online Store or on receipts for
-	// the buyer.
+	// the buyer. This is a searchable attribute for use in applicable query filters.
 	Description string `json:"description,omitempty"`
 
-	// The item option's display name for the customer. Searchable.
+	// The item option's display name for the customer. This is a searchable attribute for use in applicable query filters.
 	DisplayName string `json:"display_name,omitempty"`
 
 	// The number of `CatalogItem`s currently associated
@@ -32,7 +32,7 @@ type CatalogItemOption struct {
 	ItemCount int64 `json:"item_count,omitempty"`
 
 	// The item option's display name for the seller. Must be unique across
-	// all item options. Searchable.
+	// all item options. This is a searchable attribute for use in applicable query filters.
 	Name string `json:"name,omitempty"`
 
 	// If true, display colors for entries in `values` when present.

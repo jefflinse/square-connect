@@ -38,7 +38,7 @@ type CreateCustomerRequest struct {
 	// The given (i.e., first) name associated with the customer profile.
 	GivenName string `json:"given_name,omitempty"`
 
-	// The idempotency key for the request.	See the
+	// The idempotency key for the request. See the
 	// [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency) guide for more information.
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 

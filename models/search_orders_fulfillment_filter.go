@@ -6,10 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // SearchOrdersFulfillmentFilter Filter based on [Order Fulfillment](#type-orderfulfillment) information.
@@ -27,30 +25,11 @@ type SearchOrdersFulfillmentFilter struct {
 	// for. Will return orders if any of its fulfillments match any of the fulfillment types
 	// listed in this field.
 	// See [OrderFulfillmentType](#type-orderfulfillmenttype) for possible values
-	// Required: true
 	FulfillmentTypes []string `json:"fulfillment_types"`
 }
 
 // Validate validates this search orders fulfillment filter
 func (m *SearchOrdersFulfillmentFilter) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateFulfillmentTypes(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *SearchOrdersFulfillmentFilter) validateFulfillmentTypes(formats strfmt.Registry) error {
-
-	if err := validate.Required("fulfillment_types", "body", m.FulfillmentTypes); err != nil {
-		return err
-	}
-
 	return nil
 }
 

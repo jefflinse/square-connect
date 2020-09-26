@@ -9,19 +9,16 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // EmployeeWage The hourly wage rate that an employee will earn on a `Shift` for doing the job
-// specified by the `title` property of this object.
+// specified by the `title` property of this object. Deprecated at verison 2020-08-26. Use `TeamMemberWage` instead.
 //
 // swagger:model EmployeeWage
 type EmployeeWage struct {
 
 	// The `Employee` that this wage is assigned to.
-	// Required: true
-	// Min Length: 1
-	EmployeeID *string `json:"employee_id"`
+	EmployeeID string `json:"employee_id,omitempty"`
 
 	// Can be a custom-set hourly wage or the calculated effective hourly
 	// wage based on annual wage and hours worked per week.
@@ -38,10 +35,6 @@ type EmployeeWage struct {
 func (m *EmployeeWage) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateEmployeeID(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateHourlyRate(formats); err != nil {
 		res = append(res, err)
 	}
@@ -49,19 +42,6 @@ func (m *EmployeeWage) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *EmployeeWage) validateEmployeeID(formats strfmt.Registry) error {
-
-	if err := validate.Required("employee_id", "body", m.EmployeeID); err != nil {
-		return err
-	}
-
-	if err := validate.MinLength("employee_id", "body", string(*m.EmployeeID), 1); err != nil {
-		return err
-	}
-
 	return nil
 }
 

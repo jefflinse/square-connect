@@ -41,9 +41,13 @@ type ClientService interface {
 
 	GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInfoWriter) (*GetShiftOK, error)
 
+	GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo runtime.ClientAuthInfoWriter) (*GetTeamMemberWageOK, error)
+
 	ListBreakTypes(params *ListBreakTypesParams, authInfo runtime.ClientAuthInfoWriter) (*ListBreakTypesOK, error)
 
 	ListEmployeeWages(params *ListEmployeeWagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEmployeeWagesOK, error)
+
+	ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListTeamMemberWagesOK, error)
 
 	ListWorkweekConfigs(params *ListWorkweekConfigsParams, authInfo runtime.ClientAuthInfoWriter) (*ListWorkweekConfigsOK, error)
 
@@ -350,6 +354,43 @@ func (a *Client) GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInf
 }
 
 /*
+  GetTeamMemberWage gets team member wage
+
+  Returns a single `TeamMemberWage` specified by id.
+*/
+func (a *Client) GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo runtime.ClientAuthInfoWriter) (*GetTeamMemberWageOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetTeamMemberWageParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "GetTeamMemberWage",
+		Method:             "GET",
+		PathPattern:        "/v2/labor/team-member-wages/{id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetTeamMemberWageReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetTeamMemberWageOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetTeamMemberWage: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   ListBreakTypes lists break types
 
   Returns a paginated list of `BreakType` instances for a business.
@@ -420,6 +461,43 @@ func (a *Client) ListEmployeeWages(params *ListEmployeeWagesParams, authInfo run
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for ListEmployeeWages: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  ListTeamMemberWages lists team member wages
+
+  Returns a paginated list of `TeamMemberWage` instances for a business.
+*/
+func (a *Client) ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListTeamMemberWagesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListTeamMemberWagesParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "ListTeamMemberWages",
+		Method:             "GET",
+		PathPattern:        "/v2/labor/team-member-wages",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListTeamMemberWagesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListTeamMemberWagesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for ListTeamMemberWages: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

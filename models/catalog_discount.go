@@ -9,16 +9,17 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
-// CatalogDiscount A discount in the Catalog object model.
+// CatalogDiscount A discount applicable to items.
 //
 // swagger:model CatalogDiscount
 type CatalogDiscount struct {
 
 	// The amount of the discount. Specify an amount of `0` if `discount_type` is `VARIABLE_AMOUNT`.
 	//
-	// Do not include this field for percentage-based or variable discounts.
+	// Do not use this field for percentage-based or variable discounts.
 	AmountMoney *Money `json:"amount_money,omitempty"`
 
 	// Indicates whether the discount is a fixed amount or percentage, or entered at the time of sale.
@@ -41,14 +42,15 @@ type CatalogDiscount struct {
 	// See [CatalogDiscountModifyTaxBasis](#type-catalogdiscountmodifytaxbasis) for possible values
 	ModifyTaxBasis string `json:"modify_tax_basis,omitempty"`
 
-	// The discount name. Searchable. This field has max length of 255 Unicode code points.
+	// The discount name. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+	// Max Length: 255
 	Name string `json:"name,omitempty"`
 
 	// The percentage of the discount as a string representation of a decimal number, using a `.` as the decimal
 	// separator and without a `%` sign. A value of `7.5` corresponds to `7.5%`. Specify a percentage of `0` if `discount_type`
 	// is `VARIABLE_PERCENTAGE`.
 	//
-	// Do not include this field for amount-based or variable discounts.
+	// Do not use this field for amount-based or variable discounts.
 	Percentage string `json:"percentage,omitempty"`
 
 	// Indicates whether a mobile staff member needs to enter their PIN to apply the
@@ -61,6 +63,10 @@ func (m *CatalogDiscount) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAmountMoney(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -83,6 +89,19 @@ func (m *CatalogDiscount) validateAmountMoney(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *CatalogDiscount) validateName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Name) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+		return err
 	}
 
 	return nil

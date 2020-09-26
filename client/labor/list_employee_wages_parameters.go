@@ -67,8 +67,7 @@ type ListEmployeeWagesParams struct {
 	*/
 	Cursor *string
 	/*EmployeeID
-	  Filter wages returned to only those that are associated with the
-	specified employee.
+	  Filter wages returned to only those that are associated with the specified employee.
 
 	*/
 	EmployeeID *string

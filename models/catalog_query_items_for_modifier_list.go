@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQueryItemsForModifierList catalog query items for modifier list
+// CatalogQueryItemsForModifierList The query filter to return the items containing the specified modifier list IDs.
 //
 // swagger:model CatalogQueryItemsForModifierList
 type CatalogQueryItemsForModifierList struct {

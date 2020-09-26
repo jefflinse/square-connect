@@ -10,8 +10,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SourceApplication Provides information about the application used to generate an inventory
-// change.
+// SourceApplication Provides information about the application used to generate a change.
 //
 // swagger:model SourceApplication
 type SourceApplication struct {

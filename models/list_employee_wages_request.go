@@ -20,8 +20,7 @@ type ListEmployeeWagesRequest struct {
 	// Pointer to the next page of Employee Wage results to fetch.
 	Cursor string `json:"cursor,omitempty"`
 
-	// Filter wages returned to only those that are associated with the
-	// specified employee.
+	// Filter wages returned to only those that are associated with the specified employee.
 	EmployeeID string `json:"employee_id,omitempty"`
 
 	// Maximum number of Employee Wages to return per page. Can range between

@@ -71,10 +71,7 @@ type ListEmployeesParams struct {
 
 	*/
 	Limit *int64
-	/*LocationID
-	  Filter employees returned to only those that are associated with the specified location.
-
-	*/
+	/*LocationID*/
 	LocationID *string
 	/*Status
 	  Specifies the EmployeeStatus to filter the employee by.

@@ -114,14 +114,6 @@ type ClientService interface {
   AdjustInventory adjusts inventory
 
   Adjusts the current available inventory of an item variation.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) AdjustInventory(params *AdjustInventoryParams, authInfo runtime.ClientAuthInfoWriter) (*AdjustInventoryOK, error) {
 	// TODO: Validate the params before sending
@@ -160,14 +152,6 @@ func (a *Client) AdjustInventory(params *AdjustInventoryParams, authInfo runtime
 
   Associates a fee with an item so the fee is automatically applied to
 the item in Square Point of Sale.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ApplyFee(params *ApplyFeeParams, authInfo runtime.ClientAuthInfoWriter) (*ApplyFeeOK, error) {
 	// TODO: Validate the params before sending
@@ -206,14 +190,6 @@ func (a *Client) ApplyFee(params *ApplyFeeParams, authInfo runtime.ClientAuthInf
 
   Associates a modifier list with an item so the associated modifier
 options can be applied to the item.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ApplyModifierList(params *ApplyModifierListParams, authInfo runtime.ClientAuthInfoWriter) (*ApplyModifierListOK, error) {
 	// TODO: Validate the params before sending
@@ -251,14 +227,6 @@ func (a *Client) ApplyModifierList(params *ApplyModifierListParams, authInfo run
   CreateCategory creates category
 
   Creates an item category.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) CreateCategory(params *CreateCategoryParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCategoryOK, error) {
 	// TODO: Validate the params before sending
@@ -296,14 +264,6 @@ func (a *Client) CreateCategory(params *CreateCategoryParams, authInfo runtime.C
   CreateDiscount creates discount
 
   Creates a discount.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) CreateDiscount(params *CreateDiscountParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDiscountOK, error) {
 	// TODO: Validate the params before sending
@@ -341,14 +301,6 @@ func (a *Client) CreateDiscount(params *CreateDiscountParams, authInfo runtime.C
   CreateFee creates fee
 
   Creates a fee (tax).
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) CreateFee(params *CreateFeeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateFeeOK, error) {
 	// TODO: Validate the params before sending
@@ -387,13 +339,6 @@ func (a *Client) CreateFee(params *CreateFeeParams, authInfo runtime.ClientAuthI
 
   Creates an item and at least one variation for it.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 
 Item-related entities include fields you can use to associate them with
@@ -443,14 +388,6 @@ func (a *Client) CreateItem(params *CreateItemParams, authInfo runtime.ClientAut
   CreateModifierList creates modifier list
 
   Creates an item modifier list and at least 1 modifier option for it.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) CreateModifierList(params *CreateModifierListParams, authInfo runtime.ClientAuthInfoWriter) (*CreateModifierListOK, error) {
 	// TODO: Validate the params before sending
@@ -488,14 +425,6 @@ func (a *Client) CreateModifierList(params *CreateModifierListParams, authInfo r
   CreateModifierOption creates modifier option
 
   Creates an item modifier option and adds it to a modifier list.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) CreateModifierOption(params *CreateModifierOptionParams, authInfo runtime.ClientAuthInfoWriter) (*CreateModifierOptionOK, error) {
 	// TODO: Validate the params before sending
@@ -533,14 +462,6 @@ func (a *Client) CreateModifierOption(params *CreateModifierOptionParams, authIn
   CreatePage creates page
 
   Creates a Favorites page in Square Point of Sale.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) CreatePage(params *CreatePageParams, authInfo runtime.ClientAuthInfoWriter) (*CreatePageOK, error) {
 	// TODO: Validate the params before sending
@@ -578,14 +499,6 @@ func (a *Client) CreatePage(params *CreatePageParams, authInfo runtime.ClientAut
   CreateVariation creates variation
 
   Creates an item variation for an existing item.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) CreateVariation(params *CreateVariationParams, authInfo runtime.ClientAuthInfoWriter) (*CreateVariationOK, error) {
 	// TODO: Validate the params before sending
@@ -624,13 +537,6 @@ func (a *Client) CreateVariation(params *CreateVariationParams, authInfo runtime
 
   Deletes an existing item category.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeleteCategory__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeleteCategoryRequest` object
@@ -673,13 +579,6 @@ func (a *Client) DeleteCategory(params *DeleteCategoryParams, authInfo runtime.C
 
   Deletes an existing discount.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeleteDiscount__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeleteDiscountRequest` object
@@ -722,13 +621,6 @@ func (a *Client) DeleteDiscount(params *DeleteDiscountParams, authInfo runtime.C
 
   Deletes an existing fee (tax).
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeleteFee__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeleteFeeRequest` object
@@ -771,13 +663,6 @@ func (a *Client) DeleteFee(params *DeleteFeeParams, authInfo runtime.ClientAuthI
 
   Deletes an existing item and all item variations associated with it.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeleteItem__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeleteItemRequest` object
@@ -821,13 +706,6 @@ func (a *Client) DeleteItem(params *DeleteItemParams, authInfo runtime.ClientAut
   Deletes an existing item modifier list and all modifier options
 associated with it.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeleteModifierList__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeleteModifierListRequest` object
@@ -870,13 +748,6 @@ func (a *Client) DeleteModifierList(params *DeleteModifierListParams, authInfo r
 
   Deletes an existing item modifier option from a modifier list.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeleteModifierOption__ returns nothing on success but Connect
 SDKs map the empty response to an empty `V1DeleteModifierOptionRequest`
@@ -919,13 +790,6 @@ func (a *Client) DeleteModifierOption(params *DeleteModifierOptionParams, authIn
 
   Deletes an existing Favorites page and all of its cells.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeletePage__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeletePageRequest` object.
@@ -967,13 +831,6 @@ func (a *Client) DeletePage(params *DeletePageParams, authInfo runtime.ClientAut
 
   Deletes a cell from a Favorites page in Square Point of Sale.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeletePageCell__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeletePageCellRequest` object
@@ -1016,13 +873,6 @@ func (a *Client) DeletePageCell(params *DeletePageCellParams, authInfo runtime.C
 
   Deletes an existing item variation from an item.
 
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 
 __DeleteVariation__ returns nothing on success but Connect SDKs
 map the empty response to an empty `V1DeleteVariationRequest` object
@@ -1064,14 +914,6 @@ func (a *Client) DeleteVariation(params *DeleteVariationParams, authInfo runtime
   ListCategories lists categories
 
   Lists all the item categories for a given location.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ListCategories(params *ListCategoriesParams, authInfo runtime.ClientAuthInfoWriter) (*ListCategoriesOK, error) {
 	// TODO: Validate the params before sending
@@ -1109,14 +951,6 @@ func (a *Client) ListCategories(params *ListCategoriesParams, authInfo runtime.C
   ListDiscounts lists discounts
 
   Lists all the discounts for a given location.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ListDiscounts(params *ListDiscountsParams, authInfo runtime.ClientAuthInfoWriter) (*ListDiscountsOK, error) {
 	// TODO: Validate the params before sending
@@ -1154,14 +988,6 @@ func (a *Client) ListDiscounts(params *ListDiscountsParams, authInfo runtime.Cli
   ListFees lists fees
 
   Lists all the fees (taxes) for a given location.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ListFees(params *ListFeesParams, authInfo runtime.ClientAuthInfoWriter) (*ListFeesOK, error) {
 	// TODO: Validate the params before sending
@@ -1200,14 +1026,6 @@ func (a *Client) ListFees(params *ListFeesParams, authInfo runtime.ClientAuthInf
 
   Provides inventory information for all inventory-enabled item
 variations.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ListInventory(params *ListInventoryParams, authInfo runtime.ClientAuthInfoWriter) (*ListInventoryOK, error) {
 	// TODO: Validate the params before sending
@@ -1245,14 +1063,6 @@ func (a *Client) ListInventory(params *ListInventoryParams, authInfo runtime.Cli
   ListItems lists items
 
   Provides summary information of all items for a given location.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ListItems(params *ListItemsParams, authInfo runtime.ClientAuthInfoWriter) (*ListItemsOK, error) {
 	// TODO: Validate the params before sending
@@ -1290,14 +1100,6 @@ func (a *Client) ListItems(params *ListItemsParams, authInfo runtime.ClientAuthI
   ListModifierLists lists modifier lists
 
   Lists all the modifier lists for a given location.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ListModifierLists(params *ListModifierListsParams, authInfo runtime.ClientAuthInfoWriter) (*ListModifierListsOK, error) {
 	// TODO: Validate the params before sending
@@ -1336,14 +1138,6 @@ func (a *Client) ListModifierLists(params *ListModifierListsParams, authInfo run
 
   Lists all Favorites pages (in Square Point of Sale) for a given
 location.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) ListPages(params *ListPagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListPagesOK, error) {
 	// TODO: Validate the params before sending
@@ -1382,14 +1176,6 @@ func (a *Client) ListPages(params *ListPagesParams, authInfo runtime.ClientAuthI
 
   Removes a fee assocation from an item so the fee is no longer
 automatically applied to the item in Square Point of Sale.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) RemoveFee(params *RemoveFeeParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveFeeOK, error) {
 	// TODO: Validate the params before sending
@@ -1428,14 +1214,6 @@ func (a *Client) RemoveFee(params *RemoveFeeParams, authInfo runtime.ClientAuthI
 
   Removes a modifier list association from an item so the modifier
 options from the list can no longer be applied to the item.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) RemoveModifierList(params *RemoveModifierListParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveModifierListOK, error) {
 	// TODO: Validate the params before sending
@@ -1474,14 +1252,6 @@ func (a *Client) RemoveModifierList(params *RemoveModifierListParams, authInfo r
 
   Provides the details for a single item, including associated modifier
 lists and fees.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) RetrieveItem(params *RetrieveItemParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveItemOK, error) {
 	// TODO: Validate the params before sending
@@ -1519,14 +1289,6 @@ func (a *Client) RetrieveItem(params *RetrieveItemParams, authInfo runtime.Clien
   RetrieveModifierList retrieves modifier list
 
   Provides the details for a single modifier list.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) RetrieveModifierList(params *RetrieveModifierListParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveModifierListOK, error) {
 	// TODO: Validate the params before sending
@@ -1564,14 +1326,6 @@ func (a *Client) RetrieveModifierList(params *RetrieveModifierListParams, authIn
   UpdateCategory updates category
 
   Modifies the details of an existing item category.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdateCategory(params *UpdateCategoryParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateCategoryOK, error) {
 	// TODO: Validate the params before sending
@@ -1609,14 +1363,6 @@ func (a *Client) UpdateCategory(params *UpdateCategoryParams, authInfo runtime.C
   UpdateDiscount updates discount
 
   Modifies the details of an existing discount.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdateDiscount(params *UpdateDiscountParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateDiscountOK, error) {
 	// TODO: Validate the params before sending
@@ -1654,14 +1400,6 @@ func (a *Client) UpdateDiscount(params *UpdateDiscountParams, authInfo runtime.C
   UpdateFee updates fee
 
   Modifies the details of an existing fee (tax).
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdateFee(params *UpdateFeeParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateFeeOK, error) {
 	// TODO: Validate the params before sending
@@ -1699,14 +1437,6 @@ func (a *Client) UpdateFee(params *UpdateFeeParams, authInfo runtime.ClientAuthI
   UpdateItem updates item
 
   Modifies the core details of an existing item.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdateItem(params *UpdateItemParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateItemOK, error) {
 	// TODO: Validate the params before sending
@@ -1744,14 +1474,6 @@ func (a *Client) UpdateItem(params *UpdateItemParams, authInfo runtime.ClientAut
   UpdateModifierList updates modifier list
 
   Modifies the details of an existing item modifier list.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdateModifierList(params *UpdateModifierListParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateModifierListOK, error) {
 	// TODO: Validate the params before sending
@@ -1789,14 +1511,6 @@ func (a *Client) UpdateModifierList(params *UpdateModifierListParams, authInfo r
   UpdateModifierOption updates modifier option
 
   Modifies the details of an existing item modifier option.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdateModifierOption(params *UpdateModifierOptionParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateModifierOptionOK, error) {
 	// TODO: Validate the params before sending
@@ -1834,14 +1548,6 @@ func (a *Client) UpdateModifierOption(params *UpdateModifierOptionParams, authIn
   UpdatePage updates page
 
   Modifies the details of a Favorites page in Square Point of Sale.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdatePage(params *UpdatePageParams, authInfo runtime.ClientAuthInfoWriter) (*UpdatePageOK, error) {
 	// TODO: Validate the params before sending
@@ -1879,14 +1585,6 @@ func (a *Client) UpdatePage(params *UpdatePageParams, authInfo runtime.ClientAut
   UpdatePageCell updates page cell
 
   Modifies a cell of a Favorites page in Square Point of Sale.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdatePageCell(params *UpdatePageCellParams, authInfo runtime.ClientAuthInfoWriter) (*UpdatePageCellOK, error) {
 	// TODO: Validate the params before sending
@@ -1924,14 +1622,6 @@ func (a *Client) UpdatePageCell(params *UpdatePageCellParams, authInfo runtime.C
   UpdateVariation updates variation
 
   Modifies the details of an existing item variation.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-items)
-
----
 */
 func (a *Client) UpdateVariation(params *UpdateVariationParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateVariationOK, error) {
 	// TODO: Validate the params before sending

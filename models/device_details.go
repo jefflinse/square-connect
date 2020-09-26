@@ -6,8 +6,10 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // DeviceDetails Details about the device that took the payment.
@@ -16,14 +18,76 @@ import (
 type DeviceDetails struct {
 
 	// Square-issued ID of the device.
+	// Max Length: 255
 	DeviceID string `json:"device_id,omitempty"`
 
+	// Square-issued installation ID for the device.
+	// Max Length: 255
+	DeviceInstallationID string `json:"device_installation_id,omitempty"`
+
 	// The name of the device set by the merchant.
+	// Max Length: 255
 	DeviceName string `json:"device_name,omitempty"`
 }
 
 // Validate validates this device details
 func (m *DeviceDetails) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateDeviceID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeviceInstallationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDeviceName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DeviceDetails) validateDeviceID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.DeviceID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("device_id", "body", string(m.DeviceID), 255); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DeviceDetails) validateDeviceInstallationID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.DeviceInstallationID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("device_installation_id", "body", string(m.DeviceInstallationID), 255); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DeviceDetails) validateDeviceName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.DeviceName) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("device_name", "body", string(m.DeviceName), 255); err != nil {
+		return err
+	}
+
 	return nil
 }
 

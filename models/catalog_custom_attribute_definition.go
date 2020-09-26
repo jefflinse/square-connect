@@ -24,6 +24,7 @@ type CatalogCustomAttributeDefinition struct {
 	// The set of Catalog Object Types that this Custom Attribute may be applied to.
 	// Currently, only `ITEM` and `ITEM_VARIATION` are allowed. At least one type must be included.
 	// See [CatalogObjectType](#type-catalogobjecttype) for possible values
+	// Required: true
 	AllowedObjectTypes []string `json:"allowed_object_types"`
 
 	// The visibility of a custom attribute to applications other than the application
@@ -59,6 +60,9 @@ type CatalogCustomAttributeDefinition struct {
 	// Min Length: 1
 	Name *string `json:"name"`
 
+	// number config
+	NumberConfig *CatalogCustomAttributeDefinitionNumberConfig `json:"number_config,omitempty"`
+
 	// Populated when `type` is set to `SELECTION`, unset otherwise.
 	SelectionConfig *CatalogCustomAttributeDefinitionSelectionConfig `json:"selection_config,omitempty"`
 
@@ -85,6 +89,10 @@ type CatalogCustomAttributeDefinition struct {
 func (m *CatalogCustomAttributeDefinition) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateAllowedObjectTypes(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDescription(formats); err != nil {
 		res = append(res, err)
 	}
@@ -94,6 +102,10 @@ func (m *CatalogCustomAttributeDefinition) Validate(formats strfmt.Registry) err
 	}
 
 	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNumberConfig(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -116,6 +128,15 @@ func (m *CatalogCustomAttributeDefinition) Validate(formats strfmt.Registry) err
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CatalogCustomAttributeDefinition) validateAllowedObjectTypes(formats strfmt.Registry) error {
+
+	if err := validate.Required("allowed_object_types", "body", m.AllowedObjectTypes); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -165,6 +186,24 @@ func (m *CatalogCustomAttributeDefinition) validateName(formats strfmt.Registry)
 
 	if err := validate.MaxLength("name", "body", string(*m.Name), 255); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *CatalogCustomAttributeDefinition) validateNumberConfig(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.NumberConfig) { // not required
+		return nil
+	}
+
+	if m.NumberConfig != nil {
+		if err := m.NumberConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("number_config")
+			}
+			return err
+		}
 	}
 
 	return nil

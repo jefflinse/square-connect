@@ -6,8 +6,10 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // CatalogItemOptionValue An enumerated value that can link a
@@ -23,21 +25,20 @@ type CatalogItemOptionValue struct {
 	// enabled on the parent `ItemOption`.
 	Color string `json:"color,omitempty"`
 
-	// A human-readable description for the option value.
+	// A human-readable description for the option value. This is a searchable attribute for use in applicable query filters.
 	Description string `json:"description,omitempty"`
 
 	// Unique ID of the associated item option.
 	ItemOptionID string `json:"item_option_id,omitempty"`
 
 	// The number of `CatalogItemVariation`s that
-	// currently make use of this Item Option value. Present only if `retrieve_counts`
-	// was specified on the request used to retrieve the parent Item Option of this
+	// currently use this item option value. Present only if `retrieve_counts`
+	// was specified on the request used to retrieve the parent item option of this
 	// value.
-	//
-	// Maximum: 100 counts.
+	// Maximum: 100
 	ItemVariationCount int64 `json:"item_variation_count,omitempty"`
 
-	// Name of this item option value. Searchable.
+	// Name of this item option value. This is a searchable attribute for use in applicable query filters.
 	Name string `json:"name,omitempty"`
 
 	// Determines where this option value appears in a list of option values.
@@ -46,6 +47,28 @@ type CatalogItemOptionValue struct {
 
 // Validate validates this catalog item option value
 func (m *CatalogItemOptionValue) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateItemVariationCount(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogItemOptionValue) validateItemVariationCount(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ItemVariationCount) { // not required
+		return nil
+	}
+
+	if err := validate.MaximumInt("item_variation_count", "body", int64(m.ItemVariationCount), 100, false); err != nil {
+		return err
+	}
+
 	return nil
 }
 

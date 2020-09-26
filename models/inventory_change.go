@@ -28,6 +28,9 @@ type InventoryChange struct {
 
 	// Contains details about the inventory transfer when `type` is
 	// `TRANSFER` and unset for all other types.
+	//
+	// _Note:_ An `InventoryTransfer` object is read-only and can only be present in a
+	// `RetrieveInventoryChangesResponse` and `BatchRetrieveInventoryChangesResponse` object.
 	Transfer *InventoryTransfer `json:"transfer,omitempty"`
 
 	// Indicates how the inventory change was applied. See

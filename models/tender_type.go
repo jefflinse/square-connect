@@ -35,6 +35,9 @@ const (
 	// TenderTypeNOSALE captures enum value "NO_SALE"
 	TenderTypeNOSALE TenderType = "NO_SALE"
 
+	// TenderTypeBANKTRANSFER captures enum value "BANK_TRANSFER"
+	TenderTypeBANKTRANSFER TenderType = "BANK_TRANSFER"
+
 	// TenderTypeOTHER captures enum value "OTHER"
 	TenderTypeOTHER TenderType = "OTHER"
 )
@@ -44,7 +47,7 @@ var tenderTypeEnum []interface{}
 
 func init() {
 	var res []TenderType
-	if err := json.Unmarshal([]byte(`["CARD","CASH","THIRD_PARTY_CARD","SQUARE_GIFT_CARD","NO_SALE","OTHER"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["CARD","CASH","THIRD_PARTY_CARD","SQUARE_GIFT_CARD","NO_SALE","BANK_TRANSFER","OTHER"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

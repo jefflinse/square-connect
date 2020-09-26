@@ -56,7 +56,6 @@ dispute state to ACCEPTED.
 Square debits the disputed amount from the seller’s Square
 account. If the Square account balance does not have
 sufficient funds, Square debits the associated bank account.
-For an overview of the Disputes API, see [Overview](/docs/disputes-api/overview).
 */
 func (a *Client) AcceptDispute(params *AcceptDisputeParams, authInfo runtime.ClientAuthInfoWriter) (*AcceptDisputeOK, error) {
 	// TODO: Validate the params before sending
@@ -93,8 +92,7 @@ func (a *Client) AcceptDispute(params *AcceptDisputeParams, authInfo runtime.Cli
 /*
   CreateDisputeEvidenceText creates dispute evidence text
 
-  Uploads text to use as evidence for a dispute challenge. For more information, see
-[Challenge a Dispute](/docs/disputes-api/process-disputes#challenge-a-dispute).
+  Uploads text to use as evidence for a dispute challenge.
 */
 func (a *Client) CreateDisputeEvidenceText(params *CreateDisputeEvidenceTextParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDisputeEvidenceTextOK, error) {
 	// TODO: Validate the params before sending
@@ -332,8 +330,7 @@ evidence uploaded using the
 [CreateDisputeEvidenceFile](/reference/square/disputes-api/create-dispute-evidence-file) and
 [CreateDisputeEvidenceText](/reference/square/disputes-api/create-dispute-evidence-text) endpoints,
 and evidence automatically provided by Square, when
-available. For more information, see
-[Challenge a Dispute](/docs/disputes-api/process-disputes#challenge-a-dispute).
+available.
 */
 func (a *Client) SubmitEvidence(params *SubmitEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*SubmitEvidenceOK, error) {
 	// TODO: Validate the params before sending

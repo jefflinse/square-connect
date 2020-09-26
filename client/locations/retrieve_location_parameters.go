@@ -61,7 +61,8 @@ for the retrieve location operation typically these are written to a http.Reques
 type RetrieveLocationParams struct {
 
 	/*LocationID
-	  The ID of the location to retrieve.
+	  The ID of the location to retrieve. If you specify the string "main",
+	then the endpoint returns the main location.
 
 	*/
 	LocationID string

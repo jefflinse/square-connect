@@ -10,7 +10,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CatalogQueryItemsForItemOptions catalog query items for item options
+// CatalogQueryItemsForItemOptions The query filter to return the items containing the specified item option IDs.
 //
 // swagger:model CatalogQueryItemsForItemOptions
 type CatalogQueryItemsForItemOptions struct {

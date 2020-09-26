@@ -49,6 +49,15 @@ const (
 
 	// CardBrandSQUARECAPITALCARD captures enum value "SQUARE_CAPITAL_CARD"
 	CardBrandSQUARECAPITALCARD CardBrand = "SQUARE_CAPITAL_CARD"
+
+	// CardBrandINTERAC captures enum value "INTERAC"
+	CardBrandINTERAC CardBrand = "INTERAC"
+
+	// CardBrandEFTPOS captures enum value "EFTPOS"
+	CardBrandEFTPOS CardBrand = "EFTPOS"
+
+	// CardBrandFELICA captures enum value "FELICA"
+	CardBrandFELICA CardBrand = "FELICA"
 )
 
 // for schema
@@ -56,7 +65,7 @@ var cardBrandEnum []interface{}
 
 func init() {
 	var res []CardBrand
-	if err := json.Unmarshal([]byte(`["OTHER_BRAND","VISA","MASTERCARD","AMERICAN_EXPRESS","DISCOVER","DISCOVER_DINERS","JCB","CHINA_UNIONPAY","SQUARE_GIFT_CARD","SQUARE_CAPITAL_CARD"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["OTHER_BRAND","VISA","MASTERCARD","AMERICAN_EXPRESS","DISCOVER","DISCOVER_DINERS","JCB","CHINA_UNIONPAY","SQUARE_GIFT_CARD","SQUARE_CAPITAL_CARD","INTERAC","EFTPOS","FELICA"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {

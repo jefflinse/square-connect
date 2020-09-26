@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Transaction Represents a transaction processed with Square, either with the
@@ -32,18 +33,23 @@ type Transaction struct {
 	//
 	// It is not currently possible with the Connect API to perform a transaction
 	// lookup by this value.
+	// Max Length: 192
 	ClientID string `json:"client_id,omitempty"`
 
-	// The time when the transaction was created, in RFC 3339 format.
+	// The timestamp for when the transaction was created, in RFC 3339 format.
+	// Max Length: 32
 	CreatedAt string `json:"created_at,omitempty"`
 
 	// The transaction's unique ID, issued by Square payments servers.
+	// Max Length: 192
 	ID string `json:"id,omitempty"`
 
 	// The ID of the transaction's associated location.
+	// Max Length: 50
 	LocationID string `json:"location_id,omitempty"`
 
 	// The order_id is an identifier for the order associated with this transaction, if any.
+	// Max Length: 192
 	OrderID string `json:"order_id,omitempty"`
 
 	// The Square product that processed the transaction.
@@ -53,6 +59,7 @@ type Transaction struct {
 	// If the transaction was created with the `Charge`
 	// endpoint, this value is the same as the value provided for the `reference_id`
 	// parameter in the request to that endpoint. Otherwise, it is not set.
+	// Max Length: 40
 	ReferenceID string `json:"reference_id,omitempty"`
 
 	// Refunds that have been applied to any tender in the transaction.
@@ -69,6 +76,30 @@ type Transaction struct {
 func (m *Transaction) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateClientID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLocationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOrderID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateReferenceID(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateRefunds(formats); err != nil {
 		res = append(res, err)
 	}
@@ -84,6 +115,84 @@ func (m *Transaction) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Transaction) validateClientID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ClientID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("client_id", "body", string(m.ClientID), 192); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Transaction) validateCreatedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 32); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Transaction) validateID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("id", "body", string(m.ID), 192); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Transaction) validateLocationID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.LocationID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Transaction) validateOrderID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.OrderID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("order_id", "body", string(m.OrderID), 192); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Transaction) validateReferenceID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ReferenceID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("reference_id", "body", string(m.ReferenceID), 40); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -41,6 +41,8 @@ type ClientService interface {
 
 	RetrieveCatalogObject(params *RetrieveCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCatalogObjectOK, error)
 
+	SearchCatalogItems(params *SearchCatalogItemsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogItemsOK, error)
+
 	SearchCatalogObjects(params *SearchCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogObjectsOK, error)
 
 	UpdateItemModifierLists(params *UpdateItemModifierListsParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateItemModifierListsOK, error)
@@ -188,8 +190,8 @@ func (a *Client) BatchUpsertCatalogObjects(params *BatchUpsertCatalogObjectsPara
 /*
   CatalogInfo catalogs info
 
-  Returns information about the Square Catalog API, such as batch size
-limits for `BatchUpsertCatalogObjects`.
+  Retrieves information about the Square Catalog API, such as batch size
+limits that can be used by the `BatchUpsertCatalogObjects` endpoint.
 */
 func (a *Client) CatalogInfo(params *CatalogInfoParams, authInfo runtime.ClientAuthInfoWriter) (*CatalogInfoOK, error) {
 	// TODO: Validate the params before sending
@@ -354,22 +356,64 @@ func (a *Client) RetrieveCatalogObject(params *RetrieveCatalogObjectParams, auth
 }
 
 /*
+  SearchCatalogItems searches catalog items
+
+  Searches for catalog items or item variations by matching supported search attribute values, including
+custom attribute values, against one or more of the specified query expressions,
+
+This (`SearchCatalogItems`) endpoint differs from the [SearchCatalogObjects](#endpoint-Catalog-SearchCatalogObjects)
+endpoint in the following aspects:
+
+- `SearchCatalogItems` can only search for items or item variations, whereas `SearchCatalogObjects` can search for any type of catalog objects.
+- `SearchCatalogItems` supports the custom attribute query filters to return items or item variations that contain custom attribute values, where `SearchCatalogObjects` does not.
+- `SearchCatalogItems` does not support the `include_deleted_objects` filter to search for deleted items or item variations, whereas `SearchCatalogObjects` does.
+- The both endpoints use different call conventions, including the query filter formats.
+*/
+func (a *Client) SearchCatalogItems(params *SearchCatalogItemsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogItemsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchCatalogItemsParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "SearchCatalogItems",
+		Method:             "POST",
+		PathPattern:        "/v2/catalog/search-catalog-items",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchCatalogItemsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchCatalogItemsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for SearchCatalogItems: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   SearchCatalogObjects searches catalog objects
 
-  Queries the targeted catalog using a variety of query types:
-[CatalogQuerySortedAttribute](#type-catalogquerysortedattribute),
-[CatalogQueryExact](#type-catalogqueryexact),
-[CatalogQueryRange](#type-catalogqueryrange),
-[CatalogQueryText](#type-catalogquerytext),
-[CatalogQueryItemsForTax](#type-catalogqueryitemsfortax), and
-[CatalogQueryItemsForModifierList](#type-catalogqueryitemsformodifierlist).
---
---
-Future end of the above comment:
-[CatalogQueryItemsForTax](#type-catalogqueryitemsfortax),
-[CatalogQueryItemsForModifierList](#type-catalogqueryitemsformodifierlist),
-[CatalogQueryItemsForItemOptions](#type-catalogqueryitemsforitemoptions), and
-[CatalogQueryItemVariationsForItemOptionValues](#type-catalogqueryitemvariationsforitemoptionvalues).
+  Searches for [CatalogObject](#type-CatalogObject) of any types against supported search attribute values,
+excluding custom attribute values on items or item variations, against one or more of the specified query expressions,
+
+This (`SearchCatalogObjects`) endpoint differs from the [SearchCatalogItems](#endpoint-Catalog-SearchCatalogItems)
+endpoint in the following aspects:
+
+- `SearchCatalogItems` can only search for items or item variations, whereas `SearchCatalogObjects` can search for any type of catalog objects.
+- `SearchCatalogItems` supports the custom attribute query filters to return items or item variations that contain custom attribute values, where `SearchCatalogObjects` does not.
+- `SearchCatalogItems` does not support the `include_deleted_objects` filter to search for deleted items or item variations, whereas `SearchCatalogObjects` does.
+- The both endpoints have different call conventions, including the query filter formats.
 */
 func (a *Client) SearchCatalogObjects(params *SearchCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogObjectsOK, error) {
 	// TODO: Validate the params before sending

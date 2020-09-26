@@ -11,17 +11,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CustomerQuery Represents a query (filtering and sorting criteria) used to search
+// CustomerQuery Represents a query (including filtering criteria, sorting criteria, or both) used to search
 // for customer profiles.
 //
 // swagger:model CustomerQuery
 type CustomerQuery struct {
 
-	// A list of filter criteria.
+	// A list of filtering criteria.
 	Filter *CustomerFilter `json:"filter,omitempty"`
 
-	// Sort criteria for query results. The default sort behavior is to order
-	// customers alphabetically by `given_name` and `last_name`.
+	// Sorting criteria for query results. The default behavior is to sort
+	// customers alphabetically by `given_name` and `family_name`.
 	Sort *CustomerSort `json:"sort,omitempty"`
 }
 

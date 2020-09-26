@@ -14,8 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
-	"github.com/jefflinse/square-connect/models"
 )
 
 // NewCompletePaymentParams creates a new CompletePaymentParams object
@@ -62,13 +60,6 @@ for the complete payment operation typically these are written to a http.Request
 */
 type CompletePaymentParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
-
-	See the corresponding object definition for field details.
-
-	*/
-	Body models.CompletePaymentRequest
 	/*PaymentID
 	  Unique ID identifying the payment to be completed.
 
@@ -113,17 +104,6 @@ func (o *CompletePaymentParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithBody adds the body to the complete payment params
-func (o *CompletePaymentParams) WithBody(body models.CompletePaymentRequest) *CompletePaymentParams {
-	o.SetBody(body)
-	return o
-}
-
-// SetBody adds the body to the complete payment params
-func (o *CompletePaymentParams) SetBody(body models.CompletePaymentRequest) {
-	o.Body = body
-}
-
 // WithPaymentID adds the paymentID to the complete payment params
 func (o *CompletePaymentParams) WithPaymentID(paymentID string) *CompletePaymentParams {
 	o.SetPaymentID(paymentID)
@@ -142,12 +122,6 @@ func (o *CompletePaymentParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		return err
 	}
 	var res []error
-
-	if o.Body != nil {
-		if err := r.SetBodyParam(o.Body); err != nil {
-			return err
-		}
-	}
 
 	// path param payment_id
 	if err := r.SetPathParam("payment_id", o.PaymentID); err != nil {

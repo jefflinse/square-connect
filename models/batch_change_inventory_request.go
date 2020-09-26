@@ -20,7 +20,7 @@ type BatchChangeInventoryRequest struct {
 
 	// The set of physical counts and inventory adjustments to be made.
 	// Changes are applied based on the client-supplied timestamp and may be sent
-	// out of order. Max size is 100 changes.
+	// out of order.
 	Changes []*InventoryChange `json:"changes"`
 
 	// A client-supplied, universally unique identifier (UUID) for the

@@ -120,7 +120,10 @@ func (a *Client) ListLocations(params *ListLocationsParams, authInfo runtime.Cli
 /*
   RetrieveLocation retrieves location
 
-  Retrieves details of a location.
+  Retrieves details of a location. You can specify "main"
+as the location ID to retrieve details of the
+main location. For more information,
+see [Locations API Overview](/docs/locations-api).
 */
 func (a *Client) RetrieveLocation(params *RetrieveLocationParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveLocationOK, error) {
 	// TODO: Validate the params before sending

@@ -256,7 +256,11 @@ func (a *Client) DeleteCustomerCard(params *DeleteCustomerCardParams, authInfo r
 /*
   ListCustomers lists customers
 
-  Lists a business's customers.
+  Lists customer profiles associated with a Square account.
+
+Under normal operating conditions, newly created or updated customer profiles become available
+for the listing operation in well under 30 seconds. Occasionally, propagation of the new or updated
+profiles can take closer to one minute or longer, espeically during network incidents and outages.
 */
 func (a *Client) ListCustomers(params *ListCustomersParams, authInfo runtime.ClientAuthInfoWriter) (*ListCustomersOK, error) {
 	// TODO: Validate the params before sending
@@ -370,10 +374,16 @@ func (a *Client) RetrieveCustomer(params *RetrieveCustomerParams, authInfo runti
 /*
   SearchCustomers searches customers
 
-  Searches the customer profiles associated with a Square account.
-Calling SearchCustomers without an explicit query parameter returns all
+  Searches the customer profiles associated with a Square account using
+one or more supported query filters.
+
+Calling `SearchCustomers` without any explicit query filter returns all
 customer profiles ordered alphabetically based on `given_name` and
 `family_name`.
+
+Under normal operating conditions, newly created or updated customer profiles become available
+for the search operation in well under 30 seconds. Occasionally, propagation of the new or updated
+profiles can take closer to one minute or longer, espeically during network incidents and outages.
 */
 func (a *Client) SearchCustomers(params *SearchCustomersParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCustomersOK, error) {
 	// TODO: Validate the params before sending

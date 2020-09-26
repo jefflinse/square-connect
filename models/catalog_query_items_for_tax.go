@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQueryItemsForTax catalog query items for tax
+// CatalogQueryItemsForTax The query filter to return the items containing the specified tax IDs.
 //
 // swagger:model CatalogQueryItemsForTax
 type CatalogQueryItemsForTax struct {

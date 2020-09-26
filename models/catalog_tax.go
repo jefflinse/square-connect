@@ -6,11 +6,13 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
-// CatalogTax A tax in the Catalog object model.
+// CatalogTax A tax applicable to an item.
 //
 // swagger:model CatalogTax
 type CatalogTax struct {
@@ -30,7 +32,8 @@ type CatalogTax struct {
 	// See [TaxInclusionType](#type-taxinclusiontype) for possible values
 	InclusionType string `json:"inclusion_type,omitempty"`
 
-	// The tax's name. Searchable. This field has max length of 255 Unicode code points.
+	// The tax's name. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+	// Max Length: 255
 	Name string `json:"name,omitempty"`
 
 	// The percentage of the tax in decimal form, using a `'.'` as the decimal separator and without a `'%'` sign.
@@ -40,6 +43,28 @@ type CatalogTax struct {
 
 // Validate validates this catalog tax
 func (m *CatalogTax) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogTax) validateName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Name) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -38,14 +38,6 @@ type ClientService interface {
   RetrieveBusiness retrieves business
 
   Get the general information for a business.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-locations)
-
----
 */
 func (a *Client) RetrieveBusiness(params *RetrieveBusinessParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveBusinessOK, error) {
 	// TODO: Validate the params before sending
@@ -84,14 +76,6 @@ func (a *Client) RetrieveBusiness(params *RetrieveBusinessParams, authInfo runti
 
   Provides details for all business locations associated with a Square
 account, including the Square-assigned object ID for the location.
-
----
-
-- __Deprecation date__: 2019-11-20
-- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18
-- [Migration guide](/migrate-from-v1/guides/v1-locations)
-
----
 */
 func (a *Client) V1ListLocations(params *V1ListLocationsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListLocationsOK, error) {
 	// TODO: Validate the params before sending

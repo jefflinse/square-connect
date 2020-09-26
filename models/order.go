@@ -86,6 +86,11 @@ type Order struct {
 	// Net money amounts (sale money - return money).
 	NetAmounts *OrderMoneyAmounts `json:"net_amounts,omitempty"`
 
+	// Pricing options for an order. The options affect how the order's price is calculated.
+	// They can be used, for example, to apply automatic price adjustments that are based on pre-configured
+	// [pricing rules](https://developer.squareup.com/docs/reference/square/objects/CatalogPricingRule).
+	PricingOptions *OrderPricingOptions `json:"pricing_options,omitempty"`
+
 	// A client specified identifier to associate an entity in another system
 	// with this order.
 	// Max Length: 40
@@ -101,6 +106,9 @@ type Order struct {
 	// Itemized Return or Exchange.  There will be exactly one `Return` object per sale Order being
 	// referenced.
 	Returns []*OrderReturn `json:"returns"`
+
+	// A set-like list of rewards that have been added to the order.
+	Rewards []*OrderReward `json:"rewards"`
 
 	// A positive or negative rounding adjustment to the total of the order, commonly used to
 	// apply Cash Rounding when the minimum unit of account is smaller than the lowest physical
@@ -149,6 +157,9 @@ type Order struct {
 	// The total tax amount of money to collect for the order.
 	TotalTaxMoney *Money `json:"total_tax_money,omitempty"`
 
+	// The total tip amount of money to collect for the order.
+	TotalTipMoney *Money `json:"total_tip_money,omitempty"`
+
 	// Timestamp for when the order was last updated. In RFC 3339 format, e.g., "2016-09-04T23:59:33.123Z".
 	UpdatedAt string `json:"updated_at,omitempty"`
 
@@ -188,6 +199,10 @@ func (m *Order) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validatePricingOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateReferenceID(formats); err != nil {
 		res = append(res, err)
 	}
@@ -201,6 +216,10 @@ func (m *Order) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateReturns(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRewards(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -237,6 +256,10 @@ func (m *Order) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateTotalTaxMoney(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTotalTipMoney(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -365,6 +388,24 @@ func (m *Order) validateNetAmounts(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Order) validatePricingOptions(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.PricingOptions) { // not required
+		return nil
+	}
+
+	if m.PricingOptions != nil {
+		if err := m.PricingOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pricing_options")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Order) validateReferenceID(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.ReferenceID) { // not required
@@ -436,6 +477,31 @@ func (m *Order) validateReturns(formats strfmt.Registry) error {
 			if err := m.Returns[i].Validate(formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("returns" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Order) validateRewards(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Rewards) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Rewards); i++ {
+		if swag.IsZero(m.Rewards[i]) { // not required
+			continue
+		}
+
+		if m.Rewards[i] != nil {
+			if err := m.Rewards[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("rewards" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -621,6 +687,24 @@ func (m *Order) validateTotalTaxMoney(formats strfmt.Registry) error {
 		if err := m.TotalTaxMoney.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("total_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Order) validateTotalTipMoney(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.TotalTipMoney) { // not required
+		return nil
+	}
+
+	if m.TotalTipMoney != nil {
+		if err := m.TotalTipMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_tip_money")
 			}
 			return err
 		}

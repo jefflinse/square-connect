@@ -11,15 +11,14 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
-// CatalogModifierList A modifier list in the Catalog object model. A `CatalogModifierList`
-// contains `CatalogModifier` objects that can be applied to a `CatalogItem` at
-// the time of sale.
+// CatalogModifierList A list of modifiers applicable to items at the time of sale.
 //
-// For example, a modifier list "Condiments" that would apply to a "Hot Dog"
-// `CatalogItem` might contain `CatalogModifier`s "Ketchup", "Mustard", and "Relish".
-// The `selection_type` field specifies whether or not multiple selections from
+// For example, a "Condiments" modifier list applicable to a "Hot Dog" item
+// may contain "Ketchup", "Mustard", and "Relish" modifiers.
+// Use the `selection_type` field to specify whether or not multiple selections from
 // the modifier list are allowed.
 //
 // swagger:model CatalogModifierList
@@ -31,13 +30,14 @@ type CatalogModifierList struct {
 	// `CatalogModifier` data.
 	Modifiers []*CatalogObject `json:"modifiers"`
 
-	// A searchable name for the `CatalogModifierList`. This field has max length of 255 Unicode code points.
+	// The name for the `CatalogModifierList` instance. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+	// Max Length: 255
 	Name string `json:"name,omitempty"`
 
-	// Determines where this `CatalogModifierList` appears in a list of `CatalogModifierList` values.
+	// Determines where this modifier list appears in a list of `CatalogModifierList` values.
 	Ordinal int64 `json:"ordinal,omitempty"`
 
-	// Indicates whether multiple options from the `CatalogModifierList`
+	// Indicates whether multiple options from the modifier list
 	// can be applied to a single `CatalogItem`.
 	// See [CatalogModifierListSelectionType](#type-catalogmodifierlistselectiontype) for possible values
 	SelectionType string `json:"selection_type,omitempty"`
@@ -48,6 +48,10 @@ func (m *CatalogModifierList) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateModifiers(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -77,6 +81,19 @@ func (m *CatalogModifierList) validateModifiers(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *CatalogModifierList) validateName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Name) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+		return err
 	}
 
 	return nil

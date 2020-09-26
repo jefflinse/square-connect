@@ -9,17 +9,19 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
-// CatalogModifier A modifier in the Catalog object model.
+// CatalogModifier A modifier applicable to items at the time of sale.
 //
 // swagger:model CatalogModifier
 type CatalogModifier struct {
 
-	// The ID of the `CatalogModifierList` associated with this modifier. Searchable.
+	// The ID of the `CatalogModifierList` associated with this modifier.
 	ModifierListID string `json:"modifier_list_id,omitempty"`
 
-	// The modifier name. Searchable. This field has max length of 255 Unicode code points.
+	// The modifier name.  This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+	// Max Length: 255
 	Name string `json:"name,omitempty"`
 
 	// Determines where this `CatalogModifier` appears in the `CatalogModifierList`.
@@ -33,6 +35,10 @@ type CatalogModifier struct {
 func (m *CatalogModifier) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePriceMoney(formats); err != nil {
 		res = append(res, err)
 	}
@@ -40,6 +46,19 @@ func (m *CatalogModifier) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *CatalogModifier) validateName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Name) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+		return err
+	}
+
 	return nil
 }
 

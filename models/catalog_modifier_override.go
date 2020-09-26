@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogModifierOverride catalog modifier override
+// CatalogModifierOverride Options to control how to override the default behavior of the specified modifier.
 //
 // swagger:model CatalogModifierOverride
 type CatalogModifierOverride struct {

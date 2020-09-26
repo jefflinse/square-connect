@@ -12,13 +12,12 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQueryText catalog query text
+// CatalogQueryText The query filter to return the search result whose searchable attribute values contain all of the specified keywords or tokens, independent of the token order or case.
 //
 // swagger:model CatalogQueryText
 type CatalogQueryText struct {
 
-	// A list of 1, 2, or 3 search keywords. Keywords with fewer than 3 characters
-	// are ignored.
+	// A list of 1, 2, or 3 search keywords. Keywords with fewer than 3 characters are ignored.
 	// Required: true
 	Keywords []string `json:"keywords"`
 }

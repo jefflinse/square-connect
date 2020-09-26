@@ -28,6 +28,11 @@ type Tender struct {
 	// `amount_money` of the tender.
 	AmountMoney *Money `json:"amount_money,omitempty"`
 
+	// The details of the bank transfer tender.
+	//
+	// This value is present only if the value of `type` is `BANK_TRANSFER`.
+	BankTransferDetails *TenderBankTransferDetails `json:"bank_transfer_details,omitempty"`
+
 	// The details of the card tender.
 	//
 	// This value is present only if the value of `type` is `CARD`.
@@ -38,24 +43,30 @@ type Tender struct {
 	// This value is present only if the value of `type` is `CASH`.
 	CashDetails *TenderCashDetails `json:"cash_details,omitempty"`
 
-	// The time when the tender was created, in RFC 3339 format.
+	// The timestamp for when the tender was created, in RFC 3339 format.
+	// Max Length: 32
 	CreatedAt string `json:"created_at,omitempty"`
 
 	// If the tender is associated with a customer or represents a customer's card on file,
 	// this is the ID of the associated customer.
+	// Max Length: 191
 	CustomerID string `json:"customer_id,omitempty"`
 
 	// The tender's unique ID.
+	// Max Length: 192
 	ID string `json:"id,omitempty"`
 
 	// The ID of the transaction's associated location.
+	// Max Length: 50
 	LocationID string `json:"location_id,omitempty"`
 
 	// An optional note associated with the tender at the time of payment.
+	// Max Length: 500
 	Note string `json:"note,omitempty"`
 
 	// The ID of the `Payment` that corresponds to this tender.
 	// This value is only present for payments created with the v2 Payments API.
+	// Max Length: 192
 	PaymentID string `json:"payment_id,omitempty"`
 
 	// The amount of any Square processing fees applied to the tender.
@@ -68,6 +79,7 @@ type Tender struct {
 	TipMoney *Money `json:"tip_money,omitempty"`
 
 	// The ID of the tender's associated transaction.
+	// Max Length: 192
 	TransactionID string `json:"transaction_id,omitempty"`
 
 	// The type of tender, such as `CARD` or `CASH`.
@@ -88,6 +100,10 @@ func (m *Tender) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateBankTransferDetails(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateCardDetails(formats); err != nil {
 		res = append(res, err)
 	}
@@ -96,11 +112,39 @@ func (m *Tender) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateCreatedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCustomerID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLocationID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNote(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePaymentID(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateProcessingFeeMoney(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateTipMoney(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTransactionID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -157,6 +201,24 @@ func (m *Tender) validateAmountMoney(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Tender) validateBankTransferDetails(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.BankTransferDetails) { // not required
+		return nil
+	}
+
+	if m.BankTransferDetails != nil {
+		if err := m.BankTransferDetails.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("bank_transfer_details")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *Tender) validateCardDetails(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.CardDetails) { // not required
@@ -193,6 +255,84 @@ func (m *Tender) validateCashDetails(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Tender) validateCreatedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CreatedAt) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 32); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Tender) validateCustomerID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CustomerID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("customer_id", "body", string(m.CustomerID), 191); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Tender) validateID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("id", "body", string(m.ID), 192); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Tender) validateLocationID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.LocationID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 50); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Tender) validateNote(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Note) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("note", "body", string(m.Note), 500); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Tender) validatePaymentID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.PaymentID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("payment_id", "body", string(m.PaymentID), 192); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Tender) validateProcessingFeeMoney(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.ProcessingFeeMoney) { // not required
@@ -224,6 +364,19 @@ func (m *Tender) validateTipMoney(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *Tender) validateTransactionID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.TransactionID) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("transaction_id", "body", string(m.TransactionID), 192); err != nil {
+		return err
 	}
 
 	return nil

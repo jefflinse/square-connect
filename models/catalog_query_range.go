@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQueryRange catalog query range
+// CatalogQueryRange The query filter to return the search result whose named attribute values fall between the specified range.
 //
 // swagger:model CatalogQueryRange
 type CatalogQueryRange struct {

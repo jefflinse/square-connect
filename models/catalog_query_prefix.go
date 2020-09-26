@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQueryPrefix catalog query prefix
+// CatalogQueryPrefix The query filter to return the search result whose named attribute values are prefixed by the specified attribute value.
 //
 // swagger:model CatalogQueryPrefix
 type CatalogQueryPrefix struct {

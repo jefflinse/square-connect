@@ -10,7 +10,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CatalogQueryItemVariationsForItemOptionValues catalog query item variations for item option values
+// CatalogQueryItemVariationsForItemOptionValues The query filter to return the item variations containing the specified item option value IDs.
 //
 // swagger:model CatalogQueryItemVariationsForItemOptionValues
 type CatalogQueryItemVariationsForItemOptionValues struct {

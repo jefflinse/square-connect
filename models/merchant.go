@@ -20,7 +20,7 @@ type Merchant struct {
 	// The business name of the merchant.
 	BusinessName string `json:"business_name,omitempty"`
 
-	// The country code associated with the merchant account, in ISO 3166-1-alpha-2 format.
+	// The country code associated with the merchant account, in ISO 3166 format.
 	// See [Country](#type-country) for possible values
 	// Required: true
 	Country *string `json:"country"`
@@ -34,6 +34,9 @@ type Merchant struct {
 
 	// The language code associated with the merchant account, in BCP 47 format.
 	LanguageCode string `json:"language_code,omitempty"`
+
+	// The ID of the main `Location` for this merchant.
+	MainLocationID string `json:"main_location_id,omitempty"`
 
 	// The merchant status, active or inactive.
 	// See [MerchantStatus](#type-merchantstatus) for possible values

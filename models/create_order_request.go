@@ -28,6 +28,9 @@ type CreateOrderRequest struct {
 	// Max Length: 192
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 
+	// The ID of the business location to associate the order with.
+	LocationID string `json:"location_id,omitempty"`
+
 	// The order to create. If this field is set, then the only other top-level field that can be
 	// set is the idempotency_key.
 	Order *Order `json:"order,omitempty"`

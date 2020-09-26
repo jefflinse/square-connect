@@ -46,8 +46,7 @@ type ClientService interface {
   CancelPayment cancels payment
 
   Cancels (voids) a payment. If you set `autocomplete` to false when creating a payment,
-you can cancel the payment using this endpoint. For more information, see
-[Delayed Payments](/payments-api/take-payments#delayed-payments).
+you can cancel the payment using this endpoint.
 */
 func (a *Client) CancelPayment(params *CancelPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CancelPaymentOK, error) {
 	// TODO: Validate the params before sending
@@ -135,8 +134,7 @@ func (a *Client) CancelPaymentByIdempotencyKey(params *CancelPaymentByIdempotenc
 
 By default, payments are set to complete immediately after they are created.
 If you set autocomplete to false when creating a payment, you can complete (capture)
-the payment using this endpoint. For more information, see
-[Delayed Payments](/payments-api/take-payments#delayed-payments).
+the payment using this endpoint.
 */
 func (a *Client) CompletePayment(params *CompletePaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CompletePaymentOK, error) {
 	// TODO: Validate the params before sending
@@ -181,8 +179,6 @@ amount to accept for the payment.
 There are several optional parameters that you can include in the request.
 For example, tip money, whether to autocomplete the payment, or a reference ID
 to correlate this payment with another system.
-For more information about these
-payment options, see [Take Payments](/payments-api/take-payments).
 
 The `PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS` OAuth permission is required
 to enable application fees.

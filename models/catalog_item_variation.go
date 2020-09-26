@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // CatalogItemVariation An item variation (i.e., product) in the Catalog object model. Each item
@@ -30,7 +31,7 @@ type CatalogItemVariation struct {
 	// See [InventoryAlertType](#type-inventoryalerttype) for possible values
 	InventoryAlertType string `json:"inventory_alert_type,omitempty"`
 
-	// The ID of the `CatalogItem` associated with this item variation. Searchable.
+	// The ID of the `CatalogItem` associated with this item variation.
 	ItemID string `json:"item_id,omitempty"`
 
 	// List of item option values associated with this item variation. Listed
@@ -45,7 +46,8 @@ type CatalogItemVariation struct {
 	// whole quantities.
 	MeasurementUnitID string `json:"measurement_unit_id,omitempty"`
 
-	// The item variation's name. Searchable. This field has max length of 255 Unicode code points.
+	// The item variation's name. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+	// Max Length: 255
 	Name string `json:"name,omitempty"`
 
 	// The order in which this item variation should be displayed. This value is read-only. On writes, the ordinal
@@ -67,18 +69,19 @@ type CatalogItemVariation struct {
 	// 30 (minutes) * 60 (seconds per minute) * 1000 (milliseconds per second).
 	ServiceDuration int64 `json:"service_duration,omitempty"`
 
-	// The item variation's SKU, if any. Searchable.
+	// The item variation's SKU, if any. This is a searchable attribute for use in applicable query filters.
 	Sku string `json:"sku,omitempty"`
 
 	// If `true`, inventory tracking is active for the variation.
 	TrackInventory bool `json:"track_inventory,omitempty"`
 
-	// The item variation's UPC, if any. Searchable in the Connect API.
-	// This field is only exposed in the Connect API. It is not exposed in Square's Dashboard,
-	// Square Point of Sale app or Retail Point of Sale app.
+	// The item variation's UPC, if any. This is a searchable attribute for use in applicable query filters.
+	// It is only accessible through the Square API, and not exposed in the Square Seller Dashboard,
+	// Square Point of Sale or Retail Point of Sale apps.
 	Upc string `json:"upc,omitempty"`
 
-	// Arbitrary user metadata to associate with the item variation. Searchable. This field has max length of 255 Unicode code points.
+	// Arbitrary user metadata to associate with the item variation. This attribute value length is of Unicode code points.
+	// Max Length: 255
 	UserData string `json:"user_data,omitempty"`
 }
 
@@ -94,7 +97,15 @@ func (m *CatalogItemVariation) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validatePriceMoney(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUserData(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -154,6 +165,19 @@ func (m *CatalogItemVariation) validateLocationOverrides(formats strfmt.Registry
 	return nil
 }
 
+func (m *CatalogItemVariation) validateName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Name) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *CatalogItemVariation) validatePriceMoney(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.PriceMoney) { // not required
@@ -167,6 +191,19 @@ func (m *CatalogItemVariation) validatePriceMoney(formats strfmt.Registry) error
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *CatalogItemVariation) validateUserData(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.UserData) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("user_data", "body", string(m.UserData), 255); err != nil {
+		return err
 	}
 
 	return nil

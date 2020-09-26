@@ -6,9 +6,12 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"strconv"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // ShiftFilter Defines a filter used in a search for `Shift` records. `AND` logic is
@@ -17,13 +20,14 @@ import (
 // swagger:model ShiftFilter
 type ShiftFilter struct {
 
-	// Fetch shifts for the specified employee.
+	// Fetch shifts for the specified employees. DEPRECATED at version 2020-08-26. Use `team_member_ids` instead
 	EmployeeIds []string `json:"employee_ids"`
 
 	// Fetch the `Shift`s that end in the time range - Inclusive.
 	End *TimeRange `json:"end,omitempty"`
 
 	// Fetch shifts for the specified location.
+	// Required: true
 	LocationIds []string `json:"location_ids"`
 
 	// Fetch `Shift`s that start in the time range - Inclusive.
@@ -32,6 +36,10 @@ type ShiftFilter struct {
 	// Fetch a `Shift` instance by `Shift.status`.
 	// See [ShiftFilterStatus](#type-shiftfilterstatus) for possible values
 	Status string `json:"status,omitempty"`
+
+	// Fetch shifts for the specified team members. Replaced `employee_ids` at version "2020-08-26"
+	// Required: true
+	TeamMemberIds []string `json:"team_member_ids"`
 
 	// Fetch the `Shift`s based on workday date range.
 	Workday *ShiftWorkday `json:"workday,omitempty"`
@@ -45,7 +53,15 @@ func (m *ShiftFilter) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateLocationIds(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateStart(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTeamMemberIds(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -77,6 +93,23 @@ func (m *ShiftFilter) validateEnd(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *ShiftFilter) validateLocationIds(formats strfmt.Registry) error {
+
+	if err := validate.Required("location_ids", "body", m.LocationIds); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.LocationIds); i++ {
+
+		if err := validate.MinLength("location_ids"+"."+strconv.Itoa(i), "body", string(m.LocationIds[i]), 1); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
 func (m *ShiftFilter) validateStart(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Start) { // not required
@@ -90,6 +123,23 @@ func (m *ShiftFilter) validateStart(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *ShiftFilter) validateTeamMemberIds(formats strfmt.Registry) error {
+
+	if err := validate.Required("team_member_ids", "body", m.TeamMemberIds); err != nil {
+		return err
+	}
+
+	for i := 0; i < len(m.TeamMemberIds); i++ {
+
+		if err := validate.MinLength("team_member_ids"+"."+strconv.Itoa(i), "body", string(m.TeamMemberIds[i]), 1); err != nil {
+			return err
+		}
+
 	}
 
 	return nil

@@ -33,7 +33,16 @@ type ListPaymentRefundsRequest struct {
 	// Default: The current time.
 	EndTime string `json:"end_time,omitempty"`
 
-	// ID of location associated with payment.
+	// Maximum number of results to be returned in a single page.
+	// It is possible to receive fewer results than the specified limit on a given page.
+	//
+	// If the supplied value is greater than 100, at most 100 results will be returned.
+	//
+	// Default: `100`
+	Limit int64 `json:"limit,omitempty"`
+
+	// Limit results to the location supplied. By default, results are returned
+	// for all locations associated with the merchant.
 	LocationID string `json:"location_id,omitempty"`
 
 	// The order in which results are listed.

@@ -44,8 +44,9 @@ type RefundPaymentRequest struct {
 	// [Collect Fees](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees)
 	AppFeeMoney *Money `json:"app_fee_money,omitempty"`
 
-	//  A unique string that identifies this RefundPayment request. Key can be any valid string but
-	// must be unique for every RefundPayment request.
+	//  A unique string that identifies this RefundPayment request. Key can be any valid string
+	// but must be unique for every RefundPayment request.
+	//
 	// For more information, see [Idempotency keys](https://developer.squareup.com/docs/working-with-apis/idempotency).
 	// Required: true
 	// Min Length: 1

@@ -224,8 +224,8 @@ provided [CatalogObject](#type-catalogobject) at the requested
 Results are paginated and sorted in descending order according to their
 `occurred_at` timestamp (newest first).
 
-There are no limits on how far back the caller can page. This endpoint is
-useful when displaying recent changes for a specific item. For more
+There are no limits on how far back the caller can page. This endpoint can be
+used to display recent changes for a specific item. For more
 sophisticated queries, use a batch endpoint.
 */
 func (a *Client) RetrieveInventoryChanges(params *RetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryChangesOK, error) {

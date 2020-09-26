@@ -19,10 +19,12 @@ type DisputeEvidence struct {
 
 	// The ID of the dispute the evidence is associated with.
 	// Max Length: 40
+	// Min Length: 1
 	DisputeID string `json:"dispute_id,omitempty"`
 
 	// The Square-generated ID of the evidence.
 	// Max Length: 40
+	// Min Length: 1
 	EvidenceID string `json:"evidence_id,omitempty"`
 
 	// The type of the evidence.
@@ -30,6 +32,8 @@ type DisputeEvidence struct {
 	EvidenceType string `json:"evidence_type,omitempty"`
 
 	// The time when the next action is due, in RFC 3339 format.
+	// Max Length: 40
+	// Min Length: 1
 	UploadedAt string `json:"uploaded_at,omitempty"`
 }
 
@@ -45,6 +49,10 @@ func (m *DisputeEvidence) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateUploadedAt(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -55,6 +63,10 @@ func (m *DisputeEvidence) validateDisputeID(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.DisputeID) { // not required
 		return nil
+	}
+
+	if err := validate.MinLength("dispute_id", "body", string(m.DisputeID), 1); err != nil {
+		return err
 	}
 
 	if err := validate.MaxLength("dispute_id", "body", string(m.DisputeID), 40); err != nil {
@@ -70,7 +82,28 @@ func (m *DisputeEvidence) validateEvidenceID(formats strfmt.Registry) error {
 		return nil
 	}
 
+	if err := validate.MinLength("evidence_id", "body", string(m.EvidenceID), 1); err != nil {
+		return err
+	}
+
 	if err := validate.MaxLength("evidence_id", "body", string(m.EvidenceID), 40); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *DisputeEvidence) validateUploadedAt(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.UploadedAt) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("uploaded_at", "body", string(m.UploadedAt), 1); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("uploaded_at", "body", string(m.UploadedAt), 40); err != nil {
 		return err
 	}
 

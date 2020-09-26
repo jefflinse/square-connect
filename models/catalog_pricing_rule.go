@@ -10,7 +10,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CatalogPricingRule Defines how prices are modified or set for items that match the pricing rule
+// CatalogPricingRule Defines how discounts are automatically applied to a set of items that match the pricing rule
 // during the active time period.
 //
 // swagger:model CatalogPricingRule

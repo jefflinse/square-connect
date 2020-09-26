@@ -10,20 +10,21 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CustomerSort Indicates the field to use for sorting customer profiles.
+// CustomerSort Specifies how searched customers profiles are sorted, including the sort key and sort order.
 //
 // swagger:model CustomerSort
 type CustomerSort struct {
 
-	// Indicates the information used to sort the results. For example,
-	// by creation date.
+	//  Use one or more customer attributes as the sort key to sort searched customer profiles.
+	// For example, use creation date (`created_at`) of customers or default attributes as the sort key.
+	//
 	//
 	// Default: `DEFAULT`.
 	// See [CustomerSortField](#type-customersortfield) for possible values
 	Field string `json:"field,omitempty"`
 
-	// Indicates the order in which results should be displayed based on the
-	// value of the sort field. String comparisons use standard alphabetic comparison
+	// Indicates the order in which results should be sorted based on the
+	// sort field value. Strings use standard alphabetic comparison
 	// to determine order. Strings representing numbers are sorted as strings.
 	//
 	// Default: `ASC`.

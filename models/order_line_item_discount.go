@@ -70,6 +70,18 @@ type OrderLineItemDiscount struct {
 	// Max Length: 10
 	Percentage string `json:"percentage,omitempty"`
 
+	// The object identifier of a `pricing rule` to be applied automatically
+	// to this discount. The specification and application of the discounts, to which a `pricing_rule_id` is
+	// assigned, are completely controlled by the corresponding pricing rule.
+	PricingRuleID string `json:"pricing_rule_id,omitempty"`
+
+	// The reward identifiers corresponding to this discount. The application and
+	// specification of discounts that have `reward_ids` are completely controlled by the backing
+	// criteria corresponding to the reward tiers of the rewards that are added to the order
+	// through the Loyalty API. To manually unapply discounts that are the result of added rewards,
+	// the rewards must be removed from the order through the Loyalty API.
+	RewardIds []string `json:"reward_ids"`
+
 	// Indicates the level at which the discount applies. For `ORDER` scoped discounts,
 	// Square generates references in `applied_discounts` on all order line items that do
 	// not have them. For `LINE_ITEM` scoped discounts, the discount only applies to line items

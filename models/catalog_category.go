@@ -6,21 +6,46 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
-// CatalogCategory A category to which a `CatalogItem` belongs in the `Catalog` object model.
+// CatalogCategory A category to which a `CatalogItem` instance belongs.
 //
 // swagger:model CatalogCategory
 type CatalogCategory struct {
 
-	// The category name. Searchable. This field has max length of 255 Unicode code points.
+	// The category name. This is a searchable attribute for use in applicable query filters, and its value length is of Unicode code points.
+	// Max Length: 255
 	Name string `json:"name,omitempty"`
 }
 
 // Validate validates this catalog category
 func (m *CatalogCategory) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogCategory) validateName(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Name) { // not required
+		return nil
+	}
+
+	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+		return err
+	}
+
 	return nil
 }
 

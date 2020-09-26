@@ -69,11 +69,6 @@ type BatchRetrieveOrdersParams struct {
 
 	*/
 	Body *models.BatchRetrieveOrdersRequest
-	/*LocationID
-	  The ID of the orders' associated location.
-
-	*/
-	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -124,17 +119,6 @@ func (o *BatchRetrieveOrdersParams) SetBody(body *models.BatchRetrieveOrdersRequ
 	o.Body = body
 }
 
-// WithLocationID adds the locationID to the batch retrieve orders params
-func (o *BatchRetrieveOrdersParams) WithLocationID(locationID string) *BatchRetrieveOrdersParams {
-	o.SetLocationID(locationID)
-	return o
-}
-
-// SetLocationID adds the locationId to the batch retrieve orders params
-func (o *BatchRetrieveOrdersParams) SetLocationID(locationID string) {
-	o.LocationID = locationID
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *BatchRetrieveOrdersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -147,11 +131,6 @@ func (o *BatchRetrieveOrdersParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err
 		}
-	}
-
-	// path param location_id
-	if err := r.SetPathParam("location_id", o.LocationID); err != nil {
-		return err
 	}
 
 	if len(res) > 0 {

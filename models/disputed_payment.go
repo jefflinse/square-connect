@@ -19,6 +19,7 @@ type DisputedPayment struct {
 
 	// Square-generated unique ID of the payment being disputed.
 	// Max Length: 192
+	// Min Length: 1
 	PaymentID string `json:"payment_id,omitempty"`
 }
 
@@ -40,6 +41,10 @@ func (m *DisputedPayment) validatePaymentID(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.PaymentID) { // not required
 		return nil
+	}
+
+	if err := validate.MinLength("payment_id", "body", string(m.PaymentID), 1); err != nil {
+		return err
 	}
 
 	if err := validate.MaxLength("payment_id", "body", string(m.PaymentID), 192); err != nil {

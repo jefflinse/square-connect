@@ -21,7 +21,7 @@ type ListEmployeesRequest struct {
 	// The number of employees to be returned on each page.
 	Limit int64 `json:"limit,omitempty"`
 
-	// Filter employees returned to only those that are associated with the specified location.
+	// location id
 	LocationID string `json:"location_id,omitempty"`
 
 	// Specifies the EmployeeStatus to filter the employee by.

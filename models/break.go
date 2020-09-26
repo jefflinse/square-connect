@@ -23,9 +23,7 @@ type Break struct {
 	BreakTypeID *string `json:"break_type_id"`
 
 	// RFC 3339; follows same timezone info as `Shift`. Precision up to
-	// the minute is respected; seconds are truncated. The `end_at` minute is not
-	// counted when the break length is calculated. For example, a break from `00:00`
-	// to `00:11`  is considered a 10 minute break (midnight to 10 minutes after midnight).
+	// the minute is respected; seconds are truncated.
 	EndAt string `json:"end_at,omitempty"`
 
 	// Format: RFC-3339 P[n]Y[n]M[n]DT[n]H[n]M[n]S. The expected length of

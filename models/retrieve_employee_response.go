@@ -18,7 +18,7 @@ import (
 // swagger:model RetrieveEmployeeResponse
 type RetrieveEmployeeResponse struct {
 
-	// The response object.
+	// employee
 	Employee *Employee `json:"employee,omitempty"`
 
 	// Any errors that occurred during the request.

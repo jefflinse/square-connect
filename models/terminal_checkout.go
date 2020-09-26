@@ -22,7 +22,7 @@ type TerminalCheckout struct {
 	AmountMoney *Money `json:"amount_money"`
 
 	// Present if the status is CANCELED.
-	// See [TerminalCheckoutCancelReason](#type-terminalcheckoutcancelreason) for possible values
+	// See [ActionCancelReason](#type-actioncancelreason) for possible values
 	CancelReason string `json:"cancel_reason,omitempty"`
 
 	// The time when the `TerminalCheckout` was created as an RFC 3339 timestamp.

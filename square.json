@@ -228,7 +228,7 @@
         ],
         "summary": "RetrieveBusiness",
         "operationId": "RetrieveBusiness",
-        "description": "Get the general information for a business.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-locations)\n\n---",
+        "description": "Get the general information for a business.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -482,7 +482,7 @@
         ],
         "summary": "ListLocations",
         "operationId": "V1ListLocations",
-        "description": "Provides details for all business locations associated with a Square\naccount, including the Square-assigned object ID for the location.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-locations)\n\n---",
+        "description": "Provides details for all business locations associated with a Square\naccount, including the Square-assigned object ID for the location.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -697,7 +697,7 @@
         ],
         "summary": "ListTimecards",
         "operationId": "ListTimecards",
-        "description": "Provides summary information for all of a business\u0027s employee timecards.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-timecards)\n\n---",
+        "description": "Provides summary information for all of a business\u0027s employee timecards.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -819,7 +819,7 @@
         ],
         "summary": "CreateTimecard",
         "operationId": "CreateTimecard",
-        "description": "Creates a timecard for an employee and clocks them in with an\n`API_CREATE` event and a `clockin_time` set to the current time unless\nthe request provides a different value.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-timecards)\n\n---\n\n\nTo import timecards from another\nsystem (rather than clocking someone in). Specify the `clockin_time`\nand* `clockout_time` in the request.\n\nTimecards correspond to exactly one shift for a given employee, bounded\nby the `clockin_time` and `clockout_time` fields. An employee is\nconsidered clocked in if they have a timecard that doesn\u0027t have a\n`clockout_time` set. An employee that is currently clocked in cannot\nbe clocked in a second time.",
+        "description": "Creates a timecard for an employee and clocks them in with an\n`API_CREATE` event and a `clockin_time` set to the current time unless\nthe request provides a different value.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -861,7 +861,7 @@
         ],
         "summary": "DeleteTimecard",
         "operationId": "DeleteTimecard",
-        "description": "Deletes a timecard. Timecards can also be deleted through the\nSquare Dashboard. Deleted timecards are still accessible through\nConnect API endpoints, but cannot be modified. The `deleted` field of\nthe `Timecard` object indicates whether the timecard has been deleted.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-timecards)\n\n---\n\n*Note**: By default, deleted timecards appear alongside valid timecards in\nresults returned by the [ListTimecards](#endpoint-v1employees-listtimecards)\nendpoint. To filter deleted timecards, include the `deleted` query\nparameter in the list request.\n\n\u003caside\u003e\nOnly approved accounts can manage their employees with Square.\nUnapproved accounts cannot use employee management features with the\nAPI.\n\u003c/aside\u003e",
+        "description": "Deletes a timecard. Timecards can also be deleted through the\nSquare Dashboard. Deleted timecards are still accessible through\nConnect API endpoints, but cannot be modified. The `deleted` field of\nthe `Timecard` object indicates whether the timecard has been deleted.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -900,7 +900,7 @@
         ],
         "summary": "RetrieveTimecard",
         "operationId": "RetrieveTimecard",
-        "description": "Provides the details for a single timecard.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-timecards)\n\n---\n\n\u003caside\u003e\nOnly approved accounts can manage their employees with Square.\nUnapproved accounts cannot use employee management features with the\nAPI.\n\u003c/aside\u003e",
+        "description": "Provides the details for a single timecard.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -939,7 +939,7 @@
         ],
         "summary": "UpdateTimecard",
         "operationId": "UpdateTimecard",
-        "description": "Modifies the details of a timecard with an `API_EDIT` event for\nthe timecard. Updating an active timecard with a `clockout_time`\nclocks the employee out.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-timecards)\n\n---",
+        "description": "Modifies the details of a timecard with an `API_EDIT` event for\nthe timecard. Updating an active timecard with a `clockout_time`\nclocks the employee out.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -989,7 +989,7 @@
         ],
         "summary": "ListTimecardEvents",
         "operationId": "ListTimecardEvents",
-        "description": "Provides summary information for all events associated with a\nparticular timecard.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-timecards)\n\n---\n\n\u003caside\u003e\nOnly approved accounts can manage their employees with Square.\nUnapproved accounts cannot use employee management features with the\nAPI.\n\u003c/aside\u003e",
+        "description": "Provides summary information for all events associated with a\nparticular timecard.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1033,7 +1033,7 @@
         ],
         "summary": "ListBankAccounts",
         "operationId": "V1ListBankAccounts",
-        "description": "Provides non-confidential details for all of a location\u0027s associated bank accounts. This endpoint does not provide full bank account numbers, and there is no way to obtain a full bank account number with the Connect API.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-bankaccounts)\n\n---",
+        "description": "Provides non-confidential details for all of a location\u0027s associated bank accounts. This endpoint does not provide full bank account numbers, and there is no way to obtain a full bank account number with the Connect API.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1077,7 +1077,7 @@
         ],
         "summary": "RetrieveBankAccount",
         "operationId": "RetrieveBankAccount",
-        "description": "Provides non-confidential details for a merchant\u0027s associated bank account. This endpoint does not provide full bank account numbers, and there is no way to obtain a full bank account number with the Connect API.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-bankaccounts)\n\n---",
+        "description": "Provides non-confidential details for a merchant\u0027s associated bank account. This endpoint does not provide full bank account numbers, and there is no way to obtain a full bank account number with the Connect API.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1126,7 +1126,7 @@
         ],
         "summary": "ListCashDrawerShifts",
         "operationId": "V1ListCashDrawerShifts",
-        "description": "Provides the details for all of a location\u0027s cash drawer shifts during a date range. The date range you specify cannot exceed 90 days.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-cashdrawershifts)\n\n---",
+        "description": "Provides the details for all of a location\u0027s cash drawer shifts during a date range. The date range you specify cannot exceed 90 days.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1194,7 +1194,7 @@
         ],
         "summary": "RetrieveCashDrawerShift",
         "operationId": "V1RetrieveCashDrawerShift",
-        "description": "Provides the details for a single cash drawer shift, including all events that occurred during the shift.\n\n---\n\n- __Deprecation date__: 2020-02-26\n- [__Retirement date__](/docs/build-basics/api-lifecycle#deprecated): 2021-02-26\n- [Migration guide](/docs/migrate-from-v1/guides/v1-cashdrawershifts)\n\n---",
+        "description": "Provides the details for a single cash drawer shift, including all events that occurred during the shift.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1243,7 +1243,7 @@
         ],
         "summary": "ListCategories",
         "operationId": "ListCategories",
-        "description": "Lists all the item categories for a given location.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Lists all the item categories for a given location.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1285,7 +1285,7 @@
         ],
         "summary": "CreateCategory",
         "operationId": "CreateCategory",
-        "description": "Creates an item category.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Creates an item category.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1335,7 +1335,7 @@
         ],
         "summary": "DeleteCategory",
         "operationId": "DeleteCategory",
-        "description": "Deletes an existing item category.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeleteCategory__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeleteCategoryRequest` object\nas documented below.",
+        "description": "Deletes an existing item category.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1382,7 +1382,7 @@
         ],
         "summary": "UpdateCategory",
         "operationId": "UpdateCategory",
-        "description": "Modifies the details of an existing item category.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the details of an existing item category.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1440,7 +1440,7 @@
         ],
         "summary": "ListDiscounts",
         "operationId": "ListDiscounts",
-        "description": "Lists all the discounts for a given location.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Lists all the discounts for a given location.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1482,7 +1482,7 @@
         ],
         "summary": "CreateDiscount",
         "operationId": "CreateDiscount",
-        "description": "Creates a discount.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Creates a discount.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1532,7 +1532,7 @@
         ],
         "summary": "DeleteDiscount",
         "operationId": "DeleteDiscount",
-        "description": "Deletes an existing discount.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeleteDiscount__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeleteDiscountRequest` object\nas documented below.",
+        "description": "Deletes an existing discount.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1579,7 +1579,7 @@
         ],
         "summary": "UpdateDiscount",
         "operationId": "UpdateDiscount",
-        "description": "Modifies the details of an existing discount.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the details of an existing discount.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1637,7 +1637,7 @@
         ],
         "summary": "ListFees",
         "operationId": "ListFees",
-        "description": "Lists all the fees (taxes) for a given location.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Lists all the fees (taxes) for a given location.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1679,7 +1679,7 @@
         ],
         "summary": "CreateFee",
         "operationId": "CreateFee",
-        "description": "Creates a fee (tax).\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Creates a fee (tax).",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1729,7 +1729,7 @@
         ],
         "summary": "DeleteFee",
         "operationId": "DeleteFee",
-        "description": "Deletes an existing fee (tax).\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeleteFee__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeleteFeeRequest` object\nas documented below.",
+        "description": "Deletes an existing fee (tax).",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1776,7 +1776,7 @@
         ],
         "summary": "UpdateFee",
         "operationId": "UpdateFee",
-        "description": "Modifies the details of an existing fee (tax).\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the details of an existing fee (tax).",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1834,7 +1834,7 @@
         ],
         "summary": "ListInventory",
         "operationId": "ListInventory",
-        "description": "Provides inventory information for all inventory-enabled item\nvariations.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Provides inventory information for all inventory-enabled item\nvariations.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1894,7 +1894,7 @@
         ],
         "summary": "AdjustInventory",
         "operationId": "AdjustInventory",
-        "description": "Adjusts the current available inventory of an item variation.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Adjusts the current available inventory of an item variation.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -1952,7 +1952,7 @@
         ],
         "summary": "ListItems",
         "operationId": "ListItems",
-        "description": "Provides summary information of all items for a given location.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Provides summary information of all items for a given location.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2002,7 +2002,7 @@
         ],
         "summary": "CreateItem",
         "operationId": "CreateItem",
-        "description": "Creates an item and at least one variation for it.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n\nItem-related entities include fields you can use to associate them with\nentities in a non-Square system.\n\nWhen you create an item-related entity, you can optionally specify `id`.\nThis value must be unique among all IDs ever specified for the account,\nincluding those specified by other applications. You can never reuse an\nentity ID. If you do not specify an ID, Square generates one for the entity.\n\nItem variations have a `user_data` string that lets you associate arbitrary\nmetadata with the variation. The string cannot exceed 255 characters.",
+        "description": "Creates an item and at least one variation for it.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2052,7 +2052,7 @@
         ],
         "summary": "DeleteItem",
         "operationId": "DeleteItem",
-        "description": "Deletes an existing item and all item variations associated with it.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeleteItem__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeleteItemRequest` object\nas documented below.",
+        "description": "Deletes an existing item and all item variations associated with it.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2099,7 +2099,7 @@
         ],
         "summary": "RetrieveItem",
         "operationId": "RetrieveItem",
-        "description": "Provides the details for a single item, including associated modifier\nlists and fees.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Provides the details for a single item, including associated modifier\nlists and fees.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2146,7 +2146,7 @@
         ],
         "summary": "UpdateItem",
         "operationId": "UpdateItem",
-        "description": "Modifies the core details of an existing item.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the core details of an existing item.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2204,7 +2204,7 @@
         ],
         "summary": "RemoveFee",
         "operationId": "RemoveFee",
-        "description": "Removes a fee assocation from an item so the fee is no longer\nautomatically applied to the item in Square Point of Sale.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Removes a fee assocation from an item so the fee is no longer\nautomatically applied to the item in Square Point of Sale.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2259,7 +2259,7 @@
         ],
         "summary": "ApplyFee",
         "operationId": "ApplyFee",
-        "description": "Associates a fee with an item so the fee is automatically applied to\nthe item in Square Point of Sale.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Associates a fee with an item so the fee is automatically applied to\nthe item in Square Point of Sale.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2316,7 +2316,7 @@
         ],
         "summary": "RemoveModifierList",
         "operationId": "RemoveModifierList",
-        "description": "Removes a modifier list association from an item so the modifier\noptions from the list can no longer be applied to the item.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Removes a modifier list association from an item so the modifier\noptions from the list can no longer be applied to the item.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2371,7 +2371,7 @@
         ],
         "summary": "ApplyModifierList",
         "operationId": "ApplyModifierList",
-        "description": "Associates a modifier list with an item so the associated modifier\noptions can be applied to the item.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Associates a modifier list with an item so the associated modifier\noptions can be applied to the item.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2428,7 +2428,7 @@
         ],
         "summary": "CreateVariation",
         "operationId": "CreateVariation",
-        "description": "Creates an item variation for an existing item.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Creates an item variation for an existing item.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2486,7 +2486,7 @@
         ],
         "summary": "DeleteVariation",
         "operationId": "DeleteVariation",
-        "description": "Deletes an existing item variation from an item.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeleteVariation__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeleteVariationRequest` object\nas documented below.",
+        "description": "Deletes an existing item variation from an item.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2541,7 +2541,7 @@
         ],
         "summary": "UpdateVariation",
         "operationId": "UpdateVariation",
-        "description": "Modifies the details of an existing item variation.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the details of an existing item variation.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2607,7 +2607,7 @@
         ],
         "summary": "ListModifierLists",
         "operationId": "ListModifierLists",
-        "description": "Lists all the modifier lists for a given location.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Lists all the modifier lists for a given location.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2649,7 +2649,7 @@
         ],
         "summary": "CreateModifierList",
         "operationId": "CreateModifierList",
-        "description": "Creates an item modifier list and at least 1 modifier option for it.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Creates an item modifier list and at least 1 modifier option for it.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2699,7 +2699,7 @@
         ],
         "summary": "DeleteModifierList",
         "operationId": "DeleteModifierList",
-        "description": "Deletes an existing item modifier list and all modifier options\nassociated with it.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeleteModifierList__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeleteModifierListRequest` object\nas documented below.",
+        "description": "Deletes an existing item modifier list and all modifier options\nassociated with it.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2746,7 +2746,7 @@
         ],
         "summary": "RetrieveModifierList",
         "operationId": "RetrieveModifierList",
-        "description": "Provides the details for a single modifier list.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Provides the details for a single modifier list.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2793,7 +2793,7 @@
         ],
         "summary": "UpdateModifierList",
         "operationId": "UpdateModifierList",
-        "description": "Modifies the details of an existing item modifier list.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the details of an existing item modifier list.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2851,7 +2851,7 @@
         ],
         "summary": "CreateModifierOption",
         "operationId": "CreateModifierOption",
-        "description": "Creates an item modifier option and adds it to a modifier list.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Creates an item modifier option and adds it to a modifier list.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2909,7 +2909,7 @@
         ],
         "summary": "DeleteModifierOption",
         "operationId": "DeleteModifierOption",
-        "description": "Deletes an existing item modifier option from a modifier list.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeleteModifierOption__ returns nothing on success but Connect\nSDKs map the empty response to an empty `V1DeleteModifierOptionRequest`\nobject.",
+        "description": "Deletes an existing item modifier option from a modifier list.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -2964,7 +2964,7 @@
         ],
         "summary": "UpdateModifierOption",
         "operationId": "UpdateModifierOption",
-        "description": "Modifies the details of an existing item modifier option.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the details of an existing item modifier option.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -3195,7 +3195,7 @@
         ],
         "summary": "ListPages",
         "operationId": "ListPages",
-        "description": "Lists all Favorites pages (in Square Point of Sale) for a given\nlocation.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Lists all Favorites pages (in Square Point of Sale) for a given\nlocation.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -3237,7 +3237,7 @@
         ],
         "summary": "CreatePage",
         "operationId": "CreatePage",
-        "description": "Creates a Favorites page in Square Point of Sale.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Creates a Favorites page in Square Point of Sale.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -3287,7 +3287,7 @@
         ],
         "summary": "DeletePage",
         "operationId": "DeletePage",
-        "description": "Deletes an existing Favorites page and all of its cells.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeletePage__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeletePageRequest` object.",
+        "description": "Deletes an existing Favorites page and all of its cells.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -3334,7 +3334,7 @@
         ],
         "summary": "UpdatePage",
         "operationId": "UpdatePage",
-        "description": "Modifies the details of a Favorites page in Square Point of Sale.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies the details of a Favorites page in Square Point of Sale.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -3392,7 +3392,7 @@
         ],
         "summary": "DeletePageCell",
         "operationId": "DeletePageCell",
-        "description": "Deletes a cell from a Favorites page in Square Point of Sale.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---\n\n__DeletePageCell__ returns nothing on success but Connect SDKs\nmap the empty response to an empty `V1DeletePageCellRequest` object\nas documented below.",
+        "description": "Deletes a cell from a Favorites page in Square Point of Sale.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -3455,7 +3455,7 @@
         ],
         "summary": "UpdatePageCell",
         "operationId": "UpdatePageCell",
-        "description": "Modifies a cell of a Favorites page in Square Point of Sale.\n\n---\n\n- __Deprecation date__: 2019-11-20\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2020-11-18\n- [Migration guide](/migrate-from-v1/guides/v1-items)\n\n---",
+        "description": "Modifies a cell of a Favorites page in Square Point of Sale.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -7458,7 +7458,7 @@
         ],
         "summary": "ListRefunds",
         "operationId": "ListRefunds",
-        "description": "Lists refunds for one of a business\u0027s locations.\n\nDeprecated - recommend using [SearchOrders](#endpoint-orders-searchorders)\n\n---\n\n- __Deprecation date__: 2019-08-15\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2021-09-01\n- [Migration guide](/payments-api/migrate-from-transactions-api)\n\n---\n\n\nIn addition to full or partial tender refunds processed through Square APIs,\nrefunds may result from itemized returns or exchanges through Square\u0027s\nPoint of Sale applications.\n\nRefunds with a `status` of `PENDING` are not currently included in this\nendpoint\u0027s response.\n\nMax results per [page](#paginatingresults): 50",
+        "description": "Lists refunds for one of a business\u0027s locations.\n\nDeprecated - recommend using [SearchOrders](#endpoint-orders-searchorders)",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -7602,7 +7602,7 @@
         ],
         "summary": "Charge",
         "operationId": "Charge",
-        "description": "Charges a card represented by a card nonce or a customer\u0027s card on file.\n\nDeprecated - recommend using [CreatePayment](#endpoint-payments-createpayment)\n\n---\n\n- __Deprecation date__: 2019-08-15\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2021-09-01\n- [Migration guide](/payments-api/migrate-from-transactions-api)\n\n---\n\nYour request to this endpoint must include _either_:\n\n- A value for the `card_nonce` parameter (to charge a card nonce generated\nwith the `SqPaymentForm`)\n- Values for the `customer_card_id` and `customer_id` parameters (to charge\na customer\u0027s card on file)\n\nIn order for an eCommerce payment to potentially qualify for\n[Square chargeback protection](https://squareup.com/help/article/5394), you\n_must_ provide values for the following parameters in your request:\n\n- `buyer_email_address`\n- At least one of `billing_address` or `shipping_address`\n\nWhen this response is returned, the amount of Square\u0027s processing fee might not yet be\ncalculated. To obtain the processing fee, wait about ten seconds and call\n[RetrieveTransaction](#endpoint-retrievetransaction). See the `processing_fee_money`\nfield of each [Tender included](#type-tender) in the transaction.",
+        "description": "Charges a card represented by a card nonce or a customer\u0027s card on file.\n\nDeprecated - recommend using [CreatePayment](#endpoint-payments-createpayment)",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -7701,7 +7701,7 @@
         ],
         "summary": "CaptureTransaction",
         "operationId": "CaptureTransaction",
-        "description": "Captures a transaction that was created with the [Charge](#endpoint-charge)\nendpoint with a `delay_capture` value of `true`.\n\n---\n\n- __Deprecation date__: 2019-08-15\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2021-09-01\n- [Migration guide](/payments-api/migrate-from-transactions-api)\n\n---\n\nSee [Delayed capture transactions](/payments/transactions/overview#delayed-capture)\nfor more information.",
+        "description": "Captures a transaction that was created with the [Charge](#endpoint-charge)\nendpoint with a `delay_capture` value of `true`.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -7750,7 +7750,7 @@
         ],
         "summary": "CreateRefund",
         "operationId": "CreateRefund",
-        "description": "Initiates a refund for a previously charged tender.\n\nDeprecated - recommend using [RefundPayment](#endpoint-refunds-refundpayment)\n\n---\n\n- __Deprecation date__: 2019-08-15\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2021-09-01\n- [Migration guide](/payments-api/migrate-from-transactions-api)\n\n---\n\n\nYou must issue a refund within 120 days of the associated payment. See\n[this article](https://squareup.com/help/us/en/article/5060) for more information\non refund behavior.\n\nNOTE: Card-present transactions with Interac credit cards **cannot be\nrefunded using the Connect API**. Interac transactions must refunded\nin-person (e.g., dipping the card using POS app).",
+        "description": "Initiates a refund for a previously charged tender.\n\nDeprecated - recommend using [RefundPayment](#endpoint-refunds-refundpayment)",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [
@@ -7808,7 +7808,7 @@
         ],
         "summary": "VoidTransaction",
         "operationId": "VoidTransaction",
-        "description": "Cancels a transaction that was created with the [Charge](#endpoint-charge)\nendpoint with a `delay_capture` value of `true`.\n\n---\n\n- __Deprecation date__: 2019-08-15\n- [__Retirement date__](/build-basics/api-lifecycle#deprecated): 2021-09-01\n- [Migration guide](/payments-api/migrate-from-transactions-api)\n\n---\n\nSee [Delayed capture transactions](/payments/transactions/overview#delayed-capture)\nfor more information.",
+        "description": "Cancels a transaction that was created with the [Charge](#endpoint-charge)\nendpoint with a `delay_capture` value of `true`.",
         "x-release-status": "DEPRECATED",
         "x-is-deprecated": true,
         "x-oauthpermissions": [

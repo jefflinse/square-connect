@@ -37,8 +37,6 @@ import (
 	"github.com/jefflinse/square-connect/client/team"
 	"github.com/jefflinse/square-connect/client/terminal"
 	"github.com/jefflinse/square-connect/client/transactions"
-	"github.com/jefflinse/square-connect/client/v1_employees"
-	"github.com/jefflinse/square-connect/client/v1_transactions"
 )
 
 // Default square connect API HTTP client.
@@ -110,8 +108,6 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *SquareConn
 	cli.Team = team.New(transport, formats)
 	cli.Terminal = terminal.New(transport, formats)
 	cli.Transactions = transactions.New(transport, formats)
-	cli.V1Employees = v1_employees.New(transport, formats)
-	cli.V1Transactions = v1_transactions.New(transport, formats)
 	return cli
 }
 
@@ -210,10 +206,6 @@ type SquareConnectAPI struct {
 
 	Transactions transactions.ClientService
 
-	V1Employees v1_employees.ClientService
-
-	V1Transactions v1_transactions.ClientService
-
 	Transport runtime.ClientTransport
 }
 
@@ -247,6 +239,4 @@ func (c *SquareConnectAPI) SetTransport(transport runtime.ClientTransport) {
 	c.Team.SetTransport(transport)
 	c.Terminal.SetTransport(transport)
 	c.Transactions.SetTransport(transport)
-	c.V1Employees.SetTransport(transport)
-	c.V1Transactions.SetTransport(transport)
 }

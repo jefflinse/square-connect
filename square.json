@@ -229,9 +229,9 @@
         "tags": [
           "V1Employees"
         ],
-        "summary": "ListEmployees",
-        "operationId": "ListEmployees",
-        "description": "Provides summary information for all of a business\u0027s employees.",
+        "summary": "V1ListEmployees",
+        "operationId": "V1ListEmployees",
+        "description": "V1 Provides summary information for all of a business\u0027s employees.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
           "EMPLOYEES_READ"
@@ -366,9 +366,9 @@
         "tags": [
           "V1Employees"
         ],
-        "summary": "RetrieveEmployee",
-        "operationId": "RetrieveEmployee",
-        "description": "Provides the details for a single employee.",
+        "summary": "V1RetrieveEmployee",
+        "operationId": "V1RetrieveEmployee",
+        "description": "V1 Provides the details for a single employee.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
           "EMPLOYEES_READ"
@@ -695,9 +695,9 @@
         "tags": [
           "V1Transactions"
         ],
-        "summary": "RetrieveOrder",
-        "operationId": "RetrieveOrder",
-        "description": "Provides comprehensive information for a single online store order, including the order\u0027s history.",
+        "summary": "V1RetrieveOrder",
+        "operationId": "V1RetrieveOrder",
+        "description": "V1 Provides comprehensive information for a single online store order, including the order\u0027s history.",
         "x-release-status": "PUBLIC",
         "x-visibility": "SDK_ONLY",
         "x-oauthpermissions": [
@@ -740,9 +740,9 @@
         "tags": [
           "V1Transactions"
         ],
-        "summary": "UpdateOrder",
-        "operationId": "UpdateOrder",
-        "description": "Updates the details of an online store order. Every update you perform on an order corresponds to one of three actions:",
+        "summary": "V1UpdateOrder",
+        "operationId": "V1UpdateOrder",
+        "description": "V1 Updates the details of an online store order. Every update you perform on an order corresponds to one of three actions:",
         "x-release-status": "PUBLIC",
         "x-visibility": "SDK_ONLY",
         "x-oauthpermissions": [
@@ -796,9 +796,9 @@
         "tags": [
           "V1Transactions"
         ],
-        "summary": "ListPayments",
-        "operationId": "ListPayments",
-        "description": "Provides summary information for all payments taken for a given\nSquare account during a date range. Date ranges cannot exceed 1 year in\nlength. See Date ranges for details of inclusive and exclusive dates.\n\n*Note**: Details for payments processed with Square Point of Sale while\nin offline mode may not be transmitted to Square for up to 72 hours.\nOffline payments have a `created_at` value that reflects the time the\npayment was originally processed, not the time it was subsequently\ntransmitted to Square. Consequently, the ListPayments endpoint might\nlist an offline payment chronologically between online payments that\nwere seen in a previous request.",
+        "summary": "V1ListPayments",
+        "operationId": "V1ListPayments",
+        "description": "V1 Provides summary information for all payments taken for a given\nSquare account during a date range. Date ranges cannot exceed 1 year in\nlength. See Date ranges for details of inclusive and exclusive dates.\n\n*Note**: Details for payments processed with Square Point of Sale while\nin offline mode may not be transmitted to Square for up to 72 hours.\nOffline payments have a `created_at` value that reflects the time the\npayment was originally processed, not the time it was subsequently\ntransmitted to Square. Consequently, the ListPayments endpoint might\nlist an offline payment chronologically between online payments that\nwere seen in a previous request.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
           "PAYMENTS_READ"
@@ -926,9 +926,9 @@
         "tags": [
           "V1Transactions"
         ],
-        "summary": "ListRefunds",
-        "operationId": "ListRefunds",
-        "description": "Provides the details for all refunds initiated by a merchant or any of the merchant\u0027s mobile staff during a date range. Date ranges cannot exceed one year in length.",
+        "summary": "V1ListRefunds",
+        "operationId": "V1ListRefunds",
+        "description": "V1 Provides the details for all refunds initiated by a merchant or any of the merchant\u0027s mobile staff during a date range. Date ranges cannot exceed one year in length.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
           "PAYMENTS_READ"
@@ -1001,9 +1001,9 @@
         "tags": [
           "V1Transactions"
         ],
-        "summary": "CreateRefund",
-        "operationId": "CreateRefund",
-        "description": "Issues a refund for a previously processed payment. You must issue\na refund within 60 days of the associated payment.\n\nYou cannot issue a partial refund for a split tender payment. You must\ninstead issue a full or partial refund for a particular tender, by\nproviding the applicable tender id to the V1CreateRefund endpoint.\nIssuing a full refund for a split tender payment refunds all tenders\nassociated with the payment.\n\nIssuing a refund for a card payment is not reversible. For development\npurposes, you can create fake cash payments in Square Point of Sale and\nrefund them.",
+        "summary": "V1CreateRefund",
+        "operationId": "V1CreateRefund",
+        "description": "V1 Issues a refund for a previously processed payment. You must issue\na refund within 60 days of the associated payment.\n\nYou cannot issue a partial refund for a split tender payment. You must\ninstead issue a full or partial refund for a particular tender, by\nproviding the applicable tender id to the V1CreateRefund endpoint.\nIssuing a full refund for a split tender payment refunds all tenders\nassociated with the payment.\n\nIssuing a refund for a card payment is not reversible. For development\npurposes, you can create fake cash payments in Square Point of Sale and\nrefund them.",
         "x-release-status": "PUBLIC",
         "x-oauthpermissions": [
           "PAYMENTS_WRITE"
@@ -18867,8 +18867,7 @@
           "discount_data": "{{ CatalogDiscount object only if type\u003dDISCOUNT }}",
           "tax_data": "{{ CatalogTax object only if type\u003dTAX }}"
         }
-      },
-      "example_type": "Schema"
+      }
     },
     "CatalogObjectBatch": {
       "type": "object",
@@ -24034,7 +24033,7 @@
           "description": "The payment schedule for the invoice, represented by one or more payment requests that\ndefine payment settings, such as amount due and due date. You can specify a maximum of 13\npayment requests, with up to 12 `INSTALLMENT` request types. For more information, see\n[Payment requests](https://developer.squareup.com/docs/docs/invoices-api/overview#payment-requests).\n\nThis field is required when creating an invoice. It must contain at least one payment request."
         },
         "delivery_method": {
-          "$ref": "#/definitions/invoice_delivery_methodInvoiceDeliveryMethod",
+          "$ref": "#/definitions/InvoiceDeliveryMethod",
           "description": "The delivery method that Square uses to send the invoice, reminders, and receipts to\nthe customer. After the invoice is published, Square processes the invoice based on the delivery\nmethod and payment request settings, either immediately or at the `scheduled_at` date, if specified.\nFor example, Square might send the invoice or receipt for an automatic payment. For invoices with automatic payments, this field must be set to `EMAIL`.\n\nOne of the following is required when creating an invoice:\n- (Recommended) This `delivery_method` field. To configure an automatic payment, the `automatic_payment_source` field of the payment request is also required.\n- The deprecated `request_method` field of the payment request. Note that `invoice` objects returned in responses do not include `request_method`."
         },
         "invoice_number": {
@@ -31832,9 +31831,6 @@
     },
     "RiskEvaluation": {
       "type": "object",
-      "required": [
-        "status"
-      ],
       "properties": {
         "created_at": {
           "type": "string",
@@ -33641,9 +33637,6 @@
     },
     "SearchSubscriptionsRequest": {
       "type": "object",
-      "required": [
-        "location_ids"
-      ],
       "properties": {
         "cursor": {
           "type": "string",

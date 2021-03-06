@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -44,7 +45,7 @@ func init() {
 }
 
 func (m CatalogItemProductType) validateCatalogItemProductTypeEnum(path, location string, value CatalogItemProductType) error {
-	if err := validate.Enum(path, location, value, catalogItemProductTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, catalogItemProductTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -62,5 +63,10 @@ func (m CatalogItemProductType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this catalog item product type based on context it is used
+func (m CatalogItemProductType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

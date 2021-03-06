@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,7 @@ import (
 // a request to the [ListTransactions](#endpoint-listtransactions) endpoint.
 //
 // One of `errors` or `transactions` is present in a given response (never both).
+// Example: {"transactions":[{"created_at":"2016-01-20T22:57:56Z","id":"KnL67ZIwXCPtzOrqj0HrkxMF","location_id":"18YC4JDH91E1H","product":"EXTERNAL_API","reference_id":"some optional reference id","refunds":[{"additional_recipients":[{"amount_money":{"amount":100,"currency":"USD"},"description":"Application fees","location_id":"057P5VYJ4A5X1"}],"amount_money":{"amount":5000,"currency":"USD"},"created_at":"2016-01-20T22:59:20Z","id":"7a5RcVI0CxbOcJ2wMOkE","location_id":"18YC4JDH91E1H","processing_fee_money":{"amount":138,"currency":"USD"},"reason":"some reason why","status":"APPROVED","tender_id":"MtZRYYdDrYNQbOvV7nbuBvMF","transaction_id":"KnL67ZIwXCPtzOrqj0HrkxMF"}],"tenders":[{"additional_recipients":[{"amount_money":{"amount":20,"currency":"USD"},"description":"Application fees","location_id":"057P5VYJ4A5X1"}],"amount_money":{"amount":5000,"currency":"USD"},"card_details":{"card":{"card_brand":"VISA","last_4":"1111"},"entry_method":"KEYED","status":"CAPTURED"},"created_at":"2016-01-20T22:57:56Z","id":"MtZRYYdDrYNQbOvV7nbuBvMF","location_id":"18YC4JDH91E1H","note":"some optional note","processing_fee_money":{"amount":138,"currency":"USD"},"transaction_id":"KnL67ZIwXCPtzOrqj0HrkxMF","type":"CARD"}]}]}
 //
 // swagger:model ListTransactionsResponse
 type ListTransactionsResponse struct {
@@ -54,7 +56,6 @@ func (m *ListTransactionsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListTransactionsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -79,7 +80,6 @@ func (m *ListTransactionsResponse) validateErrors(formats strfmt.Registry) error
 }
 
 func (m *ListTransactionsResponse) validateTransactions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Transactions) { // not required
 		return nil
 	}
@@ -91,6 +91,60 @@ func (m *ListTransactionsResponse) validateTransactions(formats strfmt.Registry)
 
 		if m.Transactions[i] != nil {
 			if err := m.Transactions[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("transactions" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list transactions response based on the context it is used
+func (m *ListTransactionsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTransactions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListTransactionsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListTransactionsResponse) contextValidateTransactions(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Transactions); i++ {
+
+		if m.Transactions[i] != nil {
+			if err := m.Transactions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("transactions" + "." + strconv.Itoa(i))
 				}

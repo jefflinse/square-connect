@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // CatalogInfoRequest catalog info request
+// Example: {}
 //
 // swagger:model CatalogInfoRequest
 type CatalogInfoRequest interface{}

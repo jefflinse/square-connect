@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // DeleteLoyaltyRewardRequest A request to delete a loyalty reward.
+// Example: {"request_params":"?reward_id=9f18ac21-233a-31c3-be77-b45840f5a810"}
 //
 // swagger:model DeleteLoyaltyRewardRequest
 type DeleteLoyaltyRewardRequest interface{}

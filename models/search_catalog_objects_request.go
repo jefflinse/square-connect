@@ -6,12 +6,15 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // SearchCatalogObjectsRequest search catalog objects request
+// Example: {"request_body":{"limit":100,"object_types":["ITEM"],"query":{"prefix_query":{"attribute_name":"name","attribute_prefix":"tea"}}}}
 //
 // swagger:model SearchCatalogObjectsRequest
 type SearchCatalogObjectsRequest struct {
@@ -48,8 +51,6 @@ type SearchCatalogObjectsRequest struct {
 	Limit int64 `json:"limit,omitempty"`
 
 	// The desired set of object types to appear in the search results.
-	// The legal values are taken from the CatalogObjectType enum: `"ITEM"`, `"ITEM_VARIATION"`, `"CATEGORY"`,
-	// `"DISCOUNT"`, `"TAX"`, `"MODIFIER"`, or `"MODIFIER_LIST"`.
 	// See [CatalogObjectType](#type-catalogobjecttype) for possible values
 	ObjectTypes []string `json:"object_types"`
 
@@ -72,13 +73,40 @@ func (m *SearchCatalogObjectsRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchCatalogObjectsRequest) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
 
 	if m.Query != nil {
 		if err := m.Query.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search catalog objects request based on the context it is used
+func (m *SearchCatalogObjectsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchCatalogObjectsRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("query")
 			}

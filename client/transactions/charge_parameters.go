@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewChargeParams creates a new ChargeParams object
-// with the default values initialized.
+// NewChargeParams creates a new ChargeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewChargeParams() *ChargeParams {
-	var ()
 	return &ChargeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewChargeParamsWithTimeout creates a new ChargeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewChargeParamsWithTimeout(timeout time.Duration) *ChargeParams {
-	var ()
 	return &ChargeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewChargeParamsWithContext creates a new ChargeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewChargeParamsWithContext(ctx context.Context) *ChargeParams {
-	var ()
 	return &ChargeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewChargeParamsWithHTTPClient creates a new ChargeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewChargeParamsWithHTTPClient(client *http.Client) *ChargeParams {
-	var ()
 	return &ChargeParams{
 		HTTPClient: client,
 	}
 }
 
-/*ChargeParams contains all the parameters to send to the API endpoint
-for the charge operation typically these are written to a http.Request
+/* ChargeParams contains all the parameters to send to the API endpoint
+   for the charge operation.
+
+   Typically these are written to a http.Request.
 */
 type ChargeParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.ChargeRequest
-	/*LocationID
-	  The ID of the location to associate the created transaction with.
 
+	/* LocationID.
+
+	   The ID of the location to associate the created transaction with.
 	*/
 	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the charge params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ChargeParams) WithDefaults() *ChargeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the charge params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ChargeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the charge params
@@ -142,7 +157,6 @@ func (o *ChargeParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regist
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

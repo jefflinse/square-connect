@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 )
 
 // SearchCatalogItemsRequest Defines the request body for the [SearchCatalogItems](#endpoint-Catalog-SearchCatalogItems) endpoint.
+// Example: {"request_body":{"category_ids":["WINE_CATEGORY_ID"],"custom_attribute_filters":[{"bool_filter":true,"custom_attribute_definition_id":"VEGAN_DEFINITION_ID"},{"custom_attribute_definition_id":"BRAND_DEFINITION_ID","string_filter":"Dark Horse"},{"key":"VINTAGE","number_filter":{"max":2018,"min":2017}},{"custom_attribute_definition_id":"VARIETAL_DEFINITION_ID","selection_ids_filter":"MERLOT_SELECTION_ID"}],"enabled_location_ids":["ATL_LOCATION_ID"],"limit":100,"product_types":["REGULAR"],"sort_order":"ASC","stock_levels":["OUT","LOW"],"text_filter":"red"}}
 //
 // swagger:model SearchCatalogItemsRequest
 type SearchCatalogItemsRequest struct {
@@ -41,7 +43,7 @@ type SearchCatalogItemsRequest struct {
 	// See [CatalogItemProductType](#type-catalogitemproducttype) for possible values
 	ProductTypes []string `json:"product_types"`
 
-	// The order to sort the resutls. The default sort order is ascending (`ASC`).
+	// The order to sort the results by item names. The default sort order is ascending (`ASC`).
 	// See [SortOrder](#type-sortorder) for possible values
 	SortOrder string `json:"sort_order,omitempty"`
 
@@ -74,7 +76,6 @@ func (m *SearchCatalogItemsRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchCatalogItemsRequest) validateCustomAttributeFilters(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomAttributeFilters) { // not required
 		return nil
 	}
@@ -99,13 +100,44 @@ func (m *SearchCatalogItemsRequest) validateCustomAttributeFilters(formats strfm
 }
 
 func (m *SearchCatalogItemsRequest) validateLimit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Limit) { // not required
 		return nil
 	}
 
-	if err := validate.MaximumInt("limit", "body", int64(m.Limit), 100, false); err != nil {
+	if err := validate.MaximumInt("limit", "body", m.Limit, 100, false); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search catalog items request based on the context it is used
+func (m *SearchCatalogItemsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCustomAttributeFilters(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchCatalogItemsRequest) contextValidateCustomAttributeFilters(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.CustomAttributeFilters); i++ {
+
+		if m.CustomAttributeFilters[i] != nil {
+			if err := m.CustomAttributeFilters[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("custom_attribute_filters" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

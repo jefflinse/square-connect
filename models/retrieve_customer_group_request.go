@@ -7,6 +7,7 @@ package models
 
 // RetrieveCustomerGroupRequest Defines the fields that can be provided in a request to the
 // [RetrieveCustomerGroup](#endpoint-retrievecustomergroup) endpoint.
+// Example: {"request_body":{}}
 //
 // swagger:model RetrieveCustomerGroupRequest
 type RetrieveCustomerGroupRequest interface{}

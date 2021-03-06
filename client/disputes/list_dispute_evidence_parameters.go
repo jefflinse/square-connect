@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListDisputeEvidenceParams creates a new ListDisputeEvidenceParams object
-// with the default values initialized.
+// NewListDisputeEvidenceParams creates a new ListDisputeEvidenceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListDisputeEvidenceParams() *ListDisputeEvidenceParams {
-	var ()
 	return &ListDisputeEvidenceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListDisputeEvidenceParamsWithTimeout creates a new ListDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListDisputeEvidenceParamsWithTimeout(timeout time.Duration) *ListDisputeEvidenceParams {
-	var ()
 	return &ListDisputeEvidenceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListDisputeEvidenceParamsWithContext creates a new ListDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListDisputeEvidenceParamsWithContext(ctx context.Context) *ListDisputeEvidenceParams {
-	var ()
 	return &ListDisputeEvidenceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListDisputeEvidenceParamsWithHTTPClient creates a new ListDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListDisputeEvidenceParamsWithHTTPClient(client *http.Client) *ListDisputeEvidenceParams {
-	var ()
 	return &ListDisputeEvidenceParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListDisputeEvidenceParams contains all the parameters to send to the API endpoint
-for the list dispute evidence operation typically these are written to a http.Request
+/* ListDisputeEvidenceParams contains all the parameters to send to the API endpoint
+   for the list dispute evidence operation.
+
+   Typically these are written to a http.Request.
 */
 type ListDisputeEvidenceParams struct {
 
-	/*DisputeID
-	  The ID of the dispute.
+	/* DisputeID.
 
+	   The ID of the dispute.
 	*/
 	DisputeID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list dispute evidence params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListDisputeEvidenceParams) WithDefaults() *ListDisputeEvidenceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list dispute evidence params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListDisputeEvidenceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list dispute evidence params

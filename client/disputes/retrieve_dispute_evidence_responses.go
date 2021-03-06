@@ -29,9 +29,8 @@ func (o *RetrieveDisputeEvidenceReader) ReadResponse(response runtime.ClientResp
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewRetrieveDisputeEvidenceOK() *RetrieveDisputeEvidenceOK {
 	return &RetrieveDisputeEvidenceOK{}
 }
 
-/*RetrieveDisputeEvidenceOK handles this case with default header values.
+/* RetrieveDisputeEvidenceOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type RetrieveDisputeEvidenceOK struct {
 func (o *RetrieveDisputeEvidenceOK) Error() string {
 	return fmt.Sprintf("[GET /v2/disputes/{dispute_id}/evidence/{evidence_id}][%d] retrieveDisputeEvidenceOK  %+v", 200, o.Payload)
 }
-
 func (o *RetrieveDisputeEvidenceOK) GetPayload() *models.RetrieveDisputeEvidenceResponse {
 	return o.Payload
 }

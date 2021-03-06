@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -48,12 +50,11 @@ func (m *LoyaltyEventAdjustPoints) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEventAdjustPoints) validateLoyaltyProgramID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LoyaltyProgramID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("loyalty_program_id", "body", string(m.LoyaltyProgramID), 36); err != nil {
+	if err := validate.MaxLength("loyalty_program_id", "body", m.LoyaltyProgramID, 36); err != nil {
 		return err
 	}
 
@@ -66,6 +67,11 @@ func (m *LoyaltyEventAdjustPoints) validatePoints(formats strfmt.Registry) error
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty event adjust points based on context it is used
+func (m *LoyaltyEventAdjustPoints) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,7 @@ import (
 // a request to the [CreateRefund](#endpoint-createrefund) endpoint.
 //
 // One of `errors` or `refund` is present in a given response (never both).
+// Example: {"refund":{"additional_recipients":[{"amount_money":{"amount":10,"currency":"USD"},"description":"Application fees","location_id":"057P5VYJ4A5X1","receivable_id":"ISu5xwxJ5v0CMJTQq7RvqyMF"}],"amount_money":{"amount":100,"currency":"USD"},"created_at":"2016-02-12T00:28:18Z","id":"b27436d1-7f8e-5610-45c6-417ef71434b4-SW","location_id":"18YC4JDH91E1H","reason":"some reason","status":"PENDING","tender_id":"MtZRYYdDrYNQbOvV7nbuBvMF","transaction_id":"KnL67ZIwXCPtzOrqj0HrkxMF"}}
 //
 // swagger:model CreateRefundResponse
 type CreateRefundResponse struct {
@@ -47,7 +49,6 @@ func (m *CreateRefundResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CreateRefundResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -72,13 +73,62 @@ func (m *CreateRefundResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *CreateRefundResponse) validateRefund(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Refund) { // not required
 		return nil
 	}
 
 	if m.Refund != nil {
 		if err := m.Refund.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refund")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create refund response based on the context it is used
+func (m *CreateRefundResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefund(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateRefundResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CreateRefundResponse) contextValidateRefund(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Refund != nil {
+		if err := m.Refund.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("refund")
 			}

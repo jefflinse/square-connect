@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveWageSettingParams creates a new RetrieveWageSettingParams object
-// with the default values initialized.
+// NewRetrieveWageSettingParams creates a new RetrieveWageSettingParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveWageSettingParams() *RetrieveWageSettingParams {
-	var ()
 	return &RetrieveWageSettingParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveWageSettingParamsWithTimeout creates a new RetrieveWageSettingParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveWageSettingParamsWithTimeout(timeout time.Duration) *RetrieveWageSettingParams {
-	var ()
 	return &RetrieveWageSettingParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveWageSettingParamsWithContext creates a new RetrieveWageSettingParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveWageSettingParamsWithContext(ctx context.Context) *RetrieveWageSettingParams {
-	var ()
 	return &RetrieveWageSettingParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveWageSettingParamsWithHTTPClient creates a new RetrieveWageSettingParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveWageSettingParamsWithHTTPClient(client *http.Client) *RetrieveWageSettingParams {
-	var ()
 	return &RetrieveWageSettingParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveWageSettingParams contains all the parameters to send to the API endpoint
-for the retrieve wage setting operation typically these are written to a http.Request
+/* RetrieveWageSettingParams contains all the parameters to send to the API endpoint
+   for the retrieve wage setting operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveWageSettingParams struct {
 
-	/*TeamMemberID
-	  The ID of the team member to retrieve wage setting for
+	/* TeamMemberID.
 
+	   The ID of the team member to retrieve wage setting for
 	*/
 	TeamMemberID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve wage setting params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveWageSettingParams) WithDefaults() *RetrieveWageSettingParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve wage setting params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveWageSettingParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve wage setting params

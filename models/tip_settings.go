@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -24,10 +26,31 @@ type TipSettings struct {
 	// Indicates whether tip options should be presented on their own screen before presenting
 	// the signature screen during card payment. Defaults to false.
 	SeparateTipScreen bool `json:"separate_tip_screen,omitempty"`
+
+	// Enables the "Smart Tip Amounts" behavior.
+	// Exact tipping options depend on the region the Square seller is active in.
+	//
+	// In the United States and Canada, tipping options will be presented in whole dollar amounts for
+	// payments under 10 USD/CAD respectively.
+	//
+	// If set to true, the tip_percentages settings is ignored.
+	// Defaults to false.
+	//
+	// To learn more about smart tipping, see [Accept Tips with the Square App](https://squareup.com/help/us/en/article/5069-accept-tips-with-the-square-app)
+	SmartTipping bool `json:"smart_tipping,omitempty"`
+
+	// A list of tip percentages that should be presented during the checkout flow. Specified as
+	// up to 3 non-negative integers from 0 to 100 (inclusive). Defaults to [15, 20, 25]
+	TipPercentages []int64 `json:"tip_percentages"`
 }
 
 // Validate validates this tip settings
 func (m *TipSettings) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this tip settings based on context it is used
+func (m *TipSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

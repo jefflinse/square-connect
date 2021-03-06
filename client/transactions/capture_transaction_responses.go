@@ -29,9 +29,8 @@ func (o *CaptureTransactionReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCaptureTransactionOK() *CaptureTransactionOK {
 	return &CaptureTransactionOK{}
 }
 
-/*CaptureTransactionOK handles this case with default header values.
+/* CaptureTransactionOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CaptureTransactionOK struct {
 func (o *CaptureTransactionOK) Error() string {
 	return fmt.Sprintf("[POST /v2/locations/{location_id}/transactions/{transaction_id}/capture][%d] captureTransactionOK  %+v", 200, o.Payload)
 }
-
 func (o *CaptureTransactionOK) GetPayload() *models.CaptureTransactionResponse {
 	return o.Payload
 }

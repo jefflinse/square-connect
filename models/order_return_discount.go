@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -109,7 +111,6 @@ func (m *OrderReturnDiscount) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturnDiscount) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
@@ -127,7 +128,6 @@ func (m *OrderReturnDiscount) validateAmountMoney(formats strfmt.Registry) error
 }
 
 func (m *OrderReturnDiscount) validateAppliedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedMoney) { // not required
 		return nil
 	}
@@ -145,12 +145,11 @@ func (m *OrderReturnDiscount) validateAppliedMoney(formats strfmt.Registry) erro
 }
 
 func (m *OrderReturnDiscount) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 192); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 192); err != nil {
 		return err
 	}
 
@@ -158,12 +157,11 @@ func (m *OrderReturnDiscount) validateCatalogObjectID(formats strfmt.Registry) e
 }
 
 func (m *OrderReturnDiscount) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
@@ -171,12 +169,11 @@ func (m *OrderReturnDiscount) validateName(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturnDiscount) validatePercentage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Percentage) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("percentage", "body", string(m.Percentage), 10); err != nil {
+	if err := validate.MaxLength("percentage", "body", m.Percentage, 10); err != nil {
 		return err
 	}
 
@@ -184,12 +181,11 @@ func (m *OrderReturnDiscount) validatePercentage(formats strfmt.Registry) error 
 }
 
 func (m *OrderReturnDiscount) validateSourceDiscountUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SourceDiscountUID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("source_discount_uid", "body", string(m.SourceDiscountUID), 60); err != nil {
+	if err := validate.MaxLength("source_discount_uid", "body", m.SourceDiscountUID, 60); err != nil {
 		return err
 	}
 
@@ -197,13 +193,58 @@ func (m *OrderReturnDiscount) validateSourceDiscountUID(formats strfmt.Registry)
 }
 
 func (m *OrderReturnDiscount) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order return discount based on the context it is used
+func (m *OrderReturnDiscount) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAppliedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderReturnDiscount) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderReturnDiscount) contextValidateAppliedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AppliedMoney != nil {
+		if err := m.AppliedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("applied_money")
+			}
+			return err
+		}
 	}
 
 	return nil

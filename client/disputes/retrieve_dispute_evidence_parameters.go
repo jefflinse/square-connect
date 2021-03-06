@@ -16,64 +16,79 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveDisputeEvidenceParams creates a new RetrieveDisputeEvidenceParams object
-// with the default values initialized.
+// NewRetrieveDisputeEvidenceParams creates a new RetrieveDisputeEvidenceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveDisputeEvidenceParams() *RetrieveDisputeEvidenceParams {
-	var ()
 	return &RetrieveDisputeEvidenceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveDisputeEvidenceParamsWithTimeout creates a new RetrieveDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveDisputeEvidenceParamsWithTimeout(timeout time.Duration) *RetrieveDisputeEvidenceParams {
-	var ()
 	return &RetrieveDisputeEvidenceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveDisputeEvidenceParamsWithContext creates a new RetrieveDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveDisputeEvidenceParamsWithContext(ctx context.Context) *RetrieveDisputeEvidenceParams {
-	var ()
 	return &RetrieveDisputeEvidenceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveDisputeEvidenceParamsWithHTTPClient creates a new RetrieveDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveDisputeEvidenceParamsWithHTTPClient(client *http.Client) *RetrieveDisputeEvidenceParams {
-	var ()
 	return &RetrieveDisputeEvidenceParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveDisputeEvidenceParams contains all the parameters to send to the API endpoint
-for the retrieve dispute evidence operation typically these are written to a http.Request
+/* RetrieveDisputeEvidenceParams contains all the parameters to send to the API endpoint
+   for the retrieve dispute evidence operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveDisputeEvidenceParams struct {
 
-	/*DisputeID
-	  The ID of the dispute that you want to retrieve evidence from.
+	/* DisputeID.
 
+	   The ID of the dispute that you want to retrieve evidence from.
 	*/
 	DisputeID string
-	/*EvidenceID
-	  The ID of the evidence to retrieve.
 
+	/* EvidenceID.
+
+	   The ID of the evidence to retrieve.
 	*/
 	EvidenceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve dispute evidence params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveDisputeEvidenceParams) WithDefaults() *RetrieveDisputeEvidenceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve dispute evidence params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveDisputeEvidenceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve dispute evidence params

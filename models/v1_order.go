@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -142,7 +143,6 @@ func (m *V1Order) Validate(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -167,7 +167,6 @@ func (m *V1Order) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateOrderHistory(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OrderHistory) { // not required
 		return nil
 	}
@@ -192,7 +191,6 @@ func (m *V1Order) validateOrderHistory(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateShippingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ShippingAddress) { // not required
 		return nil
 	}
@@ -210,7 +208,6 @@ func (m *V1Order) validateShippingAddress(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateSubtotalMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SubtotalMoney) { // not required
 		return nil
 	}
@@ -228,7 +225,6 @@ func (m *V1Order) validateSubtotalMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateTender(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tender) { // not required
 		return nil
 	}
@@ -246,7 +242,6 @@ func (m *V1Order) validateTender(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateTotalDiscountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalDiscountMoney) { // not required
 		return nil
 	}
@@ -264,7 +259,6 @@ func (m *V1Order) validateTotalDiscountMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateTotalPriceMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalPriceMoney) { // not required
 		return nil
 	}
@@ -282,7 +276,6 @@ func (m *V1Order) validateTotalPriceMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateTotalShippingMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalShippingMoney) { // not required
 		return nil
 	}
@@ -300,13 +293,192 @@ func (m *V1Order) validateTotalShippingMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Order) validateTotalTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalTaxMoney) { // not required
 		return nil
 	}
 
 	if m.TotalTaxMoney != nil {
 		if err := m.TotalTaxMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 order based on the context it is used
+func (m *V1Order) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrderHistory(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShippingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSubtotalMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTender(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalDiscountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalPriceMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalShippingMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1Order) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateOrderHistory(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.OrderHistory); i++ {
+
+		if m.OrderHistory[i] != nil {
+			if err := m.OrderHistory[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("order_history" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateShippingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ShippingAddress != nil {
+		if err := m.ShippingAddress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("shipping_address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateSubtotalMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SubtotalMoney != nil {
+		if err := m.SubtotalMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("subtotal_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateTender(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Tender != nil {
+		if err := m.Tender.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tender")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateTotalDiscountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalDiscountMoney != nil {
+		if err := m.TotalDiscountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_discount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateTotalPriceMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalPriceMoney != nil {
+		if err := m.TotalPriceMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_price_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateTotalShippingMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalShippingMoney != nil {
+		if err := m.TotalShippingMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_shipping_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Order) contextValidateTotalTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalTaxMoney != nil {
+		if err := m.TotalTaxMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("total_tax_money")
 			}

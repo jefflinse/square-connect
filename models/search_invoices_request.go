@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // SearchInvoicesRequest Describes a `SearchInvoices` request.
+// Example: {"request_body":{"query":{"filter":{"customer_ids":["JDKYHBWT1D4F8MFH63DBMEN8Y4"],"location_ids":["ES0RJRZYEC39A"]},"limit":100,"sort":{"field":"INVOICE_SORT_DATE","order":"DESC"}}}}
 //
 // swagger:model SearchInvoicesRequest
 type SearchInvoicesRequest struct {
@@ -55,6 +58,34 @@ func (m *SearchInvoicesRequest) validateQuery(formats strfmt.Registry) error {
 
 	if m.Query != nil {
 		if err := m.Query.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search invoices request based on the context it is used
+func (m *SearchInvoicesRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchInvoicesRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("query")
 			}

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -72,7 +74,7 @@ type CustomerFilter struct {
 	// For [exact matching](https://developer.squareup.com/docs/docs/customers-api/cookbook/search-customers#exact-search-by-phone-number),
 	// this filter causes the search to return customers whose phone number
 	// matches the specified query expression. The number in the query must be of an E.164-compliant
-	// form. In particular, it must include the leading `+` sign followed by a contry code and then a
+	// form. In particular, it must include the leading `+` sign followed by a country code and then a
 	// subscriber number. The standard E.614 form of a US phone number is `+12061112222` of
 	// the domestic version or `+0012061112222` of the international version. The E.164-compliant
 	// variations include `+1 (206) 111-2222` or `+001 (206) 111-2222`, respectively. To match
@@ -147,7 +149,6 @@ func (m *CustomerFilter) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CustomerFilter) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -165,7 +166,6 @@ func (m *CustomerFilter) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *CustomerFilter) validateCreationSource(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreationSource) { // not required
 		return nil
 	}
@@ -183,7 +183,6 @@ func (m *CustomerFilter) validateCreationSource(formats strfmt.Registry) error {
 }
 
 func (m *CustomerFilter) validateEmailAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EmailAddress) { // not required
 		return nil
 	}
@@ -201,7 +200,6 @@ func (m *CustomerFilter) validateEmailAddress(formats strfmt.Registry) error {
 }
 
 func (m *CustomerFilter) validateGroupIds(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GroupIds) { // not required
 		return nil
 	}
@@ -219,7 +217,6 @@ func (m *CustomerFilter) validateGroupIds(formats strfmt.Registry) error {
 }
 
 func (m *CustomerFilter) validatePhoneNumber(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PhoneNumber) { // not required
 		return nil
 	}
@@ -237,7 +234,6 @@ func (m *CustomerFilter) validatePhoneNumber(formats strfmt.Registry) error {
 }
 
 func (m *CustomerFilter) validateReferenceID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReferenceID) { // not required
 		return nil
 	}
@@ -255,13 +251,148 @@ func (m *CustomerFilter) validateReferenceID(formats strfmt.Registry) error {
 }
 
 func (m *CustomerFilter) validateUpdatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
 
 	if m.UpdatedAt != nil {
 		if err := m.UpdatedAt.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updated_at")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this customer filter based on the context it is used
+func (m *CustomerFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreationSource(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEmailAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroupIds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePhoneNumber(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReferenceID(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CustomerFilter) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatedAt != nil {
+		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("created_at")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CustomerFilter) contextValidateCreationSource(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreationSource != nil {
+		if err := m.CreationSource.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("creation_source")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CustomerFilter) contextValidateEmailAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EmailAddress != nil {
+		if err := m.EmailAddress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("email_address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CustomerFilter) contextValidateGroupIds(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GroupIds != nil {
+		if err := m.GroupIds.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("group_ids")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CustomerFilter) contextValidatePhoneNumber(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PhoneNumber != nil {
+		if err := m.PhoneNumber.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("phone_number")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CustomerFilter) contextValidateReferenceID(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ReferenceID != nil {
+		if err := m.ReferenceID.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("reference_id")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CustomerFilter) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatedAt != nil {
+		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updated_at")
 			}

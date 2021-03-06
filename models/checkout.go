@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -70,7 +71,7 @@ type Checkout struct {
 	// `http://www.example.com/order-complete`, a successful transaction redirects
 	// the customer to:
 	//
-	// `http://www.example.com/order-complete?checkoutId=xxxxxx&orderId=xxxxxx&referenceId=xxxxxx&transactionId=xxxxxx`
+	// <pre><code>http://www.example.com/order-complete?checkoutId=xxxxxx&amp;orderId=xxxxxx&amp;referenceId=xxxxxx&amp;transactionId=xxxxxx</code></pre>
 	//
 	// If you do not provide a redirect URL, Square Checkout will display an order
 	// confirmation page on your behalf; however Square strongly recommends that
@@ -102,7 +103,6 @@ func (m *Checkout) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Checkout) validateAdditionalRecipients(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdditionalRecipients) { // not required
 		return nil
 	}
@@ -127,7 +127,6 @@ func (m *Checkout) validateAdditionalRecipients(formats strfmt.Registry) error {
 }
 
 func (m *Checkout) validateOrder(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Order) { // not required
 		return nil
 	}
@@ -145,13 +144,80 @@ func (m *Checkout) validateOrder(formats strfmt.Registry) error {
 }
 
 func (m *Checkout) validatePrePopulateShippingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PrePopulateShippingAddress) { // not required
 		return nil
 	}
 
 	if m.PrePopulateShippingAddress != nil {
 		if err := m.PrePopulateShippingAddress.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pre_populate_shipping_address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this checkout based on the context it is used
+func (m *Checkout) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdditionalRecipients(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrePopulateShippingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Checkout) contextValidateAdditionalRecipients(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AdditionalRecipients); i++ {
+
+		if m.AdditionalRecipients[i] != nil {
+			if err := m.AdditionalRecipients[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additional_recipients" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Checkout) contextValidateOrder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Order != nil {
+		if err := m.Order.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("order")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Checkout) contextValidatePrePopulateShippingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PrePopulateShippingAddress != nil {
+		if err := m.PrePopulateShippingAddress.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("pre_populate_shipping_address")
 			}

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,7 +15,8 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// CatalogItem An [CatalogObject](#type-CatalogObject) instance of the `ITEM` type, also referred to as an item, in the catalog.
+// CatalogItem A [CatalogObject](#type-CatalogObject) instance of the `ITEM` type, also referred to as an item, in the catalog.
+// Example: {"object":{"id":"#Cocoa","item_data":{"abbreviation":"Ch","description":"Hot chocolate","name":"Cocoa","visibility":"PRIVATE"},"present_at_all_locations":true,"type":"ITEM"}}
 //
 // swagger:model CatalogItem
 type CatalogItem struct {
@@ -120,12 +122,11 @@ func (m *CatalogItem) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItem) validateAbbreviation(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Abbreviation) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("abbreviation", "body", string(m.Abbreviation), 24); err != nil {
+	if err := validate.MaxLength("abbreviation", "body", m.Abbreviation, 24); err != nil {
 		return err
 	}
 
@@ -133,12 +134,11 @@ func (m *CatalogItem) validateAbbreviation(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItem) validateDescription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Description) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("description", "body", string(m.Description), 4096); err != nil {
+	if err := validate.MaxLength("description", "body", m.Description, 4096); err != nil {
 		return err
 	}
 
@@ -146,7 +146,6 @@ func (m *CatalogItem) validateDescription(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItem) validateItemOptions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemOptions) { // not required
 		return nil
 	}
@@ -171,7 +170,6 @@ func (m *CatalogItem) validateItemOptions(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItem) validateModifierListInfo(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ModifierListInfo) { // not required
 		return nil
 	}
@@ -196,12 +194,11 @@ func (m *CatalogItem) validateModifierListInfo(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItem) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 512); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 512); err != nil {
 		return err
 	}
 
@@ -209,7 +206,6 @@ func (m *CatalogItem) validateName(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItem) validateVariations(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Variations) { // not required
 		return nil
 	}
@@ -221,6 +217,82 @@ func (m *CatalogItem) validateVariations(formats strfmt.Registry) error {
 
 		if m.Variations[i] != nil {
 			if err := m.Variations[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("variations" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog item based on the context it is used
+func (m *CatalogItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateItemOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifierListInfo(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVariations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogItem) contextValidateItemOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ItemOptions); i++ {
+
+		if m.ItemOptions[i] != nil {
+			if err := m.ItemOptions[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("item_options" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CatalogItem) contextValidateModifierListInfo(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ModifierListInfo); i++ {
+
+		if m.ModifierListInfo[i] != nil {
+			if err := m.ModifierListInfo[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("modifier_list_info" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CatalogItem) contextValidateVariations(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Variations); i++ {
+
+		if m.Variations[i] != nil {
+			if err := m.Variations[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("variations" + "." + strconv.Itoa(i))
 				}

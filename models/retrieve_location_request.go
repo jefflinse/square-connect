@@ -7,6 +7,7 @@ package models
 
 // RetrieveLocationRequest Defines the fields that are included in the request body for
 // the __RetrieveLocation__ endpoint.
+// Example: {}
 //
 // swagger:model RetrieveLocationRequest
 type RetrieveLocationRequest interface{}

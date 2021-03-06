@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateCheckoutParams creates a new CreateCheckoutParams object
-// with the default values initialized.
+// NewCreateCheckoutParams creates a new CreateCheckoutParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateCheckoutParams() *CreateCheckoutParams {
-	var ()
 	return &CreateCheckoutParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateCheckoutParamsWithTimeout creates a new CreateCheckoutParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateCheckoutParamsWithTimeout(timeout time.Duration) *CreateCheckoutParams {
-	var ()
 	return &CreateCheckoutParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateCheckoutParamsWithContext creates a new CreateCheckoutParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateCheckoutParamsWithContext(ctx context.Context) *CreateCheckoutParams {
-	var ()
 	return &CreateCheckoutParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateCheckoutParamsWithHTTPClient creates a new CreateCheckoutParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateCheckoutParamsWithHTTPClient(client *http.Client) *CreateCheckoutParams {
-	var ()
 	return &CreateCheckoutParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateCheckoutParams contains all the parameters to send to the API endpoint
-for the create checkout operation typically these are written to a http.Request
+/* CreateCheckoutParams contains all the parameters to send to the API endpoint
+   for the create checkout operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateCheckoutParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateCheckoutRequest
-	/*LocationID
-	  The ID of the business location to associate the checkout with.
 
+	/* LocationID.
+
+	   The ID of the business location to associate the checkout with.
 	*/
 	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateCheckoutParams) WithDefaults() *CreateCheckoutParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateCheckoutParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create checkout params
@@ -142,7 +157,6 @@ func (o *CreateCheckoutParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewBatchUpsertCatalogObjectsParams creates a new BatchUpsertCatalogObjectsParams object
-// with the default values initialized.
+// NewBatchUpsertCatalogObjectsParams creates a new BatchUpsertCatalogObjectsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewBatchUpsertCatalogObjectsParams() *BatchUpsertCatalogObjectsParams {
-	var ()
 	return &BatchUpsertCatalogObjectsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewBatchUpsertCatalogObjectsParamsWithTimeout creates a new BatchUpsertCatalogObjectsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewBatchUpsertCatalogObjectsParamsWithTimeout(timeout time.Duration) *BatchUpsertCatalogObjectsParams {
-	var ()
 	return &BatchUpsertCatalogObjectsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewBatchUpsertCatalogObjectsParamsWithContext creates a new BatchUpsertCatalogObjectsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewBatchUpsertCatalogObjectsParamsWithContext(ctx context.Context) *BatchUpsertCatalogObjectsParams {
-	var ()
 	return &BatchUpsertCatalogObjectsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewBatchUpsertCatalogObjectsParamsWithHTTPClient creates a new BatchUpsertCatalogObjectsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewBatchUpsertCatalogObjectsParamsWithHTTPClient(client *http.Client) *BatchUpsertCatalogObjectsParams {
-	var ()
 	return &BatchUpsertCatalogObjectsParams{
 		HTTPClient: client,
 	}
 }
 
-/*BatchUpsertCatalogObjectsParams contains all the parameters to send to the API endpoint
-for the batch upsert catalog objects operation typically these are written to a http.Request
+/* BatchUpsertCatalogObjectsParams contains all the parameters to send to the API endpoint
+   for the batch upsert catalog objects operation.
+
+   Typically these are written to a http.Request.
 */
 type BatchUpsertCatalogObjectsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.BatchUpsertCatalogObjectsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the batch upsert catalog objects params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BatchUpsertCatalogObjectsParams) WithDefaults() *BatchUpsertCatalogObjectsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the batch upsert catalog objects params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BatchUpsertCatalogObjectsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the batch upsert catalog objects params
@@ -126,7 +140,6 @@ func (o *BatchUpsertCatalogObjectsParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

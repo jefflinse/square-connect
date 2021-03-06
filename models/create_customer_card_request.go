@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -14,6 +16,7 @@ import (
 
 // CreateCustomerCardRequest Defines the fields that are included in the request body of a request
 // to the CreateCustomerCard endpoint.
+// Example: {"request_body":{"billing_address":{"address_line_1":"500 Electric Ave","address_line_2":"Suite 600","administrative_district_level_1":"NY","country":"US","locality":"New York","postal_code":"10003"},"card_nonce":"YOUR_CARD_NONCE","cardholder_name":"Amelia Earhart"}}
 //
 // swagger:model CreateCustomerCardRequest
 type CreateCustomerCardRequest struct {
@@ -62,7 +65,6 @@ func (m *CreateCustomerCardRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CreateCustomerCardRequest) validateBillingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BillingAddress) { // not required
 		return nil
 	}
@@ -83,6 +85,34 @@ func (m *CreateCustomerCardRequest) validateCardNonce(formats strfmt.Registry) e
 
 	if err := validate.Required("card_nonce", "body", m.CardNonce); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create customer card request based on the context it is used
+func (m *CreateCustomerCardRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBillingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateCustomerCardRequest) contextValidateBillingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BillingAddress != nil {
+		if err := m.BillingAddress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("billing_address")
+			}
+			return err
+		}
 	}
 
 	return nil

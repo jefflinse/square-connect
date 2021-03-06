@@ -25,9 +25,12 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	RegisterDomain(params *RegisterDomainParams, authInfo runtime.ClientAuthInfoWriter) (*RegisterDomainOK, error)
+	RegisterDomain(params *RegisterDomainParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RegisterDomainOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -45,13 +48,12 @@ Web Apple Pay with Square for merchants using their platform.
 To learn more about Apple Pay on Web see the Apple Pay section in the
 [Square Payment Form Walkthrough](/docs/payment-form/payment-form-walkthrough).
 */
-func (a *Client) RegisterDomain(params *RegisterDomainParams, authInfo runtime.ClientAuthInfoWriter) (*RegisterDomainOK, error) {
+func (a *Client) RegisterDomain(params *RegisterDomainParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RegisterDomainOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRegisterDomainParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RegisterDomain",
 		Method:             "POST",
 		PathPattern:        "/v2/apple-pay/domains",
@@ -63,7 +65,12 @@ func (a *Client) RegisterDomain(params *RegisterDomainParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

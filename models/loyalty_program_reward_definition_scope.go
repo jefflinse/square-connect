@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -13,7 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// LoyaltyProgramRewardDefinitionScope Indicates the scope of the reward tier.
+// LoyaltyProgramRewardDefinitionScope Indicates the scope of the reward tier. DEPRECATED at version 2020-12-16. Discount details
+// are now defined using a catalog pricing rule and other catalog objects. For more information, see
+// [Get discount details for the reward](https://developer.squareup.com/docs/docs/loyalty-api/overview#get-discount-details).
 //
 // swagger:model LoyaltyProgramRewardDefinitionScope
 type LoyaltyProgramRewardDefinitionScope string
@@ -44,7 +47,7 @@ func init() {
 }
 
 func (m LoyaltyProgramRewardDefinitionScope) validateLoyaltyProgramRewardDefinitionScopeEnum(path, location string, value LoyaltyProgramRewardDefinitionScope) error {
-	if err := validate.Enum(path, location, value, loyaltyProgramRewardDefinitionScopeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, loyaltyProgramRewardDefinitionScopeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -62,5 +65,10 @@ func (m LoyaltyProgramRewardDefinitionScope) Validate(formats strfmt.Registry) e
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this loyalty program reward definition scope based on context it is used
+func (m LoyaltyProgramRewardDefinitionScope) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

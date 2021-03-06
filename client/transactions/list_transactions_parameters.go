@@ -16,93 +16,111 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListTransactionsParams creates a new ListTransactionsParams object
-// with the default values initialized.
+// NewListTransactionsParams creates a new ListTransactionsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListTransactionsParams() *ListTransactionsParams {
-	var ()
 	return &ListTransactionsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListTransactionsParamsWithTimeout creates a new ListTransactionsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListTransactionsParamsWithTimeout(timeout time.Duration) *ListTransactionsParams {
-	var ()
 	return &ListTransactionsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListTransactionsParamsWithContext creates a new ListTransactionsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListTransactionsParamsWithContext(ctx context.Context) *ListTransactionsParams {
-	var ()
 	return &ListTransactionsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListTransactionsParamsWithHTTPClient creates a new ListTransactionsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListTransactionsParamsWithHTTPClient(client *http.Client) *ListTransactionsParams {
-	var ()
 	return &ListTransactionsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListTransactionsParams contains all the parameters to send to the API endpoint
-for the list transactions operation typically these are written to a http.Request
+/* ListTransactionsParams contains all the parameters to send to the API endpoint
+   for the list transactions operation.
+
+   Typically these are written to a http.Request.
 */
 type ListTransactionsParams struct {
 
-	/*BeginTime
-	  The beginning of the requested reporting period, in RFC 3339 format.
+	/* BeginTime.
+
+	     The beginning of the requested reporting period, in RFC 3339 format.
 
 	See [Date ranges](#dateranges) for details on date inclusivity/exclusivity.
 
 	Default value: The current time minus one year.
-
 	*/
 	BeginTime *string
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
+
+	/* Cursor.
+
+	     A pagination cursor returned by a previous call to this endpoint.
 	Provide this to retrieve the next set of results for your original query.
 
 	See [Paginating results](#paginatingresults) for more information.
-
 	*/
 	Cursor *string
-	/*EndTime
-	  The end of the requested reporting period, in RFC 3339 format.
+
+	/* EndTime.
+
+	     The end of the requested reporting period, in RFC 3339 format.
 
 	See [Date ranges](#dateranges) for details on date inclusivity/exclusivity.
 
 	Default value: The current time.
-
 	*/
 	EndTime *string
-	/*LocationID
-	  The ID of the location to list transactions for.
 
+	/* LocationID.
+
+	   The ID of the location to list transactions for.
 	*/
 	LocationID string
-	/*SortOrder
-	  The order in which results are listed in the response (`ASC` for
+
+	/* SortOrder.
+
+	     The order in which results are listed in the response (`ASC` for
 	oldest first, `DESC` for newest first).
 
 	Default value: `DESC`
-
 	*/
 	SortOrder *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list transactions params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListTransactionsParams) WithDefaults() *ListTransactionsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list transactions params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListTransactionsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list transactions params
@@ -205,48 +223,51 @@ func (o *ListTransactionsParams) WriteToRequest(r runtime.ClientRequest, reg str
 
 		// query param begin_time
 		var qrBeginTime string
+
 		if o.BeginTime != nil {
 			qrBeginTime = *o.BeginTime
 		}
 		qBeginTime := qrBeginTime
 		if qBeginTime != "" {
+
 			if err := r.SetQueryParam("begin_time", qBeginTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Cursor != nil {
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndTime != nil {
 
 		// query param end_time
 		var qrEndTime string
+
 		if o.EndTime != nil {
 			qrEndTime = *o.EndTime
 		}
 		qEndTime := qrEndTime
 		if qEndTime != "" {
+
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param location_id
@@ -258,16 +279,17 @@ func (o *ListTransactionsParams) WriteToRequest(r runtime.ClientRequest, reg str
 
 		// query param sort_order
 		var qrSortOrder string
+
 		if o.SortOrder != nil {
 			qrSortOrder = *o.SortOrder
 		}
 		qSortOrder := qrSortOrder
 		if qSortOrder != "" {
+
 			if err := r.SetQueryParam("sort_order", qSortOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

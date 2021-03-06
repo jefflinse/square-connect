@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewPublishInvoiceParams creates a new PublishInvoiceParams object
-// with the default values initialized.
+// NewPublishInvoiceParams creates a new PublishInvoiceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewPublishInvoiceParams() *PublishInvoiceParams {
-	var ()
 	return &PublishInvoiceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewPublishInvoiceParamsWithTimeout creates a new PublishInvoiceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewPublishInvoiceParamsWithTimeout(timeout time.Duration) *PublishInvoiceParams {
-	var ()
 	return &PublishInvoiceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewPublishInvoiceParamsWithContext creates a new PublishInvoiceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewPublishInvoiceParamsWithContext(ctx context.Context) *PublishInvoiceParams {
-	var ()
 	return &PublishInvoiceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewPublishInvoiceParamsWithHTTPClient creates a new PublishInvoiceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewPublishInvoiceParamsWithHTTPClient(client *http.Client) *PublishInvoiceParams {
-	var ()
 	return &PublishInvoiceParams{
 		HTTPClient: client,
 	}
 }
 
-/*PublishInvoiceParams contains all the parameters to send to the API endpoint
-for the publish invoice operation typically these are written to a http.Request
+/* PublishInvoiceParams contains all the parameters to send to the API endpoint
+   for the publish invoice operation.
+
+   Typically these are written to a http.Request.
 */
 type PublishInvoiceParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.PublishInvoiceRequest
-	/*InvoiceID
-	  The id of the invoice to publish.
 
+	/* InvoiceID.
+
+	   The id of the invoice to publish.
 	*/
 	InvoiceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the publish invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PublishInvoiceParams) WithDefaults() *PublishInvoiceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the publish invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PublishInvoiceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the publish invoice params
@@ -142,7 +157,6 @@ func (o *PublishInvoiceParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

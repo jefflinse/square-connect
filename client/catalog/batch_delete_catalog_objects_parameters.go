@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewBatchDeleteCatalogObjectsParams creates a new BatchDeleteCatalogObjectsParams object
-// with the default values initialized.
+// NewBatchDeleteCatalogObjectsParams creates a new BatchDeleteCatalogObjectsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewBatchDeleteCatalogObjectsParams() *BatchDeleteCatalogObjectsParams {
-	var ()
 	return &BatchDeleteCatalogObjectsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewBatchDeleteCatalogObjectsParamsWithTimeout creates a new BatchDeleteCatalogObjectsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewBatchDeleteCatalogObjectsParamsWithTimeout(timeout time.Duration) *BatchDeleteCatalogObjectsParams {
-	var ()
 	return &BatchDeleteCatalogObjectsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewBatchDeleteCatalogObjectsParamsWithContext creates a new BatchDeleteCatalogObjectsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewBatchDeleteCatalogObjectsParamsWithContext(ctx context.Context) *BatchDeleteCatalogObjectsParams {
-	var ()
 	return &BatchDeleteCatalogObjectsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewBatchDeleteCatalogObjectsParamsWithHTTPClient creates a new BatchDeleteCatalogObjectsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewBatchDeleteCatalogObjectsParamsWithHTTPClient(client *http.Client) *BatchDeleteCatalogObjectsParams {
-	var ()
 	return &BatchDeleteCatalogObjectsParams{
 		HTTPClient: client,
 	}
 }
 
-/*BatchDeleteCatalogObjectsParams contains all the parameters to send to the API endpoint
-for the batch delete catalog objects operation typically these are written to a http.Request
+/* BatchDeleteCatalogObjectsParams contains all the parameters to send to the API endpoint
+   for the batch delete catalog objects operation.
+
+   Typically these are written to a http.Request.
 */
 type BatchDeleteCatalogObjectsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.BatchDeleteCatalogObjectsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the batch delete catalog objects params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BatchDeleteCatalogObjectsParams) WithDefaults() *BatchDeleteCatalogObjectsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the batch delete catalog objects params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BatchDeleteCatalogObjectsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the batch delete catalog objects params
@@ -126,7 +140,6 @@ func (o *BatchDeleteCatalogObjectsParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

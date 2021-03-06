@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewBulkCreateTeamMembersParams creates a new BulkCreateTeamMembersParams object
-// with the default values initialized.
+// NewBulkCreateTeamMembersParams creates a new BulkCreateTeamMembersParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewBulkCreateTeamMembersParams() *BulkCreateTeamMembersParams {
-	var ()
 	return &BulkCreateTeamMembersParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewBulkCreateTeamMembersParamsWithTimeout creates a new BulkCreateTeamMembersParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewBulkCreateTeamMembersParamsWithTimeout(timeout time.Duration) *BulkCreateTeamMembersParams {
-	var ()
 	return &BulkCreateTeamMembersParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewBulkCreateTeamMembersParamsWithContext creates a new BulkCreateTeamMembersParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewBulkCreateTeamMembersParamsWithContext(ctx context.Context) *BulkCreateTeamMembersParams {
-	var ()
 	return &BulkCreateTeamMembersParams{
-
 		Context: ctx,
 	}
 }
 
 // NewBulkCreateTeamMembersParamsWithHTTPClient creates a new BulkCreateTeamMembersParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewBulkCreateTeamMembersParamsWithHTTPClient(client *http.Client) *BulkCreateTeamMembersParams {
-	var ()
 	return &BulkCreateTeamMembersParams{
 		HTTPClient: client,
 	}
 }
 
-/*BulkCreateTeamMembersParams contains all the parameters to send to the API endpoint
-for the bulk create team members operation typically these are written to a http.Request
+/* BulkCreateTeamMembersParams contains all the parameters to send to the API endpoint
+   for the bulk create team members operation.
+
+   Typically these are written to a http.Request.
 */
 type BulkCreateTeamMembersParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.BulkCreateTeamMembersRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the bulk create team members params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BulkCreateTeamMembersParams) WithDefaults() *BulkCreateTeamMembersParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the bulk create team members params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *BulkCreateTeamMembersParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the bulk create team members params
@@ -126,7 +140,6 @@ func (o *BulkCreateTeamMembersParams) WriteToRequest(r runtime.ClientRequest, re
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

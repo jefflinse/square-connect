@@ -29,9 +29,8 @@ func (o *ListSubscriptionEventsReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewListSubscriptionEventsOK() *ListSubscriptionEventsOK {
 	return &ListSubscriptionEventsOK{}
 }
 
-/*ListSubscriptionEventsOK handles this case with default header values.
+/* ListSubscriptionEventsOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type ListSubscriptionEventsOK struct {
 func (o *ListSubscriptionEventsOK) Error() string {
 	return fmt.Sprintf("[GET /v2/subscriptions/{subscription_id}/events][%d] listSubscriptionEventsOK  %+v", 200, o.Payload)
 }
-
 func (o *ListSubscriptionEventsOK) GetPayload() *models.ListSubscriptionEventsResponse {
 	return o.Payload
 }

@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveCustomerGroupParams creates a new RetrieveCustomerGroupParams object
-// with the default values initialized.
+// NewRetrieveCustomerGroupParams creates a new RetrieveCustomerGroupParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveCustomerGroupParams() *RetrieveCustomerGroupParams {
-	var ()
 	return &RetrieveCustomerGroupParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveCustomerGroupParamsWithTimeout creates a new RetrieveCustomerGroupParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveCustomerGroupParamsWithTimeout(timeout time.Duration) *RetrieveCustomerGroupParams {
-	var ()
 	return &RetrieveCustomerGroupParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveCustomerGroupParamsWithContext creates a new RetrieveCustomerGroupParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveCustomerGroupParamsWithContext(ctx context.Context) *RetrieveCustomerGroupParams {
-	var ()
 	return &RetrieveCustomerGroupParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveCustomerGroupParamsWithHTTPClient creates a new RetrieveCustomerGroupParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveCustomerGroupParamsWithHTTPClient(client *http.Client) *RetrieveCustomerGroupParams {
-	var ()
 	return &RetrieveCustomerGroupParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveCustomerGroupParams contains all the parameters to send to the API endpoint
-for the retrieve customer group operation typically these are written to a http.Request
+/* RetrieveCustomerGroupParams contains all the parameters to send to the API endpoint
+   for the retrieve customer group operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveCustomerGroupParams struct {
 
-	/*GroupID
-	  The ID of the customer group to retrieve.
+	/* GroupID.
 
+	   The ID of the customer group to retrieve.
 	*/
 	GroupID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve customer group params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveCustomerGroupParams) WithDefaults() *RetrieveCustomerGroupParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve customer group params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveCustomerGroupParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve customer group params

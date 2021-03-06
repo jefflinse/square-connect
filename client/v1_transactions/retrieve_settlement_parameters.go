@@ -16,64 +16,79 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveSettlementParams creates a new RetrieveSettlementParams object
-// with the default values initialized.
+// NewRetrieveSettlementParams creates a new RetrieveSettlementParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveSettlementParams() *RetrieveSettlementParams {
-	var ()
 	return &RetrieveSettlementParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveSettlementParamsWithTimeout creates a new RetrieveSettlementParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveSettlementParamsWithTimeout(timeout time.Duration) *RetrieveSettlementParams {
-	var ()
 	return &RetrieveSettlementParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveSettlementParamsWithContext creates a new RetrieveSettlementParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveSettlementParamsWithContext(ctx context.Context) *RetrieveSettlementParams {
-	var ()
 	return &RetrieveSettlementParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveSettlementParamsWithHTTPClient creates a new RetrieveSettlementParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveSettlementParamsWithHTTPClient(client *http.Client) *RetrieveSettlementParams {
-	var ()
 	return &RetrieveSettlementParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveSettlementParams contains all the parameters to send to the API endpoint
-for the retrieve settlement operation typically these are written to a http.Request
+/* RetrieveSettlementParams contains all the parameters to send to the API endpoint
+   for the retrieve settlement operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveSettlementParams struct {
 
-	/*LocationID
-	  The ID of the settlements's associated location.
+	/* LocationID.
 
+	   The ID of the settlements's associated location.
 	*/
 	LocationID string
-	/*SettlementID
-	  The settlement's Square-issued ID. You obtain this value from Settlement objects returned by the List Settlements endpoint.
 
+	/* SettlementID.
+
+	   The settlement's Square-issued ID. You obtain this value from Settlement objects returned by the List Settlements endpoint.
 	*/
 	SettlementID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve settlement params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveSettlementParams) WithDefaults() *RetrieveSettlementParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve settlement params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveSettlementParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve settlement params

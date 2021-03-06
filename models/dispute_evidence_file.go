@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -22,7 +24,7 @@ type DisputeEvidenceFile struct {
 	// Min Length: 1
 	Filename string `json:"filename,omitempty"`
 
-	// Dispute evidence files must one of application/pdf, image/heic, image/heif, image/jpeg, image/png, image/tiff formats.
+	// Dispute evidence files must be application/pdf, image/heic, image/heif, image/jpeg, image/png, or image/tiff formats.
 	// Max Length: 40
 	// Min Length: 1
 	Filetype string `json:"filetype,omitempty"`
@@ -47,16 +49,15 @@ func (m *DisputeEvidenceFile) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DisputeEvidenceFile) validateFilename(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Filename) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("filename", "body", string(m.Filename), 1); err != nil {
+	if err := validate.MinLength("filename", "body", m.Filename, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("filename", "body", string(m.Filename), 40); err != nil {
+	if err := validate.MaxLength("filename", "body", m.Filename, 40); err != nil {
 		return err
 	}
 
@@ -64,19 +65,23 @@ func (m *DisputeEvidenceFile) validateFilename(formats strfmt.Registry) error {
 }
 
 func (m *DisputeEvidenceFile) validateFiletype(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Filetype) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("filetype", "body", string(m.Filetype), 1); err != nil {
+	if err := validate.MinLength("filetype", "body", m.Filetype, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("filetype", "body", string(m.Filetype), 40); err != nil {
+	if err := validate.MaxLength("filetype", "body", m.Filetype, 40); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this dispute evidence file based on context it is used
+func (m *DisputeEvidenceFile) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

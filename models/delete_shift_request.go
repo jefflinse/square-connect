@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // DeleteShiftRequest A request to delete a `Shift`
+// Example: {}
 //
 // swagger:model DeleteShiftRequest
 type DeleteShiftRequest interface{}

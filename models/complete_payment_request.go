@@ -7,8 +7,9 @@ package models
 
 // CompletePaymentRequest Completes (captures) a payment.
 //
-// By default, payments are set to autocomplete immediately after they are created.
-// To complete payments manually, set `autocomplete` to false.
+// By default, payments are set to `autocomplete` immediately after they are created.
+// To complete payments manually, set `autocomplete` to `false`.
+// Example: {"request_body":{}}
 //
 // swagger:model CompletePaymentRequest
 type CompletePaymentRequest interface{}

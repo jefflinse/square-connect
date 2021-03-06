@@ -17,75 +17,92 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListCashDrawerShiftEventsParams creates a new ListCashDrawerShiftEventsParams object
-// with the default values initialized.
+// NewListCashDrawerShiftEventsParams creates a new ListCashDrawerShiftEventsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListCashDrawerShiftEventsParams() *ListCashDrawerShiftEventsParams {
-	var ()
 	return &ListCashDrawerShiftEventsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListCashDrawerShiftEventsParamsWithTimeout creates a new ListCashDrawerShiftEventsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListCashDrawerShiftEventsParamsWithTimeout(timeout time.Duration) *ListCashDrawerShiftEventsParams {
-	var ()
 	return &ListCashDrawerShiftEventsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListCashDrawerShiftEventsParamsWithContext creates a new ListCashDrawerShiftEventsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListCashDrawerShiftEventsParamsWithContext(ctx context.Context) *ListCashDrawerShiftEventsParams {
-	var ()
 	return &ListCashDrawerShiftEventsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListCashDrawerShiftEventsParamsWithHTTPClient creates a new ListCashDrawerShiftEventsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListCashDrawerShiftEventsParamsWithHTTPClient(client *http.Client) *ListCashDrawerShiftEventsParams {
-	var ()
 	return &ListCashDrawerShiftEventsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListCashDrawerShiftEventsParams contains all the parameters to send to the API endpoint
-for the list cash drawer shift events operation typically these are written to a http.Request
+/* ListCashDrawerShiftEventsParams contains all the parameters to send to the API endpoint
+   for the list cash drawer shift events operation.
+
+   Typically these are written to a http.Request.
 */
 type ListCashDrawerShiftEventsParams struct {
 
-	/*Cursor
-	  Opaque cursor for fetching the next page of results.
+	/* Cursor.
 
+	   Opaque cursor for fetching the next page of results.
 	*/
 	Cursor *string
-	/*Limit
-	  Number of resources to be returned in a page of results (200 by
-	default, 1000 max).
 
+	/* Limit.
+
+	     Number of resources to be returned in a page of results (200 by
+	default, 1000 max).
 	*/
 	Limit *int64
-	/*LocationID
-	  The ID of the location to list cash drawer shifts for.
 
+	/* LocationID.
+
+	   The ID of the location to list cash drawer shifts for.
 	*/
 	LocationID string
-	/*ShiftID
-	  The shift ID.
 
+	/* ShiftID.
+
+	   The shift ID.
 	*/
 	ShiftID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list cash drawer shift events params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCashDrawerShiftEventsParams) WithDefaults() *ListCashDrawerShiftEventsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list cash drawer shift events params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCashDrawerShiftEventsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list cash drawer shift events params
@@ -177,38 +194,41 @@ func (o *ListCashDrawerShiftEventsParams) WriteToRequest(r runtime.ClientRequest
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// query param location_id
 	qrLocationID := o.LocationID
 	qLocationID := qrLocationID
 	if qLocationID != "" {
+
 		if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 			return err
 		}

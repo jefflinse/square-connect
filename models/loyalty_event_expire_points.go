@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -53,11 +55,11 @@ func (m *LoyaltyEventExpirePoints) validateLoyaltyProgramID(formats strfmt.Regis
 		return err
 	}
 
-	if err := validate.MinLength("loyalty_program_id", "body", string(*m.LoyaltyProgramID), 1); err != nil {
+	if err := validate.MinLength("loyalty_program_id", "body", *m.LoyaltyProgramID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("loyalty_program_id", "body", string(*m.LoyaltyProgramID), 36); err != nil {
+	if err := validate.MaxLength("loyalty_program_id", "body", *m.LoyaltyProgramID, 36); err != nil {
 		return err
 	}
 
@@ -70,10 +72,15 @@ func (m *LoyaltyEventExpirePoints) validatePoints(formats strfmt.Registry) error
 		return err
 	}
 
-	if err := validate.MaximumInt("points", "body", int64(*m.Points), 0, false); err != nil {
+	if err := validate.MaximumInt("points", "body", *m.Points, 0, false); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty event expire points based on context it is used
+func (m *LoyaltyEventExpirePoints) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

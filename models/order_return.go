@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -91,7 +92,6 @@ func (m *OrderReturn) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturn) validateReturnAmounts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReturnAmounts) { // not required
 		return nil
 	}
@@ -109,7 +109,6 @@ func (m *OrderReturn) validateReturnAmounts(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturn) validateReturnDiscounts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReturnDiscounts) { // not required
 		return nil
 	}
@@ -134,7 +133,6 @@ func (m *OrderReturn) validateReturnDiscounts(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturn) validateReturnLineItems(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReturnLineItems) { // not required
 		return nil
 	}
@@ -159,7 +157,6 @@ func (m *OrderReturn) validateReturnLineItems(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturn) validateReturnServiceCharges(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReturnServiceCharges) { // not required
 		return nil
 	}
@@ -184,7 +181,6 @@ func (m *OrderReturn) validateReturnServiceCharges(formats strfmt.Registry) erro
 }
 
 func (m *OrderReturn) validateReturnTaxes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReturnTaxes) { // not required
 		return nil
 	}
@@ -209,7 +205,6 @@ func (m *OrderReturn) validateReturnTaxes(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturn) validateRoundingAdjustment(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RoundingAdjustment) { // not required
 		return nil
 	}
@@ -227,13 +222,146 @@ func (m *OrderReturn) validateRoundingAdjustment(formats strfmt.Registry) error 
 }
 
 func (m *OrderReturn) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order return based on the context it is used
+func (m *OrderReturn) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateReturnAmounts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReturnDiscounts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReturnLineItems(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReturnServiceCharges(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReturnTaxes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRoundingAdjustment(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderReturn) contextValidateReturnAmounts(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ReturnAmounts != nil {
+		if err := m.ReturnAmounts.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("return_amounts")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderReturn) contextValidateReturnDiscounts(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ReturnDiscounts); i++ {
+
+		if m.ReturnDiscounts[i] != nil {
+			if err := m.ReturnDiscounts[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("return_discounts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderReturn) contextValidateReturnLineItems(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ReturnLineItems); i++ {
+
+		if m.ReturnLineItems[i] != nil {
+			if err := m.ReturnLineItems[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("return_line_items" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderReturn) contextValidateReturnServiceCharges(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ReturnServiceCharges); i++ {
+
+		if m.ReturnServiceCharges[i] != nil {
+			if err := m.ReturnServiceCharges[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("return_service_charges" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderReturn) contextValidateReturnTaxes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ReturnTaxes); i++ {
+
+		if m.ReturnTaxes[i] != nil {
+			if err := m.ReturnTaxes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("return_taxes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderReturn) contextValidateRoundingAdjustment(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RoundingAdjustment != nil {
+		if err := m.RoundingAdjustment.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("rounding_adjustment")
+			}
+			return err
+		}
 	}
 
 	return nil

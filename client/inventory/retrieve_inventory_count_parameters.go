@@ -16,73 +16,89 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveInventoryCountParams creates a new RetrieveInventoryCountParams object
-// with the default values initialized.
+// NewRetrieveInventoryCountParams creates a new RetrieveInventoryCountParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveInventoryCountParams() *RetrieveInventoryCountParams {
-	var ()
 	return &RetrieveInventoryCountParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveInventoryCountParamsWithTimeout creates a new RetrieveInventoryCountParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveInventoryCountParamsWithTimeout(timeout time.Duration) *RetrieveInventoryCountParams {
-	var ()
 	return &RetrieveInventoryCountParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveInventoryCountParamsWithContext creates a new RetrieveInventoryCountParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveInventoryCountParamsWithContext(ctx context.Context) *RetrieveInventoryCountParams {
-	var ()
 	return &RetrieveInventoryCountParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveInventoryCountParamsWithHTTPClient creates a new RetrieveInventoryCountParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveInventoryCountParamsWithHTTPClient(client *http.Client) *RetrieveInventoryCountParams {
-	var ()
 	return &RetrieveInventoryCountParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveInventoryCountParams contains all the parameters to send to the API endpoint
-for the retrieve inventory count operation typically these are written to a http.Request
+/* RetrieveInventoryCountParams contains all the parameters to send to the API endpoint
+   for the retrieve inventory count operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveInventoryCountParams struct {
 
-	/*CatalogObjectID
-	  ID of the `CatalogObject` to retrieve.
+	/* CatalogObjectID.
 
+	   ID of the `CatalogObject` to retrieve.
 	*/
 	CatalogObjectID string
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
+
+	/* Cursor.
+
+	     A pagination cursor returned by a previous call to this endpoint.
 	Provide this to retrieve the next set of results for the original query.
 
 	See the [Pagination](https://developer.squareup.com/docs/docs/working-with-apis/pagination) guide for more information.
-
 	*/
 	Cursor *string
-	/*LocationIds
-	  The `Location` IDs to look up as a comma-separated
-	list. An empty list queries all locations.
 
+	/* LocationIds.
+
+	     The `Location` IDs to look up as a comma-separated
+	list. An empty list queries all locations.
 	*/
 	LocationIds *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve inventory count params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveInventoryCountParams) WithDefaults() *RetrieveInventoryCountParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve inventory count params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveInventoryCountParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve inventory count params
@@ -168,32 +184,34 @@ func (o *RetrieveInventoryCountParams) WriteToRequest(r runtime.ClientRequest, r
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LocationIds != nil {
 
 		// query param location_ids
 		var qrLocationIds string
+
 		if o.LocationIds != nil {
 			qrLocationIds = *o.LocationIds
 		}
 		qLocationIds := qrLocationIds
 		if qLocationIds != "" {
+
 			if err := r.SetQueryParam("location_ids", qLocationIds); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

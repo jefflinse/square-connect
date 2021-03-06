@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -65,7 +67,6 @@ func (m *JobAssignment) Validate(formats strfmt.Registry) error {
 }
 
 func (m *JobAssignment) validateAnnualRate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AnnualRate) { // not required
 		return nil
 	}
@@ -83,7 +84,6 @@ func (m *JobAssignment) validateAnnualRate(formats strfmt.Registry) error {
 }
 
 func (m *JobAssignment) validateHourlyRate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.HourlyRate) { // not required
 		return nil
 	}
@@ -106,7 +106,7 @@ func (m *JobAssignment) validateJobTitle(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("job_title", "body", string(*m.JobTitle), 1); err != nil {
+	if err := validate.MinLength("job_title", "body", *m.JobTitle, 1); err != nil {
 		return err
 	}
 
@@ -117,6 +117,52 @@ func (m *JobAssignment) validatePayType(formats strfmt.Registry) error {
 
 	if err := validate.Required("pay_type", "body", m.PayType); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this job assignment based on the context it is used
+func (m *JobAssignment) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAnnualRate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateHourlyRate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *JobAssignment) contextValidateAnnualRate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AnnualRate != nil {
+		if err := m.AnnualRate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("annual_rate")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *JobAssignment) contextValidateHourlyRate(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.HourlyRate != nil {
+		if err := m.HourlyRate.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("hourly_rate")
+			}
+			return err
+		}
 	}
 
 	return nil

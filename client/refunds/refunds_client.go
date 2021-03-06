@@ -25,13 +25,16 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	GetPaymentRefund(params *GetPaymentRefundParams, authInfo runtime.ClientAuthInfoWriter) (*GetPaymentRefundOK, error)
+	GetPaymentRefund(params *GetPaymentRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPaymentRefundOK, error)
 
-	ListPaymentRefunds(params *ListPaymentRefundsParams, authInfo runtime.ClientAuthInfoWriter) (*ListPaymentRefundsOK, error)
+	ListPaymentRefunds(params *ListPaymentRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPaymentRefundsOK, error)
 
-	RefundPayment(params *RefundPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*RefundPaymentOK, error)
+	RefundPayment(params *RefundPaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RefundPaymentOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -39,15 +42,14 @@ type ClientService interface {
 /*
   GetPaymentRefund gets payment refund
 
-  Retrieves a specific `Refund` using the `refund_id`.
+  Retrieves a specific refund using the `refund_id`.
 */
-func (a *Client) GetPaymentRefund(params *GetPaymentRefundParams, authInfo runtime.ClientAuthInfoWriter) (*GetPaymentRefundOK, error) {
+func (a *Client) GetPaymentRefund(params *GetPaymentRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPaymentRefundOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPaymentRefundParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetPaymentRefund",
 		Method:             "GET",
 		PathPattern:        "/v2/refunds/{refund_id}",
@@ -59,7 +61,12 @@ func (a *Client) GetPaymentRefund(params *GetPaymentRefundParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -78,15 +85,14 @@ func (a *Client) GetPaymentRefund(params *GetPaymentRefundParams, authInfo runti
 
   Retrieves a list of refunds for the account making the request.
 
-Max results per page: 100
+The maximum results per page is 100.
 */
-func (a *Client) ListPaymentRefunds(params *ListPaymentRefundsParams, authInfo runtime.ClientAuthInfoWriter) (*ListPaymentRefundsOK, error) {
+func (a *Client) ListPaymentRefunds(params *ListPaymentRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPaymentRefundsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListPaymentRefundsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListPaymentRefunds",
 		Method:             "GET",
 		PathPattern:        "/v2/refunds",
@@ -98,7 +104,12 @@ func (a *Client) ListPaymentRefunds(params *ListPaymentRefundsParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -118,13 +129,12 @@ func (a *Client) ListPaymentRefunds(params *ListPaymentRefundsParams, authInfo r
   Refunds a payment. You can refund the entire payment amount or a
 portion of it.
 */
-func (a *Client) RefundPayment(params *RefundPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*RefundPaymentOK, error) {
+func (a *Client) RefundPayment(params *RefundPaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RefundPaymentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRefundPaymentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RefundPayment",
 		Method:             "POST",
 		PathPattern:        "/v2/refunds",
@@ -136,7 +146,12 @@ func (a *Client) RefundPayment(params *RefundPaymentParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

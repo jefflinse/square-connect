@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -50,7 +51,6 @@ func (m *CatalogCustomAttributeDefinitionSelectionConfig) Validate(formats strfm
 }
 
 func (m *CatalogCustomAttributeDefinitionSelectionConfig) validateAllowedSelections(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AllowedSelections) { // not required
 		return nil
 	}
@@ -75,13 +75,44 @@ func (m *CatalogCustomAttributeDefinitionSelectionConfig) validateAllowedSelecti
 }
 
 func (m *CatalogCustomAttributeDefinitionSelectionConfig) validateMaxAllowedSelections(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.MaxAllowedSelections) { // not required
 		return nil
 	}
 
-	if err := validate.MaximumInt("max_allowed_selections", "body", int64(m.MaxAllowedSelections), 100, false); err != nil {
+	if err := validate.MaximumInt("max_allowed_selections", "body", m.MaxAllowedSelections, 100, false); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog custom attribute definition selection config based on the context it is used
+func (m *CatalogCustomAttributeDefinitionSelectionConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAllowedSelections(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogCustomAttributeDefinitionSelectionConfig) contextValidateAllowedSelections(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AllowedSelections); i++ {
+
+		if m.AllowedSelections[i] != nil {
+			if err := m.AllowedSelections[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("allowed_selections" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

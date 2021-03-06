@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -33,7 +35,7 @@ type V1CreateRefundRequest struct {
 	// An optional key to ensure idempotence if you issue the same PARTIAL refund request more than once.
 	RequestIdempotenceKey string `json:"request_idempotence_key,omitempty"`
 
-	// TThe type of refund (FULL or PARTIAL).
+	// The type of refund (FULL or PARTIAL).
 	// See [V1CreateRefundRequestType](#type-v1createrefundrequesttype) for possible values
 	// Required: true
 	Type *string `json:"type"`
@@ -84,7 +86,6 @@ func (m *V1CreateRefundRequest) validateReason(formats strfmt.Registry) error {
 }
 
 func (m *V1CreateRefundRequest) validateRefundedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedMoney) { // not required
 		return nil
 	}
@@ -105,6 +106,34 @@ func (m *V1CreateRefundRequest) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 create refund request based on the context it is used
+func (m *V1CreateRefundRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateRefundedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1CreateRefundRequest) contextValidateRefundedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedMoney != nil {
+		if err := m.RefundedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_money")
+			}
+			return err
+		}
 	}
 
 	return nil

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // RetrieveTeamMemberRequest Represents a retrieve request for a `TeamMember` object.
+// Example: {"request_body":{}}
 //
 // swagger:model RetrieveTeamMemberRequest
 type RetrieveTeamMemberRequest interface{}

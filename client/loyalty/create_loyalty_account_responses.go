@@ -29,9 +29,8 @@ func (o *CreateLoyaltyAccountReader) ReadResponse(response runtime.ClientRespons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCreateLoyaltyAccountOK() *CreateLoyaltyAccountOK {
 	return &CreateLoyaltyAccountOK{}
 }
 
-/*CreateLoyaltyAccountOK handles this case with default header values.
+/* CreateLoyaltyAccountOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CreateLoyaltyAccountOK struct {
 func (o *CreateLoyaltyAccountOK) Error() string {
 	return fmt.Sprintf("[POST /v2/loyalty/accounts][%d] createLoyaltyAccountOK  %+v", 200, o.Payload)
 }
-
 func (o *CreateLoyaltyAccountOK) GetPayload() *models.CreateLoyaltyAccountResponse {
 	return o.Payload
 }

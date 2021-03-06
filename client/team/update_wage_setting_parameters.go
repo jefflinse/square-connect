@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateWageSettingParams creates a new UpdateWageSettingParams object
-// with the default values initialized.
+// NewUpdateWageSettingParams creates a new UpdateWageSettingParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateWageSettingParams() *UpdateWageSettingParams {
-	var ()
 	return &UpdateWageSettingParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateWageSettingParamsWithTimeout creates a new UpdateWageSettingParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateWageSettingParamsWithTimeout(timeout time.Duration) *UpdateWageSettingParams {
-	var ()
 	return &UpdateWageSettingParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateWageSettingParamsWithContext creates a new UpdateWageSettingParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateWageSettingParamsWithContext(ctx context.Context) *UpdateWageSettingParams {
-	var ()
 	return &UpdateWageSettingParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateWageSettingParamsWithHTTPClient creates a new UpdateWageSettingParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateWageSettingParamsWithHTTPClient(client *http.Client) *UpdateWageSettingParams {
-	var ()
 	return &UpdateWageSettingParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateWageSettingParams contains all the parameters to send to the API endpoint
-for the update wage setting operation typically these are written to a http.Request
+/* UpdateWageSettingParams contains all the parameters to send to the API endpoint
+   for the update wage setting operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateWageSettingParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateWageSettingRequest
-	/*TeamMemberID
-	  The ID of the team member to update the `WageSetting` object for.
 
+	/* TeamMemberID.
+
+	   The ID of the team member to update the `WageSetting` object for.
 	*/
 	TeamMemberID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update wage setting params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateWageSettingParams) WithDefaults() *UpdateWageSettingParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update wage setting params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateWageSettingParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update wage setting params
@@ -142,7 +157,6 @@ func (o *UpdateWageSettingParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

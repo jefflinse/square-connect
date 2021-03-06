@@ -17,113 +17,138 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListPaymentsParams creates a new ListPaymentsParams object
-// with the default values initialized.
+// NewListPaymentsParams creates a new ListPaymentsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListPaymentsParams() *ListPaymentsParams {
-	var ()
 	return &ListPaymentsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListPaymentsParamsWithTimeout creates a new ListPaymentsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListPaymentsParamsWithTimeout(timeout time.Duration) *ListPaymentsParams {
-	var ()
 	return &ListPaymentsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListPaymentsParamsWithContext creates a new ListPaymentsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListPaymentsParamsWithContext(ctx context.Context) *ListPaymentsParams {
-	var ()
 	return &ListPaymentsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListPaymentsParamsWithHTTPClient creates a new ListPaymentsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListPaymentsParamsWithHTTPClient(client *http.Client) *ListPaymentsParams {
-	var ()
 	return &ListPaymentsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListPaymentsParams contains all the parameters to send to the API endpoint
-for the list payments operation typically these are written to a http.Request
+/* ListPaymentsParams contains all the parameters to send to the API endpoint
+   for the list payments operation.
+
+   Typically these are written to a http.Request.
 */
 type ListPaymentsParams struct {
 
-	/*BeginTime
-	  Timestamp for the beginning of the reporting period, in RFC 3339 format.
-	Inclusive. Default: The current time minus one year.
+	/* BeginTime.
 
+	     The timestamp for the beginning of the reporting period, in RFC 3339 format.
+	Inclusive. Default: The current time minus one year.
 	*/
 	BeginTime *string
-	/*CardBrand
-	  The brand of `Payment` card. For example, `VISA`
 
+	/* CardBrand.
+
+	   The brand of the payment card (for example, VISA).
 	*/
 	CardBrand *string
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
-	Provide this to retrieve the next set of results for the original query.
 
-	See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
+	/* Cursor.
 
+	     A pagination cursor returned by a previous call to this endpoint.
+	Provide this cursor to retrieve the next set of results for the original query.
+
+	For more information, see [Pagination](https://developer.squareup.com/docs/basics/api101/pagination).
 	*/
 	Cursor *string
-	/*EndTime
-	  Timestamp for the end of the requested reporting period, in RFC 3339 format.
+
+	/* EndTime.
+
+	     The timestamp for the end of the reporting period, in RFC 3339 format.
 
 	Default: The current time.
-
 	*/
 	EndTime *string
-	/*Last4
-	  The last 4 digits of `Payment` card.
 
+	/* Last4.
+
+	   The last four digits of a payment card.
 	*/
 	Last4 *string
-	/*Limit
-	  Maximum number of results to be returned in a single page.
+
+	/* Limit.
+
+	     The maximum number of results to be returned in a single page.
 	It is possible to receive fewer results than the specified limit on a given page.
 
-	If the supplied value is greater than 100, at most 100 results will be returned.
+	The default value of 100 is also the maximum allowed value. If the provided value is
+	greater than 100, it is ignored and the default value is used instead.
 
 	Default: `100`
-
 	*/
 	Limit *int64
-	/*LocationID
-	  Limit results to the location supplied. By default, results are returned
-	for the default (main) location associated with the merchant.
 
+	/* LocationID.
+
+	     Limit results to the location supplied. By default, results are returned
+	for the default (main) location associated with the seller.
 	*/
 	LocationID *string
-	/*SortOrder
-	  The order in which results are listed.
-	- `ASC` - oldest to newest
-	- `DESC` - newest to oldest (default).
 
+	/* SortOrder.
+
+	     The order in which results are listed:
+	- `ASC` - Oldest to newest.
+	- `DESC` - Newest to oldest (default).
 	*/
 	SortOrder *string
-	/*Total
-	  The exact amount in the total_money for a `Payment`.
 
+	/* Total.
+
+	   The exact amount in the `total_money` for a payment.
+
+	   Format: int64
 	*/
 	Total *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list payments params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListPaymentsParams) WithDefaults() *ListPaymentsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list payments params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListPaymentsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list payments params
@@ -270,144 +295,153 @@ func (o *ListPaymentsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 
 		// query param begin_time
 		var qrBeginTime string
+
 		if o.BeginTime != nil {
 			qrBeginTime = *o.BeginTime
 		}
 		qBeginTime := qrBeginTime
 		if qBeginTime != "" {
+
 			if err := r.SetQueryParam("begin_time", qBeginTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.CardBrand != nil {
 
 		// query param card_brand
 		var qrCardBrand string
+
 		if o.CardBrand != nil {
 			qrCardBrand = *o.CardBrand
 		}
 		qCardBrand := qrCardBrand
 		if qCardBrand != "" {
+
 			if err := r.SetQueryParam("card_brand", qCardBrand); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Cursor != nil {
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndTime != nil {
 
 		// query param end_time
 		var qrEndTime string
+
 		if o.EndTime != nil {
 			qrEndTime = *o.EndTime
 		}
 		qEndTime := qrEndTime
 		if qEndTime != "" {
+
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Last4 != nil {
 
 		// query param last_4
 		var qrLast4 string
+
 		if o.Last4 != nil {
 			qrLast4 = *o.Last4
 		}
 		qLast4 := qrLast4
 		if qLast4 != "" {
+
 			if err := r.SetQueryParam("last_4", qLast4); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LocationID != nil {
 
 		// query param location_id
 		var qrLocationID string
+
 		if o.LocationID != nil {
 			qrLocationID = *o.LocationID
 		}
 		qLocationID := qrLocationID
 		if qLocationID != "" {
+
 			if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.SortOrder != nil {
 
 		// query param sort_order
 		var qrSortOrder string
+
 		if o.SortOrder != nil {
 			qrSortOrder = *o.SortOrder
 		}
 		qSortOrder := qrSortOrder
 		if qSortOrder != "" {
+
 			if err := r.SetQueryParam("sort_order", qSortOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Total != nil {
 
 		// query param total
 		var qrTotal int64
+
 		if o.Total != nil {
 			qrTotal = *o.Total
 		}
 		qTotal := swag.FormatInt64(qrTotal)
 		if qTotal != "" {
+
 			if err := r.SetQueryParam("total", qTotal); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

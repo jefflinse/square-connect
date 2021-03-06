@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // UpsertCatalogObjectRequest upsert catalog object request
+// Example: {"request_body":{"idempotency_key":"af3d1afc-7212-4300-b463-0bfc5314a5ae","object":{"id":"#Cocoa","item_data":{"abbreviation":"Ch","description":"Hot chocolate","name":"Cocoa"},"type":"ITEM"}}}
 //
 // swagger:model UpsertCatalogObjectRequest
 type UpsertCatalogObjectRequest struct {
@@ -63,7 +66,7 @@ func (m *UpsertCatalogObjectRequest) validateIdempotencyKey(formats strfmt.Regis
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
@@ -78,6 +81,34 @@ func (m *UpsertCatalogObjectRequest) validateObject(formats strfmt.Registry) err
 
 	if m.Object != nil {
 		if err := m.Object.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("object")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this upsert catalog object request based on the context it is used
+func (m *UpsertCatalogObjectRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateObject(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpsertCatalogObjectRequest) contextValidateObject(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Object != nil {
+		if err := m.Object.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("object")
 			}

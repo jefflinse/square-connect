@@ -7,6 +7,7 @@ package models
 
 // RemoveGroupFromCustomerRequest Defines the fields that are included in the request body of
 // a request to the [RemoveGroupFromCustomer](#endpoint-removegroupfromcustomer) endpoint.
+// Example: {"request_body":{}}
 //
 // swagger:model RemoveGroupFromCustomerRequest
 type RemoveGroupFromCustomerRequest interface{}

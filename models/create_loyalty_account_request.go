@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CreateLoyaltyAccountRequest A request to create a new loyalty account.
+// Example: {"request_body":{"idempotency_key":"ec78c477-b1c3-4899-a209-a4e71337c996","loyalty_account":{"mappings":[{"type":"PHONE","value":"+14155551234"}],"program_id":"d619f755-2d17-41f3-990d-c04ecedd64dd"}}}
 //
 // swagger:model CreateLoyaltyAccountRequest
 type CreateLoyaltyAccountRequest struct {
@@ -53,11 +56,11 @@ func (m *CreateLoyaltyAccountRequest) validateIdempotencyKey(formats strfmt.Regi
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 128); err != nil {
 		return err
 	}
 
@@ -72,6 +75,34 @@ func (m *CreateLoyaltyAccountRequest) validateLoyaltyAccount(formats strfmt.Regi
 
 	if m.LoyaltyAccount != nil {
 		if err := m.LoyaltyAccount.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("loyalty_account")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create loyalty account request based on the context it is used
+func (m *CreateLoyaltyAccountRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateLoyaltyAccount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateLoyaltyAccountRequest) contextValidateLoyaltyAccount(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LoyaltyAccount != nil {
+		if err := m.LoyaltyAccount.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("loyalty_account")
 			}

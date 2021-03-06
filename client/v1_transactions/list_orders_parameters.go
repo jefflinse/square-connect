@@ -17,75 +17,92 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListOrdersParams creates a new ListOrdersParams object
-// with the default values initialized.
+// NewListOrdersParams creates a new ListOrdersParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListOrdersParams() *ListOrdersParams {
-	var ()
 	return &ListOrdersParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListOrdersParamsWithTimeout creates a new ListOrdersParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListOrdersParamsWithTimeout(timeout time.Duration) *ListOrdersParams {
-	var ()
 	return &ListOrdersParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListOrdersParamsWithContext creates a new ListOrdersParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListOrdersParamsWithContext(ctx context.Context) *ListOrdersParams {
-	var ()
 	return &ListOrdersParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListOrdersParamsWithHTTPClient creates a new ListOrdersParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListOrdersParamsWithHTTPClient(client *http.Client) *ListOrdersParams {
-	var ()
 	return &ListOrdersParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListOrdersParams contains all the parameters to send to the API endpoint
-for the list orders operation typically these are written to a http.Request
+/* ListOrdersParams contains all the parameters to send to the API endpoint
+   for the list orders operation.
+
+   Typically these are written to a http.Request.
 */
 type ListOrdersParams struct {
 
-	/*BatchToken
-	  A pagination cursor to retrieve the next set of results for your
-	original query to the endpoint.
+	/* BatchToken.
 
+	     A pagination cursor to retrieve the next set of results for your
+	original query to the endpoint.
 	*/
 	BatchToken *string
-	/*Limit
-	  The maximum number of payments to return in a single response. This value cannot exceed 200.
 
+	/* Limit.
+
+	   The maximum number of payments to return in a single response. This value cannot exceed 200.
 	*/
 	Limit *int64
-	/*LocationID
-	  The ID of the location to list online store orders for.
 
+	/* LocationID.
+
+	   The ID of the location to list online store orders for.
 	*/
 	LocationID string
-	/*Order
-	  TThe order in which payments are listed in the response.
 
+	/* Order.
+
+	   The order in which payments are listed in the response.
 	*/
 	Order *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list orders params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListOrdersParams) WithDefaults() *ListOrdersParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list orders params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListOrdersParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list orders params
@@ -177,32 +194,34 @@ func (o *ListOrdersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 
 		// query param batch_token
 		var qrBatchToken string
+
 		if o.BatchToken != nil {
 			qrBatchToken = *o.BatchToken
 		}
 		qBatchToken := qrBatchToken
 		if qBatchToken != "" {
+
 			if err := r.SetQueryParam("batch_token", qBatchToken); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param location_id
@@ -214,16 +233,17 @@ func (o *ListOrdersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 
 		// query param order
 		var qrOrder string
+
 		if o.Order != nil {
 			qrOrder = *o.Order
 		}
 		qOrder := qrOrder
 		if qOrder != "" {
+
 			if err := r.SetQueryParam("order", qOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

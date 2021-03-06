@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateBreakTypeParams creates a new UpdateBreakTypeParams object
-// with the default values initialized.
+// NewUpdateBreakTypeParams creates a new UpdateBreakTypeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateBreakTypeParams() *UpdateBreakTypeParams {
-	var ()
 	return &UpdateBreakTypeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateBreakTypeParamsWithTimeout creates a new UpdateBreakTypeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateBreakTypeParamsWithTimeout(timeout time.Duration) *UpdateBreakTypeParams {
-	var ()
 	return &UpdateBreakTypeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateBreakTypeParamsWithContext creates a new UpdateBreakTypeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateBreakTypeParamsWithContext(ctx context.Context) *UpdateBreakTypeParams {
-	var ()
 	return &UpdateBreakTypeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateBreakTypeParamsWithHTTPClient creates a new UpdateBreakTypeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateBreakTypeParamsWithHTTPClient(client *http.Client) *UpdateBreakTypeParams {
-	var ()
 	return &UpdateBreakTypeParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateBreakTypeParams contains all the parameters to send to the API endpoint
-for the update break type operation typically these are written to a http.Request
+/* UpdateBreakTypeParams contains all the parameters to send to the API endpoint
+   for the update break type operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateBreakTypeParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateBreakTypeRequest
-	/*ID
-	  UUID for the `BreakType` being updated.
 
+	/* ID.
+
+	   UUID for the `BreakType` being updated.
 	*/
 	ID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update break type params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateBreakTypeParams) WithDefaults() *UpdateBreakTypeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update break type params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateBreakTypeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update break type params
@@ -142,7 +157,6 @@ func (o *UpdateBreakTypeParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

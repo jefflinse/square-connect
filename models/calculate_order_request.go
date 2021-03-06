@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 )
 
 // CalculateOrderRequest calculate order request
+// Example: {"request_body":{"idempotency_key":"b3e98fe3-b8de-471c-82f1-545f371e637c","order":{"discounts":[{"name":"50% Off","percentage":"50","scope":"ORDER"}],"line_items":[{"base_price_money":{"amount":500,"currency":"USD"},"name":"Item 1","quantity":"1"},{"base_price_money":{"amount":300,"currency":"USD"},"name":"Item 2","quantity":"2"}],"location_id":"D7AVYMEAPJ3A3"}}}
 //
 // swagger:model CalculateOrderRequest
 type CalculateOrderRequest struct {
@@ -68,7 +70,6 @@ func (m *CalculateOrderRequest) validateOrder(formats strfmt.Registry) error {
 }
 
 func (m *CalculateOrderRequest) validateProposedRewards(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ProposedRewards) { // not required
 		return nil
 	}
@@ -80,6 +81,56 @@ func (m *CalculateOrderRequest) validateProposedRewards(formats strfmt.Registry)
 
 		if m.ProposedRewards[i] != nil {
 			if err := m.ProposedRewards[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("proposed_rewards" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this calculate order request based on the context it is used
+func (m *CalculateOrderRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateOrder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProposedRewards(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CalculateOrderRequest) contextValidateOrder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Order != nil {
+		if err := m.Order.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("order")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CalculateOrderRequest) contextValidateProposedRewards(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ProposedRewards); i++ {
+
+		if m.ProposedRewards[i] != nil {
+			if err := m.ProposedRewards[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("proposed_rewards" + "." + strconv.Itoa(i))
 				}

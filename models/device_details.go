@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -17,15 +19,15 @@ import (
 // swagger:model DeviceDetails
 type DeviceDetails struct {
 
-	// Square-issued ID of the device.
+	// The Square-issued ID of the device.
 	// Max Length: 255
 	DeviceID string `json:"device_id,omitempty"`
 
-	// Square-issued installation ID for the device.
+	// The Square-issued installation ID for the device.
 	// Max Length: 255
 	DeviceInstallationID string `json:"device_installation_id,omitempty"`
 
-	// The name of the device set by the merchant.
+	// The name of the device set by the seller.
 	// Max Length: 255
 	DeviceName string `json:"device_name,omitempty"`
 }
@@ -53,12 +55,11 @@ func (m *DeviceDetails) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DeviceDetails) validateDeviceID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeviceID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("device_id", "body", string(m.DeviceID), 255); err != nil {
+	if err := validate.MaxLength("device_id", "body", m.DeviceID, 255); err != nil {
 		return err
 	}
 
@@ -66,12 +67,11 @@ func (m *DeviceDetails) validateDeviceID(formats strfmt.Registry) error {
 }
 
 func (m *DeviceDetails) validateDeviceInstallationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeviceInstallationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("device_installation_id", "body", string(m.DeviceInstallationID), 255); err != nil {
+	if err := validate.MaxLength("device_installation_id", "body", m.DeviceInstallationID, 255); err != nil {
 		return err
 	}
 
@@ -79,15 +79,19 @@ func (m *DeviceDetails) validateDeviceInstallationID(formats strfmt.Registry) er
 }
 
 func (m *DeviceDetails) validateDeviceName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeviceName) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("device_name", "body", string(m.DeviceName), 255); err != nil {
+	if err := validate.MaxLength("device_name", "body", m.DeviceName, 255); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this device details based on context it is used
+func (m *DeviceDetails) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

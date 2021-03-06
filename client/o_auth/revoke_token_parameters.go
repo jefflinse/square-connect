@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewRevokeTokenParams creates a new RevokeTokenParams object
-// with the default values initialized.
+// NewRevokeTokenParams creates a new RevokeTokenParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRevokeTokenParams() *RevokeTokenParams {
-	var ()
 	return &RevokeTokenParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRevokeTokenParamsWithTimeout creates a new RevokeTokenParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRevokeTokenParamsWithTimeout(timeout time.Duration) *RevokeTokenParams {
-	var ()
 	return &RevokeTokenParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRevokeTokenParamsWithContext creates a new RevokeTokenParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRevokeTokenParamsWithContext(ctx context.Context) *RevokeTokenParams {
-	var ()
 	return &RevokeTokenParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRevokeTokenParamsWithHTTPClient creates a new RevokeTokenParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRevokeTokenParamsWithHTTPClient(client *http.Client) *RevokeTokenParams {
-	var ()
 	return &RevokeTokenParams{
 		HTTPClient: client,
 	}
 }
 
-/*RevokeTokenParams contains all the parameters to send to the API endpoint
-for the revoke token operation typically these are written to a http.Request
+/* RevokeTokenParams contains all the parameters to send to the API endpoint
+   for the revoke token operation.
+
+   Typically these are written to a http.Request.
 */
 type RevokeTokenParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.RevokeTokenRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the revoke token params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RevokeTokenParams) WithDefaults() *RevokeTokenParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the revoke token params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RevokeTokenParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the revoke token params
@@ -126,7 +140,6 @@ func (o *RevokeTokenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

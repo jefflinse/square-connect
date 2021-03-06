@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -22,7 +23,7 @@ type Customer struct {
 	// The physical address associated with the customer profile.
 	Address *Address `json:"address,omitempty"`
 
-	// The birthday associated with the customer profile, in RFC-3339 format.
+	// The birthday associated with the customer profile, in RFC 3339 format.
 	// Year is optional, timezone and times are not allowed.
 	// For example: `0000-09-01T00:00:00-00:00` indicates a birthday on September 1st.
 	// `1998-09-01T00:00:00-00:00` indications a birthday on September 1st __1998__.
@@ -110,7 +111,6 @@ func (m *Customer) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Customer) validateAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Address) { // not required
 		return nil
 	}
@@ -128,7 +128,6 @@ func (m *Customer) validateAddress(formats strfmt.Registry) error {
 }
 
 func (m *Customer) validateCards(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Cards) { // not required
 		return nil
 	}
@@ -153,7 +152,6 @@ func (m *Customer) validateCards(formats strfmt.Registry) error {
 }
 
 func (m *Customer) validateGroups(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Groups) { // not required
 		return nil
 	}
@@ -178,13 +176,102 @@ func (m *Customer) validateGroups(formats strfmt.Registry) error {
 }
 
 func (m *Customer) validatePreferences(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Preferences) { // not required
 		return nil
 	}
 
 	if m.Preferences != nil {
 		if err := m.Preferences.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("preferences")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this customer based on the context it is used
+func (m *Customer) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCards(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGroups(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePreferences(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Customer) contextValidateAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Address != nil {
+		if err := m.Address.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Customer) contextValidateCards(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Cards); i++ {
+
+		if m.Cards[i] != nil {
+			if err := m.Cards[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("cards" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Customer) contextValidateGroups(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Groups); i++ {
+
+		if m.Groups[i] != nil {
+			if err := m.Groups[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("groups" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Customer) contextValidatePreferences(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Preferences != nil {
+		if err := m.Preferences.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("preferences")
 			}

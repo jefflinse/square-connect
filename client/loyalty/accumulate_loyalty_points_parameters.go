@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewAccumulateLoyaltyPointsParams creates a new AccumulateLoyaltyPointsParams object
-// with the default values initialized.
+// NewAccumulateLoyaltyPointsParams creates a new AccumulateLoyaltyPointsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAccumulateLoyaltyPointsParams() *AccumulateLoyaltyPointsParams {
-	var ()
 	return &AccumulateLoyaltyPointsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAccumulateLoyaltyPointsParamsWithTimeout creates a new AccumulateLoyaltyPointsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAccumulateLoyaltyPointsParamsWithTimeout(timeout time.Duration) *AccumulateLoyaltyPointsParams {
-	var ()
 	return &AccumulateLoyaltyPointsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAccumulateLoyaltyPointsParamsWithContext creates a new AccumulateLoyaltyPointsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAccumulateLoyaltyPointsParamsWithContext(ctx context.Context) *AccumulateLoyaltyPointsParams {
-	var ()
 	return &AccumulateLoyaltyPointsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAccumulateLoyaltyPointsParamsWithHTTPClient creates a new AccumulateLoyaltyPointsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAccumulateLoyaltyPointsParamsWithHTTPClient(client *http.Client) *AccumulateLoyaltyPointsParams {
-	var ()
 	return &AccumulateLoyaltyPointsParams{
 		HTTPClient: client,
 	}
 }
 
-/*AccumulateLoyaltyPointsParams contains all the parameters to send to the API endpoint
-for the accumulate loyalty points operation typically these are written to a http.Request
+/* AccumulateLoyaltyPointsParams contains all the parameters to send to the API endpoint
+   for the accumulate loyalty points operation.
+
+   Typically these are written to a http.Request.
 */
 type AccumulateLoyaltyPointsParams struct {
 
-	/*AccountID
-	  The `loyalty account` ID to which to add the points.
+	/* AccountID.
 
+	   The `loyalty account` ID to which to add the points.
 	*/
 	AccountID string
-	/*Body
-	  An object containing the fields to POST for the request.
+
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.AccumulateLoyaltyPointsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the accumulate loyalty points params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AccumulateLoyaltyPointsParams) WithDefaults() *AccumulateLoyaltyPointsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the accumulate loyalty points params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AccumulateLoyaltyPointsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the accumulate loyalty points params
@@ -147,7 +162,6 @@ func (o *AccumulateLoyaltyPointsParams) WriteToRequest(r runtime.ClientRequest, 
 	if err := r.SetPathParam("account_id", o.AccountID); err != nil {
 		return err
 	}
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

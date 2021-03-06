@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m ShiftFilterStatus) validateShiftFilterStatusEnum(path, location string, value ShiftFilterStatus) error {
-	if err := validate.Enum(path, location, value, shiftFilterStatusEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, shiftFilterStatusEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m ShiftFilterStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this shift filter status based on context it is used
+func (m ShiftFilterStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

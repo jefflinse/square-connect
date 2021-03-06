@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -42,7 +44,6 @@ func (m *TenderCashDetails) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TenderCashDetails) validateBuyerTenderedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BuyerTenderedMoney) { // not required
 		return nil
 	}
@@ -60,13 +61,58 @@ func (m *TenderCashDetails) validateBuyerTenderedMoney(formats strfmt.Registry) 
 }
 
 func (m *TenderCashDetails) validateChangeBackMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ChangeBackMoney) { // not required
 		return nil
 	}
 
 	if m.ChangeBackMoney != nil {
 		if err := m.ChangeBackMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("change_back_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this tender cash details based on the context it is used
+func (m *TenderCashDetails) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBuyerTenderedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateChangeBackMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *TenderCashDetails) contextValidateBuyerTenderedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BuyerTenderedMoney != nil {
+		if err := m.BuyerTenderedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("buyer_tendered_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TenderCashDetails) contextValidateChangeBackMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ChangeBackMoney != nil {
+		if err := m.ChangeBackMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("change_back_money")
 			}

@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreatePaymentParams creates a new CreatePaymentParams object
-// with the default values initialized.
+// NewCreatePaymentParams creates a new CreatePaymentParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreatePaymentParams() *CreatePaymentParams {
-	var ()
 	return &CreatePaymentParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreatePaymentParamsWithTimeout creates a new CreatePaymentParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreatePaymentParamsWithTimeout(timeout time.Duration) *CreatePaymentParams {
-	var ()
 	return &CreatePaymentParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreatePaymentParamsWithContext creates a new CreatePaymentParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreatePaymentParamsWithContext(ctx context.Context) *CreatePaymentParams {
-	var ()
 	return &CreatePaymentParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreatePaymentParamsWithHTTPClient creates a new CreatePaymentParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreatePaymentParamsWithHTTPClient(client *http.Client) *CreatePaymentParams {
-	var ()
 	return &CreatePaymentParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreatePaymentParams contains all the parameters to send to the API endpoint
-for the create payment operation typically these are written to a http.Request
+/* CreatePaymentParams contains all the parameters to send to the API endpoint
+   for the create payment operation.
+
+   Typically these are written to a http.Request.
 */
 type CreatePaymentParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreatePaymentRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreatePaymentParams) WithDefaults() *CreatePaymentParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreatePaymentParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create payment params
@@ -126,7 +140,6 @@ func (o *CreatePaymentParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

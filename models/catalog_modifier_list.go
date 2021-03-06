@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -20,6 +21,7 @@ import (
 // may contain "Ketchup", "Mustard", and "Relish" modifiers.
 // Use the `selection_type` field to specify whether or not multiple selections from
 // the modifier list are allowed.
+// Example: {"id":"#MilkType","modifier_list_data":{"modifiers":[{"modifier_data":{"name":"Whole Milk","price_money":{"amount":0,"currency":"USD"}},"present_at_all_locations":true,"type":"MODIFIER"},{"modifier_data":{"name":"Almond Milk","price_money":{"amount":250,"currency":"USD"}},"present_at_all_locations":true,"type":"MODIFIER"},{"modifier_data":{"name":"Soy Milk","price_money":{"amount":250,"currency":"USD"}},"present_at_all_locations":true,"type":"MODIFIER"}],"name":"Milk Type","selection_type":"SINGLE"},"present_at_all_locations":true,"type":"MODIFIER_LIST"}
 //
 // swagger:model CatalogModifierList
 type CatalogModifierList struct {
@@ -62,7 +64,6 @@ func (m *CatalogModifierList) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogModifierList) validateModifiers(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Modifiers) { // not required
 		return nil
 	}
@@ -87,13 +88,44 @@ func (m *CatalogModifierList) validateModifiers(formats strfmt.Registry) error {
 }
 
 func (m *CatalogModifierList) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog modifier list based on the context it is used
+func (m *CatalogModifierList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateModifiers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogModifierList) contextValidateModifiers(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Modifiers); i++ {
+
+		if m.Modifiers[i] != nil {
+			if err := m.Modifiers[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("modifiers" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

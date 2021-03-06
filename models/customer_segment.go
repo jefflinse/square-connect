@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -53,12 +55,11 @@ func (m *CustomerSegment) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CustomerSegment) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 255); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 255); err != nil {
 		return err
 	}
 
@@ -71,6 +72,11 @@ func (m *CustomerSegment) validateName(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this customer segment based on context it is used
+func (m *CustomerSegment) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

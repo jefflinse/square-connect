@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -19,6 +20,10 @@ import (
 //
 // swagger:model CatalogItemVariation
 type CatalogItemVariation struct {
+
+	// If the `CatalogItem` that owns this item variation is of type
+	// `APPOINTMENTS_SERVICE`, a bool representing whether this service is available for booking.
+	AvailableForBooking bool `json:"available_for_booking,omitempty"`
 
 	// If the inventory quantity for the variation is less than or equal to this value and `inventory_alert_type`
 	// is `LOW_QUANTITY`, the variation displays an alert in the merchant dashboard.
@@ -72,12 +77,19 @@ type CatalogItemVariation struct {
 	// The item variation's SKU, if any. This is a searchable attribute for use in applicable query filters.
 	Sku string `json:"sku,omitempty"`
 
+	// Tokens of employees that can perform the service represented by this variation. Only valid for
+	// variations of type `APPOINTMENTS_SERVICE`.
+	TeamMemberIds []string `json:"team_member_ids"`
+
 	// If `true`, inventory tracking is active for the variation.
 	TrackInventory bool `json:"track_inventory,omitempty"`
 
-	// The item variation's UPC, if any. This is a searchable attribute for use in applicable query filters.
-	// It is only accessible through the Square API, and not exposed in the Square Seller Dashboard,
-	// Square Point of Sale or Retail Point of Sale apps.
+	// The universal product code (UPC) of the item variation, if any. This is a searchable attribute for use in applicable query filters.
+	//
+	// The value of this attribute should be a number of 12-14 digits long.  This restriction is enforced on the Square Seller Dashboard,
+	// Square Point of Sale or Retail Point of Sale apps, where this attribute shows in the GTIN field. If a non-compliant UPC value is assigned
+	// to this attribute using the API, the value is not editable on the Seller Dashboard, Square Point of Sale or Retail Point of Sale apps
+	// unless it is updated to fit the expected format.
 	Upc string `json:"upc,omitempty"`
 
 	// Arbitrary user metadata to associate with the item variation. This attribute value length is of Unicode code points.
@@ -116,7 +128,6 @@ func (m *CatalogItemVariation) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItemVariation) validateItemOptionValues(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemOptionValues) { // not required
 		return nil
 	}
@@ -141,7 +152,6 @@ func (m *CatalogItemVariation) validateItemOptionValues(formats strfmt.Registry)
 }
 
 func (m *CatalogItemVariation) validateLocationOverrides(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationOverrides) { // not required
 		return nil
 	}
@@ -166,12 +176,11 @@ func (m *CatalogItemVariation) validateLocationOverrides(formats strfmt.Registry
 }
 
 func (m *CatalogItemVariation) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
@@ -179,7 +188,6 @@ func (m *CatalogItemVariation) validateName(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItemVariation) validatePriceMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PriceMoney) { // not required
 		return nil
 	}
@@ -197,13 +205,84 @@ func (m *CatalogItemVariation) validatePriceMoney(formats strfmt.Registry) error
 }
 
 func (m *CatalogItemVariation) validateUserData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UserData) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("user_data", "body", string(m.UserData), 255); err != nil {
+	if err := validate.MaxLength("user_data", "body", m.UserData, 255); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog item variation based on the context it is used
+func (m *CatalogItemVariation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateItemOptionValues(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocationOverrides(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePriceMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogItemVariation) contextValidateItemOptionValues(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ItemOptionValues); i++ {
+
+		if m.ItemOptionValues[i] != nil {
+			if err := m.ItemOptionValues[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("item_option_values" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CatalogItemVariation) contextValidateLocationOverrides(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.LocationOverrides); i++ {
+
+		if m.LocationOverrides[i] != nil {
+			if err := m.LocationOverrides[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("location_overrides" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CatalogItemVariation) contextValidatePriceMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PriceMoney != nil {
+		if err := m.PriceMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("price_money")
+			}
+			return err
+		}
 	}
 
 	return nil

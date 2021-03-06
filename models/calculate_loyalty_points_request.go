@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 
 // CalculateLoyaltyPointsRequest A request to calculate the points that a buyer can earn from
 // a specified purchase.
+// Example: {"request_body":{"order_id":"RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY"},"request_params":"?program_id=d619f755-2d17-41f3-990d-c04ecedd64dd"}
 //
 // swagger:model CalculateLoyaltyPointsRequest
 type CalculateLoyaltyPointsRequest struct {
@@ -43,13 +46,40 @@ func (m *CalculateLoyaltyPointsRequest) Validate(formats strfmt.Registry) error 
 }
 
 func (m *CalculateLoyaltyPointsRequest) validateTransactionAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TransactionAmountMoney) { // not required
 		return nil
 	}
 
 	if m.TransactionAmountMoney != nil {
 		if err := m.TransactionAmountMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("transaction_amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this calculate loyalty points request based on the context it is used
+func (m *CalculateLoyaltyPointsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateTransactionAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CalculateLoyaltyPointsRequest) contextValidateTransactionAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TransactionAmountMoney != nil {
+		if err := m.TransactionAmountMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("transaction_amount_money")
 			}

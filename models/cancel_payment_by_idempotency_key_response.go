@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -13,9 +14,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CancelPaymentByIdempotencyKeyResponse Return value from the
+// CancelPaymentByIdempotencyKeyResponse The return value from the
 // [CancelPaymentByIdempotencyKey](#endpoint-payments-cancelpaymentbyidempotencykey) endpoint.
-// On success, `errors` will be empty.
+// On success, `errors` is empty.
+// Example: {}
 //
 // swagger:model CancelPaymentByIdempotencyKeyResponse
 type CancelPaymentByIdempotencyKeyResponse struct {
@@ -39,7 +41,6 @@ func (m *CancelPaymentByIdempotencyKeyResponse) Validate(formats strfmt.Registry
 }
 
 func (m *CancelPaymentByIdempotencyKeyResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -51,6 +52,38 @@ func (m *CancelPaymentByIdempotencyKeyResponse) validateErrors(formats strfmt.Re
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this cancel payment by idempotency key response based on the context it is used
+func (m *CancelPaymentByIdempotencyKeyResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CancelPaymentByIdempotencyKeyResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

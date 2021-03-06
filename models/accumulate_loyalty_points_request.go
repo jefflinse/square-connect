@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // AccumulateLoyaltyPointsRequest A request to accumulate points for a purchase.
+// Example: {"request_body":{"accumulate_points":{"order_id":"RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY"},"idempotency_key":"58b90739-c3e8-4b11-85f7-e636d48d72cb","location_id":"P034NEENMD09F"},"request_params":"?account_id=5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd"}
 //
 // swagger:model AccumulateLoyaltyPointsRequest
 type AccumulateLoyaltyPointsRequest struct {
@@ -82,11 +85,11 @@ func (m *AccumulateLoyaltyPointsRequest) validateIdempotencyKey(formats strfmt.R
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 128); err != nil {
 		return err
 	}
 
@@ -97,6 +100,34 @@ func (m *AccumulateLoyaltyPointsRequest) validateLocationID(formats strfmt.Regis
 
 	if err := validate.Required("location_id", "body", m.LocationID); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this accumulate loyalty points request based on the context it is used
+func (m *AccumulateLoyaltyPointsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAccumulatePoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *AccumulateLoyaltyPointsRequest) contextValidateAccumulatePoints(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AccumulatePoints != nil {
+		if err := m.AccumulatePoints.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("accumulate_points")
+			}
+			return err
+		}
 	}
 
 	return nil

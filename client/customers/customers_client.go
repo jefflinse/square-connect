@@ -25,27 +25,30 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	AddGroupToCustomer(params *AddGroupToCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*AddGroupToCustomerOK, error)
+	AddGroupToCustomer(params *AddGroupToCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddGroupToCustomerOK, error)
 
-	CreateCustomer(params *CreateCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCustomerOK, error)
+	CreateCustomer(params *CreateCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCustomerOK, error)
 
-	CreateCustomerCard(params *CreateCustomerCardParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCustomerCardOK, error)
+	CreateCustomerCard(params *CreateCustomerCardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCustomerCardOK, error)
 
-	DeleteCustomer(params *DeleteCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCustomerOK, error)
+	DeleteCustomer(params *DeleteCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCustomerOK, error)
 
-	DeleteCustomerCard(params *DeleteCustomerCardParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCustomerCardOK, error)
+	DeleteCustomerCard(params *DeleteCustomerCardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCustomerCardOK, error)
 
-	ListCustomers(params *ListCustomersParams, authInfo runtime.ClientAuthInfoWriter) (*ListCustomersOK, error)
+	ListCustomers(params *ListCustomersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCustomersOK, error)
 
-	RemoveGroupFromCustomer(params *RemoveGroupFromCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveGroupFromCustomerOK, error)
+	RemoveGroupFromCustomer(params *RemoveGroupFromCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveGroupFromCustomerOK, error)
 
-	RetrieveCustomer(params *RetrieveCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCustomerOK, error)
+	RetrieveCustomer(params *RetrieveCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCustomerOK, error)
 
-	SearchCustomers(params *SearchCustomersParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCustomersOK, error)
+	SearchCustomers(params *SearchCustomersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchCustomersOK, error)
 
-	UpdateCustomer(params *UpdateCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateCustomerOK, error)
+	UpdateCustomer(params *UpdateCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateCustomerOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -58,13 +61,12 @@ type ClientService interface {
 The customer is identified by the `customer_id` value
 and the customer group is identified by the `group_id` value.
 */
-func (a *Client) AddGroupToCustomer(params *AddGroupToCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*AddGroupToCustomerOK, error) {
+func (a *Client) AddGroupToCustomer(params *AddGroupToCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AddGroupToCustomerOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAddGroupToCustomerParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "AddGroupToCustomer",
 		Method:             "PUT",
 		PathPattern:        "/v2/customers/{customer_id}/groups/{group_id}",
@@ -76,7 +78,12 @@ func (a *Client) AddGroupToCustomer(params *AddGroupToCustomerParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -104,13 +111,12 @@ endpoint:
 - `email_address`
 - `phone_number`
 */
-func (a *Client) CreateCustomer(params *CreateCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCustomerOK, error) {
+func (a *Client) CreateCustomer(params *CreateCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCustomerOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateCustomerParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateCustomer",
 		Method:             "POST",
 		PathPattern:        "/v2/customers",
@@ -122,7 +128,12 @@ func (a *Client) CreateCustomer(params *CreateCustomerParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -145,13 +156,12 @@ As with charges, calls to `CreateCustomerCard` are idempotent. Multiple
 calls with the same card nonce return the same card record that was created
 with the provided nonce during the _first_ call.
 */
-func (a *Client) CreateCustomerCard(params *CreateCustomerCardParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCustomerCardOK, error) {
+func (a *Client) CreateCustomerCard(params *CreateCustomerCardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCustomerCardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateCustomerCardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateCustomerCard",
 		Method:             "POST",
 		PathPattern:        "/v2/customers/{customer_id}/cards",
@@ -163,7 +173,12 @@ func (a *Client) CreateCustomerCard(params *CreateCustomerCardParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -184,13 +199,12 @@ func (a *Client) CreateCustomerCard(params *CreateCustomerCardParams, authInfo r
 are merged into a single profile, that profile is assigned a new `customer_id`. You must use the
 new `customer_id` to delete merged profiles.
 */
-func (a *Client) DeleteCustomer(params *DeleteCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCustomerOK, error) {
+func (a *Client) DeleteCustomer(params *DeleteCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCustomerOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteCustomerParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteCustomer",
 		Method:             "DELETE",
 		PathPattern:        "/v2/customers/{customer_id}",
@@ -202,7 +216,12 @@ func (a *Client) DeleteCustomer(params *DeleteCustomerParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -221,13 +240,12 @@ func (a *Client) DeleteCustomer(params *DeleteCustomerParams, authInfo runtime.C
 
   Removes a card on file from a customer.
 */
-func (a *Client) DeleteCustomerCard(params *DeleteCustomerCardParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCustomerCardOK, error) {
+func (a *Client) DeleteCustomerCard(params *DeleteCustomerCardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCustomerCardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteCustomerCardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteCustomerCard",
 		Method:             "DELETE",
 		PathPattern:        "/v2/customers/{customer_id}/cards/{card_id}",
@@ -239,7 +257,12 @@ func (a *Client) DeleteCustomerCard(params *DeleteCustomerCardParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -260,15 +283,14 @@ func (a *Client) DeleteCustomerCard(params *DeleteCustomerCardParams, authInfo r
 
 Under normal operating conditions, newly created or updated customer profiles become available
 for the listing operation in well under 30 seconds. Occasionally, propagation of the new or updated
-profiles can take closer to one minute or longer, espeically during network incidents and outages.
+profiles can take closer to one minute or longer, especially during network incidents and outages.
 */
-func (a *Client) ListCustomers(params *ListCustomersParams, authInfo runtime.ClientAuthInfoWriter) (*ListCustomersOK, error) {
+func (a *Client) ListCustomers(params *ListCustomersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCustomersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListCustomersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListCustomers",
 		Method:             "GET",
 		PathPattern:        "/v2/customers",
@@ -280,7 +302,12 @@ func (a *Client) ListCustomers(params *ListCustomersParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -302,13 +329,12 @@ func (a *Client) ListCustomers(params *ListCustomersParams, authInfo runtime.Cli
 The customer is identified by the `customer_id` value
 and the customer group is identified by the `group_id` value.
 */
-func (a *Client) RemoveGroupFromCustomer(params *RemoveGroupFromCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveGroupFromCustomerOK, error) {
+func (a *Client) RemoveGroupFromCustomer(params *RemoveGroupFromCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveGroupFromCustomerOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRemoveGroupFromCustomerParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RemoveGroupFromCustomer",
 		Method:             "DELETE",
 		PathPattern:        "/v2/customers/{customer_id}/groups/{group_id}",
@@ -320,7 +346,12 @@ func (a *Client) RemoveGroupFromCustomer(params *RemoveGroupFromCustomerParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -339,13 +370,12 @@ func (a *Client) RemoveGroupFromCustomer(params *RemoveGroupFromCustomerParams, 
 
   Returns details for a single customer.
 */
-func (a *Client) RetrieveCustomer(params *RetrieveCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCustomerOK, error) {
+func (a *Client) RetrieveCustomer(params *RetrieveCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCustomerOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveCustomerParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveCustomer",
 		Method:             "GET",
 		PathPattern:        "/v2/customers/{customer_id}",
@@ -357,7 +387,12 @@ func (a *Client) RetrieveCustomer(params *RetrieveCustomerParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -374,8 +409,7 @@ func (a *Client) RetrieveCustomer(params *RetrieveCustomerParams, authInfo runti
 /*
   SearchCustomers searches customers
 
-  Searches the customer profiles associated with a Square account using
-one or more supported query filters.
+  Searches the customer profiles associated with a Square account using a supported query filter.
 
 Calling `SearchCustomers` without any explicit query filter returns all
 customer profiles ordered alphabetically based on `given_name` and
@@ -383,15 +417,14 @@ customer profiles ordered alphabetically based on `given_name` and
 
 Under normal operating conditions, newly created or updated customer profiles become available
 for the search operation in well under 30 seconds. Occasionally, propagation of the new or updated
-profiles can take closer to one minute or longer, espeically during network incidents and outages.
+profiles can take closer to one minute or longer, especially during network incidents and outages.
 */
-func (a *Client) SearchCustomers(params *SearchCustomersParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCustomersOK, error) {
+func (a *Client) SearchCustomers(params *SearchCustomersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchCustomersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchCustomersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchCustomers",
 		Method:             "POST",
 		PathPattern:        "/v2/customers/search",
@@ -403,7 +436,12 @@ func (a *Client) SearchCustomers(params *SearchCustomersParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -426,16 +464,15 @@ the new `customer_id` to update merged profiles.
 
 You cannot edit a customer's cards on file with this endpoint. To make changes
 to a card on file, you must delete the existing card on file with the
-[DeleteCustomerCard](#endpoint-deletecustomercard) endpoint, then create a new one with the
-[CreateCustomerCard](#endpoint-createcustomercard) endpoint.
+[DeleteCustomerCard](#endpoint-Customers-deletecustomercard) endpoint, then create a new one with the
+[CreateCustomerCard](#endpoint-Customers-createcustomercard) endpoint.
 */
-func (a *Client) UpdateCustomer(params *UpdateCustomerParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateCustomerOK, error) {
+func (a *Client) UpdateCustomer(params *UpdateCustomerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateCustomerOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateCustomerParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateCustomer",
 		Method:             "PUT",
 		PathPattern:        "/v2/customers/{customer_id}",
@@ -447,7 +484,12 @@ func (a *Client) UpdateCustomer(params *UpdateCustomerParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

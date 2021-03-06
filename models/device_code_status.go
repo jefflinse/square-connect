@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -20,11 +21,17 @@ type DeviceCodeStatus string
 
 const (
 
+	// DeviceCodeStatusUNKNOWN captures enum value "UNKNOWN"
+	DeviceCodeStatusUNKNOWN DeviceCodeStatus = "UNKNOWN"
+
 	// DeviceCodeStatusUNPAIRED captures enum value "UNPAIRED"
 	DeviceCodeStatusUNPAIRED DeviceCodeStatus = "UNPAIRED"
 
 	// DeviceCodeStatusPAIRED captures enum value "PAIRED"
 	DeviceCodeStatusPAIRED DeviceCodeStatus = "PAIRED"
+
+	// DeviceCodeStatusEXPIRED captures enum value "EXPIRED"
+	DeviceCodeStatusEXPIRED DeviceCodeStatus = "EXPIRED"
 )
 
 // for schema
@@ -32,7 +39,7 @@ var deviceCodeStatusEnum []interface{}
 
 func init() {
 	var res []DeviceCodeStatus
-	if err := json.Unmarshal([]byte(`["UNPAIRED","PAIRED"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["UNKNOWN","UNPAIRED","PAIRED","EXPIRED"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -41,7 +48,7 @@ func init() {
 }
 
 func (m DeviceCodeStatus) validateDeviceCodeStatusEnum(path, location string, value DeviceCodeStatus) error {
-	if err := validate.Enum(path, location, value, deviceCodeStatusEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, deviceCodeStatusEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +66,10 @@ func (m DeviceCodeStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this device code status based on context it is used
+func (m DeviceCodeStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

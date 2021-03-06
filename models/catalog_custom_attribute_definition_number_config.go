@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -46,19 +48,23 @@ func (m *CatalogCustomAttributeDefinitionNumberConfig) Validate(formats strfmt.R
 }
 
 func (m *CatalogCustomAttributeDefinitionNumberConfig) validatePrecision(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Precision) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("precision", "body", int64(*m.Precision), 0, false); err != nil {
+	if err := validate.MinimumInt("precision", "body", *m.Precision, 0, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("precision", "body", int64(*m.Precision), 5, false); err != nil {
+	if err := validate.MaximumInt("precision", "body", *m.Precision, 5, false); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this catalog custom attribute definition number config based on context it is used
+func (m *CatalogCustomAttributeDefinitionNumberConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

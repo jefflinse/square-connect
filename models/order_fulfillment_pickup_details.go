@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -127,12 +129,11 @@ func (m *OrderFulfillmentPickupDetails) Validate(formats strfmt.Registry) error 
 }
 
 func (m *OrderFulfillmentPickupDetails) validateCancelReason(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CancelReason) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("cancel_reason", "body", string(m.CancelReason), 100); err != nil {
+	if err := validate.MaxLength("cancel_reason", "body", m.CancelReason, 100); err != nil {
 		return err
 	}
 
@@ -140,7 +141,6 @@ func (m *OrderFulfillmentPickupDetails) validateCancelReason(formats strfmt.Regi
 }
 
 func (m *OrderFulfillmentPickupDetails) validateCurbsidePickupDetails(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CurbsidePickupDetails) { // not required
 		return nil
 	}
@@ -158,12 +158,11 @@ func (m *OrderFulfillmentPickupDetails) validateCurbsidePickupDetails(formats st
 }
 
 func (m *OrderFulfillmentPickupDetails) validateNote(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Note) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("note", "body", string(m.Note), 500); err != nil {
+	if err := validate.MaxLength("note", "body", m.Note, 500); err != nil {
 		return err
 	}
 
@@ -171,13 +170,58 @@ func (m *OrderFulfillmentPickupDetails) validateNote(formats strfmt.Registry) er
 }
 
 func (m *OrderFulfillmentPickupDetails) validateRecipient(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Recipient) { // not required
 		return nil
 	}
 
 	if m.Recipient != nil {
 		if err := m.Recipient.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("recipient")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order fulfillment pickup details based on the context it is used
+func (m *OrderFulfillmentPickupDetails) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCurbsidePickupDetails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRecipient(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderFulfillmentPickupDetails) contextValidateCurbsidePickupDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CurbsidePickupDetails != nil {
+		if err := m.CurbsidePickupDetails.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("curbside_pickup_details")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderFulfillmentPickupDetails) contextValidateRecipient(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Recipient != nil {
+		if err := m.Recipient.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("recipient")
 			}

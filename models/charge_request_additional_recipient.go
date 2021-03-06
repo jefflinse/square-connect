@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -81,11 +83,11 @@ func (m *ChargeRequestAdditionalRecipient) validateDescription(formats strfmt.Re
 		return err
 	}
 
-	if err := validate.MinLength("description", "body", string(*m.Description), 1); err != nil {
+	if err := validate.MinLength("description", "body", *m.Description, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("description", "body", string(*m.Description), 100); err != nil {
+	if err := validate.MaxLength("description", "body", *m.Description, 100); err != nil {
 		return err
 	}
 
@@ -98,12 +100,40 @@ func (m *ChargeRequestAdditionalRecipient) validateLocationID(formats strfmt.Reg
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(*m.LocationID), 50); err != nil {
+	if err := validate.MaxLength("location_id", "body", *m.LocationID, 50); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this charge request additional recipient based on the context it is used
+func (m *ChargeRequestAdditionalRecipient) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ChargeRequestAdditionalRecipient) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
 	}
 
 	return nil

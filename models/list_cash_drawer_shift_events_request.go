@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // ListCashDrawerShiftEventsRequest list cash drawer shift events request
+// Example: {"request_body":{}}
 //
 // swagger:model ListCashDrawerShiftEventsRequest
 type ListCashDrawerShiftEventsRequest struct {
@@ -50,12 +53,11 @@ func (m *ListCashDrawerShiftEventsRequest) Validate(formats strfmt.Registry) err
 }
 
 func (m *ListCashDrawerShiftEventsRequest) validateLimit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Limit) { // not required
 		return nil
 	}
 
-	if err := validate.MaximumInt("limit", "body", int64(m.Limit), 1000, false); err != nil {
+	if err := validate.MaximumInt("limit", "body", m.Limit, 1000, false); err != nil {
 		return err
 	}
 
@@ -68,10 +70,15 @@ func (m *ListCashDrawerShiftEventsRequest) validateLocationID(formats strfmt.Reg
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this list cash drawer shift events request based on context it is used
+func (m *ListCashDrawerShiftEventsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

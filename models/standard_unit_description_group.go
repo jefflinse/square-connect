@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -40,7 +41,6 @@ func (m *StandardUnitDescriptionGroup) Validate(formats strfmt.Registry) error {
 }
 
 func (m *StandardUnitDescriptionGroup) validateStandardUnitDescriptions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.StandardUnitDescriptions) { // not required
 		return nil
 	}
@@ -52,6 +52,38 @@ func (m *StandardUnitDescriptionGroup) validateStandardUnitDescriptions(formats 
 
 		if m.StandardUnitDescriptions[i] != nil {
 			if err := m.StandardUnitDescriptions[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("standard_unit_descriptions" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this standard unit description group based on the context it is used
+func (m *StandardUnitDescriptionGroup) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateStandardUnitDescriptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *StandardUnitDescriptionGroup) contextValidateStandardUnitDescriptions(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.StandardUnitDescriptions); i++ {
+
+		if m.StandardUnitDescriptions[i] != nil {
+			if err := m.StandardUnitDescriptions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("standard_unit_descriptions" + "." + strconv.Itoa(i))
 				}

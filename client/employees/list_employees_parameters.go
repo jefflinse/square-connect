@@ -17,71 +17,88 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListEmployeesParams creates a new ListEmployeesParams object
-// with the default values initialized.
+// NewListEmployeesParams creates a new ListEmployeesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListEmployeesParams() *ListEmployeesParams {
-	var ()
 	return &ListEmployeesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListEmployeesParamsWithTimeout creates a new ListEmployeesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListEmployeesParamsWithTimeout(timeout time.Duration) *ListEmployeesParams {
-	var ()
 	return &ListEmployeesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListEmployeesParamsWithContext creates a new ListEmployeesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListEmployeesParamsWithContext(ctx context.Context) *ListEmployeesParams {
-	var ()
 	return &ListEmployeesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListEmployeesParamsWithHTTPClient creates a new ListEmployeesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListEmployeesParamsWithHTTPClient(client *http.Client) *ListEmployeesParams {
-	var ()
 	return &ListEmployeesParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListEmployeesParams contains all the parameters to send to the API endpoint
-for the list employees operation typically these are written to a http.Request
+/* ListEmployeesParams contains all the parameters to send to the API endpoint
+   for the list employees operation.
+
+   Typically these are written to a http.Request.
 */
 type ListEmployeesParams struct {
 
-	/*Cursor
-	  The token required to retrieve the specified page of results.
+	/* Cursor.
 
+	   The token required to retrieve the specified page of results.
 	*/
 	Cursor *string
-	/*Limit
-	  The number of employees to be returned on each page.
 
+	/* Limit.
+
+	   The number of employees to be returned on each page.
 	*/
 	Limit *int64
-	/*LocationID*/
-	LocationID *string
-	/*Status
-	  Specifies the EmployeeStatus to filter the employee by.
 
+	// LocationID.
+	LocationID *string
+
+	/* Status.
+
+	   Specifies the EmployeeStatus to filter the employee by.
 	*/
 	Status *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list employees params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListEmployeesParams) WithDefaults() *ListEmployeesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list employees params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListEmployeesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list employees params
@@ -173,64 +190,68 @@ func (o *ListEmployeesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LocationID != nil {
 
 		// query param location_id
 		var qrLocationID string
+
 		if o.LocationID != nil {
 			qrLocationID = *o.LocationID
 		}
 		qLocationID := qrLocationID
 		if qLocationID != "" {
+
 			if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Status != nil {
 
 		// query param status
 		var qrStatus string
+
 		if o.Status != nil {
 			qrStatus = *o.Status
 		}
 		qStatus := qrStatus
 		if qStatus != "" {
+
 			if err := r.SetQueryParam("status", qStatus); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

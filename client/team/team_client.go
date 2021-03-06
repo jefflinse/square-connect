@@ -25,23 +25,26 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	BulkCreateTeamMembers(params *BulkCreateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter) (*BulkCreateTeamMembersOK, error)
+	BulkCreateTeamMembers(params *BulkCreateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BulkCreateTeamMembersOK, error)
 
-	BulkUpdateTeamMembers(params *BulkUpdateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter) (*BulkUpdateTeamMembersOK, error)
+	BulkUpdateTeamMembers(params *BulkUpdateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BulkUpdateTeamMembersOK, error)
 
-	CreateTeamMember(params *CreateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter) (*CreateTeamMemberOK, error)
+	CreateTeamMember(params *CreateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTeamMemberOK, error)
 
-	RetrieveTeamMember(params *RetrieveTeamMemberParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveTeamMemberOK, error)
+	RetrieveTeamMember(params *RetrieveTeamMemberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveTeamMemberOK, error)
 
-	RetrieveWageSetting(params *RetrieveWageSettingParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveWageSettingOK, error)
+	RetrieveWageSetting(params *RetrieveWageSettingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveWageSettingOK, error)
 
-	SearchTeamMembers(params *SearchTeamMembersParams, authInfo runtime.ClientAuthInfoWriter) (*SearchTeamMembersOK, error)
+	SearchTeamMembers(params *SearchTeamMembersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchTeamMembersOK, error)
 
-	UpdateTeamMember(params *UpdateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateTeamMemberOK, error)
+	UpdateTeamMember(params *UpdateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateTeamMemberOK, error)
 
-	UpdateWageSetting(params *UpdateWageSettingParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateWageSettingOK, error)
+	UpdateWageSetting(params *UpdateWageSettingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateWageSettingOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -56,13 +59,12 @@ will contain explicit error information for this particular create.
 
 Learn about [Troubleshooting the Teams API](/docs/team/troubleshooting#bulkcreateteammembers).
 */
-func (a *Client) BulkCreateTeamMembers(params *BulkCreateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter) (*BulkCreateTeamMembersOK, error) {
+func (a *Client) BulkCreateTeamMembers(params *BulkCreateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BulkCreateTeamMembersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBulkCreateTeamMembersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BulkCreateTeamMembers",
 		Method:             "POST",
 		PathPattern:        "/v2/team-members/bulk-create",
@@ -74,7 +76,12 @@ func (a *Client) BulkCreateTeamMembers(params *BulkCreateTeamMembersParams, auth
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -97,13 +104,12 @@ the request cannot be successfully processed, the request will NOT be marked as 
 will contain explicit error information for this particular update.
 Learn about [Troubleshooting the Teams API](/docs/team/troubleshooting#bulkupdateteammembers).
 */
-func (a *Client) BulkUpdateTeamMembers(params *BulkUpdateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter) (*BulkUpdateTeamMembersOK, error) {
+func (a *Client) BulkUpdateTeamMembers(params *BulkUpdateTeamMembersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BulkUpdateTeamMembersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBulkUpdateTeamMembersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BulkUpdateTeamMembers",
 		Method:             "POST",
 		PathPattern:        "/v2/team-members/bulk-update",
@@ -115,7 +121,12 @@ func (a *Client) BulkUpdateTeamMembers(params *BulkUpdateTeamMembersParams, auth
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -134,17 +145,17 @@ func (a *Client) BulkUpdateTeamMembers(params *BulkUpdateTeamMembersParams, auth
 
   Creates a single `TeamMember` object. The `TeamMember` will be returned on successful creates.
 You must provide the following values in your request to this endpoint:
-- `first_name`
-- `last_name`
+- `given_name`
+- `family_name`
+
 Learn about [Troubleshooting the Teams API](/docs/team/troubleshooting#createteammember).
 */
-func (a *Client) CreateTeamMember(params *CreateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter) (*CreateTeamMemberOK, error) {
+func (a *Client) CreateTeamMember(params *CreateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTeamMemberOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateTeamMemberParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateTeamMember",
 		Method:             "POST",
 		PathPattern:        "/v2/team-members",
@@ -156,7 +167,12 @@ func (a *Client) CreateTeamMember(params *CreateTeamMemberParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -173,16 +189,15 @@ func (a *Client) CreateTeamMember(params *CreateTeamMemberParams, authInfo runti
 /*
   RetrieveTeamMember retrieves team member
 
-  Retrieve a `TeamMember` object for the given `TeamMember.id`
+  Retrieve a `TeamMember` object for the given `TeamMember.id`.
 Learn about [Troubleshooting the Teams API](/docs/team/troubleshooting#retrieveteammember).
 */
-func (a *Client) RetrieveTeamMember(params *RetrieveTeamMemberParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveTeamMemberOK, error) {
+func (a *Client) RetrieveTeamMember(params *RetrieveTeamMemberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveTeamMemberOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveTeamMemberParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveTeamMember",
 		Method:             "GET",
 		PathPattern:        "/v2/team-members/{team_member_id}",
@@ -194,7 +209,12 @@ func (a *Client) RetrieveTeamMember(params *RetrieveTeamMemberParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -215,13 +235,12 @@ func (a *Client) RetrieveTeamMember(params *RetrieveTeamMemberParams, authInfo r
 by `TeamMember.id`.
 Learn about [Troubleshooting the Teams API](/docs/team/troubleshooting#retrievewagesetting).
 */
-func (a *Client) RetrieveWageSetting(params *RetrieveWageSettingParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveWageSettingOK, error) {
+func (a *Client) RetrieveWageSetting(params *RetrieveWageSettingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveWageSettingOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveWageSettingParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveWageSetting",
 		Method:             "GET",
 		PathPattern:        "/v2/team-members/{team_member_id}/wage-setting",
@@ -233,7 +252,12 @@ func (a *Client) RetrieveWageSetting(params *RetrieveWageSettingParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -253,15 +277,14 @@ func (a *Client) RetrieveWageSetting(params *RetrieveWageSettingParams, authInfo
   Returns a paginated list of `TeamMember` objects for a business.
 The list to be returned can be filtered by:
 - location IDs **and**
-- `is_active`
+- `status`
 */
-func (a *Client) SearchTeamMembers(params *SearchTeamMembersParams, authInfo runtime.ClientAuthInfoWriter) (*SearchTeamMembersOK, error) {
+func (a *Client) SearchTeamMembers(params *SearchTeamMembersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchTeamMembersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchTeamMembersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchTeamMembers",
 		Method:             "POST",
 		PathPattern:        "/v2/team-members/search",
@@ -273,7 +296,12 @@ func (a *Client) SearchTeamMembers(params *SearchTeamMembersParams, authInfo run
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -293,13 +321,12 @@ func (a *Client) SearchTeamMembers(params *SearchTeamMembersParams, authInfo run
   Updates a single `TeamMember` object. The `TeamMember` will be returned on successful updates.
 Learn about [Troubleshooting the Teams API](/docs/team/troubleshooting#updateteammember).
 */
-func (a *Client) UpdateTeamMember(params *UpdateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateTeamMemberOK, error) {
+func (a *Client) UpdateTeamMember(params *UpdateTeamMemberParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateTeamMemberOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateTeamMemberParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateTeamMember",
 		Method:             "PUT",
 		PathPattern:        "/v2/team-members/{team_member_id}",
@@ -311,7 +338,12 @@ func (a *Client) UpdateTeamMember(params *UpdateTeamMemberParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -334,13 +366,12 @@ it fully replaces the `WageSetting` object for the team member.
 The `WageSetting` will be returned upon successful update.
 Learn about [Troubleshooting the Teams API](/docs/team/troubleshooting#updatewagesetting).
 */
-func (a *Client) UpdateWageSetting(params *UpdateWageSettingParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateWageSettingOK, error) {
+func (a *Client) UpdateWageSetting(params *UpdateWageSettingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateWageSettingOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateWageSettingParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateWageSetting",
 		Method:             "PUT",
 		PathPattern:        "/v2/team-members/{team_member_id}/wage-setting",
@@ -352,7 +383,12 @@ func (a *Client) UpdateWageSetting(params *UpdateWageSettingParams, authInfo run
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

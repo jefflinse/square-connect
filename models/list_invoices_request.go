@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -55,14 +57,19 @@ func (m *ListInvoicesRequest) validateLocationID(formats strfmt.Registry) error 
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(*m.LocationID), 255); err != nil {
+	if err := validate.MaxLength("location_id", "body", *m.LocationID, 255); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this list invoices request based on context it is used
+func (m *ListInvoicesRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

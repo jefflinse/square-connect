@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -61,7 +62,7 @@ func (m *CatalogItemModifierListInfo) validateModifierListID(formats strfmt.Regi
 		return err
 	}
 
-	if err := validate.MinLength("modifier_list_id", "body", string(*m.ModifierListID), 1); err != nil {
+	if err := validate.MinLength("modifier_list_id", "body", *m.ModifierListID, 1); err != nil {
 		return err
 	}
 
@@ -69,7 +70,6 @@ func (m *CatalogItemModifierListInfo) validateModifierListID(formats strfmt.Regi
 }
 
 func (m *CatalogItemModifierListInfo) validateModifierOverrides(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ModifierOverrides) { // not required
 		return nil
 	}
@@ -81,6 +81,38 @@ func (m *CatalogItemModifierListInfo) validateModifierOverrides(formats strfmt.R
 
 		if m.ModifierOverrides[i] != nil {
 			if err := m.ModifierOverrides[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("modifier_overrides" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog item modifier list info based on the context it is used
+func (m *CatalogItemModifierListInfo) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateModifierOverrides(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogItemModifierListInfo) contextValidateModifierOverrides(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ModifierOverrides); i++ {
+
+		if m.ModifierOverrides[i] != nil {
+			if err := m.ModifierOverrides[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("modifier_overrides" + "." + strconv.Itoa(i))
 				}

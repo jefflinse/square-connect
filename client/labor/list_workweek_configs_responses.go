@@ -29,9 +29,8 @@ func (o *ListWorkweekConfigsReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewListWorkweekConfigsOK() *ListWorkweekConfigsOK {
 	return &ListWorkweekConfigsOK{}
 }
 
-/*ListWorkweekConfigsOK handles this case with default header values.
+/* ListWorkweekConfigsOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type ListWorkweekConfigsOK struct {
 func (o *ListWorkweekConfigsOK) Error() string {
 	return fmt.Sprintf("[GET /v2/labor/workweek-configs][%d] listWorkweekConfigsOK  %+v", 200, o.Payload)
 }
-
 func (o *ListWorkweekConfigsOK) GetPayload() *models.ListWorkweekConfigsResponse {
 	return o.Payload
 }

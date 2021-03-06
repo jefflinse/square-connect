@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateWorkweekConfigParams creates a new UpdateWorkweekConfigParams object
-// with the default values initialized.
+// NewUpdateWorkweekConfigParams creates a new UpdateWorkweekConfigParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateWorkweekConfigParams() *UpdateWorkweekConfigParams {
-	var ()
 	return &UpdateWorkweekConfigParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateWorkweekConfigParamsWithTimeout creates a new UpdateWorkweekConfigParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateWorkweekConfigParamsWithTimeout(timeout time.Duration) *UpdateWorkweekConfigParams {
-	var ()
 	return &UpdateWorkweekConfigParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateWorkweekConfigParamsWithContext creates a new UpdateWorkweekConfigParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateWorkweekConfigParamsWithContext(ctx context.Context) *UpdateWorkweekConfigParams {
-	var ()
 	return &UpdateWorkweekConfigParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateWorkweekConfigParamsWithHTTPClient creates a new UpdateWorkweekConfigParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateWorkweekConfigParamsWithHTTPClient(client *http.Client) *UpdateWorkweekConfigParams {
-	var ()
 	return &UpdateWorkweekConfigParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateWorkweekConfigParams contains all the parameters to send to the API endpoint
-for the update workweek config operation typically these are written to a http.Request
+/* UpdateWorkweekConfigParams contains all the parameters to send to the API endpoint
+   for the update workweek config operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateWorkweekConfigParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateWorkweekConfigRequest
-	/*ID
-	  UUID for the `WorkweekConfig` object being updated.
 
+	/* ID.
+
+	   UUID for the `WorkweekConfig` object being updated.
 	*/
 	ID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update workweek config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateWorkweekConfigParams) WithDefaults() *UpdateWorkweekConfigParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update workweek config params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateWorkweekConfigParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update workweek config params
@@ -142,7 +157,6 @@ func (o *UpdateWorkweekConfigParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

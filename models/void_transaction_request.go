@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // VoidTransactionRequest void transaction request
+// Example: {}
 //
 // swagger:model VoidTransactionRequest
 type VoidTransactionRequest interface{}

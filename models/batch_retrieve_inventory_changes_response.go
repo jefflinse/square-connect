@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // BatchRetrieveInventoryChangesResponse batch retrieve inventory changes response
+// Example: {"changes":[{"physical_count":{"catalog_object_id":"W62UWFY35CWMYGVWK6TWJDNI","catalog_object_type":"ITEM_VARIATION","created_at":"2016-11-16T22:25:24.878Z","employee_id":"LRK57NSQ5X7PUD05","id":"46YDTW253DWGGK9HMAE6XCAO","location_id":"C6W5YS5QM06F5","occurred_at":"2016-11-16T22:24:49.028Z","quantity":"86","reference_id":"22c07cf4-5626-4224-89f9-691112019399","source":{"application_id":"416ff29c-86c4-4feb-b58c-9705f21f3ea0","name":"Square Point of Sale 4.37","product":"SQUARE_POS"},"state":"IN_STOCK"},"type":"PHYSICAL_COUNT"}],"errors":[]}
 //
 // swagger:model BatchRetrieveInventoryChangesResponse
 type BatchRetrieveInventoryChangesResponse struct {
@@ -50,7 +52,6 @@ func (m *BatchRetrieveInventoryChangesResponse) Validate(formats strfmt.Registry
 }
 
 func (m *BatchRetrieveInventoryChangesResponse) validateChanges(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Changes) { // not required
 		return nil
 	}
@@ -75,7 +76,6 @@ func (m *BatchRetrieveInventoryChangesResponse) validateChanges(formats strfmt.R
 }
 
 func (m *BatchRetrieveInventoryChangesResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -87,6 +87,60 @@ func (m *BatchRetrieveInventoryChangesResponse) validateErrors(formats strfmt.Re
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this batch retrieve inventory changes response based on the context it is used
+func (m *BatchRetrieveInventoryChangesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateChanges(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BatchRetrieveInventoryChangesResponse) contextValidateChanges(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Changes); i++ {
+
+		if m.Changes[i] != nil {
+			if err := m.Changes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("changes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BatchRetrieveInventoryChangesResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

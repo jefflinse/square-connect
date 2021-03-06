@@ -17,90 +17,110 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewV1ListPaymentsParams creates a new V1ListPaymentsParams object
-// with the default values initialized.
+// NewV1ListPaymentsParams creates a new V1ListPaymentsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewV1ListPaymentsParams() *V1ListPaymentsParams {
-	var ()
 	return &V1ListPaymentsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewV1ListPaymentsParamsWithTimeout creates a new V1ListPaymentsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewV1ListPaymentsParamsWithTimeout(timeout time.Duration) *V1ListPaymentsParams {
-	var ()
 	return &V1ListPaymentsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewV1ListPaymentsParamsWithContext creates a new V1ListPaymentsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewV1ListPaymentsParamsWithContext(ctx context.Context) *V1ListPaymentsParams {
-	var ()
 	return &V1ListPaymentsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewV1ListPaymentsParamsWithHTTPClient creates a new V1ListPaymentsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewV1ListPaymentsParamsWithHTTPClient(client *http.Client) *V1ListPaymentsParams {
-	var ()
 	return &V1ListPaymentsParams{
 		HTTPClient: client,
 	}
 }
 
-/*V1ListPaymentsParams contains all the parameters to send to the API endpoint
-for the v1 list payments operation typically these are written to a http.Request
+/* V1ListPaymentsParams contains all the parameters to send to the API endpoint
+   for the v1 list payments operation.
+
+   Typically these are written to a http.Request.
 */
 type V1ListPaymentsParams struct {
 
-	/*BatchToken
-	  A pagination cursor to retrieve the next set of results for your
-	original query to the endpoint.
+	/* BatchToken.
 
+	     A pagination cursor to retrieve the next set of results for your
+	original query to the endpoint.
 	*/
 	BatchToken *string
-	/*BeginTime
-	  The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
 
+	/* BeginTime.
+
+	   The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
 	*/
 	BeginTime *string
-	/*EndTime
-	  The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
 
+	/* EndTime.
+
+	   The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
 	*/
 	EndTime *string
-	/*IncludePartial
-	  Indicates whether or not to include partial payments in the response. Partial payments will have the tenders collected so far, but the itemizations will be empty until the payment is completed.
 
+	/* IncludePartial.
+
+	   Indicates whether or not to include partial payments in the response. Partial payments will have the tenders collected so far, but the itemizations will be empty until the payment is completed.
 	*/
 	IncludePartial *bool
-	/*Limit
-	  The maximum number of payments to return in a single response. This value cannot exceed 200.
 
+	/* Limit.
+
+	   The maximum number of payments to return in a single response. This value cannot exceed 200.
 	*/
 	Limit *int64
-	/*LocationID
-	  The ID of the location to list payments for. If you specify me, this endpoint returns payments aggregated from all of the business's locations.
 
+	/* LocationID.
+
+	   The ID of the location to list payments for. If you specify me, this endpoint returns payments aggregated from all of the business's locations.
 	*/
 	LocationID string
-	/*Order
-	  The order in which payments are listed in the response.
 
+	/* Order.
+
+	   The order in which payments are listed in the response.
 	*/
 	Order *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the v1 list payments params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1ListPaymentsParams) WithDefaults() *V1ListPaymentsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the v1 list payments params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1ListPaymentsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the v1 list payments params
@@ -225,80 +245,85 @@ func (o *V1ListPaymentsParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 
 		// query param batch_token
 		var qrBatchToken string
+
 		if o.BatchToken != nil {
 			qrBatchToken = *o.BatchToken
 		}
 		qBatchToken := qrBatchToken
 		if qBatchToken != "" {
+
 			if err := r.SetQueryParam("batch_token", qBatchToken); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.BeginTime != nil {
 
 		// query param begin_time
 		var qrBeginTime string
+
 		if o.BeginTime != nil {
 			qrBeginTime = *o.BeginTime
 		}
 		qBeginTime := qrBeginTime
 		if qBeginTime != "" {
+
 			if err := r.SetQueryParam("begin_time", qBeginTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndTime != nil {
 
 		// query param end_time
 		var qrEndTime string
+
 		if o.EndTime != nil {
 			qrEndTime = *o.EndTime
 		}
 		qEndTime := qrEndTime
 		if qEndTime != "" {
+
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.IncludePartial != nil {
 
 		// query param include_partial
 		var qrIncludePartial bool
+
 		if o.IncludePartial != nil {
 			qrIncludePartial = *o.IncludePartial
 		}
 		qIncludePartial := swag.FormatBool(qrIncludePartial)
 		if qIncludePartial != "" {
+
 			if err := r.SetQueryParam("include_partial", qIncludePartial); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param location_id
@@ -310,16 +335,17 @@ func (o *V1ListPaymentsParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 
 		// query param order
 		var qrOrder string
+
 		if o.Order != nil {
 			qrOrder = *o.Order
 		}
 		qOrder := qrOrder
 		if qOrder != "" {
+
 			if err := r.SetQueryParam("order", qOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // PayOrderResponse Defines the fields that are included in the response body of a request to the
 // [PayOrder](#endpoint-payorder) endpoint.
+// Example: {"order":{"closed_at":"2019-08-06T02:47:37.140Z","created_at":"2019-08-06T02:47:35.693Z","id":"lgwOlEityYPJtcuvKTVKT1pA986YY","line_items":[{"base_price_money":{"amount":500,"currency":"USD"},"gross_sales_money":{"amount":500,"currency":"USD"},"name":"Item 1","quantity":"1","total_discount_money":{"amount":0,"currency":"USD"},"total_money":{"amount":500,"currency":"USD"},"total_tax_money":{"amount":0,"currency":"USD"},"uid":"QW6kofLHJK7JEKMjlSVP5C"},{"base_price_money":{"amount":750,"currency":"USD"},"gross_sales_money":{"amount":1500,"currency":"USD"},"name":"Item 2","quantity":"2","total_discount_money":{"amount":0,"currency":"USD"},"total_money":{"amount":1500,"currency":"USD"},"total_tax_money":{"amount":0,"currency":"USD"},"uid":"zhw8MNfRGdFQMI2WE1UBJD"}],"location_id":"P3CCK6HSNDAS7","net_amounts":{"discount_money":{"amount":0,"currency":"USD"},"service_charge_money":{"amount":0,"currency":"USD"},"tax_money":{"amount":0,"currency":"USD"},"tip_money":{"amount":0,"currency":"USD"},"total_money":{"amount":2000,"currency":"USD"}},"source":{"name":"Source Name"},"state":"COMPLETED","tenders":[{"amount_money":{"amount":1000,"currency":"USD"},"card_details":{"card":{"card_brand":"VISA","exp_month":2,"exp_year":2022,"fingerprint":"sq-1-n_BL15KP87ClDa4-h2nXOI0fp5VnxNH6hfhzqhptTfAgxgLuGFcg6jIPngDz4IkkTQ","last_4":"1111"},"entry_method":"KEYED","status":"CAPTURED"},"created_at":"2019-08-06T02:47:36.293Z","id":"EnZdNAlWCmfh6Mt5FMNST1o7taB","location_id":"P3CCK6HSNDAS7","payment_id":"EnZdNAlWCmfh6Mt5FMNST1o7taB","transaction_id":"lgwOlEityYPJtcuvKTVKT1pA986YY","type":"CARD"},{"amount_money":{"amount":1000,"currency":"USD"},"card_details":{"card":{"card_brand":"VISA","exp_month":2,"exp_year":2022,"fingerprint":"sq-1-n_BL15KP87ClDa4-h2nXOI0fp5VnxNH6hfhzqhptTfAgxgLuGFcg6jIPngDz4IkkTQ","last_4":"1111"},"entry_method":"KEYED","status":"CAPTURED"},"created_at":"2019-08-06T02:47:36.809Z","id":"0LRiVlbXVwe8ozu4KbZxd12mvaB","location_id":"P3CCK6HSNDAS7","payment_id":"0LRiVlbXVwe8ozu4KbZxd12mvaB","transaction_id":"lgwOlEityYPJtcuvKTVKT1pA986YY","type":"CARD"}],"total_discount_money":{"amount":0,"currency":"USD"},"total_money":{"amount":2000,"currency":"USD"},"total_service_charge_money":{"amount":0,"currency":"USD"},"total_tax_money":{"amount":0,"currency":"USD"},"updated_at":"2019-08-06T02:47:37.140Z","version":4}}
 //
 // swagger:model PayOrderResponse
 type PayOrderResponse struct {
@@ -45,7 +47,6 @@ func (m *PayOrderResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PayOrderResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -70,13 +71,62 @@ func (m *PayOrderResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *PayOrderResponse) validateOrder(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Order) { // not required
 		return nil
 	}
 
 	if m.Order != nil {
 		if err := m.Order.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("order")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this pay order response based on the context it is used
+func (m *PayOrderResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *PayOrderResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *PayOrderResponse) contextValidateOrder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Order != nil {
+		if err := m.Order.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("order")
 			}

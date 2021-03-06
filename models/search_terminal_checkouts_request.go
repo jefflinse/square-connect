@@ -6,32 +6,42 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // SearchTerminalCheckoutsRequest search terminal checkouts request
+// Example: {"request_body":{"limit":2,"query":{"filter":{"status":"COMPLETED"}}}}
 //
 // swagger:model SearchTerminalCheckoutsRequest
 type SearchTerminalCheckoutsRequest struct {
 
 	// A pagination cursor returned by a previous call to this endpoint.
 	// Provide this to retrieve the next set of results for the original query.
+	// See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
 	Cursor string `json:"cursor,omitempty"`
 
 	// Limit the number of results returned for a single request.
+	// Maximum: 100
+	// Minimum: 1
 	Limit int64 `json:"limit,omitempty"`
 
-	// Query the terminal checkouts based on given conditions and sort order. Calling
-	// SearchTerminalCheckouts without an explicitly query parameter will return all available
-	// checkouts with the default sort order.
+	// Queries terminal checkouts based on given conditions and sort order.
+	// Leaving this unset will return all checkouts with the default sort order.
 	Query *TerminalCheckoutQuery `json:"query,omitempty"`
 }
 
 // Validate validates this search terminal checkouts request
 func (m *SearchTerminalCheckoutsRequest) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateLimit(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateQuery(formats); err != nil {
 		res = append(res, err)
@@ -43,14 +53,57 @@ func (m *SearchTerminalCheckoutsRequest) Validate(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *SearchTerminalCheckoutsRequest) validateQuery(formats strfmt.Registry) error {
+func (m *SearchTerminalCheckoutsRequest) validateLimit(formats strfmt.Registry) error {
+	if swag.IsZero(m.Limit) { // not required
+		return nil
+	}
 
+	if err := validate.MinimumInt("limit", "body", m.Limit, 1, false); err != nil {
+		return err
+	}
+
+	if err := validate.MaximumInt("limit", "body", m.Limit, 100, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *SearchTerminalCheckoutsRequest) validateQuery(formats strfmt.Registry) error {
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
 
 	if m.Query != nil {
 		if err := m.Query.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search terminal checkouts request based on the context it is used
+func (m *SearchTerminalCheckoutsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchTerminalCheckoutsRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("query")
 			}

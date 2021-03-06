@@ -25,29 +25,28 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListOrders(params *ListOrdersParams, authInfo runtime.ClientAuthInfoWriter) (*ListOrdersOK, error)
+	ListOrders(params *ListOrdersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOrdersOK, error)
 
-	ListSettlements(params *ListSettlementsParams, authInfo runtime.ClientAuthInfoWriter) (*ListSettlementsOK, error)
+	ListSettlements(params *ListSettlementsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSettlementsOK, error)
 
-	RetrieveBankAccount(params *RetrieveBankAccountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveBankAccountOK, error)
+	RetrievePayment(params *RetrievePaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrievePaymentOK, error)
 
-	RetrieveOrder(params *RetrieveOrderParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveOrderOK, error)
+	RetrieveSettlement(params *RetrieveSettlementParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveSettlementOK, error)
 
-	RetrievePayment(params *RetrievePaymentParams, authInfo runtime.ClientAuthInfoWriter) (*RetrievePaymentOK, error)
+	V1CreateRefund(params *V1CreateRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1CreateRefundOK, error)
 
-	RetrieveSettlement(params *RetrieveSettlementParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveSettlementOK, error)
+	V1ListPayments(params *V1ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1ListPaymentsOK, error)
 
-	V1CreateRefund(params *V1CreateRefundParams, authInfo runtime.ClientAuthInfoWriter) (*V1CreateRefundOK, error)
+	V1ListRefunds(params *V1ListRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1ListRefundsOK, error)
 
-	V1ListBankAccounts(params *V1ListBankAccountsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListBankAccountsOK, error)
+	V1RetrieveOrder(params *V1RetrieveOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1RetrieveOrderOK, error)
 
-	V1ListPayments(params *V1ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListPaymentsOK, error)
-
-	V1ListRefunds(params *V1ListRefundsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListRefundsOK, error)
-
-	V1UpdateOrder(params *V1UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*V1UpdateOrderOK, error)
+	V1UpdateOrder(params *V1UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1UpdateOrderOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -57,13 +56,12 @@ type ClientService interface {
 
   Provides summary information for a merchant's online store orders.
 */
-func (a *Client) ListOrders(params *ListOrdersParams, authInfo runtime.ClientAuthInfoWriter) (*ListOrdersOK, error) {
+func (a *Client) ListOrders(params *ListOrdersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListOrdersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListOrdersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListOrders",
 		Method:             "GET",
 		PathPattern:        "/v1/{location_id}/orders",
@@ -75,7 +73,12 @@ func (a *Client) ListOrders(params *ListOrdersParams, authInfo runtime.ClientAut
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -99,13 +102,12 @@ ranges cannot exceed one year in length.
 *Note**: the ListSettlements endpoint does not provide entry
 information.
 */
-func (a *Client) ListSettlements(params *ListSettlementsParams, authInfo runtime.ClientAuthInfoWriter) (*ListSettlementsOK, error) {
+func (a *Client) ListSettlements(params *ListSettlementsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSettlementsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListSettlementsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListSettlements",
 		Method:             "GET",
 		PathPattern:        "/v1/{location_id}/settlements",
@@ -117,7 +119,12 @@ func (a *Client) ListSettlements(params *ListSettlementsParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -132,91 +139,16 @@ func (a *Client) ListSettlements(params *ListSettlementsParams, authInfo runtime
 }
 
 /*
-  RetrieveBankAccount retrieves bank account
-
-  Provides non-confidential details for a merchant's associated bank account. This endpoint does not provide full bank account numbers, and there is no way to obtain a full bank account number with the Connect API.
-*/
-func (a *Client) RetrieveBankAccount(params *RetrieveBankAccountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveBankAccountOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewRetrieveBankAccountParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "RetrieveBankAccount",
-		Method:             "GET",
-		PathPattern:        "/v1/{location_id}/bank-accounts/{bank_account_id}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &RetrieveBankAccountReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*RetrieveBankAccountOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for RetrieveBankAccount: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  RetrieveOrder retrieves order
-
-  Provides comprehensive information for a single online store order, including the order's history.
-*/
-func (a *Client) RetrieveOrder(params *RetrieveOrderParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveOrderOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewRetrieveOrderParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "RetrieveOrder",
-		Method:             "GET",
-		PathPattern:        "/v1/{location_id}/orders/{order_id}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &RetrieveOrderReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*RetrieveOrderOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for RetrieveOrder: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
   RetrievePayment retrieves payment
 
   Provides comprehensive information for a single payment.
 */
-func (a *Client) RetrievePayment(params *RetrievePaymentParams, authInfo runtime.ClientAuthInfoWriter) (*RetrievePaymentOK, error) {
+func (a *Client) RetrievePayment(params *RetrievePaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrievePaymentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrievePaymentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrievePayment",
 		Method:             "GET",
 		PathPattern:        "/v1/{location_id}/payments/{payment_id}",
@@ -228,7 +160,12 @@ func (a *Client) RetrievePayment(params *RetrievePaymentParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -263,13 +200,12 @@ whether it has failed. A completed settlement is typically reflected in
 a bank account within 3 business days, but in exceptional cases it may
 take longer.
 */
-func (a *Client) RetrieveSettlement(params *RetrieveSettlementParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveSettlementOK, error) {
+func (a *Client) RetrieveSettlement(params *RetrieveSettlementParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveSettlementOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveSettlementParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveSettlement",
 		Method:             "GET",
 		PathPattern:        "/v1/{location_id}/settlements/{settlement_id}",
@@ -281,7 +217,12 @@ func (a *Client) RetrieveSettlement(params *RetrieveSettlementParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -296,9 +237,9 @@ func (a *Client) RetrieveSettlement(params *RetrieveSettlementParams, authInfo r
 }
 
 /*
-  V1CreateRefund creates refund
+  V1CreateRefund v1s create refund
 
-  Issues a refund for a previously processed payment. You must issue
+  V1 Issues a refund for a previously processed payment. You must issue
 a refund within 60 days of the associated payment.
 
 You cannot issue a partial refund for a split tender payment. You must
@@ -311,13 +252,12 @@ Issuing a refund for a card payment is not reversible. For development
 purposes, you can create fake cash payments in Square Point of Sale and
 refund them.
 */
-func (a *Client) V1CreateRefund(params *V1CreateRefundParams, authInfo runtime.ClientAuthInfoWriter) (*V1CreateRefundOK, error) {
+func (a *Client) V1CreateRefund(params *V1CreateRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1CreateRefundOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewV1CreateRefundParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "V1CreateRefund",
 		Method:             "POST",
 		PathPattern:        "/v1/{location_id}/refunds",
@@ -329,7 +269,12 @@ func (a *Client) V1CreateRefund(params *V1CreateRefundParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -344,46 +289,9 @@ func (a *Client) V1CreateRefund(params *V1CreateRefundParams, authInfo runtime.C
 }
 
 /*
-  V1ListBankAccounts lists bank accounts
+  V1ListPayments v1s list payments
 
-  Provides non-confidential details for all of a location's associated bank accounts. This endpoint does not provide full bank account numbers, and there is no way to obtain a full bank account number with the Connect API.
-*/
-func (a *Client) V1ListBankAccounts(params *V1ListBankAccountsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListBankAccountsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewV1ListBankAccountsParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "V1ListBankAccounts",
-		Method:             "GET",
-		PathPattern:        "/v1/{location_id}/bank-accounts",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &V1ListBankAccountsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*V1ListBankAccountsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for V1ListBankAccounts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  V1ListPayments lists payments
-
-  Provides summary information for all payments taken for a given
+  V1 Provides summary information for all payments taken for a given
 Square account during a date range. Date ranges cannot exceed 1 year in
 length. See Date ranges for details of inclusive and exclusive dates.
 
@@ -395,13 +303,12 @@ transmitted to Square. Consequently, the ListPayments endpoint might
 list an offline payment chronologically between online payments that
 were seen in a previous request.
 */
-func (a *Client) V1ListPayments(params *V1ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListPaymentsOK, error) {
+func (a *Client) V1ListPayments(params *V1ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1ListPaymentsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewV1ListPaymentsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "V1ListPayments",
 		Method:             "GET",
 		PathPattern:        "/v1/{location_id}/payments",
@@ -413,7 +320,12 @@ func (a *Client) V1ListPayments(params *V1ListPaymentsParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -428,17 +340,16 @@ func (a *Client) V1ListPayments(params *V1ListPaymentsParams, authInfo runtime.C
 }
 
 /*
-  V1ListRefunds lists refunds
+  V1ListRefunds v1s list refunds
 
-  Provides the details for all refunds initiated by a merchant or any of the merchant's mobile staff during a date range. Date ranges cannot exceed one year in length.
+  V1 Provides the details for all refunds initiated by a merchant or any of the merchant's mobile staff during a date range. Date ranges cannot exceed one year in length.
 */
-func (a *Client) V1ListRefunds(params *V1ListRefundsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListRefundsOK, error) {
+func (a *Client) V1ListRefunds(params *V1ListRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1ListRefundsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewV1ListRefundsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "V1ListRefunds",
 		Method:             "GET",
 		PathPattern:        "/v1/{location_id}/refunds",
@@ -450,7 +361,12 @@ func (a *Client) V1ListRefunds(params *V1ListRefundsParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -465,17 +381,57 @@ func (a *Client) V1ListRefunds(params *V1ListRefundsParams, authInfo runtime.Cli
 }
 
 /*
-  V1UpdateOrder updates order
+  V1RetrieveOrder v1s retrieve order
 
-  Updates the details of an online store order. Every update you perform on an order corresponds to one of three actions:
+  V1 Provides comprehensive information for a single online store order, including the order's history.
 */
-func (a *Client) V1UpdateOrder(params *V1UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*V1UpdateOrderOK, error) {
+func (a *Client) V1RetrieveOrder(params *V1RetrieveOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1RetrieveOrderOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewV1RetrieveOrderParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "V1RetrieveOrder",
+		Method:             "GET",
+		PathPattern:        "/v1/{location_id}/orders/{order_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &V1RetrieveOrderReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*V1RetrieveOrderOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for V1RetrieveOrder: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  V1UpdateOrder v1s update order
+
+  V1 Updates the details of an online store order. Every update you perform on an order corresponds to one of three actions:
+*/
+func (a *Client) V1UpdateOrder(params *V1UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1UpdateOrderOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewV1UpdateOrderParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "V1UpdateOrder",
 		Method:             "PUT",
 		PathPattern:        "/v1/{location_id}/orders/{order_id}",
@@ -487,7 +443,12 @@ func (a *Client) V1UpdateOrder(params *V1UpdateOrderParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

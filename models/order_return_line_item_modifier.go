@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -80,7 +82,6 @@ func (m *OrderReturnLineItemModifier) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderReturnLineItemModifier) validateBasePriceMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BasePriceMoney) { // not required
 		return nil
 	}
@@ -98,12 +99,11 @@ func (m *OrderReturnLineItemModifier) validateBasePriceMoney(formats strfmt.Regi
 }
 
 func (m *OrderReturnLineItemModifier) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 192); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 192); err != nil {
 		return err
 	}
 
@@ -111,12 +111,11 @@ func (m *OrderReturnLineItemModifier) validateCatalogObjectID(formats strfmt.Reg
 }
 
 func (m *OrderReturnLineItemModifier) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
@@ -124,12 +123,11 @@ func (m *OrderReturnLineItemModifier) validateName(formats strfmt.Registry) erro
 }
 
 func (m *OrderReturnLineItemModifier) validateSourceModifierUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SourceModifierUID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("source_modifier_uid", "body", string(m.SourceModifierUID), 60); err != nil {
+	if err := validate.MaxLength("source_modifier_uid", "body", m.SourceModifierUID, 60); err != nil {
 		return err
 	}
 
@@ -137,7 +135,6 @@ func (m *OrderReturnLineItemModifier) validateSourceModifierUID(formats strfmt.R
 }
 
 func (m *OrderReturnLineItemModifier) validateTotalPriceMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalPriceMoney) { // not required
 		return nil
 	}
@@ -155,13 +152,58 @@ func (m *OrderReturnLineItemModifier) validateTotalPriceMoney(formats strfmt.Reg
 }
 
 func (m *OrderReturnLineItemModifier) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order return line item modifier based on the context it is used
+func (m *OrderReturnLineItemModifier) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBasePriceMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalPriceMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderReturnLineItemModifier) contextValidateBasePriceMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BasePriceMoney != nil {
+		if err := m.BasePriceMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("base_price_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderReturnLineItemModifier) contextValidateTotalPriceMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalPriceMoney != nil {
+		if err := m.TotalPriceMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_price_money")
+			}
+			return err
+		}
 	}
 
 	return nil

@@ -29,9 +29,8 @@ func (o *AccumulateLoyaltyPointsReader) ReadResponse(response runtime.ClientResp
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewAccumulateLoyaltyPointsOK() *AccumulateLoyaltyPointsOK {
 	return &AccumulateLoyaltyPointsOK{}
 }
 
-/*AccumulateLoyaltyPointsOK handles this case with default header values.
+/* AccumulateLoyaltyPointsOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type AccumulateLoyaltyPointsOK struct {
 func (o *AccumulateLoyaltyPointsOK) Error() string {
 	return fmt.Sprintf("[POST /v2/loyalty/accounts/{account_id}/accumulate][%d] accumulateLoyaltyPointsOK  %+v", 200, o.Payload)
 }
-
 func (o *AccumulateLoyaltyPointsOK) GetPayload() *models.AccumulateLoyaltyPointsResponse {
 	return o.Payload
 }

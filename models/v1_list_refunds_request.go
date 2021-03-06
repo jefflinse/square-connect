@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -28,13 +30,18 @@ type V1ListRefundsRequest struct {
 	// The approximate number of refunds to return in a single response. Default: 100. Max: 200. Response may contain more results than the prescribed limit when refunds are made simultaneously to multiple tenders in a payment or when refunds are generated in an exchange to account for the value of returned goods.
 	Limit int64 `json:"limit,omitempty"`
 
-	// TThe order in which payments are listed in the response.
+	// The order in which payments are listed in the response.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order string `json:"order,omitempty"`
 }
 
 // Validate validates this v1 list refunds request
 func (m *V1ListRefundsRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this v1 list refunds request based on context it is used
+func (m *V1ListRefundsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

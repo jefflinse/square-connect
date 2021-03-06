@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -41,13 +43,40 @@ func (m *StandardUnitDescription) Validate(formats strfmt.Registry) error {
 }
 
 func (m *StandardUnitDescription) validateUnit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Unit) { // not required
 		return nil
 	}
 
 	if m.Unit != nil {
 		if err := m.Unit.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("unit")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this standard unit description based on the context it is used
+func (m *StandardUnitDescription) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateUnit(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *StandardUnitDescription) contextValidateUnit(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Unit != nil {
+		if err := m.Unit.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("unit")
 			}

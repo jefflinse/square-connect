@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // GetShiftResponse A response to request to get a `Shift`. Contains
 // the requested `Shift` object. May contain a set of `Error` objects if
 // the request resulted in errors.
+// Example: {"shift":{"breaks":[{"break_type_id":"92EPDRQKJ5088","end_at":"2019-02-23T20:00:00-05:00","expected_duration":"PT1H","id":"M9BBKEPQAQD2T","is_paid":true,"name":"Lunch Break","start_at":"2019-02-23T19:00:00-05:00"}],"created_at":"2019-02-27T00:12:12Z","employee_id":"D71KRMQof6cXGUW0aAv7","end_at":"2019-02-23T21:00:00-05:00","id":"T35HMQSN89SV4","location_id":"PAA1RJZZKXBFG","start_at":"2019-02-23T18:00:00-05:00","status":"CLOSED","team_member_id":"D71KRMQof6cXGUW0aAv7","timezone":"America/New_York","updated_at":"2019-02-27T00:12:12Z","version":1,"wage":{"hourly_rate":{"amount":1457,"currency":"USD"},"title":"Cashier"}}}
 //
 // swagger:model GetShiftResponse
 type GetShiftResponse struct {
@@ -46,7 +48,6 @@ func (m *GetShiftResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *GetShiftResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -71,13 +72,62 @@ func (m *GetShiftResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *GetShiftResponse) validateShift(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Shift) { // not required
 		return nil
 	}
 
 	if m.Shift != nil {
 		if err := m.Shift.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("shift")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this get shift response based on the context it is used
+func (m *GetShiftResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShift(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GetShiftResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *GetShiftResponse) contextValidateShift(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Shift != nil {
+		if err := m.Shift.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("shift")
 			}

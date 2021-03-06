@@ -25,19 +25,22 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CancelSubscription(params *CancelSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*CancelSubscriptionOK, error)
+	CancelSubscription(params *CancelSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelSubscriptionOK, error)
 
-	CreateSubscription(params *CreateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*CreateSubscriptionOK, error)
+	CreateSubscription(params *CreateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubscriptionOK, error)
 
-	ListSubscriptionEvents(params *ListSubscriptionEventsParams, authInfo runtime.ClientAuthInfoWriter) (*ListSubscriptionEventsOK, error)
+	ListSubscriptionEvents(params *ListSubscriptionEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSubscriptionEventsOK, error)
 
-	RetrieveSubscription(params *RetrieveSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveSubscriptionOK, error)
+	RetrieveSubscription(params *RetrieveSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveSubscriptionOK, error)
 
-	SearchSubscriptions(params *SearchSubscriptionsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchSubscriptionsOK, error)
+	SearchSubscriptions(params *SearchSubscriptionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchSubscriptionsOK, error)
 
-	UpdateSubscription(params *UpdateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateSubscriptionOK, error)
+	UpdateSubscription(params *UpdateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateSubscriptionOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -48,13 +51,12 @@ type ClientService interface {
   Sets the `canceled_date` field to the end of the active billing period.
 After this date, the status changes from ACTIVE to CANCELED.
 */
-func (a *Client) CancelSubscription(params *CancelSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*CancelSubscriptionOK, error) {
+func (a *Client) CancelSubscription(params *CancelSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelSubscriptionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCancelSubscriptionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CancelSubscription",
 		Method:             "POST",
 		PathPattern:        "/v2/subscriptions/{subscription_id}/cancel",
@@ -66,7 +68,12 @@ func (a *Client) CancelSubscription(params *CancelSubscriptionParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -90,13 +97,12 @@ the subscription. Otherwise, Square bills an invoice to the customer's email
 address. The subscription starts immediately, unless the request includes
 the optional `start_date`. Each individual subscription is associated with a particular location.
 */
-func (a *Client) CreateSubscription(params *CreateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*CreateSubscriptionOK, error) {
+func (a *Client) CreateSubscription(params *CreateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSubscriptionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateSubscriptionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateSubscription",
 		Method:             "POST",
 		PathPattern:        "/v2/subscriptions",
@@ -108,7 +114,12 @@ func (a *Client) CreateSubscription(params *CreateSubscriptionParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -128,13 +139,12 @@ func (a *Client) CreateSubscription(params *CreateSubscriptionParams, authInfo r
   Lists all events for a specific subscription.
 In the current implementation, only `START_SUBSCRIPTION` and `STOP_SUBSCRIPTION` (when the subscription was canceled) events are returned.
 */
-func (a *Client) ListSubscriptionEvents(params *ListSubscriptionEventsParams, authInfo runtime.ClientAuthInfoWriter) (*ListSubscriptionEventsOK, error) {
+func (a *Client) ListSubscriptionEvents(params *ListSubscriptionEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSubscriptionEventsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListSubscriptionEventsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListSubscriptionEvents",
 		Method:             "GET",
 		PathPattern:        "/v2/subscriptions/{subscription_id}/events",
@@ -146,7 +156,12 @@ func (a *Client) ListSubscriptionEvents(params *ListSubscriptionEventsParams, au
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -165,13 +180,12 @@ func (a *Client) ListSubscriptionEvents(params *ListSubscriptionEventsParams, au
 
   Retrieves a subscription.
 */
-func (a *Client) RetrieveSubscription(params *RetrieveSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveSubscriptionOK, error) {
+func (a *Client) RetrieveSubscription(params *RetrieveSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveSubscriptionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveSubscriptionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveSubscription",
 		Method:             "GET",
 		PathPattern:        "/v2/subscriptions/{subscription_id}",
@@ -183,7 +197,12 @@ func (a *Client) RetrieveSubscription(params *RetrieveSubscriptionParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -217,13 +236,12 @@ customer by subscription creation date.
 For more information, see
 [Retrieve subscriptions](/docs/subscriptions-api/overview#retrieve-subscriptions).
 */
-func (a *Client) SearchSubscriptions(params *SearchSubscriptionsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchSubscriptionsOK, error) {
+func (a *Client) SearchSubscriptions(params *SearchSubscriptionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchSubscriptionsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchSubscriptionsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchSubscriptions",
 		Method:             "POST",
 		PathPattern:        "/v2/subscriptions/search",
@@ -235,7 +253,12 @@ func (a *Client) SearchSubscriptions(params *SearchSubscriptionsParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -255,13 +278,12 @@ func (a *Client) SearchSubscriptions(params *SearchSubscriptionsParams, authInfo
   Updates a subscription. You can set, modify, and clear the
 `subscription` field values.
 */
-func (a *Client) UpdateSubscription(params *UpdateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateSubscriptionOK, error) {
+func (a *Client) UpdateSubscription(params *UpdateSubscriptionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateSubscriptionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateSubscriptionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateSubscription",
 		Method:             "PUT",
 		PathPattern:        "/v2/subscriptions/{subscription_id}",
@@ -273,7 +295,12 @@ func (a *Client) UpdateSubscription(params *UpdateSubscriptionParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

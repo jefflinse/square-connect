@@ -25,9 +25,12 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateCheckout(params *CreateCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCheckoutOK, error)
+	CreateCheckout(params *CreateCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCheckoutOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -39,13 +42,12 @@ type ClientService interface {
 be directed to in order to provide their payment information using a
 payment processing workflow hosted on connect.squareup.com.
 */
-func (a *Client) CreateCheckout(params *CreateCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCheckoutOK, error) {
+func (a *Client) CreateCheckout(params *CreateCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCheckoutOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateCheckoutParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateCheckout",
 		Method:             "POST",
 		PathPattern:        "/v2/locations/{location_id}/checkouts",
@@ -57,7 +59,12 @@ func (a *Client) CreateCheckout(params *CreateCheckoutParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

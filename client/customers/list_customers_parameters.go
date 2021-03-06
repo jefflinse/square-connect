@@ -16,77 +16,93 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListCustomersParams creates a new ListCustomersParams object
-// with the default values initialized.
+// NewListCustomersParams creates a new ListCustomersParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListCustomersParams() *ListCustomersParams {
-	var ()
 	return &ListCustomersParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListCustomersParamsWithTimeout creates a new ListCustomersParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListCustomersParamsWithTimeout(timeout time.Duration) *ListCustomersParams {
-	var ()
 	return &ListCustomersParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListCustomersParamsWithContext creates a new ListCustomersParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListCustomersParamsWithContext(ctx context.Context) *ListCustomersParams {
-	var ()
 	return &ListCustomersParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListCustomersParamsWithHTTPClient creates a new ListCustomersParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListCustomersParamsWithHTTPClient(client *http.Client) *ListCustomersParams {
-	var ()
 	return &ListCustomersParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListCustomersParams contains all the parameters to send to the API endpoint
-for the list customers operation typically these are written to a http.Request
+/* ListCustomersParams contains all the parameters to send to the API endpoint
+   for the list customers operation.
+
+   Typically these are written to a http.Request.
 */
 type ListCustomersParams struct {
 
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
+	/* Cursor.
+
+	     A pagination cursor returned by a previous call to this endpoint.
 	Provide this to retrieve the next set of results for your original query.
 
 	See the [Pagination guide](https://developer.squareup.com/docs/working-with-apis/pagination) for more information.
-
 	*/
 	Cursor *string
-	/*SortField
-	  Indicates how Customers should be sorted.
+
+	/* SortField.
+
+	     Indicates how Customers should be sorted.
 
 	Default: `DEFAULT`.
-
 	*/
 	SortField *string
-	/*SortOrder
-	  Indicates whether Customers should be sorted in ascending (`ASC`) or
+
+	/* SortOrder.
+
+	     Indicates whether Customers should be sorted in ascending (`ASC`) or
 	descending (`DESC`) order.
 
 	Default: `ASC`.
-
 	*/
 	SortOrder *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list customers params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCustomersParams) WithDefaults() *ListCustomersParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list customers params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCustomersParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list customers params
@@ -167,48 +183,51 @@ func (o *ListCustomersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.SortField != nil {
 
 		// query param sort_field
 		var qrSortField string
+
 		if o.SortField != nil {
 			qrSortField = *o.SortField
 		}
 		qSortField := qrSortField
 		if qSortField != "" {
+
 			if err := r.SetQueryParam("sort_field", qSortField); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.SortOrder != nil {
 
 		// query param sort_order
 		var qrSortOrder string
+
 		if o.SortOrder != nil {
 			qrSortOrder = *o.SortOrder
 		}
 		qSortOrder := qrSortOrder
 		if qSortOrder != "" {
+
 			if err := r.SetQueryParam("sort_order", qSortOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

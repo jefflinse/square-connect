@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 
 // CreateMobileAuthorizationCodeResponse Defines the fields that are included in the response body of
 // a request to the __CreateMobileAuthorizationCode__ endpoint.
+// Example: {"authorization_code":"YOUR_MOBILE_AUTHORIZATION_CODE","expires_at":"2019-01-10T19:42:08Z"}
 //
 // swagger:model CreateMobileAuthorizationCodeResponse
 type CreateMobileAuthorizationCodeResponse struct {
@@ -45,13 +48,40 @@ func (m *CreateMobileAuthorizationCodeResponse) Validate(formats strfmt.Registry
 }
 
 func (m *CreateMobileAuthorizationCodeResponse) validateError(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Error) { // not required
 		return nil
 	}
 
 	if m.Error != nil {
 		if err := m.Error.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("error")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create mobile authorization code response based on the context it is used
+func (m *CreateMobileAuthorizationCodeResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateError(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateMobileAuthorizationCodeResponse) contextValidateError(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Error != nil {
+		if err := m.Error.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("error")
 			}

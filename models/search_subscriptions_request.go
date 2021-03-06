@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -15,6 +17,7 @@ import (
 // SearchSubscriptionsRequest Defines parameters in a
 // [SearchSubscriptions](#endpoint-subscriptions-searchsubscriptions) endpoint
 // request.
+// Example: {"request_body":{"query":{"filter":{"customer_ids":["CHFGVKYY8RSV93M5KCYTG4PN0G"],"location_ids":["S8GWD5R9QB376"]}}}}
 //
 // swagger:model SearchSubscriptionsRequest
 type SearchSubscriptionsRequest struct {
@@ -56,12 +59,11 @@ func (m *SearchSubscriptionsRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchSubscriptionsRequest) validateLimit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Limit) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("limit", "body", int64(m.Limit), 1, false); err != nil {
+	if err := validate.MinimumInt("limit", "body", m.Limit, 1, false); err != nil {
 		return err
 	}
 
@@ -69,13 +71,40 @@ func (m *SearchSubscriptionsRequest) validateLimit(formats strfmt.Registry) erro
 }
 
 func (m *SearchSubscriptionsRequest) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
 
 	if m.Query != nil {
 		if err := m.Query.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search subscriptions request based on the context it is used
+func (m *SearchSubscriptionsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchSubscriptionsRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("query")
 			}

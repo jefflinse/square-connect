@@ -17,100 +17,122 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewV1ListEmployeesParams creates a new V1ListEmployeesParams object
-// with the default values initialized.
+// NewV1ListEmployeesParams creates a new V1ListEmployeesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewV1ListEmployeesParams() *V1ListEmployeesParams {
-	var ()
 	return &V1ListEmployeesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewV1ListEmployeesParamsWithTimeout creates a new V1ListEmployeesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewV1ListEmployeesParamsWithTimeout(timeout time.Duration) *V1ListEmployeesParams {
-	var ()
 	return &V1ListEmployeesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewV1ListEmployeesParamsWithContext creates a new V1ListEmployeesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewV1ListEmployeesParamsWithContext(ctx context.Context) *V1ListEmployeesParams {
-	var ()
 	return &V1ListEmployeesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewV1ListEmployeesParamsWithHTTPClient creates a new V1ListEmployeesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewV1ListEmployeesParamsWithHTTPClient(client *http.Client) *V1ListEmployeesParams {
-	var ()
 	return &V1ListEmployeesParams{
 		HTTPClient: client,
 	}
 }
 
-/*V1ListEmployeesParams contains all the parameters to send to the API endpoint
-for the v1 list employees operation typically these are written to a http.Request
+/* V1ListEmployeesParams contains all the parameters to send to the API endpoint
+   for the v1 list employees operation.
+
+   Typically these are written to a http.Request.
 */
 type V1ListEmployeesParams struct {
 
-	/*BatchToken
-	  A pagination cursor to retrieve the next set of results for your
-	original query to the endpoint.
+	/* BatchToken.
 
+	     A pagination cursor to retrieve the next set of results for your
+	original query to the endpoint.
 	*/
 	BatchToken *string
-	/*BeginCreatedAt
-	  If filtering results by their created_at field, the beginning of the requested reporting period, in ISO 8601 format.
 
+	/* BeginCreatedAt.
+
+	   If filtering results by their created_at field, the beginning of the requested reporting period, in ISO 8601 format.
 	*/
 	BeginCreatedAt *string
-	/*BeginUpdatedAt
-	  If filtering results by their updated_at field, the beginning of the requested reporting period, in ISO 8601 format
 
+	/* BeginUpdatedAt.
+
+	   If filtering results by their updated_at field, the beginning of the requested reporting period, in ISO 8601 format
 	*/
 	BeginUpdatedAt *string
-	/*EndCreatedAt
-	  If filtering results by their created_at field, the end of the requested reporting period, in ISO 8601 format.
 
+	/* EndCreatedAt.
+
+	   If filtering results by their created_at field, the end of the requested reporting period, in ISO 8601 format.
 	*/
 	EndCreatedAt *string
-	/*EndUpdatedAt
-	  If filtering results by there updated_at field, the end of the requested reporting period, in ISO 8601 format.
 
+	/* EndUpdatedAt.
+
+	   If filtering results by there updated_at field, the end of the requested reporting period, in ISO 8601 format.
 	*/
 	EndUpdatedAt *string
-	/*ExternalID
-	  If provided, the endpoint returns only employee entities with the specified external_id.
 
+	/* ExternalID.
+
+	   If provided, the endpoint returns only employee entities with the specified external_id.
 	*/
 	ExternalID *string
-	/*Limit
-	  The maximum integer number of employee entities to return in a single response. Default 100, maximum 200.
 
+	/* Limit.
+
+	   The maximum integer number of employee entities to return in a single response. Default 100, maximum 200.
 	*/
 	Limit *int64
-	/*Order
-	  The order in which employees are listed in the response, based on their created_at field.      Default value: ASC
 
+	/* Order.
+
+	   The order in which employees are listed in the response, based on their created_at field.      Default value: ASC
 	*/
 	Order *string
-	/*Status
-	  If provided, the endpoint returns only employee entities with the specified status (ACTIVE or INACTIVE).
 
+	/* Status.
+
+	   If provided, the endpoint returns only employee entities with the specified status (ACTIVE or INACTIVE).
 	*/
 	Status *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the v1 list employees params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1ListEmployeesParams) WithDefaults() *V1ListEmployeesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the v1 list employees params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1ListEmployeesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the v1 list employees params
@@ -257,144 +279,153 @@ func (o *V1ListEmployeesParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param batch_token
 		var qrBatchToken string
+
 		if o.BatchToken != nil {
 			qrBatchToken = *o.BatchToken
 		}
 		qBatchToken := qrBatchToken
 		if qBatchToken != "" {
+
 			if err := r.SetQueryParam("batch_token", qBatchToken); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.BeginCreatedAt != nil {
 
 		// query param begin_created_at
 		var qrBeginCreatedAt string
+
 		if o.BeginCreatedAt != nil {
 			qrBeginCreatedAt = *o.BeginCreatedAt
 		}
 		qBeginCreatedAt := qrBeginCreatedAt
 		if qBeginCreatedAt != "" {
+
 			if err := r.SetQueryParam("begin_created_at", qBeginCreatedAt); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.BeginUpdatedAt != nil {
 
 		// query param begin_updated_at
 		var qrBeginUpdatedAt string
+
 		if o.BeginUpdatedAt != nil {
 			qrBeginUpdatedAt = *o.BeginUpdatedAt
 		}
 		qBeginUpdatedAt := qrBeginUpdatedAt
 		if qBeginUpdatedAt != "" {
+
 			if err := r.SetQueryParam("begin_updated_at", qBeginUpdatedAt); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndCreatedAt != nil {
 
 		// query param end_created_at
 		var qrEndCreatedAt string
+
 		if o.EndCreatedAt != nil {
 			qrEndCreatedAt = *o.EndCreatedAt
 		}
 		qEndCreatedAt := qrEndCreatedAt
 		if qEndCreatedAt != "" {
+
 			if err := r.SetQueryParam("end_created_at", qEndCreatedAt); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndUpdatedAt != nil {
 
 		// query param end_updated_at
 		var qrEndUpdatedAt string
+
 		if o.EndUpdatedAt != nil {
 			qrEndUpdatedAt = *o.EndUpdatedAt
 		}
 		qEndUpdatedAt := qrEndUpdatedAt
 		if qEndUpdatedAt != "" {
+
 			if err := r.SetQueryParam("end_updated_at", qEndUpdatedAt); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ExternalID != nil {
 
 		// query param external_id
 		var qrExternalID string
+
 		if o.ExternalID != nil {
 			qrExternalID = *o.ExternalID
 		}
 		qExternalID := qrExternalID
 		if qExternalID != "" {
+
 			if err := r.SetQueryParam("external_id", qExternalID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Order != nil {
 
 		// query param order
 		var qrOrder string
+
 		if o.Order != nil {
 			qrOrder = *o.Order
 		}
 		qOrder := qrOrder
 		if qOrder != "" {
+
 			if err := r.SetQueryParam("order", qOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Status != nil {
 
 		// query param status
 		var qrStatus string
+
 		if o.Status != nil {
 			qrStatus = *o.Status
 		}
 		qStatus := qrStatus
 		if qStatus != "" {
+
 			if err := r.SetQueryParam("status", qStatus); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

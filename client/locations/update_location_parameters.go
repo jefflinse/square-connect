@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateLocationParams creates a new UpdateLocationParams object
-// with the default values initialized.
+// NewUpdateLocationParams creates a new UpdateLocationParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateLocationParams() *UpdateLocationParams {
-	var ()
 	return &UpdateLocationParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateLocationParamsWithTimeout creates a new UpdateLocationParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateLocationParamsWithTimeout(timeout time.Duration) *UpdateLocationParams {
-	var ()
 	return &UpdateLocationParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateLocationParamsWithContext creates a new UpdateLocationParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateLocationParamsWithContext(ctx context.Context) *UpdateLocationParams {
-	var ()
 	return &UpdateLocationParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateLocationParamsWithHTTPClient creates a new UpdateLocationParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateLocationParamsWithHTTPClient(client *http.Client) *UpdateLocationParams {
-	var ()
 	return &UpdateLocationParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateLocationParams contains all the parameters to send to the API endpoint
-for the update location operation typically these are written to a http.Request
+/* UpdateLocationParams contains all the parameters to send to the API endpoint
+   for the update location operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateLocationParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateLocationRequest
-	/*LocationID
-	  The ID of the location to update.
 
+	/* LocationID.
+
+	   The ID of the location to update.
 	*/
 	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update location params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateLocationParams) WithDefaults() *UpdateLocationParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update location params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateLocationParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update location params
@@ -142,7 +157,6 @@ func (o *UpdateLocationParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

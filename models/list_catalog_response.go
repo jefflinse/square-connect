@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // ListCatalogResponse list catalog response
+// Example: {"objects":[{"category_data":{"name":"Beverages"},"id":"5ZYQZZ2IECPVJ2IJ5KQPRDC3","is_deleted":false,"present_at_all_locations":true,"type":"CATEGORY","updated_at":"2017-02-21T14:50:26.495Z","version":1487688626495},{"id":"L5R47DGBZOOVKCAFIXC56AEN","is_deleted":false,"present_at_all_locations":true,"tax_data":{"calculation_phase":"TAX_SUBTOTAL_PHASE","enabled":true,"inclusion_type":"ADDITIVE","name":"Sales Tax","percentage":"5.0"},"type":"TAX","updated_at":"2017-02-21T14:50:26.495Z","version":1487688626495}]}
 //
 // swagger:model ListCatalogResponse
 type ListCatalogResponse struct {
@@ -22,7 +24,7 @@ type ListCatalogResponse struct {
 	// See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
 	Cursor string `json:"cursor,omitempty"`
 
-	// Information on any errors encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 
 	// The CatalogObjects returned.
@@ -48,7 +50,6 @@ func (m *ListCatalogResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListCatalogResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -73,7 +74,6 @@ func (m *ListCatalogResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *ListCatalogResponse) validateObjects(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Objects) { // not required
 		return nil
 	}
@@ -85,6 +85,60 @@ func (m *ListCatalogResponse) validateObjects(formats strfmt.Registry) error {
 
 		if m.Objects[i] != nil {
 			if err := m.Objects[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("objects" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list catalog response based on the context it is used
+func (m *ListCatalogResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjects(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListCatalogResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListCatalogResponse) contextValidateObjects(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Objects); i++ {
+
+		if m.Objects[i] != nil {
+			if err := m.Objects[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("objects" + "." + strconv.Itoa(i))
 				}

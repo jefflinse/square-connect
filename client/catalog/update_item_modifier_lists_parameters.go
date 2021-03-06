@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateItemModifierListsParams creates a new UpdateItemModifierListsParams object
-// with the default values initialized.
+// NewUpdateItemModifierListsParams creates a new UpdateItemModifierListsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateItemModifierListsParams() *UpdateItemModifierListsParams {
-	var ()
 	return &UpdateItemModifierListsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateItemModifierListsParamsWithTimeout creates a new UpdateItemModifierListsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateItemModifierListsParamsWithTimeout(timeout time.Duration) *UpdateItemModifierListsParams {
-	var ()
 	return &UpdateItemModifierListsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateItemModifierListsParamsWithContext creates a new UpdateItemModifierListsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateItemModifierListsParamsWithContext(ctx context.Context) *UpdateItemModifierListsParams {
-	var ()
 	return &UpdateItemModifierListsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateItemModifierListsParamsWithHTTPClient creates a new UpdateItemModifierListsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateItemModifierListsParamsWithHTTPClient(client *http.Client) *UpdateItemModifierListsParams {
-	var ()
 	return &UpdateItemModifierListsParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateItemModifierListsParams contains all the parameters to send to the API endpoint
-for the update item modifier lists operation typically these are written to a http.Request
+/* UpdateItemModifierListsParams contains all the parameters to send to the API endpoint
+   for the update item modifier lists operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateItemModifierListsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateItemModifierListsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update item modifier lists params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateItemModifierListsParams) WithDefaults() *UpdateItemModifierListsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update item modifier lists params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateItemModifierListsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update item modifier lists params
@@ -126,7 +140,6 @@ func (o *UpdateItemModifierListsParams) WriteToRequest(r runtime.ClientRequest, 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

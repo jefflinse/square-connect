@@ -29,9 +29,8 @@ func (o *UpdateItemModifierListsReader) ReadResponse(response runtime.ClientResp
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewUpdateItemModifierListsOK() *UpdateItemModifierListsOK {
 	return &UpdateItemModifierListsOK{}
 }
 
-/*UpdateItemModifierListsOK handles this case with default header values.
+/* UpdateItemModifierListsOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type UpdateItemModifierListsOK struct {
 func (o *UpdateItemModifierListsOK) Error() string {
 	return fmt.Sprintf("[POST /v2/catalog/update-item-modifier-lists][%d] updateItemModifierListsOK  %+v", 200, o.Payload)
 }
-
 func (o *UpdateItemModifierListsOK) GetPayload() *models.UpdateItemModifierListsResponse {
 	return o.Payload
 }

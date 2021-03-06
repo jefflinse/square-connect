@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -57,7 +58,6 @@ func (m *V1Settlement) Validate(formats strfmt.Registry) error {
 }
 
 func (m *V1Settlement) validateEntries(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Entries) { // not required
 		return nil
 	}
@@ -82,13 +82,62 @@ func (m *V1Settlement) validateEntries(formats strfmt.Registry) error {
 }
 
 func (m *V1Settlement) validateTotalMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalMoney) { // not required
 		return nil
 	}
 
 	if m.TotalMoney != nil {
 		if err := m.TotalMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 settlement based on the context it is used
+func (m *V1Settlement) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateEntries(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1Settlement) contextValidateEntries(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Entries); i++ {
+
+		if m.Entries[i] != nil {
+			if err := m.Entries[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("entries" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Settlement) contextValidateTotalMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalMoney != nil {
+		if err := m.TotalMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("total_money")
 			}

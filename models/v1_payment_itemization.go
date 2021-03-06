@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -125,7 +126,6 @@ func (m *V1PaymentItemization) Validate(formats strfmt.Registry) error {
 }
 
 func (m *V1PaymentItemization) validateDiscountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DiscountMoney) { // not required
 		return nil
 	}
@@ -143,7 +143,6 @@ func (m *V1PaymentItemization) validateDiscountMoney(formats strfmt.Registry) er
 }
 
 func (m *V1PaymentItemization) validateDiscounts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Discounts) { // not required
 		return nil
 	}
@@ -168,7 +167,6 @@ func (m *V1PaymentItemization) validateDiscounts(formats strfmt.Registry) error 
 }
 
 func (m *V1PaymentItemization) validateGrossSalesMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GrossSalesMoney) { // not required
 		return nil
 	}
@@ -186,7 +184,6 @@ func (m *V1PaymentItemization) validateGrossSalesMoney(formats strfmt.Registry) 
 }
 
 func (m *V1PaymentItemization) validateItemDetail(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemDetail) { // not required
 		return nil
 	}
@@ -204,7 +201,6 @@ func (m *V1PaymentItemization) validateItemDetail(formats strfmt.Registry) error
 }
 
 func (m *V1PaymentItemization) validateModifiers(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Modifiers) { // not required
 		return nil
 	}
@@ -229,7 +225,6 @@ func (m *V1PaymentItemization) validateModifiers(formats strfmt.Registry) error 
 }
 
 func (m *V1PaymentItemization) validateNetSalesMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NetSalesMoney) { // not required
 		return nil
 	}
@@ -247,7 +242,6 @@ func (m *V1PaymentItemization) validateNetSalesMoney(formats strfmt.Registry) er
 }
 
 func (m *V1PaymentItemization) validateSingleQuantityMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SingleQuantityMoney) { // not required
 		return nil
 	}
@@ -265,7 +259,6 @@ func (m *V1PaymentItemization) validateSingleQuantityMoney(formats strfmt.Regist
 }
 
 func (m *V1PaymentItemization) validateTaxes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Taxes) { // not required
 		return nil
 	}
@@ -290,13 +283,196 @@ func (m *V1PaymentItemization) validateTaxes(formats strfmt.Registry) error {
 }
 
 func (m *V1PaymentItemization) validateTotalMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalMoney) { // not required
 		return nil
 	}
 
 	if m.TotalMoney != nil {
 		if err := m.TotalMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 payment itemization based on the context it is used
+func (m *V1PaymentItemization) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDiscountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDiscounts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGrossSalesMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemDetail(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifiers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNetSalesMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSingleQuantityMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTaxes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateDiscountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DiscountMoney != nil {
+		if err := m.DiscountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("discount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateDiscounts(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Discounts); i++ {
+
+		if m.Discounts[i] != nil {
+			if err := m.Discounts[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("discounts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateGrossSalesMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GrossSalesMoney != nil {
+		if err := m.GrossSalesMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("gross_sales_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateItemDetail(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemDetail != nil {
+		if err := m.ItemDetail.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("item_detail")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateModifiers(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Modifiers); i++ {
+
+		if m.Modifiers[i] != nil {
+			if err := m.Modifiers[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("modifiers" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateNetSalesMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NetSalesMoney != nil {
+		if err := m.NetSalesMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("net_sales_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateSingleQuantityMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SingleQuantityMoney != nil {
+		if err := m.SingleQuantityMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("single_quantity_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateTaxes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Taxes); i++ {
+
+		if m.Taxes[i] != nil {
+			if err := m.Taxes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("taxes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1PaymentItemization) contextValidateTotalMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalMoney != nil {
+		if err := m.TotalMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("total_money")
 			}

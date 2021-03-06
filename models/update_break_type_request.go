@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // UpdateBreakTypeRequest A request to update a `BreakType`
+// Example: {"request_body":{"break_type":{"break_name":"Lunch","expected_duration":"PT50M","is_paid":true,"location_id":"26M7H24AZ9N6R","version":1}}}
 //
 // swagger:model UpdateBreakTypeRequest
 type UpdateBreakTypeRequest struct {
@@ -44,6 +47,34 @@ func (m *UpdateBreakTypeRequest) validateBreakType(formats strfmt.Registry) erro
 
 	if m.BreakType != nil {
 		if err := m.BreakType.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("break_type")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update break type request based on the context it is used
+func (m *UpdateBreakTypeRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBreakType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateBreakTypeRequest) contextValidateBreakType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BreakType != nil {
+		if err := m.BreakType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("break_type")
 			}

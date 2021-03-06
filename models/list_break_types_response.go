@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // ListBreakTypesResponse The response to a request for a set of `BreakTypes`. Contains
 // the requested `BreakType` objects. May contain a set of `Error` objects if
 // the request resulted in errors.
+// Example: {"break_types":[{"break_name":"Coffee Break","created_at":"2019-01-22T20:47:37Z","expected_duration":"PT5M","id":"REGS1EQR1TPZ5","is_paid":false,"location_id":"PAA1RJZZKXBFG","updated_at":"2019-01-22T20:47:37Z","version":1},{"break_name":"Lunch Break","created_at":"2019-01-25T19:26:30Z","expected_duration":"PT1H","id":"92EPDRQKJ5088","is_paid":true,"location_id":"PAA1RJZZKXBFG","updated_at":"2019-01-25T19:26:30Z","version":3}],"cursor":"2fofTniCgT0yIPAq26kmk0YyFQJZfbWkh73OOnlTHmTAx13NgED"}
 //
 // swagger:model ListBreakTypesResponse
 type ListBreakTypesResponse struct {
@@ -50,7 +52,6 @@ func (m *ListBreakTypesResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListBreakTypesResponse) validateBreakTypes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BreakTypes) { // not required
 		return nil
 	}
@@ -75,7 +76,6 @@ func (m *ListBreakTypesResponse) validateBreakTypes(formats strfmt.Registry) err
 }
 
 func (m *ListBreakTypesResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -87,6 +87,60 @@ func (m *ListBreakTypesResponse) validateErrors(formats strfmt.Registry) error {
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list break types response based on the context it is used
+func (m *ListBreakTypesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBreakTypes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListBreakTypesResponse) contextValidateBreakTypes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.BreakTypes); i++ {
+
+		if m.BreakTypes[i] != nil {
+			if err := m.BreakTypes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("break_types" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListBreakTypesResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

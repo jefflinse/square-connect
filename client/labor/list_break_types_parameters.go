@@ -17,71 +17,87 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListBreakTypesParams creates a new ListBreakTypesParams object
-// with the default values initialized.
+// NewListBreakTypesParams creates a new ListBreakTypesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListBreakTypesParams() *ListBreakTypesParams {
-	var ()
 	return &ListBreakTypesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListBreakTypesParamsWithTimeout creates a new ListBreakTypesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListBreakTypesParamsWithTimeout(timeout time.Duration) *ListBreakTypesParams {
-	var ()
 	return &ListBreakTypesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListBreakTypesParamsWithContext creates a new ListBreakTypesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListBreakTypesParamsWithContext(ctx context.Context) *ListBreakTypesParams {
-	var ()
 	return &ListBreakTypesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListBreakTypesParamsWithHTTPClient creates a new ListBreakTypesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListBreakTypesParamsWithHTTPClient(client *http.Client) *ListBreakTypesParams {
-	var ()
 	return &ListBreakTypesParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListBreakTypesParams contains all the parameters to send to the API endpoint
-for the list break types operation typically these are written to a http.Request
+/* ListBreakTypesParams contains all the parameters to send to the API endpoint
+   for the list break types operation.
+
+   Typically these are written to a http.Request.
 */
 type ListBreakTypesParams struct {
 
-	/*Cursor
-	  Pointer to the next page of Break Type results to fetch.
+	/* Cursor.
 
+	   Pointer to the next page of Break Type results to fetch.
 	*/
 	Cursor *string
-	/*Limit
-	  Maximum number of Break Types to return per page. Can range between 1
-	and 200. The default is the maximum at 200.
 
+	/* Limit.
+
+	     Maximum number of Break Types to return per page. Can range between 1
+	and 200. The default is the maximum at 200.
 	*/
 	Limit *int64
-	/*LocationID
-	  Filter Break Types returned to only those that are associated with the
-	specified location.
 
+	/* LocationID.
+
+	     Filter Break Types returned to only those that are associated with the
+	specified location.
 	*/
 	LocationID *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list break types params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListBreakTypesParams) WithDefaults() *ListBreakTypesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list break types params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListBreakTypesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list break types params
@@ -162,48 +178,51 @@ func (o *ListBreakTypesParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LocationID != nil {
 
 		// query param location_id
 		var qrLocationID string
+
 		if o.LocationID != nil {
 			qrLocationID = *o.LocationID
 		}
 		qLocationID := qrLocationID
 		if qLocationID != "" {
+
 			if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

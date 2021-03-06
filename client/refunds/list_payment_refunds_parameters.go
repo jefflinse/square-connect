@@ -17,116 +17,138 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListPaymentRefundsParams creates a new ListPaymentRefundsParams object
-// with the default values initialized.
+// NewListPaymentRefundsParams creates a new ListPaymentRefundsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListPaymentRefundsParams() *ListPaymentRefundsParams {
-	var ()
 	return &ListPaymentRefundsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListPaymentRefundsParamsWithTimeout creates a new ListPaymentRefundsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListPaymentRefundsParamsWithTimeout(timeout time.Duration) *ListPaymentRefundsParams {
-	var ()
 	return &ListPaymentRefundsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListPaymentRefundsParamsWithContext creates a new ListPaymentRefundsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListPaymentRefundsParamsWithContext(ctx context.Context) *ListPaymentRefundsParams {
-	var ()
 	return &ListPaymentRefundsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListPaymentRefundsParamsWithHTTPClient creates a new ListPaymentRefundsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListPaymentRefundsParamsWithHTTPClient(client *http.Client) *ListPaymentRefundsParams {
-	var ()
 	return &ListPaymentRefundsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListPaymentRefundsParams contains all the parameters to send to the API endpoint
-for the list payment refunds operation typically these are written to a http.Request
+/* ListPaymentRefundsParams contains all the parameters to send to the API endpoint
+   for the list payment refunds operation.
+
+   Typically these are written to a http.Request.
 */
 type ListPaymentRefundsParams struct {
 
-	/*BeginTime
-	  Timestamp for the beginning of the requested reporting period, in RFC 3339 format.
+	/* BeginTime.
+
+	     The timestamp for the beginning of the requested reporting period, in RFC 3339 format.
 
 	Default: The current time minus one year.
-
 	*/
 	BeginTime *string
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
-	Provide this to retrieve the next set of results for the original query.
 
-	See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
+	/* Cursor.
 
+	     A pagination cursor returned by a previous call to this endpoint.
+	Provide this cursor to retrieve the next set of results for the original query.
+
+	For more information, see [Pagination](https://developer.squareup.com/docs/basics/api101/pagination).
 	*/
 	Cursor *string
-	/*EndTime
-	  Timestamp for the end of the requested reporting period, in RFC 3339 format.
+
+	/* EndTime.
+
+	     The timestamp for the end of the requested reporting period, in RFC 3339 format.
 
 	Default: The current time.
-
 	*/
 	EndTime *string
-	/*Limit
-	  Maximum number of results to be returned in a single page.
+
+	/* Limit.
+
+	     The maximum number of results to be returned in a single page.
+
 	It is possible to receive fewer results than the specified limit on a given page.
 
-	If the supplied value is greater than 100, at most 100 results will be returned.
+	If the supplied value is greater than 100, no more than 100 results are returned.
 
-	Default: `100`
-
+	Default: 100
 	*/
 	Limit *int64
-	/*LocationID
-	  Limit results to the location supplied. By default, results are returned
-	for all locations associated with the merchant.
 
+	/* LocationID.
+
+	     Limit results to the location supplied. By default, results are returned
+	for all locations associated with the seller.
 	*/
 	LocationID *string
-	/*SortOrder
-	  The order in which results are listed.
-	- `ASC` - oldest to newest
-	- `DESC` - newest to oldest (default).
 
+	/* SortOrder.
+
+	     The order in which results are listed:
+	- `ASC` - Oldest to newest.
+	- `DESC` - Newest to oldest (default).
 	*/
 	SortOrder *string
-	/*SourceType
-	  If provided, only refunds with the given source type are returned.
-	- `CARD` - List refunds only for payments where card was specified as payment
+
+	/* SourceType.
+
+	     If provided, only refunds with the given source type are returned.
+	- `CARD` - List refunds only for payments where `CARD` was specified as the payment
 	source.
 
-	Default: If omitted refunds are returned regardless of source type.
-
+	Default: If omitted, refunds are returned regardless of the source type.
 	*/
 	SourceType *string
-	/*Status
-	  If provided, only refunds with the given status are returned.
+
+	/* Status.
+
+	     If provided, only refunds with the given status are returned.
 	For a list of refund status values, see `PaymentRefund`.
 
-	Default: If omitted refunds are returned regardless of status.
-
+	Default: If omitted, refunds are returned regardless of their status.
 	*/
 	Status *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list payment refunds params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListPaymentRefundsParams) WithDefaults() *ListPaymentRefundsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list payment refunds params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListPaymentRefundsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list payment refunds params
@@ -262,128 +284,136 @@ func (o *ListPaymentRefundsParams) WriteToRequest(r runtime.ClientRequest, reg s
 
 		// query param begin_time
 		var qrBeginTime string
+
 		if o.BeginTime != nil {
 			qrBeginTime = *o.BeginTime
 		}
 		qBeginTime := qrBeginTime
 		if qBeginTime != "" {
+
 			if err := r.SetQueryParam("begin_time", qBeginTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Cursor != nil {
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndTime != nil {
 
 		// query param end_time
 		var qrEndTime string
+
 		if o.EndTime != nil {
 			qrEndTime = *o.EndTime
 		}
 		qEndTime := qrEndTime
 		if qEndTime != "" {
+
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LocationID != nil {
 
 		// query param location_id
 		var qrLocationID string
+
 		if o.LocationID != nil {
 			qrLocationID = *o.LocationID
 		}
 		qLocationID := qrLocationID
 		if qLocationID != "" {
+
 			if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.SortOrder != nil {
 
 		// query param sort_order
 		var qrSortOrder string
+
 		if o.SortOrder != nil {
 			qrSortOrder = *o.SortOrder
 		}
 		qSortOrder := qrSortOrder
 		if qSortOrder != "" {
+
 			if err := r.SetQueryParam("sort_order", qSortOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.SourceType != nil {
 
 		// query param source_type
 		var qrSourceType string
+
 		if o.SourceType != nil {
 			qrSourceType = *o.SourceType
 		}
 		qSourceType := qrSourceType
 		if qSourceType != "" {
+
 			if err := r.SetQueryParam("source_type", qSourceType); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Status != nil {
 
 		// query param status
 		var qrStatus string
+
 		if o.Status != nil {
 			qrStatus = *o.Status
 		}
 		qStatus := qrStatus
 		if qStatus != "" {
+
 			if err := r.SetQueryParam("status", qStatus); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

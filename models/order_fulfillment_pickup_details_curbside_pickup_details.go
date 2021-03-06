@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -41,15 +43,19 @@ func (m *OrderFulfillmentPickupDetailsCurbsidePickupDetails) Validate(formats st
 }
 
 func (m *OrderFulfillmentPickupDetailsCurbsidePickupDetails) validateCurbsideDetails(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CurbsideDetails) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("curbside_details", "body", string(m.CurbsideDetails), 250); err != nil {
+	if err := validate.MaxLength("curbside_details", "body", m.CurbsideDetails, 250); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this order fulfillment pickup details curbside pickup details based on context it is used
+func (m *OrderFulfillmentPickupDetailsCurbsidePickupDetails) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

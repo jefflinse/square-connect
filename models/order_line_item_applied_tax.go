@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -63,7 +65,6 @@ func (m *OrderLineItemAppliedTax) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItemAppliedTax) validateAppliedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedMoney) { // not required
 		return nil
 	}
@@ -86,11 +87,11 @@ func (m *OrderLineItemAppliedTax) validateTaxUID(formats strfmt.Registry) error 
 		return err
 	}
 
-	if err := validate.MinLength("tax_uid", "body", string(*m.TaxUID), 1); err != nil {
+	if err := validate.MinLength("tax_uid", "body", *m.TaxUID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("tax_uid", "body", string(*m.TaxUID), 60); err != nil {
+	if err := validate.MaxLength("tax_uid", "body", *m.TaxUID, 60); err != nil {
 		return err
 	}
 
@@ -98,13 +99,40 @@ func (m *OrderLineItemAppliedTax) validateTaxUID(formats strfmt.Registry) error 
 }
 
 func (m *OrderLineItemAppliedTax) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order line item applied tax based on the context it is used
+func (m *OrderLineItemAppliedTax) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAppliedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderLineItemAppliedTax) contextValidateAppliedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AppliedMoney != nil {
+		if err := m.AppliedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("applied_money")
+			}
+			return err
+		}
 	}
 
 	return nil

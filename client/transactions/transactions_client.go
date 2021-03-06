@@ -25,21 +25,24 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CaptureTransaction(params *CaptureTransactionParams, authInfo runtime.ClientAuthInfoWriter) (*CaptureTransactionOK, error)
+	CaptureTransaction(params *CaptureTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CaptureTransactionOK, error)
 
-	Charge(params *ChargeParams, authInfo runtime.ClientAuthInfoWriter) (*ChargeOK, error)
+	Charge(params *ChargeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ChargeOK, error)
 
-	CreateRefund(params *CreateRefundParams, authInfo runtime.ClientAuthInfoWriter) (*CreateRefundOK, error)
+	CreateRefund(params *CreateRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateRefundOK, error)
 
-	ListRefunds(params *ListRefundsParams, authInfo runtime.ClientAuthInfoWriter) (*ListRefundsOK, error)
+	ListRefunds(params *ListRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRefundsOK, error)
 
-	ListTransactions(params *ListTransactionsParams, authInfo runtime.ClientAuthInfoWriter) (*ListTransactionsOK, error)
+	ListTransactions(params *ListTransactionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTransactionsOK, error)
 
-	RetrieveTransaction(params *RetrieveTransactionParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveTransactionOK, error)
+	RetrieveTransaction(params *RetrieveTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveTransactionOK, error)
 
-	VoidTransaction(params *VoidTransactionParams, authInfo runtime.ClientAuthInfoWriter) (*VoidTransactionOK, error)
+	VoidTransaction(params *VoidTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*VoidTransactionOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -54,13 +57,12 @@ endpoint with a `delay_capture` value of `true`.
 See [Delayed capture transactions](/payments/transactions/overview#delayed-capture)
 for more information.
 */
-func (a *Client) CaptureTransaction(params *CaptureTransactionParams, authInfo runtime.ClientAuthInfoWriter) (*CaptureTransactionOK, error) {
+func (a *Client) CaptureTransaction(params *CaptureTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CaptureTransactionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCaptureTransactionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CaptureTransaction",
 		Method:             "POST",
 		PathPattern:        "/v2/locations/{location_id}/transactions/{transaction_id}/capture",
@@ -72,7 +74,12 @@ func (a *Client) CaptureTransaction(params *CaptureTransactionParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -110,13 +117,12 @@ calculated. To obtain the processing fee, wait about ten seconds and call
 [RetrieveTransaction](#endpoint-retrievetransaction). See the `processing_fee_money`
 field of each [Tender included](#type-tender) in the transaction.
 */
-func (a *Client) Charge(params *ChargeParams, authInfo runtime.ClientAuthInfoWriter) (*ChargeOK, error) {
+func (a *Client) Charge(params *ChargeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ChargeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewChargeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "Charge",
 		Method:             "POST",
 		PathPattern:        "/v2/locations/{location_id}/transactions",
@@ -128,7 +134,12 @@ func (a *Client) Charge(params *ChargeParams, authInfo runtime.ClientAuthInfoWri
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -155,13 +166,12 @@ NOTE: Card-present transactions with Interac credit cards **cannot be
 refunded using the Connect API**. Interac transactions must refunded
 in-person (e.g., dipping the card using POS app).
 */
-func (a *Client) CreateRefund(params *CreateRefundParams, authInfo runtime.ClientAuthInfoWriter) (*CreateRefundOK, error) {
+func (a *Client) CreateRefund(params *CreateRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateRefundOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateRefundParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateRefund",
 		Method:             "POST",
 		PathPattern:        "/v2/locations/{location_id}/transactions/{transaction_id}/refund",
@@ -173,7 +183,12 @@ func (a *Client) CreateRefund(params *CreateRefundParams, authInfo runtime.Clien
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -201,13 +216,12 @@ endpoint's response.
 
 Max results per [page](#paginatingresults): 50
 */
-func (a *Client) ListRefunds(params *ListRefundsParams, authInfo runtime.ClientAuthInfoWriter) (*ListRefundsOK, error) {
+func (a *Client) ListRefunds(params *ListRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRefundsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListRefundsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListRefunds",
 		Method:             "GET",
 		PathPattern:        "/v2/locations/{location_id}/refunds",
@@ -219,7 +233,12 @@ func (a *Client) ListRefunds(params *ListRefundsParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -243,13 +262,12 @@ information from returns and exchanges.
 
 Max results per [page](#paginatingresults): 50
 */
-func (a *Client) ListTransactions(params *ListTransactionsParams, authInfo runtime.ClientAuthInfoWriter) (*ListTransactionsOK, error) {
+func (a *Client) ListTransactions(params *ListTransactionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTransactionsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListTransactionsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListTransactions",
 		Method:             "GET",
 		PathPattern:        "/v2/locations/{location_id}/transactions",
@@ -261,7 +279,12 @@ func (a *Client) ListTransactions(params *ListTransactionsParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -280,13 +303,12 @@ func (a *Client) ListTransactions(params *ListTransactionsParams, authInfo runti
 
   Retrieves details for a single transaction.
 */
-func (a *Client) RetrieveTransaction(params *RetrieveTransactionParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveTransactionOK, error) {
+func (a *Client) RetrieveTransaction(params *RetrieveTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveTransactionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveTransactionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveTransaction",
 		Method:             "GET",
 		PathPattern:        "/v2/locations/{location_id}/transactions/{transaction_id}",
@@ -298,7 +320,12 @@ func (a *Client) RetrieveTransaction(params *RetrieveTransactionParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -322,13 +349,12 @@ endpoint with a `delay_capture` value of `true`.
 See [Delayed capture transactions](/payments/transactions/overview#delayed-capture)
 for more information.
 */
-func (a *Client) VoidTransaction(params *VoidTransactionParams, authInfo runtime.ClientAuthInfoWriter) (*VoidTransactionOK, error) {
+func (a *Client) VoidTransaction(params *VoidTransactionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*VoidTransactionOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewVoidTransactionParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "VoidTransaction",
 		Method:             "POST",
 		PathPattern:        "/v2/locations/{location_id}/transactions/{transaction_id}/void",
@@ -340,7 +366,12 @@ func (a *Client) VoidTransaction(params *VoidTransactionParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

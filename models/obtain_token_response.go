@@ -6,18 +6,21 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ObtainTokenResponse obtain token response
+// Example: {"access_token":"ACCESS_TOKEN","expires_at":"2006-01-02T15:04:05Z","merchant_id":"MERCHANT_ID","refresh_token":"REFRESH_TOKEN","token_type":"bearer"}
 //
 // swagger:model ObtainTokenResponse
 type ObtainTokenResponse struct {
 
 	// A valid OAuth access token. OAuth access tokens are 64 bytes long.
 	// Provide the access token in a header with every request to Connect API
-	// endpoints. See the [Build with OAuth](https://developer.squareup.com/docs/authz/oauth/build-with-the-api) guide
+	// endpoints. See [OAuth API: Walkthrough](https://developer.squareup.com/docs/oauth-api/walkthrough)
 	// for more information.
 	AccessToken string `json:"access_token,omitempty"`
 
@@ -31,7 +34,7 @@ type ObtainTokenResponse struct {
 	// The ID of the authorizing merchant's business.
 	MerchantID string `json:"merchant_id,omitempty"`
 
-	// T__LEGACY FIELD__. The ID of the subscription plan the merchant signed
+	// __LEGACY FIELD__. The ID of the subscription plan the merchant signed
 	// up for. Only present if the merchant signed up for a subscription during
 	// authorization.
 	PlanID string `json:"plan_id,omitempty"`
@@ -39,6 +42,10 @@ type ObtainTokenResponse struct {
 	// A refresh token. OAuth refresh tokens are 64 bytes long.
 	// For more information, see [OAuth access token management](https://developer.squareup.com/docs/authz/oauth/how-it-works#oauth-access-token-management).
 	RefreshToken string `json:"refresh_token,omitempty"`
+
+	// A boolean indicating the access token is a short-lived access token.
+	// The short-lived access token returned in the response will expire in 24 hours.
+	ShortLived bool `json:"short_lived,omitempty"`
 
 	// __LEGACY FIELD__. The ID of a subscription plan the merchant signed up
 	// for. Only present if the merchant signed up for a subscription during authorization.
@@ -50,6 +57,11 @@ type ObtainTokenResponse struct {
 
 // Validate validates this obtain token response
 func (m *ObtainTokenResponse) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this obtain token response based on context it is used
+func (m *ObtainTokenResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateShiftParams creates a new CreateShiftParams object
-// with the default values initialized.
+// NewCreateShiftParams creates a new CreateShiftParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateShiftParams() *CreateShiftParams {
-	var ()
 	return &CreateShiftParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateShiftParamsWithTimeout creates a new CreateShiftParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateShiftParamsWithTimeout(timeout time.Duration) *CreateShiftParams {
-	var ()
 	return &CreateShiftParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateShiftParamsWithContext creates a new CreateShiftParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateShiftParamsWithContext(ctx context.Context) *CreateShiftParams {
-	var ()
 	return &CreateShiftParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateShiftParamsWithHTTPClient creates a new CreateShiftParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateShiftParamsWithHTTPClient(client *http.Client) *CreateShiftParams {
-	var ()
 	return &CreateShiftParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateShiftParams contains all the parameters to send to the API endpoint
-for the create shift operation typically these are written to a http.Request
+/* CreateShiftParams contains all the parameters to send to the API endpoint
+   for the create shift operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateShiftParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateShiftRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create shift params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateShiftParams) WithDefaults() *CreateShiftParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create shift params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateShiftParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create shift params
@@ -126,7 +140,6 @@ func (o *CreateShiftParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

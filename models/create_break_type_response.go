@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // CreateBreakTypeResponse The response to the request to create a `BreakType`. Contains
 // the created `BreakType` object. May contain a set of `Error` objects if
 // the request resulted in errors.
+// Example: {"break_type":{"break_name":"Lunch Break","created_at":"2019-02-26T22:42:54Z","expected_duration":"PT30M","id":"49SSVDJG76WF3","is_paid":true,"location_id":"CGJN03P1D08GF","updated_at":"2019-02-26T22:42:54Z","version":1}}
 //
 // swagger:model CreateBreakTypeResponse
 type CreateBreakTypeResponse struct {
@@ -46,7 +48,6 @@ func (m *CreateBreakTypeResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CreateBreakTypeResponse) validateBreakType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BreakType) { // not required
 		return nil
 	}
@@ -64,7 +65,6 @@ func (m *CreateBreakTypeResponse) validateBreakType(formats strfmt.Registry) err
 }
 
 func (m *CreateBreakTypeResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -76,6 +76,56 @@ func (m *CreateBreakTypeResponse) validateErrors(formats strfmt.Registry) error 
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create break type response based on the context it is used
+func (m *CreateBreakTypeResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBreakType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateBreakTypeResponse) contextValidateBreakType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BreakType != nil {
+		if err := m.BreakType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("break_type")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CreateBreakTypeResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

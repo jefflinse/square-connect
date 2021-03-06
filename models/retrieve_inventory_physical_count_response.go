@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // RetrieveInventoryPhysicalCountResponse retrieve inventory physical count response
+// Example: {"count":{"catalog_object_id":"W62UWFY35CWMYGVWK6TWJDNI","catalog_object_type":"ITEM_VARIATION","created_at":"2016-11-16T22:25:24.878Z","employee_id":"LRK57NSQ5X7PUD05","id":"ANZADNPLKADOJKJIUANKLMLQ","location_id":"C6W5YS5QM06F5","occurred_at":"2016-11-16T22:25:24.878Z","quantity":"15","reference_id":"f857ec37-f9a0-4458-8e23-5b5e0bea4e53","source":{"application_id":"416ff29c-86c4-4feb-b58c-9705f21f3ea0","name":"Square Point of Sale 4.37","product":"SQUARE_POS"},"state":"IN_STOCK"},"errors":[]}
 //
 // swagger:model RetrieveInventoryPhysicalCountResponse
 type RetrieveInventoryPhysicalCountResponse struct {
@@ -44,7 +46,6 @@ func (m *RetrieveInventoryPhysicalCountResponse) Validate(formats strfmt.Registr
 }
 
 func (m *RetrieveInventoryPhysicalCountResponse) validateCount(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Count) { // not required
 		return nil
 	}
@@ -62,7 +63,6 @@ func (m *RetrieveInventoryPhysicalCountResponse) validateCount(formats strfmt.Re
 }
 
 func (m *RetrieveInventoryPhysicalCountResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,6 +74,56 @@ func (m *RetrieveInventoryPhysicalCountResponse) validateErrors(formats strfmt.R
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve inventory physical count response based on the context it is used
+func (m *RetrieveInventoryPhysicalCountResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveInventoryPhysicalCountResponse) contextValidateCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Count != nil {
+		if err := m.Count.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("count")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RetrieveInventoryPhysicalCountResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

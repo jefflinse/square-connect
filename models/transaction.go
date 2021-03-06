@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -119,12 +120,11 @@ func (m *Transaction) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateClientID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ClientID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("client_id", "body", string(m.ClientID), 192); err != nil {
+	if err := validate.MaxLength("client_id", "body", m.ClientID, 192); err != nil {
 		return err
 	}
 
@@ -132,12 +132,11 @@ func (m *Transaction) validateClientID(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 32); err != nil {
+	if err := validate.MaxLength("created_at", "body", m.CreatedAt, 32); err != nil {
 		return err
 	}
 
@@ -145,12 +144,11 @@ func (m *Transaction) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 192); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 192); err != nil {
 		return err
 	}
 
@@ -158,12 +156,11 @@ func (m *Transaction) validateID(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateLocationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 50); err != nil {
+	if err := validate.MaxLength("location_id", "body", m.LocationID, 50); err != nil {
 		return err
 	}
 
@@ -171,12 +168,11 @@ func (m *Transaction) validateLocationID(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateOrderID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OrderID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("order_id", "body", string(m.OrderID), 192); err != nil {
+	if err := validate.MaxLength("order_id", "body", m.OrderID, 192); err != nil {
 		return err
 	}
 
@@ -184,12 +180,11 @@ func (m *Transaction) validateOrderID(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateReferenceID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReferenceID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("reference_id", "body", string(m.ReferenceID), 40); err != nil {
+	if err := validate.MaxLength("reference_id", "body", m.ReferenceID, 40); err != nil {
 		return err
 	}
 
@@ -197,7 +192,6 @@ func (m *Transaction) validateReferenceID(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateRefunds(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Refunds) { // not required
 		return nil
 	}
@@ -222,7 +216,6 @@ func (m *Transaction) validateRefunds(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateShippingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ShippingAddress) { // not required
 		return nil
 	}
@@ -240,7 +233,6 @@ func (m *Transaction) validateShippingAddress(formats strfmt.Registry) error {
 }
 
 func (m *Transaction) validateTenders(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tenders) { // not required
 		return nil
 	}
@@ -252,6 +244,78 @@ func (m *Transaction) validateTenders(formats strfmt.Registry) error {
 
 		if m.Tenders[i] != nil {
 			if err := m.Tenders[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tenders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this transaction based on the context it is used
+func (m *Transaction) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateRefunds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShippingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTenders(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Transaction) contextValidateRefunds(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Refunds); i++ {
+
+		if m.Refunds[i] != nil {
+			if err := m.Refunds[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("refunds" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Transaction) contextValidateShippingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ShippingAddress != nil {
+		if err := m.ShippingAddress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("shipping_address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Transaction) contextValidateTenders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Tenders); i++ {
+
+		if m.Tenders[i] != nil {
+			if err := m.Tenders[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("tenders" + "." + strconv.Itoa(i))
 				}

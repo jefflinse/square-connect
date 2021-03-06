@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewDeleteLoyaltyRewardParams creates a new DeleteLoyaltyRewardParams object
-// with the default values initialized.
+// NewDeleteLoyaltyRewardParams creates a new DeleteLoyaltyRewardParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteLoyaltyRewardParams() *DeleteLoyaltyRewardParams {
-	var ()
 	return &DeleteLoyaltyRewardParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteLoyaltyRewardParamsWithTimeout creates a new DeleteLoyaltyRewardParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteLoyaltyRewardParamsWithTimeout(timeout time.Duration) *DeleteLoyaltyRewardParams {
-	var ()
 	return &DeleteLoyaltyRewardParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteLoyaltyRewardParamsWithContext creates a new DeleteLoyaltyRewardParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteLoyaltyRewardParamsWithContext(ctx context.Context) *DeleteLoyaltyRewardParams {
-	var ()
 	return &DeleteLoyaltyRewardParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteLoyaltyRewardParamsWithHTTPClient creates a new DeleteLoyaltyRewardParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteLoyaltyRewardParamsWithHTTPClient(client *http.Client) *DeleteLoyaltyRewardParams {
-	var ()
 	return &DeleteLoyaltyRewardParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteLoyaltyRewardParams contains all the parameters to send to the API endpoint
-for the delete loyalty reward operation typically these are written to a http.Request
+/* DeleteLoyaltyRewardParams contains all the parameters to send to the API endpoint
+   for the delete loyalty reward operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteLoyaltyRewardParams struct {
 
-	/*RewardID
-	  The ID of the `loyalty reward` to delete.
+	/* RewardID.
 
+	   The ID of the `loyalty reward` to delete.
 	*/
 	RewardID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete loyalty reward params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteLoyaltyRewardParams) WithDefaults() *DeleteLoyaltyRewardParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete loyalty reward params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteLoyaltyRewardParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete loyalty reward params

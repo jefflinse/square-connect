@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -19,7 +21,7 @@ import (
 // elsewhere in the same request body. This temporary ID can be any string unique within
 // the call, but must be prefixed by "#".
 //
-// After the request is sumbitted and the object created, a permanent server-generated ID is assigned
+// After the request is submitted and the object created, a permanent server-generated ID is assigned
 // to the new object. The permanent ID is unique across the Square catalog.
 //
 // swagger:model CatalogIdMapping
@@ -34,6 +36,11 @@ type CatalogIDMapping struct {
 
 // Validate validates this catalog Id mapping
 func (m *CatalogIDMapping) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this catalog Id mapping based on context it is used
+func (m *CatalogIDMapping) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

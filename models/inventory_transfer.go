@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -136,12 +138,11 @@ func (m *InventoryTransfer) Validate(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 100); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 100); err != nil {
 		return err
 	}
 
@@ -149,12 +150,11 @@ func (m *InventoryTransfer) validateCatalogObjectID(formats strfmt.Registry) err
 }
 
 func (m *InventoryTransfer) validateCatalogObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectType) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_type", "body", string(m.CatalogObjectType), 14); err != nil {
+	if err := validate.MaxLength("catalog_object_type", "body", m.CatalogObjectType, 14); err != nil {
 		return err
 	}
 
@@ -162,12 +162,11 @@ func (m *InventoryTransfer) validateCatalogObjectType(formats strfmt.Registry) e
 }
 
 func (m *InventoryTransfer) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 34); err != nil {
+	if err := validate.MaxLength("created_at", "body", m.CreatedAt, 34); err != nil {
 		return err
 	}
 
@@ -175,12 +174,11 @@ func (m *InventoryTransfer) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateEmployeeID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EmployeeID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("employee_id", "body", string(m.EmployeeID), 100); err != nil {
+	if err := validate.MaxLength("employee_id", "body", m.EmployeeID, 100); err != nil {
 		return err
 	}
 
@@ -188,12 +186,11 @@ func (m *InventoryTransfer) validateEmployeeID(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateFromLocationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FromLocationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("from_location_id", "body", string(m.FromLocationID), 100); err != nil {
+	if err := validate.MaxLength("from_location_id", "body", m.FromLocationID, 100); err != nil {
 		return err
 	}
 
@@ -201,12 +198,11 @@ func (m *InventoryTransfer) validateFromLocationID(formats strfmt.Registry) erro
 }
 
 func (m *InventoryTransfer) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 100); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 100); err != nil {
 		return err
 	}
 
@@ -214,12 +210,11 @@ func (m *InventoryTransfer) validateID(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateOccurredAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OccurredAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("occurred_at", "body", string(m.OccurredAt), 34); err != nil {
+	if err := validate.MaxLength("occurred_at", "body", m.OccurredAt, 34); err != nil {
 		return err
 	}
 
@@ -227,12 +222,11 @@ func (m *InventoryTransfer) validateOccurredAt(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateQuantity(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Quantity) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("quantity", "body", string(m.Quantity), 26); err != nil {
+	if err := validate.MaxLength("quantity", "body", m.Quantity, 26); err != nil {
 		return err
 	}
 
@@ -240,12 +234,11 @@ func (m *InventoryTransfer) validateQuantity(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateReferenceID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReferenceID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("reference_id", "body", string(m.ReferenceID), 255); err != nil {
+	if err := validate.MaxLength("reference_id", "body", m.ReferenceID, 255); err != nil {
 		return err
 	}
 
@@ -253,7 +246,6 @@ func (m *InventoryTransfer) validateReferenceID(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateSource(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Source) { // not required
 		return nil
 	}
@@ -271,13 +263,40 @@ func (m *InventoryTransfer) validateSource(formats strfmt.Registry) error {
 }
 
 func (m *InventoryTransfer) validateToLocationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ToLocationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("to_location_id", "body", string(m.ToLocationID), 100); err != nil {
+	if err := validate.MaxLength("to_location_id", "body", m.ToLocationID, 100); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this inventory transfer based on the context it is used
+func (m *InventoryTransfer) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateSource(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *InventoryTransfer) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Source != nil {
+		if err := m.Source.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source")
+			}
+			return err
+		}
 	}
 
 	return nil

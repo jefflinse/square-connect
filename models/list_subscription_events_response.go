@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // ListSubscriptionEventsResponse Defines the fields that are included in the response from the
 // [ListSubscriptionEvents](#endpoint-subscriptions-listsubscriptionevents)
 // endpoint.
+// Example: {"subscription_events":[{"effective_date":"2020-04-24","id":"06809161-3867-4598-8269-8aea5be4f9de","plan_id":"6JHXF3B2CW3YKHDV4XEM674H","subscription_event_type":"START_SUBSCRIPTION"},{"effective_date":"2020-05-06","id":"a0c08083-5db0-4800-85c7-d398de4fbb6e","plan_id":"6JHXF3B2CW3YKHDV4XEM674H","subscription_event_type":"STOP_SUBSCRIPTION"}]}
 //
 // swagger:model ListSubscriptionEventsResponse
 type ListSubscriptionEventsResponse struct {
@@ -53,7 +55,6 @@ func (m *ListSubscriptionEventsResponse) Validate(formats strfmt.Registry) error
 }
 
 func (m *ListSubscriptionEventsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -78,7 +79,6 @@ func (m *ListSubscriptionEventsResponse) validateErrors(formats strfmt.Registry)
 }
 
 func (m *ListSubscriptionEventsResponse) validateSubscriptionEvents(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SubscriptionEvents) { // not required
 		return nil
 	}
@@ -90,6 +90,60 @@ func (m *ListSubscriptionEventsResponse) validateSubscriptionEvents(formats strf
 
 		if m.SubscriptionEvents[i] != nil {
 			if err := m.SubscriptionEvents[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("subscription_events" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list subscription events response based on the context it is used
+func (m *ListSubscriptionEventsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSubscriptionEvents(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListSubscriptionEventsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListSubscriptionEventsResponse) contextValidateSubscriptionEvents(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.SubscriptionEvents); i++ {
+
+		if m.SubscriptionEvents[i] != nil {
+			if err := m.SubscriptionEvents[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("subscription_events" + "." + strconv.Itoa(i))
 				}

@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetTerminalCheckoutParams creates a new GetTerminalCheckoutParams object
-// with the default values initialized.
+// NewGetTerminalCheckoutParams creates a new GetTerminalCheckoutParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetTerminalCheckoutParams() *GetTerminalCheckoutParams {
-	var ()
 	return &GetTerminalCheckoutParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGetTerminalCheckoutParamsWithTimeout creates a new GetTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGetTerminalCheckoutParamsWithTimeout(timeout time.Duration) *GetTerminalCheckoutParams {
-	var ()
 	return &GetTerminalCheckoutParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGetTerminalCheckoutParamsWithContext creates a new GetTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGetTerminalCheckoutParamsWithContext(ctx context.Context) *GetTerminalCheckoutParams {
-	var ()
 	return &GetTerminalCheckoutParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGetTerminalCheckoutParamsWithHTTPClient creates a new GetTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGetTerminalCheckoutParamsWithHTTPClient(client *http.Client) *GetTerminalCheckoutParams {
-	var ()
 	return &GetTerminalCheckoutParams{
 		HTTPClient: client,
 	}
 }
 
-/*GetTerminalCheckoutParams contains all the parameters to send to the API endpoint
-for the get terminal checkout operation typically these are written to a http.Request
+/* GetTerminalCheckoutParams contains all the parameters to send to the API endpoint
+   for the get terminal checkout operation.
+
+   Typically these are written to a http.Request.
 */
 type GetTerminalCheckoutParams struct {
 
-	/*CheckoutID
-	  Unique ID for the desired `TerminalCheckout`
+	/* CheckoutID.
 
+	   Unique ID for the desired `TerminalCheckout`
 	*/
 	CheckoutID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the get terminal checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetTerminalCheckoutParams) WithDefaults() *GetTerminalCheckoutParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the get terminal checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetTerminalCheckoutParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get terminal checkout params

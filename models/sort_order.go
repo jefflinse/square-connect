@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m SortOrder) validateSortOrderEnum(path, location string, value SortOrder) error {
-	if err := validate.Enum(path, location, value, sortOrderEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, sortOrderEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m SortOrder) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this sort order based on context it is used
+func (m SortOrder) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

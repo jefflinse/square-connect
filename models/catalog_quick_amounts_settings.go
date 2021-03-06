@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -51,7 +52,6 @@ func (m *CatalogQuickAmountsSettings) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogQuickAmountsSettings) validateAmounts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Amounts) { // not required
 		return nil
 	}
@@ -79,6 +79,38 @@ func (m *CatalogQuickAmountsSettings) validateOption(formats strfmt.Registry) er
 
 	if err := validate.Required("option", "body", m.Option); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog quick amounts settings based on the context it is used
+func (m *CatalogQuickAmountsSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmounts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogQuickAmountsSettings) contextValidateAmounts(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Amounts); i++ {
+
+		if m.Amounts[i] != nil {
+			if err := m.Amounts[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("amounts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

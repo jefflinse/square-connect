@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -56,7 +57,7 @@ func init() {
 }
 
 func (m V1TenderEntryMethod) validateV1TenderEntryMethodEnum(path, location string, value V1TenderEntryMethod) error {
-	if err := validate.Enum(path, location, value, v1TenderEntryMethodEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, v1TenderEntryMethodEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -74,5 +75,10 @@ func (m V1TenderEntryMethod) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this v1 tender entry method based on context it is used
+func (m V1TenderEntryMethod) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

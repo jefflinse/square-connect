@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // UpdateWageSettingRequest Represents an update request for the `WageSetting` object describing a `TeamMember`.
+// Example: {"request_body":{"wage_setting":{"is_overtime_exempt":true,"job_assignments":[{"annual_rate":{"amount":3000000,"currency":"USD"},"job_title":"Manager","pay_type":"SALARY","weekly_hours":40},{"hourly_rate":{"amount":1200,"currency":"USD"},"job_title":"Cashier","pay_type":"HOURLY"}]}}}
 //
 // swagger:model UpdateWageSettingRequest
 type UpdateWageSettingRequest struct {
@@ -44,6 +47,34 @@ func (m *UpdateWageSettingRequest) validateWageSetting(formats strfmt.Registry) 
 
 	if m.WageSetting != nil {
 		if err := m.WageSetting.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("wage_setting")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update wage setting request based on the context it is used
+func (m *UpdateWageSettingRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateWageSetting(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateWageSettingRequest) contextValidateWageSetting(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WageSetting != nil {
+		if err := m.WageSetting.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("wage_setting")
 			}

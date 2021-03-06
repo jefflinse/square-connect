@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCancelPaymentByIdempotencyKeyParams creates a new CancelPaymentByIdempotencyKeyParams object
-// with the default values initialized.
+// NewCancelPaymentByIdempotencyKeyParams creates a new CancelPaymentByIdempotencyKeyParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCancelPaymentByIdempotencyKeyParams() *CancelPaymentByIdempotencyKeyParams {
-	var ()
 	return &CancelPaymentByIdempotencyKeyParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCancelPaymentByIdempotencyKeyParamsWithTimeout creates a new CancelPaymentByIdempotencyKeyParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCancelPaymentByIdempotencyKeyParamsWithTimeout(timeout time.Duration) *CancelPaymentByIdempotencyKeyParams {
-	var ()
 	return &CancelPaymentByIdempotencyKeyParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCancelPaymentByIdempotencyKeyParamsWithContext creates a new CancelPaymentByIdempotencyKeyParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCancelPaymentByIdempotencyKeyParamsWithContext(ctx context.Context) *CancelPaymentByIdempotencyKeyParams {
-	var ()
 	return &CancelPaymentByIdempotencyKeyParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCancelPaymentByIdempotencyKeyParamsWithHTTPClient creates a new CancelPaymentByIdempotencyKeyParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCancelPaymentByIdempotencyKeyParamsWithHTTPClient(client *http.Client) *CancelPaymentByIdempotencyKeyParams {
-	var ()
 	return &CancelPaymentByIdempotencyKeyParams{
 		HTTPClient: client,
 	}
 }
 
-/*CancelPaymentByIdempotencyKeyParams contains all the parameters to send to the API endpoint
-for the cancel payment by idempotency key operation typically these are written to a http.Request
+/* CancelPaymentByIdempotencyKeyParams contains all the parameters to send to the API endpoint
+   for the cancel payment by idempotency key operation.
+
+   Typically these are written to a http.Request.
 */
 type CancelPaymentByIdempotencyKeyParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CancelPaymentByIdempotencyKeyRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the cancel payment by idempotency key params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CancelPaymentByIdempotencyKeyParams) WithDefaults() *CancelPaymentByIdempotencyKeyParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the cancel payment by idempotency key params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CancelPaymentByIdempotencyKeyParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the cancel payment by idempotency key params
@@ -126,7 +140,6 @@ func (o *CancelPaymentByIdempotencyKeyParams) WriteToRequest(r runtime.ClientReq
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

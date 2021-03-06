@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateLocationParams creates a new CreateLocationParams object
-// with the default values initialized.
+// NewCreateLocationParams creates a new CreateLocationParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateLocationParams() *CreateLocationParams {
-	var ()
 	return &CreateLocationParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateLocationParamsWithTimeout creates a new CreateLocationParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateLocationParamsWithTimeout(timeout time.Duration) *CreateLocationParams {
-	var ()
 	return &CreateLocationParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateLocationParamsWithContext creates a new CreateLocationParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateLocationParamsWithContext(ctx context.Context) *CreateLocationParams {
-	var ()
 	return &CreateLocationParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateLocationParamsWithHTTPClient creates a new CreateLocationParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateLocationParamsWithHTTPClient(client *http.Client) *CreateLocationParams {
-	var ()
 	return &CreateLocationParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateLocationParams contains all the parameters to send to the API endpoint
-for the create location operation typically these are written to a http.Request
+/* CreateLocationParams contains all the parameters to send to the API endpoint
+   for the create location operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateLocationParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateLocationRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create location params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateLocationParams) WithDefaults() *CreateLocationParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create location params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateLocationParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create location params
@@ -126,7 +140,6 @@ func (o *CreateLocationParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

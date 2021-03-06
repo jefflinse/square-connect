@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // SearchSubscriptionsResponse Defines the fields that are included in the response from the
 // [SearchSubscriptions](#endpoint-subscriptions-searchsubscriptions) endpoint.
+// Example: {"subscriptions":[{"canceled_date":"2020-04-14","card_id":"ccof:mueUsvgajChmjEbp4GB","charged_through_date":"2020-05-14","created_at":"2020-08-03T21:53:10Z","customer_id":"CHFGVKYY8RSV93M5KCYTG4PN0G","id":"de86fc96-8664-474b-af1a-abbe59cacf0e","location_id":"S8GWD5R9QB376","paid_until_date":"2020-05-14","plan_id":"L3TJVDHVBEQEGQDEZL2JJM7R","start_date":"2020-04-14","status":"CANCELED","timezone":"UTC"},{"created_at":"2020-08-03T21:53:10Z","customer_id":"CHFGVKYY8RSV93M5KCYTG4PN0G","id":"56214fb2-cc85-47a1-93bc-44f3766bb56f","location_id":"S8GWD5R9QB376","plan_id":"6JHXF3B2CW3YKHDV4XEM674H","price_override_money":{"amount":100,"currency":"USD"},"start_date":"2020-08-01","status":"PENDING","tax_percentage":"5","timezone":"America/Los_Angeles","version":1594155459464},{"charged_through_date":"2020-06-11","created_at":"2020-08-03T21:53:10Z","customer_id":"CHFGVKYY8RSV93M5KCYTG4PN0G","id":"8151fc89-da15-4eb9-a685-1a70883cebfc","invoice_ids":["grebK0Q_l8H4fqoMMVvt-Q","rcX_i3sNmHTGKhI4W2mceA"],"location_id":"S8GWD5R9QB376","paid_until_date":"2020-06-11","plan_id":"6JHXF3B2CW3YKHDV4XEM674H","price_override_money":{"amount":1000,"currency":"USD"},"start_date":"2020-05-11","status":"ACTIVE","timezone":"America/Los_Angeles"}]}
 //
 // swagger:model SearchSubscriptionsResponse
 type SearchSubscriptionsResponse struct {
@@ -52,7 +54,6 @@ func (m *SearchSubscriptionsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchSubscriptionsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -77,7 +78,6 @@ func (m *SearchSubscriptionsResponse) validateErrors(formats strfmt.Registry) er
 }
 
 func (m *SearchSubscriptionsResponse) validateSubscriptions(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Subscriptions) { // not required
 		return nil
 	}
@@ -89,6 +89,60 @@ func (m *SearchSubscriptionsResponse) validateSubscriptions(formats strfmt.Regis
 
 		if m.Subscriptions[i] != nil {
 			if err := m.Subscriptions[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("subscriptions" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search subscriptions response based on the context it is used
+func (m *SearchSubscriptionsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSubscriptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchSubscriptionsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchSubscriptionsResponse) contextValidateSubscriptions(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Subscriptions); i++ {
+
+		if m.Subscriptions[i] != nil {
+			if err := m.Subscriptions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("subscriptions" + "." + strconv.Itoa(i))
 				}

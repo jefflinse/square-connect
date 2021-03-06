@@ -16,64 +16,79 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRemoveDisputeEvidenceParams creates a new RemoveDisputeEvidenceParams object
-// with the default values initialized.
+// NewRemoveDisputeEvidenceParams creates a new RemoveDisputeEvidenceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRemoveDisputeEvidenceParams() *RemoveDisputeEvidenceParams {
-	var ()
 	return &RemoveDisputeEvidenceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRemoveDisputeEvidenceParamsWithTimeout creates a new RemoveDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRemoveDisputeEvidenceParamsWithTimeout(timeout time.Duration) *RemoveDisputeEvidenceParams {
-	var ()
 	return &RemoveDisputeEvidenceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRemoveDisputeEvidenceParamsWithContext creates a new RemoveDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRemoveDisputeEvidenceParamsWithContext(ctx context.Context) *RemoveDisputeEvidenceParams {
-	var ()
 	return &RemoveDisputeEvidenceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRemoveDisputeEvidenceParamsWithHTTPClient creates a new RemoveDisputeEvidenceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRemoveDisputeEvidenceParamsWithHTTPClient(client *http.Client) *RemoveDisputeEvidenceParams {
-	var ()
 	return &RemoveDisputeEvidenceParams{
 		HTTPClient: client,
 	}
 }
 
-/*RemoveDisputeEvidenceParams contains all the parameters to send to the API endpoint
-for the remove dispute evidence operation typically these are written to a http.Request
+/* RemoveDisputeEvidenceParams contains all the parameters to send to the API endpoint
+   for the remove dispute evidence operation.
+
+   Typically these are written to a http.Request.
 */
 type RemoveDisputeEvidenceParams struct {
 
-	/*DisputeID
-	  The ID of the dispute you want to remove evidence from.
+	/* DisputeID.
 
+	   The ID of the dispute you want to remove evidence from.
 	*/
 	DisputeID string
-	/*EvidenceID
-	  The ID of the evidence you want to remove.
 
+	/* EvidenceID.
+
+	   The ID of the evidence you want to remove.
 	*/
 	EvidenceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the remove dispute evidence params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RemoveDisputeEvidenceParams) WithDefaults() *RemoveDisputeEvidenceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the remove dispute evidence params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RemoveDisputeEvidenceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the remove dispute evidence params

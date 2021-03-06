@@ -7,6 +7,7 @@ package models
 
 // AddGroupToCustomerRequest Defines the fields that are included in the request body of
 // a request to the [AddGroupToCustomer](#endpoint-addgrouptocustomer) endpoint.
+// Example: {"request_body":{}}
 //
 // swagger:model AddGroupToCustomerRequest
 type AddGroupToCustomerRequest interface{}

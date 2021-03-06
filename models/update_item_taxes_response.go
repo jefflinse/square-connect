@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,11 +15,12 @@ import (
 )
 
 // UpdateItemTaxesResponse update item taxes response
+// Example: {"updated_at":"2016-11-16T22:25:24.878Z"}
 //
 // swagger:model UpdateItemTaxesResponse
 type UpdateItemTaxesResponse struct {
 
-	// Information on any errors encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 
 	// The database [timestamp](https://developer.squareup.com/docs/build-basics/working-with-dates) of this update in RFC 3339 format, e.g., `2016-09-04T23:59:33.123Z`.
@@ -40,7 +42,6 @@ func (m *UpdateItemTaxesResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateItemTaxesResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -52,6 +53,38 @@ func (m *UpdateItemTaxesResponse) validateErrors(formats strfmt.Registry) error 
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update item taxes response based on the context it is used
+func (m *UpdateItemTaxesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateItemTaxesResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

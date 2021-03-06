@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // RetrieveLoyaltyAccountRequest A request to retrieve a loyalty account.
+// Example: {"request_params":"?account_id=79b807d2-d786-46a9-933b-918028d7a8c5"}
 //
 // swagger:model RetrieveLoyaltyAccountRequest
 type RetrieveLoyaltyAccountRequest interface{}

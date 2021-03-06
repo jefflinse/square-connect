@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // BatchRetrieveInventoryChangesRequest batch retrieve inventory changes request
+// Example: {"request_body":{"catalog_object_ids":["W62UWFY35CWMYGVWK6TWJDNI"],"location_ids":["C6W5YS5QM06F5"],"states":["IN_STOCK"],"types":["PHYSICAL_COUNT"],"updated_after":"2016-11-01T00:00:00.000Z","updated_before":"2016-12-01T00:00:00.000Z"}}
 //
 // swagger:model BatchRetrieveInventoryChangesRequest
 type BatchRetrieveInventoryChangesRequest struct {
@@ -53,6 +56,11 @@ type BatchRetrieveInventoryChangesRequest struct {
 
 // Validate validates this batch retrieve inventory changes request
 func (m *BatchRetrieveInventoryChangesRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this batch retrieve inventory changes request based on context it is used
+func (m *BatchRetrieveInventoryChangesRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

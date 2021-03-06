@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CreateLoyaltyRewardRequest A request to create a loyalty reward.
+// Example: {"request_body":{"idempotency_key":"18c2e5ea-a620-4b1f-ad60-7b167285e451","reward":{"loyalty_account_id":"5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd","order_id":"RFZfrdtm3mhO1oGzf5Cx7fEMsmGZY","reward_tier_id":"e1b39225-9da5-43d1-a5db-782cdd8ad94f"}}}
 //
 // swagger:model CreateLoyaltyRewardRequest
 type CreateLoyaltyRewardRequest struct {
@@ -53,11 +56,11 @@ func (m *CreateLoyaltyRewardRequest) validateIdempotencyKey(formats strfmt.Regis
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 128); err != nil {
 		return err
 	}
 
@@ -72,6 +75,34 @@ func (m *CreateLoyaltyRewardRequest) validateReward(formats strfmt.Registry) err
 
 	if m.Reward != nil {
 		if err := m.Reward.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("reward")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create loyalty reward request based on the context it is used
+func (m *CreateLoyaltyRewardRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateReward(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateLoyaltyRewardRequest) contextValidateReward(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Reward != nil {
+		if err := m.Reward.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("reward")
 			}

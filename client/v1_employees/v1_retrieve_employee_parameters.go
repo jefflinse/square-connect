@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewV1RetrieveEmployeeParams creates a new V1RetrieveEmployeeParams object
-// with the default values initialized.
+// NewV1RetrieveEmployeeParams creates a new V1RetrieveEmployeeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewV1RetrieveEmployeeParams() *V1RetrieveEmployeeParams {
-	var ()
 	return &V1RetrieveEmployeeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewV1RetrieveEmployeeParamsWithTimeout creates a new V1RetrieveEmployeeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewV1RetrieveEmployeeParamsWithTimeout(timeout time.Duration) *V1RetrieveEmployeeParams {
-	var ()
 	return &V1RetrieveEmployeeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewV1RetrieveEmployeeParamsWithContext creates a new V1RetrieveEmployeeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewV1RetrieveEmployeeParamsWithContext(ctx context.Context) *V1RetrieveEmployeeParams {
-	var ()
 	return &V1RetrieveEmployeeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewV1RetrieveEmployeeParamsWithHTTPClient creates a new V1RetrieveEmployeeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewV1RetrieveEmployeeParamsWithHTTPClient(client *http.Client) *V1RetrieveEmployeeParams {
-	var ()
 	return &V1RetrieveEmployeeParams{
 		HTTPClient: client,
 	}
 }
 
-/*V1RetrieveEmployeeParams contains all the parameters to send to the API endpoint
-for the v1 retrieve employee operation typically these are written to a http.Request
+/* V1RetrieveEmployeeParams contains all the parameters to send to the API endpoint
+   for the v1 retrieve employee operation.
+
+   Typically these are written to a http.Request.
 */
 type V1RetrieveEmployeeParams struct {
 
-	/*EmployeeID
-	  The employee's ID.
+	/* EmployeeID.
 
+	   The employee's ID.
 	*/
 	EmployeeID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the v1 retrieve employee params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1RetrieveEmployeeParams) WithDefaults() *V1RetrieveEmployeeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the v1 retrieve employee params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1RetrieveEmployeeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the v1 retrieve employee params

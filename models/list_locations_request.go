@@ -7,6 +7,7 @@ package models
 
 // ListLocationsRequest Defines the fields that are included in requests to
 // the __ListLocations__ endpoint.
+// Example: {}
 //
 // swagger:model ListLocationsRequest
 type ListLocationsRequest interface{}

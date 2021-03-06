@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveTeamMemberParams creates a new RetrieveTeamMemberParams object
-// with the default values initialized.
+// NewRetrieveTeamMemberParams creates a new RetrieveTeamMemberParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveTeamMemberParams() *RetrieveTeamMemberParams {
-	var ()
 	return &RetrieveTeamMemberParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveTeamMemberParamsWithTimeout creates a new RetrieveTeamMemberParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveTeamMemberParamsWithTimeout(timeout time.Duration) *RetrieveTeamMemberParams {
-	var ()
 	return &RetrieveTeamMemberParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveTeamMemberParamsWithContext creates a new RetrieveTeamMemberParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveTeamMemberParamsWithContext(ctx context.Context) *RetrieveTeamMemberParams {
-	var ()
 	return &RetrieveTeamMemberParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveTeamMemberParamsWithHTTPClient creates a new RetrieveTeamMemberParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveTeamMemberParamsWithHTTPClient(client *http.Client) *RetrieveTeamMemberParams {
-	var ()
 	return &RetrieveTeamMemberParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveTeamMemberParams contains all the parameters to send to the API endpoint
-for the retrieve team member operation typically these are written to a http.Request
+/* RetrieveTeamMemberParams contains all the parameters to send to the API endpoint
+   for the retrieve team member operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveTeamMemberParams struct {
 
-	/*TeamMemberID
-	  The ID of the team member to retrieve.
+	/* TeamMemberID.
 
+	   The ID of the team member to retrieve.
 	*/
 	TeamMemberID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve team member params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveTeamMemberParams) WithDefaults() *RetrieveTeamMemberParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve team member params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveTeamMemberParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve team member params

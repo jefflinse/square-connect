@@ -17,64 +17,79 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListWorkweekConfigsParams creates a new ListWorkweekConfigsParams object
-// with the default values initialized.
+// NewListWorkweekConfigsParams creates a new ListWorkweekConfigsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListWorkweekConfigsParams() *ListWorkweekConfigsParams {
-	var ()
 	return &ListWorkweekConfigsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListWorkweekConfigsParamsWithTimeout creates a new ListWorkweekConfigsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListWorkweekConfigsParamsWithTimeout(timeout time.Duration) *ListWorkweekConfigsParams {
-	var ()
 	return &ListWorkweekConfigsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListWorkweekConfigsParamsWithContext creates a new ListWorkweekConfigsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListWorkweekConfigsParamsWithContext(ctx context.Context) *ListWorkweekConfigsParams {
-	var ()
 	return &ListWorkweekConfigsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListWorkweekConfigsParamsWithHTTPClient creates a new ListWorkweekConfigsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListWorkweekConfigsParamsWithHTTPClient(client *http.Client) *ListWorkweekConfigsParams {
-	var ()
 	return &ListWorkweekConfigsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListWorkweekConfigsParams contains all the parameters to send to the API endpoint
-for the list workweek configs operation typically these are written to a http.Request
+/* ListWorkweekConfigsParams contains all the parameters to send to the API endpoint
+   for the list workweek configs operation.
+
+   Typically these are written to a http.Request.
 */
 type ListWorkweekConfigsParams struct {
 
-	/*Cursor
-	  Pointer to the next page of Workweek Config results to fetch.
+	/* Cursor.
 
+	   Pointer to the next page of Workweek Config results to fetch.
 	*/
 	Cursor *string
-	/*Limit
-	  Maximum number of Workweek Configs to return per page.
 
+	/* Limit.
+
+	   Maximum number of Workweek Configs to return per page.
 	*/
 	Limit *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list workweek configs params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListWorkweekConfigsParams) WithDefaults() *ListWorkweekConfigsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list workweek configs params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListWorkweekConfigsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list workweek configs params
@@ -144,32 +159,34 @@ func (o *ListWorkweekConfigsParams) WriteToRequest(r runtime.ClientRequest, reg 
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

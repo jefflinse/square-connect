@@ -25,13 +25,16 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ObtainToken(params *ObtainTokenParams) (*ObtainTokenOK, error)
+	ObtainToken(params *ObtainTokenParams, opts ...ClientOption) (*ObtainTokenOK, error)
 
-	RenewToken(params *RenewTokenParams, authInfo runtime.ClientAuthInfoWriter) (*RenewTokenOK, error)
+	RenewToken(params *RenewTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RenewTokenOK, error)
 
-	RevokeToken(params *RevokeTokenParams, authInfo runtime.ClientAuthInfoWriter) (*RevokeTokenOK, error)
+	RevokeToken(params *RevokeTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RevokeTokenOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -44,7 +47,6 @@ type ClientService interface {
 The endpoint supports distinct methods of obtaining OAuth access tokens.
 Applications specify a method by adding the `grant_type` parameter
 in the request and also provide relevant information.
-For more information, see [OAuth access token management](/authz/oauth/how-it-works#oauth-access-token-management).
 
 __Note:__ Regardless of the method application specified,
 the endpoint always returns two items; an OAuth access token and
@@ -53,13 +55,12 @@ a refresh token in the response.
 __OAuth tokens should only live on secure servers. Application clients
 should never interact directly with OAuth tokens__.
 */
-func (a *Client) ObtainToken(params *ObtainTokenParams) (*ObtainTokenOK, error) {
+func (a *Client) ObtainToken(params *ObtainTokenParams, opts ...ClientOption) (*ObtainTokenOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewObtainTokenParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ObtainToken",
 		Method:             "POST",
 		PathPattern:        "/oauth2/token",
@@ -70,7 +71,12 @@ func (a *Client) ObtainToken(params *ObtainTokenParams) (*ObtainTokenOK, error) 
 		Reader:             &ObtainTokenReader{formats: a.formats},
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -108,13 +114,12 @@ Authorization: Client APPLICATION_SECRET
 Replace `APPLICATION_SECRET` with the application secret on the Credentials
 page in the [application dashboard](https://connect.squareup.com/apps).
 */
-func (a *Client) RenewToken(params *RenewTokenParams, authInfo runtime.ClientAuthInfoWriter) (*RenewTokenOK, error) {
+func (a *Client) RenewToken(params *RenewTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RenewTokenOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRenewTokenParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RenewToken",
 		Method:             "POST",
 		PathPattern:        "/oauth2/clients/{client_id}/access-token/renew",
@@ -126,7 +131,12 @@ func (a *Client) RenewToken(params *RenewTokenParams, authInfo runtime.ClientAut
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -158,15 +168,14 @@ Authorization: Client APPLICATION_SECRET
 ```
 
 Replace `APPLICATION_SECRET` with the application secret on the Credentials
-page in the [application dashboard](https://connect.squareup.com/apps).
+page in the [Developer Dashboard](https://developer.squareup.com/apps).
 */
-func (a *Client) RevokeToken(params *RevokeTokenParams, authInfo runtime.ClientAuthInfoWriter) (*RevokeTokenOK, error) {
+func (a *Client) RevokeToken(params *RevokeTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RevokeTokenOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRevokeTokenParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RevokeToken",
 		Method:             "POST",
 		PathPattern:        "/oauth2/revoke",
@@ -178,7 +187,12 @@ func (a *Client) RevokeToken(params *RevokeTokenParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

@@ -25,17 +25,20 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateCustomerGroup(params *CreateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCustomerGroupOK, error)
+	CreateCustomerGroup(params *CreateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCustomerGroupOK, error)
 
-	DeleteCustomerGroup(params *DeleteCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCustomerGroupOK, error)
+	DeleteCustomerGroup(params *DeleteCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCustomerGroupOK, error)
 
-	ListCustomerGroups(params *ListCustomerGroupsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCustomerGroupsOK, error)
+	ListCustomerGroups(params *ListCustomerGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCustomerGroupsOK, error)
 
-	RetrieveCustomerGroup(params *RetrieveCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCustomerGroupOK, error)
+	RetrieveCustomerGroup(params *RetrieveCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCustomerGroupOK, error)
 
-	UpdateCustomerGroup(params *UpdateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateCustomerGroupOK, error)
+	UpdateCustomerGroup(params *UpdateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateCustomerGroupOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -47,13 +50,12 @@ type ClientService interface {
 
 The request must include the `name` value of the group.
 */
-func (a *Client) CreateCustomerGroup(params *CreateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*CreateCustomerGroupOK, error) {
+func (a *Client) CreateCustomerGroup(params *CreateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateCustomerGroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateCustomerGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateCustomerGroup",
 		Method:             "POST",
 		PathPattern:        "/v2/customers/groups",
@@ -65,7 +67,12 @@ func (a *Client) CreateCustomerGroup(params *CreateCustomerGroupParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -84,13 +91,12 @@ func (a *Client) CreateCustomerGroup(params *CreateCustomerGroupParams, authInfo
 
   Deletes a customer group as identified by the `group_id` value.
 */
-func (a *Client) DeleteCustomerGroup(params *DeleteCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCustomerGroupOK, error) {
+func (a *Client) DeleteCustomerGroup(params *DeleteCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCustomerGroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteCustomerGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteCustomerGroup",
 		Method:             "DELETE",
 		PathPattern:        "/v2/customers/groups/{group_id}",
@@ -102,7 +108,12 @@ func (a *Client) DeleteCustomerGroup(params *DeleteCustomerGroupParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -121,13 +132,12 @@ func (a *Client) DeleteCustomerGroup(params *DeleteCustomerGroupParams, authInfo
 
   Retrieves the list of customer groups of a business.
 */
-func (a *Client) ListCustomerGroups(params *ListCustomerGroupsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCustomerGroupsOK, error) {
+func (a *Client) ListCustomerGroups(params *ListCustomerGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCustomerGroupsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListCustomerGroupsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListCustomerGroups",
 		Method:             "GET",
 		PathPattern:        "/v2/customers/groups",
@@ -139,7 +149,12 @@ func (a *Client) ListCustomerGroups(params *ListCustomerGroupsParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -158,13 +173,12 @@ func (a *Client) ListCustomerGroups(params *ListCustomerGroupsParams, authInfo r
 
   Retrieves a specific customer group as identified by the `group_id` value.
 */
-func (a *Client) RetrieveCustomerGroup(params *RetrieveCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCustomerGroupOK, error) {
+func (a *Client) RetrieveCustomerGroup(params *RetrieveCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCustomerGroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveCustomerGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveCustomerGroup",
 		Method:             "GET",
 		PathPattern:        "/v2/customers/groups/{group_id}",
@@ -176,7 +190,12 @@ func (a *Client) RetrieveCustomerGroup(params *RetrieveCustomerGroupParams, auth
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -195,13 +214,12 @@ func (a *Client) RetrieveCustomerGroup(params *RetrieveCustomerGroupParams, auth
 
   Updates a customer group as identified by the `group_id` value.
 */
-func (a *Client) UpdateCustomerGroup(params *UpdateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateCustomerGroupOK, error) {
+func (a *Client) UpdateCustomerGroup(params *UpdateCustomerGroupParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateCustomerGroupOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateCustomerGroupParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateCustomerGroup",
 		Method:             "PUT",
 		PathPattern:        "/v2/customers/groups/{group_id}",
@@ -213,7 +231,12 @@ func (a *Client) UpdateCustomerGroup(params *UpdateCustomerGroupParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

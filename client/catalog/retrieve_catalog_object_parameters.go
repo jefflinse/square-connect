@@ -17,75 +17,98 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewRetrieveCatalogObjectParams creates a new RetrieveCatalogObjectParams object
-// with the default values initialized.
+// NewRetrieveCatalogObjectParams creates a new RetrieveCatalogObjectParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveCatalogObjectParams() *RetrieveCatalogObjectParams {
-	var ()
 	return &RetrieveCatalogObjectParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveCatalogObjectParamsWithTimeout creates a new RetrieveCatalogObjectParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveCatalogObjectParamsWithTimeout(timeout time.Duration) *RetrieveCatalogObjectParams {
-	var ()
 	return &RetrieveCatalogObjectParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveCatalogObjectParamsWithContext creates a new RetrieveCatalogObjectParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveCatalogObjectParamsWithContext(ctx context.Context) *RetrieveCatalogObjectParams {
-	var ()
 	return &RetrieveCatalogObjectParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveCatalogObjectParamsWithHTTPClient creates a new RetrieveCatalogObjectParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveCatalogObjectParamsWithHTTPClient(client *http.Client) *RetrieveCatalogObjectParams {
-	var ()
 	return &RetrieveCatalogObjectParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveCatalogObjectParams contains all the parameters to send to the API endpoint
-for the retrieve catalog object operation typically these are written to a http.Request
+/* RetrieveCatalogObjectParams contains all the parameters to send to the API endpoint
+   for the retrieve catalog object operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveCatalogObjectParams struct {
 
-	/*IncludeRelatedObjects
-	  If `true`, the response will include additional objects that are related to the
+	/* CatalogVersion.
+
+	     Requests objects as of a specific version of the catalog. This allows you to retrieve historical
+	versions of objects. The value to retrieve a specific version of an object can be found
+	in the version field of `CatalogObject`s.
+
+	     Format: int64
+	*/
+	CatalogVersion *int64
+
+	/* IncludeRelatedObjects.
+
+	     If `true`, the response will include additional objects that are related to the
 	requested object, as follows:
 
-	If the `object` field of the response contains a CatalogItem,
-	its associated CatalogCategory, CatalogTax objects,
-	CatalogImages and CatalogModifierLists
-	will be returned in the `related_objects` field of the response. If the `object`
-	field of the response contains a CatalogItemVariation,
-	its parent CatalogItem will be returned in the `related_objects` field of
-	the response.
+	If the `object` field of the response contains a `CatalogItem`, its associated
+	`CatalogCategory`, `CatalogTax`, `CatalogImage` and `CatalogModifierList` objects will
+	be returned in the `related_objects` field of the response. If the `object` field of
+	the response contains a `CatalogItemVariation`, its parent `CatalogItem` will be returned
+	in the `related_objects` field of the response.
 
 	Default value: `false`
-
 	*/
 	IncludeRelatedObjects *bool
-	/*ObjectID
-	  The object ID of any type of catalog objects to be retrieved.
 
+	/* ObjectID.
+
+	   The object ID of any type of catalog objects to be retrieved.
 	*/
 	ObjectID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve catalog object params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveCatalogObjectParams) WithDefaults() *RetrieveCatalogObjectParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve catalog object params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveCatalogObjectParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve catalog object params
@@ -121,6 +144,17 @@ func (o *RetrieveCatalogObjectParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCatalogVersion adds the catalogVersion to the retrieve catalog object params
+func (o *RetrieveCatalogObjectParams) WithCatalogVersion(catalogVersion *int64) *RetrieveCatalogObjectParams {
+	o.SetCatalogVersion(catalogVersion)
+	return o
+}
+
+// SetCatalogVersion adds the catalogVersion to the retrieve catalog object params
+func (o *RetrieveCatalogObjectParams) SetCatalogVersion(catalogVersion *int64) {
+	o.CatalogVersion = catalogVersion
+}
+
 // WithIncludeRelatedObjects adds the includeRelatedObjects to the retrieve catalog object params
 func (o *RetrieveCatalogObjectParams) WithIncludeRelatedObjects(includeRelatedObjects *bool) *RetrieveCatalogObjectParams {
 	o.SetIncludeRelatedObjects(includeRelatedObjects)
@@ -151,20 +185,38 @@ func (o *RetrieveCatalogObjectParams) WriteToRequest(r runtime.ClientRequest, re
 	}
 	var res []error
 
+	if o.CatalogVersion != nil {
+
+		// query param catalog_version
+		var qrCatalogVersion int64
+
+		if o.CatalogVersion != nil {
+			qrCatalogVersion = *o.CatalogVersion
+		}
+		qCatalogVersion := swag.FormatInt64(qrCatalogVersion)
+		if qCatalogVersion != "" {
+
+			if err := r.SetQueryParam("catalog_version", qCatalogVersion); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.IncludeRelatedObjects != nil {
 
 		// query param include_related_objects
 		var qrIncludeRelatedObjects bool
+
 		if o.IncludeRelatedObjects != nil {
 			qrIncludeRelatedObjects = *o.IncludeRelatedObjects
 		}
 		qIncludeRelatedObjects := swag.FormatBool(qrIncludeRelatedObjects)
 		if qIncludeRelatedObjects != "" {
+
 			if err := r.SetQueryParam("include_related_objects", qIncludeRelatedObjects); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param object_id

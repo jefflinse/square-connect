@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // BatchChangeInventoryResponse batch change inventory response
+// Example: {"counts":[{"calculated_at":"2016-11-16T22:28:01.223Z","catalog_object_id":"W62UWFY35CWMYGVWK6TWJDNI","catalog_object_type":"ITEM_VARIATION","location_id":"C6W5YS5QM06F5","quantity":"53","state":"IN_STOCK"}],"errors":[]}
 //
 // swagger:model BatchChangeInventoryResponse
 type BatchChangeInventoryResponse struct {
@@ -44,7 +46,6 @@ func (m *BatchChangeInventoryResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *BatchChangeInventoryResponse) validateCounts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Counts) { // not required
 		return nil
 	}
@@ -69,7 +70,6 @@ func (m *BatchChangeInventoryResponse) validateCounts(formats strfmt.Registry) e
 }
 
 func (m *BatchChangeInventoryResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -81,6 +81,60 @@ func (m *BatchChangeInventoryResponse) validateErrors(formats strfmt.Registry) e
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this batch change inventory response based on the context it is used
+func (m *BatchChangeInventoryResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCounts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BatchChangeInventoryResponse) contextValidateCounts(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Counts); i++ {
+
+		if m.Counts[i] != nil {
+			if err := m.Counts[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("counts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BatchChangeInventoryResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

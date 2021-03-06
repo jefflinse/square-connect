@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetInvoiceParams creates a new GetInvoiceParams object
-// with the default values initialized.
+// NewGetInvoiceParams creates a new GetInvoiceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetInvoiceParams() *GetInvoiceParams {
-	var ()
 	return &GetInvoiceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGetInvoiceParamsWithTimeout creates a new GetInvoiceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGetInvoiceParamsWithTimeout(timeout time.Duration) *GetInvoiceParams {
-	var ()
 	return &GetInvoiceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGetInvoiceParamsWithContext creates a new GetInvoiceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGetInvoiceParamsWithContext(ctx context.Context) *GetInvoiceParams {
-	var ()
 	return &GetInvoiceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGetInvoiceParamsWithHTTPClient creates a new GetInvoiceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGetInvoiceParamsWithHTTPClient(client *http.Client) *GetInvoiceParams {
-	var ()
 	return &GetInvoiceParams{
 		HTTPClient: client,
 	}
 }
 
-/*GetInvoiceParams contains all the parameters to send to the API endpoint
-for the get invoice operation typically these are written to a http.Request
+/* GetInvoiceParams contains all the parameters to send to the API endpoint
+   for the get invoice operation.
+
+   Typically these are written to a http.Request.
 */
 type GetInvoiceParams struct {
 
-	/*InvoiceID
-	  The id of the invoice to retrieve.
+	/* InvoiceID.
 
+	   The id of the invoice to retrieve.
 	*/
 	InvoiceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the get invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetInvoiceParams) WithDefaults() *GetInvoiceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the get invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetInvoiceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get invoice params

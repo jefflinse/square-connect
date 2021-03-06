@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,11 +15,12 @@ import (
 )
 
 // UpdateInvoiceRequest Describes a `UpdateInvoice` request.
+// Example: {"request_body":{"fields_to_clear":["payments_requests[2da7964f-f3d2-4f43-81e8-5aa220bf3355].reminders"],"idempotency_key":"4ee82288-0910-499e-ab4c-5d0071dad1be","invoice":{"payment_requests":[{"tipping_enabled":false,"uid":"2da7964f-f3d2-4f43-81e8-5aa220bf3355"}]}}}
 //
 // swagger:model UpdateInvoiceRequest
 type UpdateInvoiceRequest struct {
 
-	// List of fields to clear.
+	// The list of fields to clear.
 	// For examples, see [Update an invoice](https://developer.squareup.com/docs/docs/invoices-api/overview#update-an-invoice).
 	FieldsToClear []string `json:"fields_to_clear"`
 
@@ -29,9 +32,9 @@ type UpdateInvoiceRequest struct {
 	// Max Length: 128
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 
-	// The invoice fields to update. You need to only specify the fields you want to change.
-	// The current invoice version must be specified in the version field. For more information,
-	// see [Update an invoice](invoices-api/overview#update-an-invoice).
+	// The invoice fields to update.
+	// The current invoice version must be specified in the `version` field. For more information,
+	// see [Update an invoice](https://developer.squareup.com/docs/docs/invoices-api/overview#update-an-invoice).
 	// Required: true
 	Invoice *Invoice `json:"invoice"`
 }
@@ -55,12 +58,11 @@ func (m *UpdateInvoiceRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateInvoiceRequest) validateIdempotencyKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.IdempotencyKey) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", m.IdempotencyKey, 128); err != nil {
 		return err
 	}
 
@@ -75,6 +77,34 @@ func (m *UpdateInvoiceRequest) validateInvoice(formats strfmt.Registry) error {
 
 	if m.Invoice != nil {
 		if err := m.Invoice.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("invoice")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update invoice request based on the context it is used
+func (m *UpdateInvoiceRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateInvoice(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateInvoiceRequest) contextValidateInvoice(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Invoice != nil {
+		if err := m.Invoice.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("invoice")
 			}

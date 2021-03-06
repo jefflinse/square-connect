@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // BatchDeleteCatalogObjectsRequest batch delete catalog objects request
+// Example: {"request_body":{"object_ids":["W62UWFY35CWMYGVWK6TWJDNI","AA27W3M2GGTF3H6AVPNB77CK"]}}
 //
 // swagger:model BatchDeleteCatalogObjectsRequest
 type BatchDeleteCatalogObjectsRequest struct {
@@ -23,6 +26,11 @@ type BatchDeleteCatalogObjectsRequest struct {
 
 // Validate validates this batch delete catalog objects request
 func (m *BatchDeleteCatalogObjectsRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this batch delete catalog objects request based on context it is used
+func (m *BatchDeleteCatalogObjectsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

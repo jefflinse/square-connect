@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateTeamMemberParams creates a new CreateTeamMemberParams object
-// with the default values initialized.
+// NewCreateTeamMemberParams creates a new CreateTeamMemberParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateTeamMemberParams() *CreateTeamMemberParams {
-	var ()
 	return &CreateTeamMemberParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateTeamMemberParamsWithTimeout creates a new CreateTeamMemberParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateTeamMemberParamsWithTimeout(timeout time.Duration) *CreateTeamMemberParams {
-	var ()
 	return &CreateTeamMemberParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateTeamMemberParamsWithContext creates a new CreateTeamMemberParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateTeamMemberParamsWithContext(ctx context.Context) *CreateTeamMemberParams {
-	var ()
 	return &CreateTeamMemberParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateTeamMemberParamsWithHTTPClient creates a new CreateTeamMemberParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateTeamMemberParamsWithHTTPClient(client *http.Client) *CreateTeamMemberParams {
-	var ()
 	return &CreateTeamMemberParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateTeamMemberParams contains all the parameters to send to the API endpoint
-for the create team member operation typically these are written to a http.Request
+/* CreateTeamMemberParams contains all the parameters to send to the API endpoint
+   for the create team member operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateTeamMemberParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateTeamMemberRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create team member params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateTeamMemberParams) WithDefaults() *CreateTeamMemberParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create team member params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateTeamMemberParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create team member params
@@ -126,7 +140,6 @@ func (o *CreateTeamMemberParams) WriteToRequest(r runtime.ClientRequest, reg str
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

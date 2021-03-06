@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -32,6 +34,11 @@ type FilterValue struct {
 
 // Validate validates this filter value
 func (m *FilterValue) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this filter value based on context it is used
+func (m *FilterValue) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

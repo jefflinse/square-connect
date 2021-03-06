@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // RetrieveInventoryPhysicalCountRequest retrieve inventory physical count request
+// Example: {}
 //
 // swagger:model RetrieveInventoryPhysicalCountRequest
 type RetrieveInventoryPhysicalCountRequest interface{}

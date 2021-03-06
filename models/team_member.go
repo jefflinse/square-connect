@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -70,13 +72,40 @@ func (m *TeamMember) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TeamMember) validateAssignedLocations(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AssignedLocations) { // not required
 		return nil
 	}
 
 	if m.AssignedLocations != nil {
 		if err := m.AssignedLocations.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("assigned_locations")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this team member based on the context it is used
+func (m *TeamMember) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAssignedLocations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *TeamMember) contextValidateAssignedLocations(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AssignedLocations != nil {
+		if err := m.AssignedLocations.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("assigned_locations")
 			}

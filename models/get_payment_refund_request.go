@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // GetPaymentRefundRequest Retrieves a specific `Refund` using the `refund_id`.
+// Example: {"request_body":{}}
 //
 // swagger:model GetPaymentRefundRequest
 type GetPaymentRefundRequest interface{}

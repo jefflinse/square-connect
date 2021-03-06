@@ -25,11 +25,14 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListCustomerSegments(params *ListCustomerSegmentsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCustomerSegmentsOK, error)
+	ListCustomerSegments(params *ListCustomerSegmentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCustomerSegmentsOK, error)
 
-	RetrieveCustomerSegment(params *RetrieveCustomerSegmentParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCustomerSegmentOK, error)
+	RetrieveCustomerSegment(params *RetrieveCustomerSegmentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCustomerSegmentOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -39,13 +42,12 @@ type ClientService interface {
 
   Retrieves the list of customer segments of a business.
 */
-func (a *Client) ListCustomerSegments(params *ListCustomerSegmentsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCustomerSegmentsOK, error) {
+func (a *Client) ListCustomerSegments(params *ListCustomerSegmentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCustomerSegmentsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListCustomerSegmentsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListCustomerSegments",
 		Method:             "GET",
 		PathPattern:        "/v2/customers/segments",
@@ -57,7 +59,12 @@ func (a *Client) ListCustomerSegments(params *ListCustomerSegmentsParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -76,13 +83,12 @@ func (a *Client) ListCustomerSegments(params *ListCustomerSegmentsParams, authIn
 
   Retrieves a specific customer segment as identified by the `segment_id` value.
 */
-func (a *Client) RetrieveCustomerSegment(params *RetrieveCustomerSegmentParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCustomerSegmentOK, error) {
+func (a *Client) RetrieveCustomerSegment(params *RetrieveCustomerSegmentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCustomerSegmentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveCustomerSegmentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveCustomerSegment",
 		Method:             "GET",
 		PathPattern:        "/v2/customers/segments/{segment_id}",
@@ -94,7 +100,12 @@ func (a *Client) RetrieveCustomerSegment(params *RetrieveCustomerSegmentParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

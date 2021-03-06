@@ -29,9 +29,8 @@ func (o *SubmitEvidenceReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewSubmitEvidenceOK() *SubmitEvidenceOK {
 	return &SubmitEvidenceOK{}
 }
 
-/*SubmitEvidenceOK handles this case with default header values.
+/* SubmitEvidenceOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type SubmitEvidenceOK struct {
 func (o *SubmitEvidenceOK) Error() string {
 	return fmt.Sprintf("[POST /v2/disputes/{dispute_id}/submit-evidence][%d] submitEvidenceOK  %+v", 200, o.Payload)
 }
-
 func (o *SubmitEvidenceOK) GetPayload() *models.SubmitEvidenceResponse {
 	return o.Payload
 }

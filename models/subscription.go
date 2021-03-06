@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -112,12 +114,11 @@ func (m *Subscription) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Subscription) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 255); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 255); err != nil {
 		return err
 	}
 
@@ -125,13 +126,40 @@ func (m *Subscription) validateID(formats strfmt.Registry) error {
 }
 
 func (m *Subscription) validatePriceOverrideMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PriceOverrideMoney) { // not required
 		return nil
 	}
 
 	if m.PriceOverrideMoney != nil {
 		if err := m.PriceOverrideMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("price_override_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this subscription based on the context it is used
+func (m *Subscription) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePriceOverrideMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Subscription) contextValidatePriceOverrideMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PriceOverrideMoney != nil {
+		if err := m.PriceOverrideMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("price_override_money")
 			}

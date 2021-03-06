@@ -25,15 +25,26 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CancelTerminalCheckout(params *CancelTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*CancelTerminalCheckoutOK, error)
+	CancelTerminalCheckout(params *CancelTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTerminalCheckoutOK, error)
 
-	CreateTerminalCheckout(params *CreateTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*CreateTerminalCheckoutOK, error)
+	CancelTerminalRefund(params *CancelTerminalRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTerminalRefundOK, error)
 
-	GetTerminalCheckout(params *GetTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*GetTerminalCheckoutOK, error)
+	CreateTerminalCheckout(params *CreateTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTerminalCheckoutOK, error)
 
-	SearchTerminalCheckouts(params *SearchTerminalCheckoutsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchTerminalCheckoutsOK, error)
+	CreateTerminalRefund(params *CreateTerminalRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTerminalRefundOK, error)
+
+	GetTerminalCheckout(params *GetTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTerminalCheckoutOK, error)
+
+	GetTerminalRefund(params *GetTerminalRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTerminalRefundOK, error)
+
+	SearchTerminalCheckouts(params *SearchTerminalCheckoutsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchTerminalCheckoutsOK, error)
+
+	SearchTerminalRefunds(params *SearchTerminalRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchTerminalRefundsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -41,15 +52,14 @@ type ClientService interface {
 /*
   CancelTerminalCheckout cancels terminal checkout
 
-  Cancels a Terminal checkout request, if the status of the request permits it.
+  Cancels a Terminal checkout request if the status of the request permits it.
 */
-func (a *Client) CancelTerminalCheckout(params *CancelTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*CancelTerminalCheckoutOK, error) {
+func (a *Client) CancelTerminalCheckout(params *CancelTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTerminalCheckoutOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCancelTerminalCheckoutParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CancelTerminalCheckout",
 		Method:             "POST",
 		PathPattern:        "/v2/terminals/checkouts/{checkout_id}/cancel",
@@ -61,7 +71,12 @@ func (a *Client) CancelTerminalCheckout(params *CancelTerminalCheckoutParams, au
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -76,17 +91,57 @@ func (a *Client) CancelTerminalCheckout(params *CancelTerminalCheckoutParams, au
 }
 
 /*
+  CancelTerminalRefund cancels terminal refund
+
+  Cancels an Interac terminal refund request by refund request ID if the status of the request permits it.
+*/
+func (a *Client) CancelTerminalRefund(params *CancelTerminalRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelTerminalRefundOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCancelTerminalRefundParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CancelTerminalRefund",
+		Method:             "POST",
+		PathPattern:        "/v2/terminals/refunds/{terminal_refund_id}/cancel",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CancelTerminalRefundReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CancelTerminalRefundOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CancelTerminalRefund: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   CreateTerminalCheckout creates terminal checkout
 
   Creates a new Terminal checkout request and sends it to the specified device to take a payment for the requested amount.
 */
-func (a *Client) CreateTerminalCheckout(params *CreateTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*CreateTerminalCheckoutOK, error) {
+func (a *Client) CreateTerminalCheckout(params *CreateTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTerminalCheckoutOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateTerminalCheckoutParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateTerminalCheckout",
 		Method:             "POST",
 		PathPattern:        "/v2/terminals/checkouts",
@@ -98,7 +153,12 @@ func (a *Client) CreateTerminalCheckout(params *CreateTerminalCheckoutParams, au
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -113,17 +173,57 @@ func (a *Client) CreateTerminalCheckout(params *CreateTerminalCheckoutParams, au
 }
 
 /*
+  CreateTerminalRefund creates terminal refund
+
+  Creates a request to refund an Interac payment completed on a Square Terminal.
+*/
+func (a *Client) CreateTerminalRefund(params *CreateTerminalRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateTerminalRefundOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateTerminalRefundParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "CreateTerminalRefund",
+		Method:             "POST",
+		PathPattern:        "/v2/terminals/refunds",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateTerminalRefundReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateTerminalRefundOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for CreateTerminalRefund: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   GetTerminalCheckout gets terminal checkout
 
   Retrieves a Terminal checkout request by checkout_id.
 */
-func (a *Client) GetTerminalCheckout(params *GetTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter) (*GetTerminalCheckoutOK, error) {
+func (a *Client) GetTerminalCheckout(params *GetTerminalCheckoutParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTerminalCheckoutOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetTerminalCheckoutParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetTerminalCheckout",
 		Method:             "GET",
 		PathPattern:        "/v2/terminals/checkouts/{checkout_id}",
@@ -135,7 +235,12 @@ func (a *Client) GetTerminalCheckout(params *GetTerminalCheckoutParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -150,17 +255,57 @@ func (a *Client) GetTerminalCheckout(params *GetTerminalCheckoutParams, authInfo
 }
 
 /*
+  GetTerminalRefund gets terminal refund
+
+  Retrieves an Interac terminal refund object by ID.
+*/
+func (a *Client) GetTerminalRefund(params *GetTerminalRefundParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTerminalRefundOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetTerminalRefundParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetTerminalRefund",
+		Method:             "GET",
+		PathPattern:        "/v2/terminals/refunds/{terminal_refund_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetTerminalRefundReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetTerminalRefundOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for GetTerminalRefund: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
   SearchTerminalCheckouts searches terminal checkouts
 
   Retrieves a filtered list of Terminal checkout requests created by the account making the request.
 */
-func (a *Client) SearchTerminalCheckouts(params *SearchTerminalCheckoutsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchTerminalCheckoutsOK, error) {
+func (a *Client) SearchTerminalCheckouts(params *SearchTerminalCheckoutsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchTerminalCheckoutsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchTerminalCheckoutsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchTerminalCheckouts",
 		Method:             "POST",
 		PathPattern:        "/v2/terminals/checkouts/search",
@@ -172,7 +317,12 @@ func (a *Client) SearchTerminalCheckouts(params *SearchTerminalCheckoutsParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -183,6 +333,47 @@ func (a *Client) SearchTerminalCheckouts(params *SearchTerminalCheckoutsParams, 
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for SearchTerminalCheckouts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  SearchTerminalRefunds searches terminal refunds
+
+  Retrieves a filtered list of Terminal Interac refund requests created by the seller making the request.
+*/
+func (a *Client) SearchTerminalRefunds(params *SearchTerminalRefundsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchTerminalRefundsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewSearchTerminalRefundsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "SearchTerminalRefunds",
+		Method:             "POST",
+		PathPattern:        "/v2/terminals/refunds/search",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &SearchTerminalRefundsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*SearchTerminalRefundsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for SearchTerminalRefunds: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 

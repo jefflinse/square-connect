@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m LoyaltyEventSource) validateLoyaltyEventSourceEnum(path, location string, value LoyaltyEventSource) error {
-	if err := validate.Enum(path, location, value, loyaltyEventSourceEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, loyaltyEventSourceEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m LoyaltyEventSource) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this loyalty event source based on context it is used
+func (m LoyaltyEventSource) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // SearchCatalogObjectsResponse search catalog objects response
+// Example: {"objects":[{"id":"X5DZ5NWWAQ44CKBLKIFQGOWK","is_deleted":false,"item_data":{"category_id":"E7CLE5RZZ744BHWVQQEAHI2C","description":"A delicious blend of black tea.","name":"Tea - Black","product_type":"REGULAR","tax_ids":["ZXITPM6RWHZ7GZ7EIP3YKECM"],"variations":[{"id":"5GSZPX6EU7MM75S57OONG3V5","is_deleted":false,"item_variation_data":{"item_id":"X5DZ5NWWAQ44CKBLKIFQGOWK","name":"Regular","ordinal":1,"price_money":{"amount":150,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2017-10-26T15:27:31.626Z","version":1509031651626},{"id":"XVLBN7DU6JTWHJTG5F265B43","is_deleted":false,"item_variation_data":{"item_id":"X5DZ5NWWAQ44CKBLKIFQGOWK","name":"Large","ordinal":2,"price_money":{"amount":225,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2017-10-26T15:27:31.626Z","version":1509031651626}],"visibility":"PRIVATE"},"present_at_all_locations":true,"type":"ITEM","updated_at":"2017-10-26T15:41:32.337Z","version":1509032492337},{"id":"NNNEM3LA656Q46NXLWCNI7S5","is_deleted":false,"item_data":{"category_id":"E7CLE5RZZ744BHWVQQEAHI2C","description":"Relaxing green herbal tea.","name":"Tea - Green","product_type":"REGULAR","tax_ids":["ZXITPM6RWHZ7GZ7EIP3YKECM"],"variations":[{"id":"FHYBVIA6NVBCSOVETA62WEA4","is_deleted":false,"item_variation_data":{"item_id":"NNNEM3LA656Q46NXLWCNI7S5","name":"Regular","ordinal":1,"price_money":{"amount":150,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2017-10-26T15:29:00.524Z","version":1509031740524}],"visibility":"PRIVATE"},"present_at_all_locations":true,"type":"ITEM","updated_at":"2017-10-26T15:41:23.232Z","version":1509032483232}]}
 //
 // swagger:model SearchCatalogObjectsResponse
 type SearchCatalogObjectsResponse struct {
@@ -22,7 +24,7 @@ type SearchCatalogObjectsResponse struct {
 	// See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
 	Cursor string `json:"cursor,omitempty"`
 
-	// Information on any errors encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 
 	// When the associated product catalog was last updated. Will
@@ -59,7 +61,6 @@ func (m *SearchCatalogObjectsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchCatalogObjectsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -84,7 +85,6 @@ func (m *SearchCatalogObjectsResponse) validateErrors(formats strfmt.Registry) e
 }
 
 func (m *SearchCatalogObjectsResponse) validateObjects(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Objects) { // not required
 		return nil
 	}
@@ -109,7 +109,6 @@ func (m *SearchCatalogObjectsResponse) validateObjects(formats strfmt.Registry) 
 }
 
 func (m *SearchCatalogObjectsResponse) validateRelatedObjects(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RelatedObjects) { // not required
 		return nil
 	}
@@ -121,6 +120,82 @@ func (m *SearchCatalogObjectsResponse) validateRelatedObjects(formats strfmt.Reg
 
 		if m.RelatedObjects[i] != nil {
 			if err := m.RelatedObjects[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("related_objects" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search catalog objects response based on the context it is used
+func (m *SearchCatalogObjectsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjects(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRelatedObjects(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchCatalogObjectsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchCatalogObjectsResponse) contextValidateObjects(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Objects); i++ {
+
+		if m.Objects[i] != nil {
+			if err := m.Objects[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("objects" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchCatalogObjectsResponse) contextValidateRelatedObjects(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.RelatedObjects); i++ {
+
+		if m.RelatedObjects[i] != nil {
+			if err := m.RelatedObjects[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("related_objects" + "." + strconv.Itoa(i))
 				}

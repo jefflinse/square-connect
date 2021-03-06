@@ -17,85 +17,104 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewV1ListRefundsParams creates a new V1ListRefundsParams object
-// with the default values initialized.
+// NewV1ListRefundsParams creates a new V1ListRefundsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewV1ListRefundsParams() *V1ListRefundsParams {
-	var ()
 	return &V1ListRefundsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewV1ListRefundsParamsWithTimeout creates a new V1ListRefundsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewV1ListRefundsParamsWithTimeout(timeout time.Duration) *V1ListRefundsParams {
-	var ()
 	return &V1ListRefundsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewV1ListRefundsParamsWithContext creates a new V1ListRefundsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewV1ListRefundsParamsWithContext(ctx context.Context) *V1ListRefundsParams {
-	var ()
 	return &V1ListRefundsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewV1ListRefundsParamsWithHTTPClient creates a new V1ListRefundsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewV1ListRefundsParamsWithHTTPClient(client *http.Client) *V1ListRefundsParams {
-	var ()
 	return &V1ListRefundsParams{
 		HTTPClient: client,
 	}
 }
 
-/*V1ListRefundsParams contains all the parameters to send to the API endpoint
-for the v1 list refunds operation typically these are written to a http.Request
+/* V1ListRefundsParams contains all the parameters to send to the API endpoint
+   for the v1 list refunds operation.
+
+   Typically these are written to a http.Request.
 */
 type V1ListRefundsParams struct {
 
-	/*BatchToken
-	  A pagination cursor to retrieve the next set of results for your
-	original query to the endpoint.
+	/* BatchToken.
 
+	     A pagination cursor to retrieve the next set of results for your
+	original query to the endpoint.
 	*/
 	BatchToken *string
-	/*BeginTime
-	  The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
 
+	/* BeginTime.
+
+	   The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
 	*/
 	BeginTime *string
-	/*EndTime
-	  The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
 
+	/* EndTime.
+
+	   The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
 	*/
 	EndTime *string
-	/*Limit
-	  The approximate number of refunds to return in a single response. Default: 100. Max: 200. Response may contain more results than the prescribed limit when refunds are made simultaneously to multiple tenders in a payment or when refunds are generated in an exchange to account for the value of returned goods.
 
+	/* Limit.
+
+	   The approximate number of refunds to return in a single response. Default: 100. Max: 200. Response may contain more results than the prescribed limit when refunds are made simultaneously to multiple tenders in a payment or when refunds are generated in an exchange to account for the value of returned goods.
 	*/
 	Limit *int64
-	/*LocationID
-	  The ID of the location to list refunds for.
 
+	/* LocationID.
+
+	   The ID of the location to list refunds for.
 	*/
 	LocationID string
-	/*Order
-	  TThe order in which payments are listed in the response.
 
+	/* Order.
+
+	   The order in which payments are listed in the response.
 	*/
 	Order *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the v1 list refunds params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1ListRefundsParams) WithDefaults() *V1ListRefundsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the v1 list refunds params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1ListRefundsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the v1 list refunds params
@@ -209,64 +228,68 @@ func (o *V1ListRefundsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param batch_token
 		var qrBatchToken string
+
 		if o.BatchToken != nil {
 			qrBatchToken = *o.BatchToken
 		}
 		qBatchToken := qrBatchToken
 		if qBatchToken != "" {
+
 			if err := r.SetQueryParam("batch_token", qBatchToken); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.BeginTime != nil {
 
 		// query param begin_time
 		var qrBeginTime string
+
 		if o.BeginTime != nil {
 			qrBeginTime = *o.BeginTime
 		}
 		qBeginTime := qrBeginTime
 		if qBeginTime != "" {
+
 			if err := r.SetQueryParam("begin_time", qBeginTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndTime != nil {
 
 		// query param end_time
 		var qrEndTime string
+
 		if o.EndTime != nil {
 			qrEndTime = *o.EndTime
 		}
 		qEndTime := qrEndTime
 		if qEndTime != "" {
+
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param location_id
@@ -278,16 +301,17 @@ func (o *V1ListRefundsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param order
 		var qrOrder string
+
 		if o.Order != nil {
 			qrOrder = *o.Order
 		}
 		qOrder := qrOrder
 		if qOrder != "" {
+
 			if err := r.SetQueryParam("order", qOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

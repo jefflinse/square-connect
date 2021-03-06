@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // RetrieveWageSettingResponse Represents a response from a retrieve request, containing the specified `WageSetting` object or error messages.
+// Example: {"wage_setting":{"created_at":"2020-06-11T23:01:21+00:00","is_overtime_exempt":false,"job_assignments":[{"annual_rate":{"amount":4500000,"currency":"USD"},"hourly_rate":{"amount":2164,"currency":"USD"},"job_title":"Manager","pay_type":"SALARY","weekly_hours":40}],"team_member_id":"1yJlHapkseYnNPETIU1B","updated_at":"2020-06-11T23:01:21+00:00","version":1}}
 //
 // swagger:model RetrieveWageSettingResponse
 type RetrieveWageSettingResponse struct {
@@ -44,7 +46,6 @@ func (m *RetrieveWageSettingResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RetrieveWageSettingResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -69,13 +70,62 @@ func (m *RetrieveWageSettingResponse) validateErrors(formats strfmt.Registry) er
 }
 
 func (m *RetrieveWageSettingResponse) validateWageSetting(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.WageSetting) { // not required
 		return nil
 	}
 
 	if m.WageSetting != nil {
 		if err := m.WageSetting.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("wage_setting")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve wage setting response based on the context it is used
+func (m *RetrieveWageSettingResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWageSetting(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveWageSettingResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *RetrieveWageSettingResponse) contextValidateWageSetting(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WageSetting != nil {
+		if err := m.WageSetting.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("wage_setting")
 			}

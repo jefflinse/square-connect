@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -81,12 +83,11 @@ func (m *LoyaltyReward) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyReward) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 36); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 36); err != nil {
 		return err
 	}
 
@@ -99,11 +100,11 @@ func (m *LoyaltyReward) validateLoyaltyAccountID(formats strfmt.Registry) error 
 		return err
 	}
 
-	if err := validate.MinLength("loyalty_account_id", "body", string(*m.LoyaltyAccountID), 1); err != nil {
+	if err := validate.MinLength("loyalty_account_id", "body", *m.LoyaltyAccountID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("loyalty_account_id", "body", string(*m.LoyaltyAccountID), 36); err != nil {
+	if err := validate.MaxLength("loyalty_account_id", "body", *m.LoyaltyAccountID, 36); err != nil {
 		return err
 	}
 
@@ -111,12 +112,11 @@ func (m *LoyaltyReward) validateLoyaltyAccountID(formats strfmt.Registry) error 
 }
 
 func (m *LoyaltyReward) validatePoints(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Points) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("points", "body", int64(m.Points), 1, false); err != nil {
+	if err := validate.MinimumInt("points", "body", m.Points, 1, false); err != nil {
 		return err
 	}
 
@@ -129,14 +129,19 @@ func (m *LoyaltyReward) validateRewardTierID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("reward_tier_id", "body", string(*m.RewardTierID), 1); err != nil {
+	if err := validate.MinLength("reward_tier_id", "body", *m.RewardTierID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("reward_tier_id", "body", string(*m.RewardTierID), 36); err != nil {
+	if err := validate.MaxLength("reward_tier_id", "body", *m.RewardTierID, 36); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty reward based on context it is used
+func (m *LoyaltyReward) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

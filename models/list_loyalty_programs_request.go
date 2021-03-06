@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // ListLoyaltyProgramsRequest A request to list `LoyaltyProgram`.
+// Example: {"request_body":{}}
 //
 // swagger:model ListLoyaltyProgramsRequest
 type ListLoyaltyProgramsRequest interface{}

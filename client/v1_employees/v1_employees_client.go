@@ -25,39 +25,26 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateEmployee(params *CreateEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateEmployeeOK, error)
+	CreateEmployee(params *CreateEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateEmployeeOK, error)
 
-	CreateEmployeeRole(params *CreateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter) (*CreateEmployeeRoleOK, error)
+	CreateEmployeeRole(params *CreateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateEmployeeRoleOK, error)
 
-	CreateTimecard(params *CreateTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*CreateTimecardOK, error)
+	ListEmployeeRoles(params *ListEmployeeRolesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEmployeeRolesOK, error)
 
-	DeleteTimecard(params *DeleteTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteTimecardOK, error)
+	RetrieveEmployeeRole(params *RetrieveEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveEmployeeRoleOK, error)
 
-	ListEmployeeRoles(params *ListEmployeeRolesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEmployeeRolesOK, error)
+	UpdateEmployee(params *UpdateEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateEmployeeOK, error)
 
-	ListTimecardEvents(params *ListTimecardEventsParams, authInfo runtime.ClientAuthInfoWriter) (*ListTimecardEventsOK, error)
+	UpdateEmployeeRole(params *UpdateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateEmployeeRoleOK, error)
 
-	ListTimecards(params *ListTimecardsParams, authInfo runtime.ClientAuthInfoWriter) (*ListTimecardsOK, error)
+	V1ListEmployees(params *V1ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1ListEmployeesOK, error)
 
-	RetrieveEmployeeRole(params *RetrieveEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveEmployeeRoleOK, error)
-
-	RetrieveTimecard(params *RetrieveTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveTimecardOK, error)
-
-	UpdateEmployee(params *UpdateEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateEmployeeOK, error)
-
-	UpdateEmployeeRole(params *UpdateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateEmployeeRoleOK, error)
-
-	UpdateTimecard(params *UpdateTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateTimecardOK, error)
-
-	V1ListCashDrawerShifts(params *V1ListCashDrawerShiftsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListCashDrawerShiftsOK, error)
-
-	V1ListEmployees(params *V1ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListEmployeesOK, error)
-
-	V1RetrieveCashDrawerShift(params *V1RetrieveCashDrawerShiftParams, authInfo runtime.ClientAuthInfoWriter) (*V1RetrieveCashDrawerShiftOK, error)
-
-	V1RetrieveEmployee(params *V1RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*V1RetrieveEmployeeOK, error)
+	V1RetrieveEmployee(params *V1RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1RetrieveEmployeeOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -71,18 +58,15 @@ of `INACTIVE`. Inactive employees cannot sign in to Square Point of Sale
 until they are activated from the Square Dashboard. Employee status
 cannot be changed with the Connect API.
 
-<aside class="important">
 Employee entities cannot be deleted. To disable employee profiles,
 set the employee's status to <code>INACTIVE</code>
-</aside>
 */
-func (a *Client) CreateEmployee(params *CreateEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateEmployeeOK, error) {
+func (a *Client) CreateEmployee(params *CreateEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateEmployeeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateEmployeeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateEmployee",
 		Method:             "POST",
 		PathPattern:        "/v1/me/employees",
@@ -94,7 +78,12 @@ func (a *Client) CreateEmployee(params *CreateEmployeeParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -125,13 +114,12 @@ endpoint. An employee can have only one role at a time.
 If an employee has no role, they have none of the permissions associated
 with roles. All employees can accept payments with Square Point of Sale.
 */
-func (a *Client) CreateEmployeeRole(params *CreateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter) (*CreateEmployeeRoleOK, error) {
+func (a *Client) CreateEmployeeRole(params *CreateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateEmployeeRoleOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateEmployeeRoleParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateEmployeeRole",
 		Method:             "POST",
 		PathPattern:        "/v1/me/roles",
@@ -143,7 +131,12 @@ func (a *Client) CreateEmployeeRole(params *CreateEmployeeRoleParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -158,116 +151,16 @@ func (a *Client) CreateEmployeeRole(params *CreateEmployeeRoleParams, authInfo r
 }
 
 /*
-  CreateTimecard creates timecard
-
-  Creates a timecard for an employee and clocks them in with an
-`API_CREATE` event and a `clockin_time` set to the current time unless
-the request provides a different value.
-
-To import timecards from another
-system (rather than clocking someone in). Specify the `clockin_time`
-and* `clockout_time` in the request.
-
-Timecards correspond to exactly one shift for a given employee, bounded
-by the `clockin_time` and `clockout_time` fields. An employee is
-considered clocked in if they have a timecard that doesn't have a
-`clockout_time` set. An employee that is currently clocked in cannot
-be clocked in a second time.
-*/
-func (a *Client) CreateTimecard(params *CreateTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*CreateTimecardOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewCreateTimecardParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "CreateTimecard",
-		Method:             "POST",
-		PathPattern:        "/v1/me/timecards",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &CreateTimecardReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*CreateTimecardOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for CreateTimecard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  DeleteTimecard deletes timecard
-
-  Deletes a timecard. Timecards can also be deleted through the
-Square Dashboard. Deleted timecards are still accessible through
-Connect API endpoints, but cannot be modified. The `deleted` field of
-the `Timecard` object indicates whether the timecard has been deleted.
-
-
-__Note__: By default, deleted timecards appear alongside valid timecards in
-results returned by the [ListTimecards](#endpoint-v1employees-listtimecards)
-endpoint. To filter deleted timecards, include the `deleted` query
-parameter in the list request.
-
-Only approved accounts can manage their employees with Square.
-Unapproved accounts cannot use employee management features with the
-API.
-*/
-func (a *Client) DeleteTimecard(params *DeleteTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteTimecardOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteTimecardParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "DeleteTimecard",
-		Method:             "DELETE",
-		PathPattern:        "/v1/me/timecards/{timecard_id}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &DeleteTimecardReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteTimecardOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for DeleteTimecard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
   ListEmployeeRoles lists employee roles
 
   Provides summary information for all of a business's employee roles.
 */
-func (a *Client) ListEmployeeRoles(params *ListEmployeeRolesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEmployeeRolesOK, error) {
+func (a *Client) ListEmployeeRoles(params *ListEmployeeRolesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEmployeeRolesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListEmployeeRolesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListEmployeeRoles",
 		Method:             "GET",
 		PathPattern:        "/v1/me/roles",
@@ -279,7 +172,12 @@ func (a *Client) ListEmployeeRoles(params *ListEmployeeRolesParams, authInfo run
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -294,99 +192,16 @@ func (a *Client) ListEmployeeRoles(params *ListEmployeeRolesParams, authInfo run
 }
 
 /*
-  ListTimecardEvents lists timecard events
-
-  Provides summary information for all events associated with a
-particular timecard.
-
-
-<aside>
-Only approved accounts can manage their employees with Square.
-Unapproved accounts cannot use employee management features with the
-API.
-</aside>
-*/
-func (a *Client) ListTimecardEvents(params *ListTimecardEventsParams, authInfo runtime.ClientAuthInfoWriter) (*ListTimecardEventsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListTimecardEventsParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListTimecardEvents",
-		Method:             "GET",
-		PathPattern:        "/v1/me/timecards/{timecard_id}/events",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListTimecardEventsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListTimecardEventsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListTimecardEvents: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  ListTimecards lists timecards
-
-  Provides summary information for all of a business's employee timecards.
-*/
-func (a *Client) ListTimecards(params *ListTimecardsParams, authInfo runtime.ClientAuthInfoWriter) (*ListTimecardsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListTimecardsParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "ListTimecards",
-		Method:             "GET",
-		PathPattern:        "/v1/me/timecards",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListTimecardsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListTimecardsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for ListTimecards: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
   RetrieveEmployeeRole retrieves employee role
 
   Provides the details for a single employee role.
 */
-func (a *Client) RetrieveEmployeeRole(params *RetrieveEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveEmployeeRoleOK, error) {
+func (a *Client) RetrieveEmployeeRole(params *RetrieveEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveEmployeeRoleOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveEmployeeRoleParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveEmployeeRole",
 		Method:             "GET",
 		PathPattern:        "/v1/me/roles/{role_id}",
@@ -398,7 +213,12 @@ func (a *Client) RetrieveEmployeeRole(params *RetrieveEmployeeRoleParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -413,59 +233,14 @@ func (a *Client) RetrieveEmployeeRole(params *RetrieveEmployeeRoleParams, authIn
 }
 
 /*
-  RetrieveTimecard retrieves timecard
-
-  Provides the details for a single timecard.
-
-
-<aside>
-Only approved accounts can manage their employees with Square.
-Unapproved accounts cannot use employee management features with the
-API.
-</aside>
-*/
-func (a *Client) RetrieveTimecard(params *RetrieveTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveTimecardOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewRetrieveTimecardParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "RetrieveTimecard",
-		Method:             "GET",
-		PathPattern:        "/v1/me/timecards/{timecard_id}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &RetrieveTimecardReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*RetrieveTimecardOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for RetrieveTimecard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
   UpdateEmployee updates employee
 */
-func (a *Client) UpdateEmployee(params *UpdateEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateEmployeeOK, error) {
+func (a *Client) UpdateEmployee(params *UpdateEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateEmployeeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateEmployeeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateEmployee",
 		Method:             "PUT",
 		PathPattern:        "/v1/me/employees/{employee_id}",
@@ -477,7 +252,12 @@ func (a *Client) UpdateEmployee(params *UpdateEmployeeParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -496,13 +276,12 @@ func (a *Client) UpdateEmployee(params *UpdateEmployeeParams, authInfo runtime.C
 
   Modifies the details of an employee role.
 */
-func (a *Client) UpdateEmployeeRole(params *UpdateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateEmployeeRoleOK, error) {
+func (a *Client) UpdateEmployeeRole(params *UpdateEmployeeRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateEmployeeRoleOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateEmployeeRoleParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateEmployeeRole",
 		Method:             "PUT",
 		PathPattern:        "/v1/me/roles/{role_id}",
@@ -514,7 +293,12 @@ func (a *Client) UpdateEmployeeRole(params *UpdateEmployeeRoleParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -529,93 +313,16 @@ func (a *Client) UpdateEmployeeRole(params *UpdateEmployeeRoleParams, authInfo r
 }
 
 /*
-  UpdateTimecard updates timecard
+  V1ListEmployees v1s list employees
 
-  Modifies the details of a timecard with an `API_EDIT` event for
-the timecard. Updating an active timecard with a `clockout_time`
-clocks the employee out.
+  V1 Provides summary information for all of a business's employees.
 */
-func (a *Client) UpdateTimecard(params *UpdateTimecardParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateTimecardOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateTimecardParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "UpdateTimecard",
-		Method:             "PUT",
-		PathPattern:        "/v1/me/timecards/{timecard_id}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &UpdateTimecardReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UpdateTimecardOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for UpdateTimecard: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  V1ListCashDrawerShifts lists cash drawer shifts
-
-  Provides the details for all of a location's cash drawer shifts during a date range. The date range you specify cannot exceed 90 days.
-*/
-func (a *Client) V1ListCashDrawerShifts(params *V1ListCashDrawerShiftsParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListCashDrawerShiftsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewV1ListCashDrawerShiftsParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "V1ListCashDrawerShifts",
-		Method:             "GET",
-		PathPattern:        "/v1/{location_id}/cash-drawer-shifts",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &V1ListCashDrawerShiftsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*V1ListCashDrawerShiftsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for V1ListCashDrawerShifts: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  V1ListEmployees lists employees
-
-  Provides summary information for all of a business's employees.
-*/
-func (a *Client) V1ListEmployees(params *V1ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter) (*V1ListEmployeesOK, error) {
+func (a *Client) V1ListEmployees(params *V1ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1ListEmployeesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewV1ListEmployeesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "V1ListEmployees",
 		Method:             "GET",
 		PathPattern:        "/v1/me/employees",
@@ -627,7 +334,12 @@ func (a *Client) V1ListEmployees(params *V1ListEmployeesParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -642,54 +354,16 @@ func (a *Client) V1ListEmployees(params *V1ListEmployeesParams, authInfo runtime
 }
 
 /*
-  V1RetrieveCashDrawerShift retrieves cash drawer shift
+  V1RetrieveEmployee v1s retrieve employee
 
-  Provides the details for a single cash drawer shift, including all events that occurred during the shift.
+  V1 Provides the details for a single employee.
 */
-func (a *Client) V1RetrieveCashDrawerShift(params *V1RetrieveCashDrawerShiftParams, authInfo runtime.ClientAuthInfoWriter) (*V1RetrieveCashDrawerShiftOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewV1RetrieveCashDrawerShiftParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "V1RetrieveCashDrawerShift",
-		Method:             "GET",
-		PathPattern:        "/v1/{location_id}/cash-drawer-shifts/{shift_id}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &V1RetrieveCashDrawerShiftReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*V1RetrieveCashDrawerShiftOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
-	msg := fmt.Sprintf("unexpected success response for V1RetrieveCashDrawerShift: API contract not enforced by server. Client expected to get an error, but got: %T", result)
-	panic(msg)
-}
-
-/*
-  V1RetrieveEmployee retrieves employee
-
-  Provides the details for a single employee.
-*/
-func (a *Client) V1RetrieveEmployee(params *V1RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*V1RetrieveEmployeeOK, error) {
+func (a *Client) V1RetrieveEmployee(params *V1RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*V1RetrieveEmployeeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewV1RetrieveEmployeeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "V1RetrieveEmployee",
 		Method:             "GET",
 		PathPattern:        "/v1/me/employees/{employee_id}",
@@ -701,7 +375,12 @@ func (a *Client) V1RetrieveEmployee(params *V1RetrieveEmployeeParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

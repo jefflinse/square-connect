@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewRefundPaymentParams creates a new RefundPaymentParams object
-// with the default values initialized.
+// NewRefundPaymentParams creates a new RefundPaymentParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRefundPaymentParams() *RefundPaymentParams {
-	var ()
 	return &RefundPaymentParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRefundPaymentParamsWithTimeout creates a new RefundPaymentParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRefundPaymentParamsWithTimeout(timeout time.Duration) *RefundPaymentParams {
-	var ()
 	return &RefundPaymentParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRefundPaymentParamsWithContext creates a new RefundPaymentParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRefundPaymentParamsWithContext(ctx context.Context) *RefundPaymentParams {
-	var ()
 	return &RefundPaymentParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRefundPaymentParamsWithHTTPClient creates a new RefundPaymentParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRefundPaymentParamsWithHTTPClient(client *http.Client) *RefundPaymentParams {
-	var ()
 	return &RefundPaymentParams{
 		HTTPClient: client,
 	}
 }
 
-/*RefundPaymentParams contains all the parameters to send to the API endpoint
-for the refund payment operation typically these are written to a http.Request
+/* RefundPaymentParams contains all the parameters to send to the API endpoint
+   for the refund payment operation.
+
+   Typically these are written to a http.Request.
 */
 type RefundPaymentParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.RefundPaymentRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the refund payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RefundPaymentParams) WithDefaults() *RefundPaymentParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the refund payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RefundPaymentParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the refund payment params
@@ -126,7 +140,6 @@ func (o *RefundPaymentParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

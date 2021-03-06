@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateOrderParams creates a new UpdateOrderParams object
-// with the default values initialized.
+// NewUpdateOrderParams creates a new UpdateOrderParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateOrderParams() *UpdateOrderParams {
-	var ()
 	return &UpdateOrderParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateOrderParamsWithTimeout creates a new UpdateOrderParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateOrderParamsWithTimeout(timeout time.Duration) *UpdateOrderParams {
-	var ()
 	return &UpdateOrderParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateOrderParamsWithContext creates a new UpdateOrderParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateOrderParamsWithContext(ctx context.Context) *UpdateOrderParams {
-	var ()
 	return &UpdateOrderParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateOrderParamsWithHTTPClient creates a new UpdateOrderParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateOrderParamsWithHTTPClient(client *http.Client) *UpdateOrderParams {
-	var ()
 	return &UpdateOrderParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateOrderParams contains all the parameters to send to the API endpoint
-for the update order operation typically these are written to a http.Request
+/* UpdateOrderParams contains all the parameters to send to the API endpoint
+   for the update order operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateOrderParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateOrderRequest
-	/*OrderID
-	  The ID of the order to update.
 
+	/* OrderID.
+
+	   The ID of the order to update.
 	*/
 	OrderID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateOrderParams) WithDefaults() *UpdateOrderParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateOrderParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update order params
@@ -142,7 +157,6 @@ func (o *UpdateOrderParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

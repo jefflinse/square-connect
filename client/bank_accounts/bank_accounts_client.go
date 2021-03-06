@@ -25,13 +25,16 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	GetBankAccount(params *GetBankAccountParams, authInfo runtime.ClientAuthInfoWriter) (*GetBankAccountOK, error)
+	GetBankAccount(params *GetBankAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBankAccountOK, error)
 
-	GetBankAccountByV1ID(params *GetBankAccountByV1IDParams, authInfo runtime.ClientAuthInfoWriter) (*GetBankAccountByV1IDOK, error)
+	GetBankAccountByV1ID(params *GetBankAccountByV1IDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBankAccountByV1IDOK, error)
 
-	ListBankAccounts(params *ListBankAccountsParams, authInfo runtime.ClientAuthInfoWriter) (*ListBankAccountsOK, error)
+	ListBankAccounts(params *ListBankAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListBankAccountsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -40,16 +43,14 @@ type ClientService interface {
   GetBankAccount gets bank account
 
   Returns details of a [BankAccount](#type-bankaccount)
-linked to a Square account. For more information, see
-[Bank Accounts API](/docs/bank-accounts-api).
+linked to a Square account.
 */
-func (a *Client) GetBankAccount(params *GetBankAccountParams, authInfo runtime.ClientAuthInfoWriter) (*GetBankAccountOK, error) {
+func (a *Client) GetBankAccount(params *GetBankAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBankAccountOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetBankAccountParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetBankAccount",
 		Method:             "GET",
 		PathPattern:        "/v2/bank-accounts/{bank_account_id}",
@@ -61,7 +62,12 @@ func (a *Client) GetBankAccount(params *GetBankAccountParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -79,16 +85,13 @@ func (a *Client) GetBankAccount(params *GetBankAccountParams, authInfo runtime.C
   GetBankAccountByV1ID gets bank account by v1 Id
 
   Returns details of a [BankAccount](#type-bankaccount) identified by V1 bank account ID.
-For more information, see
-[Retrieve a bank account by using an ID issued by V1 Bank Accounts API](/docs/bank-accounts-api#retrieve-a-bank-account-by-using-an-id-issued-by-the-v1-bank-accounts-api).
 */
-func (a *Client) GetBankAccountByV1ID(params *GetBankAccountByV1IDParams, authInfo runtime.ClientAuthInfoWriter) (*GetBankAccountByV1IDOK, error) {
+func (a *Client) GetBankAccountByV1ID(params *GetBankAccountByV1IDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBankAccountByV1IDOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetBankAccountByV1IDParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetBankAccountByV1Id",
 		Method:             "GET",
 		PathPattern:        "/v2/bank-accounts/by-v1-id/{v1_bank_account_id}",
@@ -100,7 +103,12 @@ func (a *Client) GetBankAccountByV1ID(params *GetBankAccountByV1IDParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -118,16 +126,13 @@ func (a *Client) GetBankAccountByV1ID(params *GetBankAccountByV1IDParams, authIn
   ListBankAccounts lists bank accounts
 
   Returns a list of [BankAccount](#type-bankaccount) objects linked to a Square account.
-For more information, see
-[Bank Accounts API](/docs/bank-accounts-api).
 */
-func (a *Client) ListBankAccounts(params *ListBankAccountsParams, authInfo runtime.ClientAuthInfoWriter) (*ListBankAccountsOK, error) {
+func (a *Client) ListBankAccounts(params *ListBankAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListBankAccountsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListBankAccountsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListBankAccounts",
 		Method:             "GET",
 		PathPattern:        "/v2/bank-accounts",
@@ -139,7 +144,12 @@ func (a *Client) ListBankAccounts(params *ListBankAccountsParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

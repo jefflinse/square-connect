@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewCompletePaymentParams creates a new CompletePaymentParams object
-// with the default values initialized.
+// NewCompletePaymentParams creates a new CompletePaymentParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCompletePaymentParams() *CompletePaymentParams {
-	var ()
 	return &CompletePaymentParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCompletePaymentParamsWithTimeout creates a new CompletePaymentParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCompletePaymentParamsWithTimeout(timeout time.Duration) *CompletePaymentParams {
-	var ()
 	return &CompletePaymentParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCompletePaymentParamsWithContext creates a new CompletePaymentParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCompletePaymentParamsWithContext(ctx context.Context) *CompletePaymentParams {
-	var ()
 	return &CompletePaymentParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCompletePaymentParamsWithHTTPClient creates a new CompletePaymentParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCompletePaymentParamsWithHTTPClient(client *http.Client) *CompletePaymentParams {
-	var ()
 	return &CompletePaymentParams{
 		HTTPClient: client,
 	}
 }
 
-/*CompletePaymentParams contains all the parameters to send to the API endpoint
-for the complete payment operation typically these are written to a http.Request
+/* CompletePaymentParams contains all the parameters to send to the API endpoint
+   for the complete payment operation.
+
+   Typically these are written to a http.Request.
 */
 type CompletePaymentParams struct {
 
-	/*PaymentID
-	  Unique ID identifying the payment to be completed.
+	/* PaymentID.
 
+	   The unique ID identifying the payment to be completed.
 	*/
 	PaymentID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the complete payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CompletePaymentParams) WithDefaults() *CompletePaymentParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the complete payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CompletePaymentParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the complete payment params

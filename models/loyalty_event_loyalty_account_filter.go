@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -43,10 +45,15 @@ func (m *LoyaltyEventLoyaltyAccountFilter) validateLoyaltyAccountID(formats strf
 		return err
 	}
 
-	if err := validate.MinLength("loyalty_account_id", "body", string(*m.LoyaltyAccountID), 1); err != nil {
+	if err := validate.MinLength("loyalty_account_id", "body", *m.LoyaltyAccountID, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty event loyalty account filter based on context it is used
+func (m *LoyaltyEventLoyaltyAccountFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

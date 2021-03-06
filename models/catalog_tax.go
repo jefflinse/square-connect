@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CatalogTax A tax applicable to an item.
+// Example: {"object":{"id":"#SalesTax","present_at_all_locations":true,"tax_data":{"calculation_phase":"TAX_SUBTOTAL_PHASE","enabled":true,"fee_applies_to_custom_amounts":true,"inclusion_type":"ADDITIVE","name":"Sales Tax","percentage":"5.0"},"type":"TAX"}}
 //
 // swagger:model CatalogTax
 type CatalogTax struct {
@@ -25,7 +28,7 @@ type CatalogTax struct {
 	// See [TaxCalculationPhase](#type-taxcalculationphase) for possible values
 	CalculationPhase string `json:"calculation_phase,omitempty"`
 
-	// If `true`, the tax will be shown as enabled in the Square Point of Sale app.
+	// A Boolean flag to indicate whether the tax is displayed as enabled (`true`) in the Square Point of Sale app or not (`false`).
 	Enabled bool `json:"enabled,omitempty"`
 
 	// Whether the tax is `ADDITIVE` or `INCLUSIVE`.
@@ -56,15 +59,19 @@ func (m *CatalogTax) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogTax) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this catalog tax based on context it is used
+func (m *CatalogTax) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

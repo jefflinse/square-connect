@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -45,10 +47,8 @@ type CatalogPricingRule struct {
 	// See [ExcludeStrategy](#type-excludestrategy) for possible values
 	ExcludeStrategy string `json:"exclude_strategy,omitempty"`
 
-	// Unique ID for the `CatalogProductSet` that will be matched by this rule.
-	// A match rule matches within the entire cart.
-	// A match rule can match multiple times in the cart.
-	// If no `ProductSet` is present, the rule will match all products.
+	// Unique ID for the `CatalogProductSet` that will be matched by this rule. A match rule
+	// matches within the entire cart, and can match multiple times. This field will always be set.
 	MatchProductsID string `json:"match_products_id,omitempty"`
 
 	// User-defined name for the pricing rule. For example, "Buy one get one
@@ -60,23 +60,28 @@ type CatalogPricingRule struct {
 	// in effect.
 	TimePeriodIds []string `json:"time_period_ids"`
 
-	// Represents the date the Pricing Rule is valid from. Represented in RFC3339 full-date format (YYYY-MM-DD).
+	// Represents the date the Pricing Rule is valid from. Represented in RFC 3339 full-date format (YYYY-MM-DD).
 	ValidFromDate string `json:"valid_from_date,omitempty"`
 
-	// Represents the local time the pricing rule should be valid from. Represented in RFC3339 partial-time format
+	// Represents the local time the pricing rule should be valid from. Represented in RFC 3339 partial-time format
 	// (HH:MM:SS). Partial seconds will be truncated.
 	ValidFromLocalTime string `json:"valid_from_local_time,omitempty"`
 
-	// Represents the date the Pricing Rule is valid until. Represented in RFC3339 full-date format (YYYY-MM-DD).
+	// Represents the date the Pricing Rule is valid until. Represented in RFC 3339 full-date format (YYYY-MM-DD).
 	ValidUntilDate string `json:"valid_until_date,omitempty"`
 
-	// Represents the local time the pricing rule should be valid until. Represented in RFC3339 partial-time format
+	// Represents the local time the pricing rule should be valid until. Represented in RFC 3339 partial-time format
 	// (HH:MM:SS). Partial seconds will be truncated.
 	ValidUntilLocalTime string `json:"valid_until_local_time,omitempty"`
 }
 
 // Validate validates this catalog pricing rule
 func (m *CatalogPricingRule) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this catalog pricing rule based on context it is used
+func (m *CatalogPricingRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // GetTerminalCheckoutRequest get terminal checkout request
+// Example: {"request_body":{}}
 //
 // swagger:model GetTerminalCheckoutRequest
 type GetTerminalCheckoutRequest interface{}

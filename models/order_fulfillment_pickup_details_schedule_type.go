@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m OrderFulfillmentPickupDetailsScheduleType) validateOrderFulfillmentPickupDetailsScheduleTypeEnum(path, location string, value OrderFulfillmentPickupDetailsScheduleType) error {
-	if err := validate.Enum(path, location, value, orderFulfillmentPickupDetailsScheduleTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, orderFulfillmentPickupDetailsScheduleTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m OrderFulfillmentPickupDetailsScheduleType) Validate(formats strfmt.Regis
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this order fulfillment pickup details schedule type based on context it is used
+func (m OrderFulfillmentPickupDetailsScheduleType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

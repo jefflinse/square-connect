@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // ListMerchantsResponse The response object returned by the [ListMerchant](#endpoint-listmerchant) endpoint.
+// Example: {"merchant":[{"business_name":"Apple A Day","country":"US","currency":"USD","id":"DM7VKY8Q63GNP","language_code":"en-US","main_location_id":"9A65CGC72ZQG1","status":"ACTIVE"}]}
 //
 // swagger:model ListMerchantsResponse
 type ListMerchantsResponse struct {
@@ -47,7 +49,6 @@ func (m *ListMerchantsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListMerchantsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -72,7 +73,6 @@ func (m *ListMerchantsResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *ListMerchantsResponse) validateMerchant(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Merchant) { // not required
 		return nil
 	}
@@ -84,6 +84,60 @@ func (m *ListMerchantsResponse) validateMerchant(formats strfmt.Registry) error 
 
 		if m.Merchant[i] != nil {
 			if err := m.Merchant[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("merchant" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list merchants response based on the context it is used
+func (m *ListMerchantsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMerchant(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListMerchantsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListMerchantsResponse) contextValidateMerchant(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Merchant); i++ {
+
+		if m.Merchant[i] != nil {
+			if err := m.Merchant[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("merchant" + "." + strconv.Itoa(i))
 				}

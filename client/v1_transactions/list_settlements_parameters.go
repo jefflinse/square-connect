@@ -17,90 +17,110 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListSettlementsParams creates a new ListSettlementsParams object
-// with the default values initialized.
+// NewListSettlementsParams creates a new ListSettlementsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListSettlementsParams() *ListSettlementsParams {
-	var ()
 	return &ListSettlementsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListSettlementsParamsWithTimeout creates a new ListSettlementsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListSettlementsParamsWithTimeout(timeout time.Duration) *ListSettlementsParams {
-	var ()
 	return &ListSettlementsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListSettlementsParamsWithContext creates a new ListSettlementsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListSettlementsParamsWithContext(ctx context.Context) *ListSettlementsParams {
-	var ()
 	return &ListSettlementsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListSettlementsParamsWithHTTPClient creates a new ListSettlementsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListSettlementsParamsWithHTTPClient(client *http.Client) *ListSettlementsParams {
-	var ()
 	return &ListSettlementsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListSettlementsParams contains all the parameters to send to the API endpoint
-for the list settlements operation typically these are written to a http.Request
+/* ListSettlementsParams contains all the parameters to send to the API endpoint
+   for the list settlements operation.
+
+   Typically these are written to a http.Request.
 */
 type ListSettlementsParams struct {
 
-	/*BatchToken
-	  A pagination cursor to retrieve the next set of results for your
-	original query to the endpoint.
+	/* BatchToken.
 
+	     A pagination cursor to retrieve the next set of results for your
+	original query to the endpoint.
 	*/
 	BatchToken *string
-	/*BeginTime
-	  The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
 
+	/* BeginTime.
+
+	   The beginning of the requested reporting period, in ISO 8601 format. If this value is before January 1, 2013 (2013-01-01T00:00:00Z), this endpoint returns an error. Default value: The current time minus one year.
 	*/
 	BeginTime *string
-	/*EndTime
-	  The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
 
+	/* EndTime.
+
+	   The end of the requested reporting period, in ISO 8601 format. If this value is more than one year greater than begin_time, this endpoint returns an error. Default value: The current time.
 	*/
 	EndTime *string
-	/*Limit
-	  The maximum number of settlements to return in a single response. This value cannot exceed 200.
 
+	/* Limit.
+
+	   The maximum number of settlements to return in a single response. This value cannot exceed 200.
 	*/
 	Limit *int64
-	/*LocationID
-	  The ID of the location to list settlements for. If you specify me, this endpoint returns settlements aggregated from all of the business's locations.
 
+	/* LocationID.
+
+	   The ID of the location to list settlements for. If you specify me, this endpoint returns settlements aggregated from all of the business's locations.
 	*/
 	LocationID string
-	/*Order
-	  The order in which settlements are listed in the response.
 
+	/* Order.
+
+	   The order in which settlements are listed in the response.
 	*/
 	Order *string
-	/*Status
-	  Provide this parameter to retrieve only settlements with a particular status (SENT or FAILED).
 
+	/* Status.
+
+	   Provide this parameter to retrieve only settlements with a particular status (SENT or FAILED).
 	*/
 	Status *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list settlements params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListSettlementsParams) WithDefaults() *ListSettlementsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list settlements params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListSettlementsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list settlements params
@@ -225,64 +245,68 @@ func (o *ListSettlementsParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param batch_token
 		var qrBatchToken string
+
 		if o.BatchToken != nil {
 			qrBatchToken = *o.BatchToken
 		}
 		qBatchToken := qrBatchToken
 		if qBatchToken != "" {
+
 			if err := r.SetQueryParam("batch_token", qBatchToken); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.BeginTime != nil {
 
 		// query param begin_time
 		var qrBeginTime string
+
 		if o.BeginTime != nil {
 			qrBeginTime = *o.BeginTime
 		}
 		qBeginTime := qrBeginTime
 		if qBeginTime != "" {
+
 			if err := r.SetQueryParam("begin_time", qBeginTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndTime != nil {
 
 		// query param end_time
 		var qrEndTime string
+
 		if o.EndTime != nil {
 			qrEndTime = *o.EndTime
 		}
 		qEndTime := qrEndTime
 		if qEndTime != "" {
+
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param location_id
@@ -294,32 +318,34 @@ func (o *ListSettlementsParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param order
 		var qrOrder string
+
 		if o.Order != nil {
 			qrOrder = *o.Order
 		}
 		qOrder := qrOrder
 		if qOrder != "" {
+
 			if err := r.SetQueryParam("order", qOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Status != nil {
 
 		// query param status
 		var qrStatus string
+
 		if o.Status != nil {
 			qrStatus = *o.Status
 		}
 		qStatus := qrStatus
 		if qStatus != "" {
+
 			if err := r.SetQueryParam("status", qStatus); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

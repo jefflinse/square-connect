@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -13,7 +14,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RetrieveDisputeResponse Defines fields in a RetrieveDispute response.
+// RetrieveDisputeResponse Defines fields in a `RetrieveDispute` response.
+// Example: {"dispute":{"amount_money":{"amount":2000,"currency":"USD"},"brand_dispute_id":"100000282394","card_brand":"visa","created_at":"2018-10-18T15:59:13.613Z","dispute_id":"XDgyFu7yo1E2S5lQGGpYn","disputed_payments":[{"payment_id":"6Ee10wvqhfipStz297mtUhBXvaB"}],"due_at":"2018-11-01T00:00:00.000Z","reason":"NO_KNOWLEDGE","state":"LOST","updated_at":"2018-10-18T15:59:13.613Z"}}
 //
 // swagger:model RetrieveDisputeResponse
 type RetrieveDisputeResponse struct {
@@ -21,7 +23,7 @@ type RetrieveDisputeResponse struct {
 	// Details about the requested `Dispute`.
 	Dispute *Dispute `json:"dispute,omitempty"`
 
-	// Information on errors encountered during the request.
+	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors"`
 }
 
@@ -44,7 +46,6 @@ func (m *RetrieveDisputeResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RetrieveDisputeResponse) validateDispute(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Dispute) { // not required
 		return nil
 	}
@@ -62,7 +63,6 @@ func (m *RetrieveDisputeResponse) validateDispute(formats strfmt.Registry) error
 }
 
 func (m *RetrieveDisputeResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,6 +74,56 @@ func (m *RetrieveDisputeResponse) validateErrors(formats strfmt.Registry) error 
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve dispute response based on the context it is used
+func (m *RetrieveDisputeResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDispute(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveDisputeResponse) contextValidateDispute(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Dispute != nil {
+		if err := m.Dispute.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("dispute")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RetrieveDisputeResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

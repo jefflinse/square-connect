@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -52,7 +54,7 @@ func (m *LoyaltyProgramTerminology) validateOne(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("one", "body", string(*m.One), 1); err != nil {
+	if err := validate.MinLength("one", "body", *m.One, 1); err != nil {
 		return err
 	}
 
@@ -65,10 +67,15 @@ func (m *LoyaltyProgramTerminology) validateOther(formats strfmt.Registry) error
 		return err
 	}
 
-	if err := validate.MinLength("other", "body", string(*m.Other), 1); err != nil {
+	if err := validate.MinLength("other", "body", *m.Other, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty program terminology based on context it is used
+func (m *LoyaltyProgramTerminology) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

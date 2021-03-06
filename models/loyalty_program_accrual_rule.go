@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -82,12 +84,11 @@ func (m *LoyaltyProgramAccrualRule) validateAccrualType(formats strfmt.Registry)
 }
 
 func (m *LoyaltyProgramAccrualRule) validatePoints(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Points) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("points", "body", int64(m.Points), 1, false); err != nil {
+	if err := validate.MinimumInt("points", "body", m.Points, 1, false); err != nil {
 		return err
 	}
 
@@ -95,7 +96,6 @@ func (m *LoyaltyProgramAccrualRule) validatePoints(formats strfmt.Registry) erro
 }
 
 func (m *LoyaltyProgramAccrualRule) validateSpendAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SpendAmountMoney) { // not required
 		return nil
 	}
@@ -113,13 +113,58 @@ func (m *LoyaltyProgramAccrualRule) validateSpendAmountMoney(formats strfmt.Regi
 }
 
 func (m *LoyaltyProgramAccrualRule) validateVisitMinimumAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.VisitMinimumAmountMoney) { // not required
 		return nil
 	}
 
 	if m.VisitMinimumAmountMoney != nil {
 		if err := m.VisitMinimumAmountMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("visit_minimum_amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this loyalty program accrual rule based on the context it is used
+func (m *LoyaltyProgramAccrualRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateSpendAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVisitMinimumAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LoyaltyProgramAccrualRule) contextValidateSpendAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SpendAmountMoney != nil {
+		if err := m.SpendAmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("spend_amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyProgramAccrualRule) contextValidateVisitMinimumAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.VisitMinimumAmountMoney != nil {
+		if err := m.VisitMinimumAmountMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("visit_minimum_amount_money")
 			}

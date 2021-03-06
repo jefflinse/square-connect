@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -68,7 +70,6 @@ func (m *SearchOrdersFilter) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchOrdersFilter) validateCustomerFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomerFilter) { // not required
 		return nil
 	}
@@ -86,7 +87,6 @@ func (m *SearchOrdersFilter) validateCustomerFilter(formats strfmt.Registry) err
 }
 
 func (m *SearchOrdersFilter) validateDateTimeFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DateTimeFilter) { // not required
 		return nil
 	}
@@ -104,7 +104,6 @@ func (m *SearchOrdersFilter) validateDateTimeFilter(formats strfmt.Registry) err
 }
 
 func (m *SearchOrdersFilter) validateFulfillmentFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FulfillmentFilter) { // not required
 		return nil
 	}
@@ -122,7 +121,6 @@ func (m *SearchOrdersFilter) validateFulfillmentFilter(formats strfmt.Registry) 
 }
 
 func (m *SearchOrdersFilter) validateSourceFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SourceFilter) { // not required
 		return nil
 	}
@@ -140,13 +138,112 @@ func (m *SearchOrdersFilter) validateSourceFilter(formats strfmt.Registry) error
 }
 
 func (m *SearchOrdersFilter) validateStateFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.StateFilter) { // not required
 		return nil
 	}
 
 	if m.StateFilter != nil {
 		if err := m.StateFilter.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("state_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search orders filter based on the context it is used
+func (m *SearchOrdersFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCustomerFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDateTimeFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFulfillmentFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSourceFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStateFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchOrdersFilter) contextValidateCustomerFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CustomerFilter != nil {
+		if err := m.CustomerFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("customer_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersFilter) contextValidateDateTimeFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DateTimeFilter != nil {
+		if err := m.DateTimeFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("date_time_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersFilter) contextValidateFulfillmentFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.FulfillmentFilter != nil {
+		if err := m.FulfillmentFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("fulfillment_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersFilter) contextValidateSourceFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SourceFilter != nil {
+		if err := m.SourceFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersFilter) contextValidateStateFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.StateFilter != nil {
+		if err := m.StateFilter.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("state_filter")
 			}

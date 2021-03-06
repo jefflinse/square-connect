@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CreateDeviceCodeRequest create device code request
+// Example: {"request_body":{"device_code":{"location_id":"B5E4484SHHNYH","name":"Counter 1","product_type":"TERMINAL_API"},"idempotency_key":"01bb00a6-0c86-4770-94ed-f5fca973cd56"}}
 //
 // swagger:model CreateDeviceCodeRequest
 type CreateDeviceCodeRequest struct {
@@ -21,8 +24,8 @@ type CreateDeviceCodeRequest struct {
 	// Required: true
 	DeviceCode *DeviceCode `json:"device_code"`
 
-	// A unique string that identifies this CreateCheckout request. Keys can be any valid string but
-	// must be unique for every CreateCheckout request.
+	// A unique string that identifies this CreateDeviceCode request. Keys can
+	// be any valid string but must be unique for every CreateDeviceCode request.
 	//
 	// See [Idempotency keys](https://developer.squareup.com/docs/basics/api101/idempotency) for more information.
 	// Required: true
@@ -73,12 +76,40 @@ func (m *CreateDeviceCodeRequest) validateIdempotencyKey(formats strfmt.Registry
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 128); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create device code request based on the context it is used
+func (m *CreateDeviceCodeRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDeviceCode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateDeviceCodeRequest) contextValidateDeviceCode(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeviceCode != nil {
+		if err := m.DeviceCode.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("device_code")
+			}
+			return err
+		}
 	}
 
 	return nil

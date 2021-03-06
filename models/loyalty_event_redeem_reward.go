@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -57,11 +59,11 @@ func (m *LoyaltyEventRedeemReward) validateLoyaltyProgramID(formats strfmt.Regis
 		return err
 	}
 
-	if err := validate.MinLength("loyalty_program_id", "body", string(*m.LoyaltyProgramID), 1); err != nil {
+	if err := validate.MinLength("loyalty_program_id", "body", *m.LoyaltyProgramID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("loyalty_program_id", "body", string(*m.LoyaltyProgramID), 36); err != nil {
+	if err := validate.MaxLength("loyalty_program_id", "body", *m.LoyaltyProgramID, 36); err != nil {
 		return err
 	}
 
@@ -69,15 +71,19 @@ func (m *LoyaltyEventRedeemReward) validateLoyaltyProgramID(formats strfmt.Regis
 }
 
 func (m *LoyaltyEventRedeemReward) validateRewardID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RewardID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("reward_id", "body", string(m.RewardID), 36); err != nil {
+	if err := validate.MaxLength("reward_id", "body", m.RewardID, 36); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty event redeem reward based on context it is used
+func (m *LoyaltyEventRedeemReward) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

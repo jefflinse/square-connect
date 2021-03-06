@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveLoyaltyAccountParams creates a new RetrieveLoyaltyAccountParams object
-// with the default values initialized.
+// NewRetrieveLoyaltyAccountParams creates a new RetrieveLoyaltyAccountParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveLoyaltyAccountParams() *RetrieveLoyaltyAccountParams {
-	var ()
 	return &RetrieveLoyaltyAccountParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveLoyaltyAccountParamsWithTimeout creates a new RetrieveLoyaltyAccountParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveLoyaltyAccountParamsWithTimeout(timeout time.Duration) *RetrieveLoyaltyAccountParams {
-	var ()
 	return &RetrieveLoyaltyAccountParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveLoyaltyAccountParamsWithContext creates a new RetrieveLoyaltyAccountParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveLoyaltyAccountParamsWithContext(ctx context.Context) *RetrieveLoyaltyAccountParams {
-	var ()
 	return &RetrieveLoyaltyAccountParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveLoyaltyAccountParamsWithHTTPClient creates a new RetrieveLoyaltyAccountParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveLoyaltyAccountParamsWithHTTPClient(client *http.Client) *RetrieveLoyaltyAccountParams {
-	var ()
 	return &RetrieveLoyaltyAccountParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveLoyaltyAccountParams contains all the parameters to send to the API endpoint
-for the retrieve loyalty account operation typically these are written to a http.Request
+/* RetrieveLoyaltyAccountParams contains all the parameters to send to the API endpoint
+   for the retrieve loyalty account operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveLoyaltyAccountParams struct {
 
-	/*AccountID
-	  The ID of the `loyalty account` to retrieve.
+	/* AccountID.
 
+	   The ID of the `loyalty account` to retrieve.
 	*/
 	AccountID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve loyalty account params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveLoyaltyAccountParams) WithDefaults() *RetrieveLoyaltyAccountParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve loyalty account params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveLoyaltyAccountParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve loyalty account params

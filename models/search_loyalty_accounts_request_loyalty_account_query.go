@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -18,7 +19,18 @@ import (
 // swagger:model SearchLoyaltyAccountsRequestLoyaltyAccountQuery
 type SearchLoyaltyAccountsRequestLoyaltyAccountQuery struct {
 
+	// The set of customer IDs to use in the loyalty account search.
+	//
+	// This cannot be combined with `mappings`.
+	//
+	// Max: 30 customer IDs
+	CustomerIds []string `json:"customer_ids"`
+
 	// The set of mappings to use in the loyalty account search.
+	//
+	// This cannot be combined with `customer_ids`.
+	//
+	// Max: 30 mappings
 	Mappings []*LoyaltyAccountMapping `json:"mappings"`
 }
 
@@ -37,7 +49,6 @@ func (m *SearchLoyaltyAccountsRequestLoyaltyAccountQuery) Validate(formats strfm
 }
 
 func (m *SearchLoyaltyAccountsRequestLoyaltyAccountQuery) validateMappings(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Mappings) { // not required
 		return nil
 	}
@@ -49,6 +60,38 @@ func (m *SearchLoyaltyAccountsRequestLoyaltyAccountQuery) validateMappings(forma
 
 		if m.Mappings[i] != nil {
 			if err := m.Mappings[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("mappings" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search loyalty accounts request loyalty account query based on the context it is used
+func (m *SearchLoyaltyAccountsRequestLoyaltyAccountQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateMappings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchLoyaltyAccountsRequestLoyaltyAccountQuery) contextValidateMappings(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Mappings); i++ {
+
+		if m.Mappings[i] != nil {
+			if err := m.Mappings[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("mappings" + "." + strconv.Itoa(i))
 				}

@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateDisputeEvidenceTextParams creates a new CreateDisputeEvidenceTextParams object
-// with the default values initialized.
+// NewCreateDisputeEvidenceTextParams creates a new CreateDisputeEvidenceTextParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateDisputeEvidenceTextParams() *CreateDisputeEvidenceTextParams {
-	var ()
 	return &CreateDisputeEvidenceTextParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateDisputeEvidenceTextParamsWithTimeout creates a new CreateDisputeEvidenceTextParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateDisputeEvidenceTextParamsWithTimeout(timeout time.Duration) *CreateDisputeEvidenceTextParams {
-	var ()
 	return &CreateDisputeEvidenceTextParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateDisputeEvidenceTextParamsWithContext creates a new CreateDisputeEvidenceTextParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateDisputeEvidenceTextParamsWithContext(ctx context.Context) *CreateDisputeEvidenceTextParams {
-	var ()
 	return &CreateDisputeEvidenceTextParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateDisputeEvidenceTextParamsWithHTTPClient creates a new CreateDisputeEvidenceTextParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateDisputeEvidenceTextParamsWithHTTPClient(client *http.Client) *CreateDisputeEvidenceTextParams {
-	var ()
 	return &CreateDisputeEvidenceTextParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateDisputeEvidenceTextParams contains all the parameters to send to the API endpoint
-for the create dispute evidence text operation typically these are written to a http.Request
+/* CreateDisputeEvidenceTextParams contains all the parameters to send to the API endpoint
+   for the create dispute evidence text operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateDisputeEvidenceTextParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateDisputeEvidenceTextRequest
-	/*DisputeID
-	  The ID of the dispute you want to upload evidence for.
 
+	/* DisputeID.
+
+	   The ID of the dispute you want to upload evidence for.
 	*/
 	DisputeID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create dispute evidence text params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateDisputeEvidenceTextParams) WithDefaults() *CreateDisputeEvidenceTextParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create dispute evidence text params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateDisputeEvidenceTextParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create dispute evidence text params
@@ -142,7 +157,6 @@ func (o *CreateDisputeEvidenceTextParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

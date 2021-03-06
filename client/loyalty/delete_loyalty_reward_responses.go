@@ -29,9 +29,8 @@ func (o *DeleteLoyaltyRewardReader) ReadResponse(response runtime.ClientResponse
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewDeleteLoyaltyRewardOK() *DeleteLoyaltyRewardOK {
 	return &DeleteLoyaltyRewardOK{}
 }
 
-/*DeleteLoyaltyRewardOK handles this case with default header values.
+/* DeleteLoyaltyRewardOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type DeleteLoyaltyRewardOK struct {
 func (o *DeleteLoyaltyRewardOK) Error() string {
 	return fmt.Sprintf("[DELETE /v2/loyalty/rewards/{reward_id}][%d] deleteLoyaltyRewardOK  %+v", 200, o.Payload)
 }
-
 func (o *DeleteLoyaltyRewardOK) GetPayload() *models.DeleteLoyaltyRewardResponse {
 	return o.Payload
 }

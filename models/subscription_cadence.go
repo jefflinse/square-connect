@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -74,7 +75,7 @@ func init() {
 }
 
 func (m SubscriptionCadence) validateSubscriptionCadenceEnum(path, location string, value SubscriptionCadence) error {
-	if err := validate.Enum(path, location, value, subscriptionCadenceEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, subscriptionCadenceEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -92,5 +93,10 @@ func (m SubscriptionCadence) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this subscription cadence based on context it is used
+func (m SubscriptionCadence) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

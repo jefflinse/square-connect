@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 
 // CreateCheckoutRequest Defines the parameters that can be included in the body of
 // a request to the __CreateCheckout__ endpoint.
+// Example: {"request_body":{"additional_recipients":[{"amount_money":{"amount":60,"currency":"USD"},"description":"Application fees","location_id":"057P5VYJ4A5X1"}],"ask_for_shipping_address":true,"idempotency_key":"86ae1696-b1e3-4328-af6d-f1e04d947ad6","merchant_support_email":"merchant+support@website.com","order":{"idempotency_key":"12ae1696-z1e3-4328-af6d-f1e04d947gd4","order":{"customer_id":"customer_id","discounts":[{"amount_money":{"amount":100,"currency":"USD"},"scope":"LINE_ITEM","type":"FIXED_AMOUNT","uid":"56ae1696-z1e3-9328-af6d-f1e04d947gd4"}],"line_items":[{"applied_discounts":[{"discount_uid":"56ae1696-z1e3-9328-af6d-f1e04d947gd4"}],"applied_taxes":[{"tax_uid":"38ze1696-z1e3-5628-af6d-f1e04d947fg3"}],"base_price_money":{"amount":1500,"currency":"USD"},"name":"Printed T Shirt","quantity":"2"},{"base_price_money":{"amount":2500,"currency":"USD"},"name":"Slim Jeans","quantity":"1"},{"base_price_money":{"amount":3500,"currency":"USD"},"name":"Woven Sweater","quantity":"3"}],"location_id":"location_id","reference_id":"reference_id","taxes":[{"percentage":"7.75","scope":"LINE_ITEM","type":"INCLUSIVE","uid":"38ze1696-z1e3-5628-af6d-f1e04d947fg3"}]}},"pre_populate_buyer_email":"example@email.com","pre_populate_shipping_address":{"address_line_1":"1455 Market St.","address_line_2":"Suite 600","administrative_district_level_1":"CA","country":"US","first_name":"Jane","last_name":"Doe","locality":"San Francisco","postal_code":"94103"},"redirect_url":"https://merchant.website.com/order-confirm"}}
 //
 // swagger:model CreateCheckoutRequest
 type CreateCheckoutRequest struct {
@@ -96,7 +98,7 @@ type CreateCheckoutRequest struct {
 	// `http://www.example.com/order-complete`, a successful transaction redirects
 	// the customer to:
 	//
-	// `http://www.example.com/order-complete?checkoutId=xxxxxx&orderId=xxxxxx&referenceId=xxxxxx&transactionId=xxxxxx`
+	// <pre><code>http://www.example.com/order-complete?checkoutId=xxxxxx&amp;orderId=xxxxxx&amp;referenceId=xxxxxx&amp;transactionId=xxxxxx</code></pre>
 	//
 	// If you do not provide a redirect URL, Square Checkout will display an order
 	// confirmation page on your behalf; however Square strongly recommends that
@@ -151,7 +153,6 @@ func (m *CreateCheckoutRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CreateCheckoutRequest) validateAdditionalRecipients(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdditionalRecipients) { // not required
 		return nil
 	}
@@ -181,11 +182,11 @@ func (m *CreateCheckoutRequest) validateIdempotencyKey(formats strfmt.Registry) 
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 192); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 192); err != nil {
 		return err
 	}
 
@@ -193,12 +194,11 @@ func (m *CreateCheckoutRequest) validateIdempotencyKey(formats strfmt.Registry) 
 }
 
 func (m *CreateCheckoutRequest) validateMerchantSupportEmail(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.MerchantSupportEmail) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("merchant_support_email", "body", string(m.MerchantSupportEmail), 254); err != nil {
+	if err := validate.MaxLength("merchant_support_email", "body", m.MerchantSupportEmail, 254); err != nil {
 		return err
 	}
 
@@ -206,12 +206,11 @@ func (m *CreateCheckoutRequest) validateMerchantSupportEmail(formats strfmt.Regi
 }
 
 func (m *CreateCheckoutRequest) validateNote(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Note) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("note", "body", string(m.Note), 60); err != nil {
+	if err := validate.MaxLength("note", "body", m.Note, 60); err != nil {
 		return err
 	}
 
@@ -237,12 +236,11 @@ func (m *CreateCheckoutRequest) validateOrder(formats strfmt.Registry) error {
 }
 
 func (m *CreateCheckoutRequest) validatePrePopulateBuyerEmail(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PrePopulateBuyerEmail) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("pre_populate_buyer_email", "body", string(m.PrePopulateBuyerEmail), 254); err != nil {
+	if err := validate.MaxLength("pre_populate_buyer_email", "body", m.PrePopulateBuyerEmail, 254); err != nil {
 		return err
 	}
 
@@ -250,7 +248,6 @@ func (m *CreateCheckoutRequest) validatePrePopulateBuyerEmail(formats strfmt.Reg
 }
 
 func (m *CreateCheckoutRequest) validatePrePopulateShippingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PrePopulateShippingAddress) { // not required
 		return nil
 	}
@@ -268,13 +265,80 @@ func (m *CreateCheckoutRequest) validatePrePopulateShippingAddress(formats strfm
 }
 
 func (m *CreateCheckoutRequest) validateRedirectURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RedirectURL) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("redirect_url", "body", string(m.RedirectURL), 800); err != nil {
+	if err := validate.MaxLength("redirect_url", "body", m.RedirectURL, 800); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create checkout request based on the context it is used
+func (m *CreateCheckoutRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdditionalRecipients(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrder(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrePopulateShippingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateCheckoutRequest) contextValidateAdditionalRecipients(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AdditionalRecipients); i++ {
+
+		if m.AdditionalRecipients[i] != nil {
+			if err := m.AdditionalRecipients[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additional_recipients" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CreateCheckoutRequest) contextValidateOrder(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Order != nil {
+		if err := m.Order.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("order")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CreateCheckoutRequest) contextValidatePrePopulateShippingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PrePopulateShippingAddress != nil {
+		if err := m.PrePopulateShippingAddress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pre_populate_shipping_address")
+			}
+			return err
+		}
 	}
 
 	return nil

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -15,15 +17,20 @@ import (
 // swagger:model BalancePaymentDetails
 type BalancePaymentDetails struct {
 
-	// ID for the account used to fund the payment.
+	// The ID of the account used to fund the payment.
 	AccountID string `json:"account_id,omitempty"`
 
-	// The balance payment’s current state. Can be `COMPLETED` or `FAILED`.
+	// The balance payment’s current state. The state can be COMPLETED or FAILED.
 	Status string `json:"status,omitempty"`
 }
 
 // Validate validates this balance payment details
 func (m *BalancePaymentDetails) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this balance payment details based on context it is used
+func (m *BalancePaymentDetails) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

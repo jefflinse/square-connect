@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -23,6 +25,11 @@ type OrderLineItemTax struct {
 
 	// The amount of the money applied by the tax in the order.
 	AppliedMoney *Money `json:"applied_money,omitempty"`
+
+	// Determines whether the tax was automatically applied to the order based on
+	// the catalog configuration. For an example, see
+	// [Automatically Apply Taxes to an Order](https://developer.squareup.com/docs/docs/orders-api/apply-taxes-and-discounts/auto-apply-taxes).
+	AutoApplied bool `json:"auto_applied,omitempty"`
 
 	// The catalog object id referencing `CatalogTax`.
 	// Max Length: 192
@@ -108,7 +115,6 @@ func (m *OrderLineItemTax) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItemTax) validateAppliedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedMoney) { // not required
 		return nil
 	}
@@ -126,12 +132,11 @@ func (m *OrderLineItemTax) validateAppliedMoney(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItemTax) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 192); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 192); err != nil {
 		return err
 	}
 
@@ -139,12 +144,11 @@ func (m *OrderLineItemTax) validateCatalogObjectID(formats strfmt.Registry) erro
 }
 
 func (m *OrderLineItemTax) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
@@ -152,12 +156,11 @@ func (m *OrderLineItemTax) validateName(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItemTax) validatePercentage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Percentage) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("percentage", "body", string(m.Percentage), 10); err != nil {
+	if err := validate.MaxLength("percentage", "body", m.Percentage, 10); err != nil {
 		return err
 	}
 
@@ -165,13 +168,40 @@ func (m *OrderLineItemTax) validatePercentage(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItemTax) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order line item tax based on the context it is used
+func (m *OrderLineItemTax) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAppliedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderLineItemTax) contextValidateAppliedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AppliedMoney != nil {
+		if err := m.AppliedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("applied_money")
+			}
+			return err
+		}
 	}
 
 	return nil

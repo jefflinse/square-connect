@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -44,7 +45,7 @@ func init() {
 }
 
 func (m CatalogQuickAmountsSettingsOption) validateCatalogQuickAmountsSettingsOptionEnum(path, location string, value CatalogQuickAmountsSettingsOption) error {
-	if err := validate.Enum(path, location, value, catalogQuickAmountsSettingsOptionEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, catalogQuickAmountsSettingsOptionEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -62,5 +63,10 @@ func (m CatalogQuickAmountsSettingsOption) Validate(formats strfmt.Registry) err
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this catalog quick amounts settings option based on context it is used
+func (m CatalogQuickAmountsSettingsOption) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

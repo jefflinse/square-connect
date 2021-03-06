@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateCustomerParams creates a new UpdateCustomerParams object
-// with the default values initialized.
+// NewUpdateCustomerParams creates a new UpdateCustomerParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateCustomerParams() *UpdateCustomerParams {
-	var ()
 	return &UpdateCustomerParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateCustomerParamsWithTimeout creates a new UpdateCustomerParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateCustomerParamsWithTimeout(timeout time.Duration) *UpdateCustomerParams {
-	var ()
 	return &UpdateCustomerParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateCustomerParamsWithContext creates a new UpdateCustomerParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateCustomerParamsWithContext(ctx context.Context) *UpdateCustomerParams {
-	var ()
 	return &UpdateCustomerParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateCustomerParamsWithHTTPClient creates a new UpdateCustomerParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateCustomerParamsWithHTTPClient(client *http.Client) *UpdateCustomerParams {
-	var ()
 	return &UpdateCustomerParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateCustomerParams contains all the parameters to send to the API endpoint
-for the update customer operation typically these are written to a http.Request
+/* UpdateCustomerParams contains all the parameters to send to the API endpoint
+   for the update customer operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateCustomerParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateCustomerRequest
-	/*CustomerID
-	  The ID of the customer to update.
 
+	/* CustomerID.
+
+	   The ID of the customer to update.
 	*/
 	CustomerID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update customer params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateCustomerParams) WithDefaults() *UpdateCustomerParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update customer params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateCustomerParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update customer params
@@ -142,7 +157,6 @@ func (o *UpdateCustomerParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

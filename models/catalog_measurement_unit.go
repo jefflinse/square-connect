@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -47,13 +49,40 @@ func (m *CatalogMeasurementUnit) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogMeasurementUnit) validateMeasurementUnit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.MeasurementUnit) { // not required
 		return nil
 	}
 
 	if m.MeasurementUnit != nil {
 		if err := m.MeasurementUnit.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("measurement_unit")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog measurement unit based on the context it is used
+func (m *CatalogMeasurementUnit) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateMeasurementUnit(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogMeasurementUnit) contextValidateMeasurementUnit(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MeasurementUnit != nil {
+		if err := m.MeasurementUnit.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("measurement_unit")
 			}

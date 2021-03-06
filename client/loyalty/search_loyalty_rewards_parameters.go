@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchLoyaltyRewardsParams creates a new SearchLoyaltyRewardsParams object
-// with the default values initialized.
+// NewSearchLoyaltyRewardsParams creates a new SearchLoyaltyRewardsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchLoyaltyRewardsParams() *SearchLoyaltyRewardsParams {
-	var ()
 	return &SearchLoyaltyRewardsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchLoyaltyRewardsParamsWithTimeout creates a new SearchLoyaltyRewardsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchLoyaltyRewardsParamsWithTimeout(timeout time.Duration) *SearchLoyaltyRewardsParams {
-	var ()
 	return &SearchLoyaltyRewardsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchLoyaltyRewardsParamsWithContext creates a new SearchLoyaltyRewardsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchLoyaltyRewardsParamsWithContext(ctx context.Context) *SearchLoyaltyRewardsParams {
-	var ()
 	return &SearchLoyaltyRewardsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchLoyaltyRewardsParamsWithHTTPClient creates a new SearchLoyaltyRewardsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchLoyaltyRewardsParamsWithHTTPClient(client *http.Client) *SearchLoyaltyRewardsParams {
-	var ()
 	return &SearchLoyaltyRewardsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchLoyaltyRewardsParams contains all the parameters to send to the API endpoint
-for the search loyalty rewards operation typically these are written to a http.Request
+/* SearchLoyaltyRewardsParams contains all the parameters to send to the API endpoint
+   for the search loyalty rewards operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchLoyaltyRewardsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchLoyaltyRewardsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search loyalty rewards params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchLoyaltyRewardsParams) WithDefaults() *SearchLoyaltyRewardsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search loyalty rewards params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchLoyaltyRewardsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search loyalty rewards params
@@ -126,7 +140,6 @@ func (o *SearchLoyaltyRewardsParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

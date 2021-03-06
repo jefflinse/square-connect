@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchShiftsParams creates a new SearchShiftsParams object
-// with the default values initialized.
+// NewSearchShiftsParams creates a new SearchShiftsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchShiftsParams() *SearchShiftsParams {
-	var ()
 	return &SearchShiftsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchShiftsParamsWithTimeout creates a new SearchShiftsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchShiftsParamsWithTimeout(timeout time.Duration) *SearchShiftsParams {
-	var ()
 	return &SearchShiftsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchShiftsParamsWithContext creates a new SearchShiftsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchShiftsParamsWithContext(ctx context.Context) *SearchShiftsParams {
-	var ()
 	return &SearchShiftsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchShiftsParamsWithHTTPClient creates a new SearchShiftsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchShiftsParamsWithHTTPClient(client *http.Client) *SearchShiftsParams {
-	var ()
 	return &SearchShiftsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchShiftsParams contains all the parameters to send to the API endpoint
-for the search shifts operation typically these are written to a http.Request
+/* SearchShiftsParams contains all the parameters to send to the API endpoint
+   for the search shifts operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchShiftsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchShiftsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search shifts params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchShiftsParams) WithDefaults() *SearchShiftsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search shifts params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchShiftsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search shifts params
@@ -126,7 +140,6 @@ func (o *SearchShiftsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

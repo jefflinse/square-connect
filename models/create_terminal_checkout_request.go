@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CreateTerminalCheckoutRequest create terminal checkout request
+// Example: {"request_body":{"checkout":{"amount_money":{"amount":2610,"currency":"USD"},"device_options":{"device_id":"dbb5d83a-7838-11ea-bc55-0242ac130003"},"note":"A brief note","reference_id":"id11572"},"idempotency_key":"28a0c3bc-7839-11ea-bc55-0242ac130003"}}
 //
 // swagger:model CreateTerminalCheckoutRequest
 type CreateTerminalCheckoutRequest struct {
@@ -21,8 +24,8 @@ type CreateTerminalCheckoutRequest struct {
 	// Required: true
 	Checkout *TerminalCheckout `json:"checkout"`
 
-	// A unique string that identifies this CreateCheckout request. Keys can be any valid string but
-	// must be unique for every CreateCheckout request.
+	// A unique string that identifies this `CreateCheckout` request. Keys can be any valid string but
+	// must be unique for every `CreateCheckout` request.
 	//
 	// See [Idempotency keys](https://developer.squareup.com/docs/basics/api101/idempotency) for more information.
 	// Required: true
@@ -73,12 +76,40 @@ func (m *CreateTerminalCheckoutRequest) validateIdempotencyKey(formats strfmt.Re
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 64); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 64); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create terminal checkout request based on the context it is used
+func (m *CreateTerminalCheckoutRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCheckout(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateTerminalCheckoutRequest) contextValidateCheckout(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Checkout != nil {
+		if err := m.Checkout.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("checkout")
+			}
+			return err
+		}
 	}
 
 	return nil

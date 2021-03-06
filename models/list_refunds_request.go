@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -14,6 +16,7 @@ import (
 // a request to the [ListRefunds](#endpoint-listrefunds) endpoint.
 //
 // Deprecated - recommend using [SearchOrders](#endpoint-orders-searchorders)
+// Example: {"request_params":"?begin_time=2016-01-15T00:00:00Z\u0026end_time=2016-01-31T00:00:00Z"}
 //
 // swagger:model ListRefundsRequest
 type ListRefundsRequest struct {
@@ -48,6 +51,11 @@ type ListRefundsRequest struct {
 
 // Validate validates this list refunds request
 func (m *ListRefundsRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this list refunds request based on context it is used
+func (m *ListRefundsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

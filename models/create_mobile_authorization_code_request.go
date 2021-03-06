@@ -6,12 +6,15 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // CreateMobileAuthorizationCodeRequest Defines the body parameters that can be provided in a request to the
 // __CreateMobileAuthorizationCode__ endpoint.
+// Example: {"request_body":{"location_id":"YOUR_LOCATION_ID"},"request_url":"/mobile/authorization-code"}
 //
 // swagger:model CreateMobileAuthorizationCodeRequest
 type CreateMobileAuthorizationCodeRequest struct {
@@ -22,6 +25,11 @@ type CreateMobileAuthorizationCodeRequest struct {
 
 // Validate validates this create mobile authorization code request
 func (m *CreateMobileAuthorizationCodeRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this create mobile authorization code request based on context it is used
+func (m *CreateMobileAuthorizationCodeRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

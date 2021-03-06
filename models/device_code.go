@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -79,12 +81,11 @@ func (m *DeviceCode) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DeviceCode) validateLocationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 50); err != nil {
+	if err := validate.MaxLength("location_id", "body", m.LocationID, 50); err != nil {
 		return err
 	}
 
@@ -92,12 +93,11 @@ func (m *DeviceCode) validateLocationID(formats strfmt.Registry) error {
 }
 
 func (m *DeviceCode) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 128); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 128); err != nil {
 		return err
 	}
 
@@ -110,6 +110,11 @@ func (m *DeviceCode) validateProductType(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this device code based on context it is used
+func (m *DeviceCode) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

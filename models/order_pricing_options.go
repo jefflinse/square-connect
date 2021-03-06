@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -17,12 +19,22 @@ import (
 // swagger:model OrderPricingOptions
 type OrderPricingOptions struct {
 
-	// The option to determine whether or not pricing rule-based discounts are automatically applied to an order.
+	// The option to determine whether pricing rule-based
+	// discounts are automatically applied to an order.
 	AutoApplyDiscounts bool `json:"auto_apply_discounts,omitempty"`
+
+	// The option to determine whether rule-based taxes are automatically
+	// applied to an order when the criteria of the corresponding rules are met.
+	AutoApplyTaxes bool `json:"auto_apply_taxes,omitempty"`
 }
 
 // Validate validates this order pricing options
 func (m *OrderPricingOptions) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this order pricing options based on context it is used
+func (m *OrderPricingOptions) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

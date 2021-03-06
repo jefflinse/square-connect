@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -31,6 +33,11 @@ type OrderFulfillmentUpdatedUpdate struct {
 
 // Validate validates this order fulfillment updated update
 func (m *OrderFulfillmentUpdatedUpdate) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this order fulfillment updated update based on context it is used
+func (m *OrderFulfillmentUpdatedUpdate) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // ListCashDrawerShiftEventsResponse list cash drawer shift events response
+// Example: {"events":[{"created_at":"2019-11-22T00:43:02.000Z","description":"","event_money":{"amount":100,"currency":"USD"},"event_type":"CASH_TENDER_PAYMENT","id":"9F07DB01-D85A-4B77-88C3-D5C64CEB5155"},{"created_at":"2019-11-22T00:43:12.000Z","description":"","event_money":{"amount":250,"currency":"USD"},"event_type":"CASH_TENDER_PAYMENT","id":"B2854CEA-A781-49B3-8F31-C64558231F48"},{"created_at":"2019-11-22T00:43:23.000Z","description":"","event_money":{"amount":250,"currency":"USD"},"event_type":"CASH_TENDER_CANCELLED_PAYMENT","id":"B5FB7F72-95CD-44A3-974D-26C41064D042"},{"created_at":"2019-11-22T00:43:46.000Z","description":"","event_money":{"amount":100,"currency":"USD"},"event_type":"CASH_TENDER_REFUND","id":"0B425480-8504-40B4-A867-37B23543931B"},{"created_at":"2019-11-22T00:44:18.000Z","description":"Transfer from another drawer","event_money":{"amount":10000,"currency":"USD"},"event_type":"PAID_IN","id":"8C66E60E-FDCF-4EEF-A98D-3B14B7ED5CBE"},{"created_at":"2019-11-22T00:44:29.000Z","description":"Transfer out to another drawer","event_money":{"amount":10000,"currency":"USD"},"event_type":"PAID_OUT","id":"D5ACA7FE-C64D-4ADA-8BC8-82118A2DAE4F"}]}
 //
 // swagger:model ListCashDrawerShiftEventsResponse
 type ListCashDrawerShiftEventsResponse struct {
@@ -49,7 +51,6 @@ func (m *ListCashDrawerShiftEventsResponse) Validate(formats strfmt.Registry) er
 }
 
 func (m *ListCashDrawerShiftEventsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,7 +75,6 @@ func (m *ListCashDrawerShiftEventsResponse) validateErrors(formats strfmt.Regist
 }
 
 func (m *ListCashDrawerShiftEventsResponse) validateEvents(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Events) { // not required
 		return nil
 	}
@@ -86,6 +86,60 @@ func (m *ListCashDrawerShiftEventsResponse) validateEvents(formats strfmt.Regist
 
 		if m.Events[i] != nil {
 			if err := m.Events[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("events" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list cash drawer shift events response based on the context it is used
+func (m *ListCashDrawerShiftEventsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEvents(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListCashDrawerShiftEventsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListCashDrawerShiftEventsResponse) contextValidateEvents(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Events); i++ {
+
+		if m.Events[i] != nil {
+			if err := m.Events[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("events" + "." + strconv.Itoa(i))
 				}

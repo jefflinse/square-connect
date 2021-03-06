@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -14,6 +16,7 @@ import (
 // UpdateSubscriptionRequest Defines parameters in a
 // [UpdateSubscription](#endpoint-subscriptions-updatesubscription) endpoint
 // request.
+// Example: {"request_body":{"subscription":{"price_override_money":{"amount":2000,"currency":"USD"},"tax_percentage":null,"version":1594155459464}}}
 //
 // swagger:model UpdateSubscriptionRequest
 type UpdateSubscriptionRequest struct {
@@ -39,13 +42,40 @@ func (m *UpdateSubscriptionRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateSubscriptionRequest) validateSubscription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Subscription) { // not required
 		return nil
 	}
 
 	if m.Subscription != nil {
 		if err := m.Subscription.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("subscription")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update subscription request based on the context it is used
+func (m *UpdateSubscriptionRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateSubscription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateSubscriptionRequest) contextValidateSubscription(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Subscription != nil {
+		if err := m.Subscription.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("subscription")
 			}

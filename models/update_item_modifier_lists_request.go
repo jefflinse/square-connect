@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // UpdateItemModifierListsRequest update item modifier lists request
+// Example: {"request_body":{"item_ids":["H42BRLUJ5KTZTTMPVSLFAACQ","2JXOBJIHCWBQ4NZ3RIXQGJA6"],"modifier_lists_to_disable":["7WRC16CJZDVLSNDQ35PP6YAD"],"modifier_lists_to_enable":["H42BRLUJ5KTZTTMPVSLFAACQ","2JXOBJIHCWBQ4NZ3RIXQGJA6"]}}
 //
 // swagger:model UpdateItemModifierListsRequest
 type UpdateItemModifierListsRequest struct {
@@ -48,6 +51,11 @@ func (m *UpdateItemModifierListsRequest) validateItemIds(formats strfmt.Registry
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this update item modifier lists request based on context it is used
+func (m *UpdateItemModifierListsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -19,9 +20,6 @@ import (
 type SubscriptionStatus string
 
 const (
-
-	// SubscriptionStatusDEFAULTSUBSCRIPTIONSTATUSDONOTUSE captures enum value "DEFAULT_SUBSCRIPTION_STATUS_DO_NOT_USE"
-	SubscriptionStatusDEFAULTSUBSCRIPTIONSTATUSDONOTUSE SubscriptionStatus = "DEFAULT_SUBSCRIPTION_STATUS_DO_NOT_USE"
 
 	// SubscriptionStatusPENDING captures enum value "PENDING"
 	SubscriptionStatusPENDING SubscriptionStatus = "PENDING"
@@ -38,7 +36,7 @@ var subscriptionStatusEnum []interface{}
 
 func init() {
 	var res []SubscriptionStatus
-	if err := json.Unmarshal([]byte(`["DEFAULT_SUBSCRIPTION_STATUS_DO_NOT_USE","PENDING","ACTIVE","CANCELED"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["PENDING","ACTIVE","CANCELED"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -47,7 +45,7 @@ func init() {
 }
 
 func (m SubscriptionStatus) validateSubscriptionStatusEnum(path, location string, value SubscriptionStatus) error {
-	if err := validate.Enum(path, location, value, subscriptionStatusEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, subscriptionStatusEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -65,5 +63,10 @@ func (m SubscriptionStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this subscription status based on context it is used
+func (m SubscriptionStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

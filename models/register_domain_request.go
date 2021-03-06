@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -14,6 +16,7 @@ import (
 
 // RegisterDomainRequest Defines the parameters that can be included in the body of
 // a request to the [RegisterDomain](#endpoint-registerdomain) endpoint.
+// Example: {"request_body":{"domain_name":"example.com"}}
 //
 // swagger:model RegisterDomainRequest
 type RegisterDomainRequest struct {
@@ -45,14 +48,19 @@ func (m *RegisterDomainRequest) validateDomainName(formats strfmt.Registry) erro
 		return err
 	}
 
-	if err := validate.MinLength("domain_name", "body", string(*m.DomainName), 1); err != nil {
+	if err := validate.MinLength("domain_name", "body", *m.DomainName, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("domain_name", "body", string(*m.DomainName), 255); err != nil {
+	if err := validate.MaxLength("domain_name", "body", *m.DomainName, 255); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this register domain request based on context it is used
+func (m *RegisterDomainRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

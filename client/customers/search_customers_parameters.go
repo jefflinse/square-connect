@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchCustomersParams creates a new SearchCustomersParams object
-// with the default values initialized.
+// NewSearchCustomersParams creates a new SearchCustomersParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchCustomersParams() *SearchCustomersParams {
-	var ()
 	return &SearchCustomersParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchCustomersParamsWithTimeout creates a new SearchCustomersParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchCustomersParamsWithTimeout(timeout time.Duration) *SearchCustomersParams {
-	var ()
 	return &SearchCustomersParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchCustomersParamsWithContext creates a new SearchCustomersParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchCustomersParamsWithContext(ctx context.Context) *SearchCustomersParams {
-	var ()
 	return &SearchCustomersParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchCustomersParamsWithHTTPClient creates a new SearchCustomersParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchCustomersParamsWithHTTPClient(client *http.Client) *SearchCustomersParams {
-	var ()
 	return &SearchCustomersParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchCustomersParams contains all the parameters to send to the API endpoint
-for the search customers operation typically these are written to a http.Request
+/* SearchCustomersParams contains all the parameters to send to the API endpoint
+   for the search customers operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchCustomersParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchCustomersRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search customers params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchCustomersParams) WithDefaults() *SearchCustomersParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search customers params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchCustomersParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search customers params
@@ -126,7 +140,6 @@ func (o *SearchCustomersParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

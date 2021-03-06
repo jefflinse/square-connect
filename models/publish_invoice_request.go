@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // PublishInvoiceRequest Describes a `PublishInvoice` request.
+// Example: {"request_body":{"idempotency_key":"32da42d0-1997-41b0-826b-f09464fc2c2e","version":1}}
 //
 // swagger:model PublishInvoiceRequest
 type PublishInvoiceRequest struct {
@@ -51,12 +54,11 @@ func (m *PublishInvoiceRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PublishInvoiceRequest) validateIdempotencyKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.IdempotencyKey) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", m.IdempotencyKey, 128); err != nil {
 		return err
 	}
 
@@ -69,6 +71,11 @@ func (m *PublishInvoiceRequest) validateVersion(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this publish invoice request based on context it is used
+func (m *PublishInvoiceRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 
 // UpdateCustomerRequest Defines the body parameters that can be provided in a request to the
 // UpdateCustomer endpoint.
+// Example: {"request_body":{"email_address":"New.Amelia.Earhart@example.com","note":"updated customer note","phone_number":""}}
 //
 // swagger:model UpdateCustomerRequest
 type UpdateCustomerRequest struct {
@@ -20,7 +23,7 @@ type UpdateCustomerRequest struct {
 	// The physical address associated with the customer profile.
 	Address *Address `json:"address,omitempty"`
 
-	// The birthday associated with the customer profile, in RFC-3339 format.
+	// The birthday associated with the customer profile, in RFC 3339 format.
 	// Year is optional, timezone and times are not allowed.
 	// For example: `0000-09-01T00:00:00-00:00` indicates a birthday on September 1st.
 	// `1998-09-01T00:00:00-00:00` indications a birthday on September 1st __1998__.
@@ -67,13 +70,40 @@ func (m *UpdateCustomerRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateCustomerRequest) validateAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Address) { // not required
 		return nil
 	}
 
 	if m.Address != nil {
 		if err := m.Address.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update customer request based on the context it is used
+func (m *UpdateCustomerRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateCustomerRequest) contextValidateAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Address != nil {
+		if err := m.Address.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("address")
 			}

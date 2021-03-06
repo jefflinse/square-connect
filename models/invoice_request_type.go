@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -13,8 +14,14 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// InvoiceRequestType Identifies the type of the payment request. For more information,
-// see [Payment request](TBD).
+// InvoiceRequestType Indicates the type of the payment request. An invoice supports the following payment request combinations:
+// - 1 balance
+// - 1 deposit with 1 balance
+// - 2 - 12 installments
+// - 1 deposit with 2 - 12 installments
+//
+// For more information,
+// see [Payment requests](https://developer.squareup.com/docs/docs/invoices-api/overview#payment-requests).
 //
 // swagger:model InvoiceRequestType
 type InvoiceRequestType string
@@ -45,7 +52,7 @@ func init() {
 }
 
 func (m InvoiceRequestType) validateInvoiceRequestTypeEnum(path, location string, value InvoiceRequestType) error {
-	if err := validate.Enum(path, location, value, invoiceRequestTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, invoiceRequestTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -63,5 +70,10 @@ func (m InvoiceRequestType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this invoice request type based on context it is used
+func (m InvoiceRequestType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

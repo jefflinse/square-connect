@@ -29,9 +29,8 @@ func (o *SearchLoyaltyAccountsReader) ReadResponse(response runtime.ClientRespon
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewSearchLoyaltyAccountsOK() *SearchLoyaltyAccountsOK {
 	return &SearchLoyaltyAccountsOK{}
 }
 
-/*SearchLoyaltyAccountsOK handles this case with default header values.
+/* SearchLoyaltyAccountsOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type SearchLoyaltyAccountsOK struct {
 func (o *SearchLoyaltyAccountsOK) Error() string {
 	return fmt.Sprintf("[POST /v2/loyalty/accounts/search][%d] searchLoyaltyAccountsOK  %+v", 200, o.Payload)
 }
-
 func (o *SearchLoyaltyAccountsOK) GetPayload() *models.SearchLoyaltyAccountsResponse {
 	return o.Payload
 }

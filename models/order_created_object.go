@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -35,13 +37,40 @@ func (m *OrderCreatedObject) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderCreatedObject) validateOrderCreated(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OrderCreated) { // not required
 		return nil
 	}
 
 	if m.OrderCreated != nil {
 		if err := m.OrderCreated.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("order_created")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order created object based on the context it is used
+func (m *OrderCreatedObject) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateOrderCreated(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderCreatedObject) contextValidateOrderCreated(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OrderCreated != nil {
+		if err := m.OrderCreated.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("order_created")
 			}

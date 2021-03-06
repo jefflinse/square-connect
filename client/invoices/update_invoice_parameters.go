@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateInvoiceParams creates a new UpdateInvoiceParams object
-// with the default values initialized.
+// NewUpdateInvoiceParams creates a new UpdateInvoiceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateInvoiceParams() *UpdateInvoiceParams {
-	var ()
 	return &UpdateInvoiceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateInvoiceParamsWithTimeout creates a new UpdateInvoiceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateInvoiceParamsWithTimeout(timeout time.Duration) *UpdateInvoiceParams {
-	var ()
 	return &UpdateInvoiceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateInvoiceParamsWithContext creates a new UpdateInvoiceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateInvoiceParamsWithContext(ctx context.Context) *UpdateInvoiceParams {
-	var ()
 	return &UpdateInvoiceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateInvoiceParamsWithHTTPClient creates a new UpdateInvoiceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateInvoiceParamsWithHTTPClient(client *http.Client) *UpdateInvoiceParams {
-	var ()
 	return &UpdateInvoiceParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateInvoiceParams contains all the parameters to send to the API endpoint
-for the update invoice operation typically these are written to a http.Request
+/* UpdateInvoiceParams contains all the parameters to send to the API endpoint
+   for the update invoice operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateInvoiceParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateInvoiceRequest
-	/*InvoiceID
-	  The id of the invoice to update.
 
+	/* InvoiceID.
+
+	   The ID of the invoice to update.
 	*/
 	InvoiceID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateInvoiceParams) WithDefaults() *UpdateInvoiceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateInvoiceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update invoice params
@@ -142,7 +157,6 @@ func (o *UpdateInvoiceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

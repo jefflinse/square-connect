@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -67,7 +68,6 @@ func (m *V1PaymentSurcharge) Validate(formats strfmt.Registry) error {
 }
 
 func (m *V1PaymentSurcharge) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
@@ -85,7 +85,6 @@ func (m *V1PaymentSurcharge) validateAmountMoney(formats strfmt.Registry) error 
 }
 
 func (m *V1PaymentSurcharge) validateAppliedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedMoney) { // not required
 		return nil
 	}
@@ -103,7 +102,6 @@ func (m *V1PaymentSurcharge) validateAppliedMoney(formats strfmt.Registry) error
 }
 
 func (m *V1PaymentSurcharge) validateTaxes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Taxes) { // not required
 		return nil
 	}
@@ -115,6 +113,74 @@ func (m *V1PaymentSurcharge) validateTaxes(formats strfmt.Registry) error {
 
 		if m.Taxes[i] != nil {
 			if err := m.Taxes[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("taxes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 payment surcharge based on the context it is used
+func (m *V1PaymentSurcharge) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAppliedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTaxes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1PaymentSurcharge) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PaymentSurcharge) contextValidateAppliedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AppliedMoney != nil {
+		if err := m.AppliedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("applied_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1PaymentSurcharge) contextValidateTaxes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Taxes); i++ {
+
+		if m.Taxes[i] != nil {
+			if err := m.Taxes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("taxes" + "." + strconv.Itoa(i))
 				}

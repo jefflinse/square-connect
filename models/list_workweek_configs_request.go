@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ListWorkweekConfigsRequest A request for a set of `WorkweekConfig` objects
+// Example: {"request_params":"?limit=1\u0026cursor=s4R0Z6ecFTzTC4jz8sUDBQTudX3KE313OT9fCt3VUgsXM4sMgED"}
 //
 // swagger:model ListWorkweekConfigsRequest
 type ListWorkweekConfigsRequest struct {
@@ -24,6 +27,11 @@ type ListWorkweekConfigsRequest struct {
 
 // Validate validates this list workweek configs request
 func (m *ListWorkweekConfigsRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this list workweek configs request based on context it is used
+func (m *ListWorkweekConfigsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

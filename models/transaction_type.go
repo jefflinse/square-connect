@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -13,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// TransactionType Transaction type used in the disputed payment.
+// TransactionType The transaction type used in the disputed payment.
 //
 // swagger:model TransactionType
 type TransactionType string
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m TransactionType) validateTransactionTypeEnum(path, location string, value TransactionType) error {
-	if err := validate.Enum(path, location, value, transactionTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, transactionTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m TransactionType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this transaction type based on context it is used
+func (m TransactionType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

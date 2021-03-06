@@ -29,9 +29,8 @@ func (o *CreateLocationReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCreateLocationOK() *CreateLocationOK {
 	return &CreateLocationOK{}
 }
 
-/*CreateLocationOK handles this case with default header values.
+/* CreateLocationOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CreateLocationOK struct {
 func (o *CreateLocationOK) Error() string {
 	return fmt.Sprintf("[POST /v2/locations][%d] createLocationOK  %+v", 200, o.Payload)
 }
-
 func (o *CreateLocationOK) GetPayload() *models.CreateLocationResponse {
 	return o.Payload
 }

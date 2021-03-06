@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,7 @@ import (
 // a request to the ListCustomers endpoint.
 //
 // One of `errors` or `customers` is present in a given response (never both).
+// Example: {"customers":[{"address":{"address_line_1":"500 Electric Ave","address_line_2":"Suite 600","administrative_district_level_1":"NY","country":"US","locality":"New York","postal_code":"10003"},"created_at":"2016-03-23T20:21:54.859Z","email_address":"Amelia.Earhart@example.com","family_name":"Earhart","given_name":"Amelia","group_ids":["545AXB44B4XXWMVQ4W8SBT3HHF"],"groups":[{"id":"545AXB44B4XXWMVQ4W8SBT3HHF","name":"Aviation Enthusiasts"},{"id":"1KB9JE5EGJXCW.REACHABLE","name":"Reachable"}],"id":"JDKYHBWT1D4F8MFH63DBMEN8Y4","note":"a customer","phone_number":"1-212-555-4240","reference_id":"YOUR_REFERENCE_ID","segment_ids":["1KB9JE5EGJXCW.REACHABLE"],"updated_at":"2016-03-23T20:21:55Z"}]}
 //
 // swagger:model ListCustomersResponse
 type ListCustomersResponse struct {
@@ -54,7 +56,6 @@ func (m *ListCustomersResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListCustomersResponse) validateCustomers(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Customers) { // not required
 		return nil
 	}
@@ -79,7 +80,6 @@ func (m *ListCustomersResponse) validateCustomers(formats strfmt.Registry) error
 }
 
 func (m *ListCustomersResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -91,6 +91,60 @@ func (m *ListCustomersResponse) validateErrors(formats strfmt.Registry) error {
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list customers response based on the context it is used
+func (m *ListCustomersResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCustomers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListCustomersResponse) contextValidateCustomers(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Customers); i++ {
+
+		if m.Customers[i] != nil {
+			if err := m.Customers[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("customers" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListCustomersResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

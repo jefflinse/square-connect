@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateSubscriptionParams creates a new CreateSubscriptionParams object
-// with the default values initialized.
+// NewCreateSubscriptionParams creates a new CreateSubscriptionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateSubscriptionParams() *CreateSubscriptionParams {
-	var ()
 	return &CreateSubscriptionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateSubscriptionParamsWithTimeout creates a new CreateSubscriptionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateSubscriptionParamsWithTimeout(timeout time.Duration) *CreateSubscriptionParams {
-	var ()
 	return &CreateSubscriptionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateSubscriptionParamsWithContext creates a new CreateSubscriptionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateSubscriptionParamsWithContext(ctx context.Context) *CreateSubscriptionParams {
-	var ()
 	return &CreateSubscriptionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateSubscriptionParamsWithHTTPClient creates a new CreateSubscriptionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateSubscriptionParamsWithHTTPClient(client *http.Client) *CreateSubscriptionParams {
-	var ()
 	return &CreateSubscriptionParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateSubscriptionParams contains all the parameters to send to the API endpoint
-for the create subscription operation typically these are written to a http.Request
+/* CreateSubscriptionParams contains all the parameters to send to the API endpoint
+   for the create subscription operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateSubscriptionParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateSubscriptionRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create subscription params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateSubscriptionParams) WithDefaults() *CreateSubscriptionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create subscription params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateSubscriptionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create subscription params
@@ -126,7 +140,6 @@ func (o *CreateSubscriptionParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

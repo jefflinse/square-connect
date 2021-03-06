@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -17,8 +19,9 @@ import (
 // swagger:model DeviceCheckoutOptions
 type DeviceCheckoutOptions struct {
 
-	// The unique Id of the device intended for this `TerminalCheckout`.
-	// The Id can be retrieved from /v2/devices api.
+	// The unique ID of the device intended for this `TerminalCheckout`.
+	// A list of `DeviceCode` objects can be retrieved from the /v2/devices/codes endpoint.
+	// Match a `DeviceCode.device_id` value with `device_id` to get the associated device code.
 	// Required: true
 	DeviceID *string `json:"device_id"`
 
@@ -57,13 +60,40 @@ func (m *DeviceCheckoutOptions) validateDeviceID(formats strfmt.Registry) error 
 }
 
 func (m *DeviceCheckoutOptions) validateTipSettings(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TipSettings) { // not required
 		return nil
 	}
 
 	if m.TipSettings != nil {
 		if err := m.TipSettings.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tip_settings")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this device checkout options based on the context it is used
+func (m *DeviceCheckoutOptions) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateTipSettings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DeviceCheckoutOptions) contextValidateTipSettings(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TipSettings != nil {
+		if err := m.TipSettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("tip_settings")
 			}

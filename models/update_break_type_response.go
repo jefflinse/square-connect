@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // UpdateBreakTypeResponse A response to a request to update a `BreakType`. Contains
 // the requested `BreakType` objects. May contain a set of `Error` objects if
 // the request resulted in errors.
+// Example: {"break_type":{"break_name":"Lunch","created_at":"2018-06-12T20:19:12Z","expected_duration":"PT50M","id":"Q6JSJS6D4DBCH","is_paid":true,"location_id":"26M7H24AZ9N6R","updated_at":"2019-02-26T23:12:59Z","version":2}}
 //
 // swagger:model UpdateBreakTypeResponse
 type UpdateBreakTypeResponse struct {
@@ -46,7 +48,6 @@ func (m *UpdateBreakTypeResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateBreakTypeResponse) validateBreakType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BreakType) { // not required
 		return nil
 	}
@@ -64,7 +65,6 @@ func (m *UpdateBreakTypeResponse) validateBreakType(formats strfmt.Registry) err
 }
 
 func (m *UpdateBreakTypeResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -76,6 +76,56 @@ func (m *UpdateBreakTypeResponse) validateErrors(formats strfmt.Registry) error 
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update break type response based on the context it is used
+func (m *UpdateBreakTypeResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBreakType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateBreakTypeResponse) contextValidateBreakType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BreakType != nil {
+		if err := m.BreakType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("break_type")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *UpdateBreakTypeResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

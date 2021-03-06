@@ -29,9 +29,8 @@ func (o *CancelPaymentReader) ReadResponse(response runtime.ClientResponse, cons
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCancelPaymentOK() *CancelPaymentOK {
 	return &CancelPaymentOK{}
 }
 
-/*CancelPaymentOK handles this case with default header values.
+/* CancelPaymentOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CancelPaymentOK struct {
 func (o *CancelPaymentOK) Error() string {
 	return fmt.Sprintf("[POST /v2/payments/{payment_id}/cancel][%d] cancelPaymentOK  %+v", 200, o.Payload)
 }
-
 func (o *CancelPaymentOK) GetPayload() *models.CancelPaymentResponse {
 	return o.Payload
 }

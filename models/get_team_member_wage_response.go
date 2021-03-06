@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // GetTeamMemberWageResponse A response to a request to get a `TeamMemberWage`. Contains
 // the requested `TeamMemberWage` objects. May contain a set of `Error` objects if
 // the request resulted in errors.
+// Example: {"team_member_wage":{"hourly_rate":{"amount":2000,"currency":"USD"},"id":"pXS3qCv7BERPnEGedM4S8mhm","team_member_id":"33fJchumvVdJwxV0H6L9","title":"Manager"}}
 //
 // swagger:model GetTeamMemberWageResponse
 type GetTeamMemberWageResponse struct {
@@ -46,7 +48,6 @@ func (m *GetTeamMemberWageResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *GetTeamMemberWageResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -71,13 +72,62 @@ func (m *GetTeamMemberWageResponse) validateErrors(formats strfmt.Registry) erro
 }
 
 func (m *GetTeamMemberWageResponse) validateTeamMemberWage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TeamMemberWage) { // not required
 		return nil
 	}
 
 	if m.TeamMemberWage != nil {
 		if err := m.TeamMemberWage.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("team_member_wage")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this get team member wage response based on the context it is used
+func (m *GetTeamMemberWageResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTeamMemberWage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GetTeamMemberWageResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *GetTeamMemberWageResponse) contextValidateTeamMemberWage(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TeamMemberWage != nil {
+		if err := m.TeamMemberWage.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("team_member_wage")
 			}

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -13,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// LoyaltyProgramStatus Whether the program is currently active.
+// LoyaltyProgramStatus Indicates whether the program is currently active.
 //
 // swagger:model LoyaltyProgramStatus
 type LoyaltyProgramStatus string
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m LoyaltyProgramStatus) validateLoyaltyProgramStatusEnum(path, location string, value LoyaltyProgramStatus) error {
-	if err := validate.Enum(path, location, value, loyaltyProgramStatusEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, loyaltyProgramStatusEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m LoyaltyProgramStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this loyalty program status based on context it is used
+func (m LoyaltyProgramStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

@@ -29,9 +29,8 @@ func (o *CatalogInfoReader) ReadResponse(response runtime.ClientResponse, consum
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCatalogInfoOK() *CatalogInfoOK {
 	return &CatalogInfoOK{}
 }
 
-/*CatalogInfoOK handles this case with default header values.
+/* CatalogInfoOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CatalogInfoOK struct {
 func (o *CatalogInfoOK) Error() string {
 	return fmt.Sprintf("[GET /v2/catalog/info][%d] catalogInfoOK  %+v", 200, o.Payload)
 }
-
 func (o *CatalogInfoOK) GetPayload() *models.CatalogInfoResponse {
 	return o.Payload
 }

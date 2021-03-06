@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,7 @@ import (
 // a request to the [Charge](#endpoint-charge) endpoint.
 //
 // One of `errors` or `transaction` is present in a given response (never both).
+// Example: {"transaction":{"created_at":"2016-03-10T22:57:56Z","id":"KnL67ZIwXCPtzOrqj0HrkxMF","location_id":"18YC4JDH91E1H","product":"EXTERNAL_API","reference_id":"some optional reference id","tenders":[{"additional_recipients":[{"amount_money":{"amount":20,"currency":"USD"},"description":"Application fees","location_id":"057P5VYJ4A5X1","receivable_id":"ISu5xwxJ5v0CMJTQq7RvqyMF"}],"amount_money":{"amount":200,"currency":"USD"},"card_details":{"card":{"card_brand":"VISA","last_4":"1111"},"entry_method":"KEYED","status":"CAPTURED"},"created_at":"2016-03-10T22:57:56Z","id":"MtZRYYdDrYNQbOvV7nbuBvMF","location_id":"18YC4JDH91E1H","note":"some optional note","transaction_id":"KnL67ZIwXCPtzOrqj0HrkxMF","type":"CARD"}]}}
 //
 // swagger:model ChargeResponse
 type ChargeResponse struct {
@@ -47,7 +49,6 @@ func (m *ChargeResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ChargeResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -72,13 +73,62 @@ func (m *ChargeResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *ChargeResponse) validateTransaction(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Transaction) { // not required
 		return nil
 	}
 
 	if m.Transaction != nil {
 		if err := m.Transaction.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("transaction")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this charge response based on the context it is used
+func (m *ChargeResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTransaction(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ChargeResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ChargeResponse) contextValidateTransaction(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Transaction != nil {
+		if err := m.Transaction.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("transaction")
 			}

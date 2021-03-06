@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveDisputeParams creates a new RetrieveDisputeParams object
-// with the default values initialized.
+// NewRetrieveDisputeParams creates a new RetrieveDisputeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveDisputeParams() *RetrieveDisputeParams {
-	var ()
 	return &RetrieveDisputeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveDisputeParamsWithTimeout creates a new RetrieveDisputeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveDisputeParamsWithTimeout(timeout time.Duration) *RetrieveDisputeParams {
-	var ()
 	return &RetrieveDisputeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveDisputeParamsWithContext creates a new RetrieveDisputeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveDisputeParamsWithContext(ctx context.Context) *RetrieveDisputeParams {
-	var ()
 	return &RetrieveDisputeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveDisputeParamsWithHTTPClient creates a new RetrieveDisputeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveDisputeParamsWithHTTPClient(client *http.Client) *RetrieveDisputeParams {
-	var ()
 	return &RetrieveDisputeParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveDisputeParams contains all the parameters to send to the API endpoint
-for the retrieve dispute operation typically these are written to a http.Request
+/* RetrieveDisputeParams contains all the parameters to send to the API endpoint
+   for the retrieve dispute operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveDisputeParams struct {
 
-	/*DisputeID
-	  The ID of the dispute you want more details about.
+	/* DisputeID.
 
+	   The ID of the dispute you want more details about.
 	*/
 	DisputeID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve dispute params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveDisputeParams) WithDefaults() *RetrieveDisputeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve dispute params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveDisputeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve dispute params

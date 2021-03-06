@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -16,12 +18,17 @@ import (
 type PaymentOptions struct {
 
 	// Indicates whether the Payment objects created from this `TerminalCheckout` will automatically be
-	// COMPLETED or left in an APPROVED state for later modification.
+	// `COMPLETED` or left in an `APPROVED` state for later modification.
 	Autocomplete bool `json:"autocomplete,omitempty"`
 }
 
 // Validate validates this payment options
 func (m *PaymentOptions) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this payment options based on context it is used
+func (m *PaymentOptions) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

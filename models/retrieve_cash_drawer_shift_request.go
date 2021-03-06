@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // RetrieveCashDrawerShiftRequest retrieve cash drawer shift request
+// Example: {"request_body":{}}
 //
 // swagger:model RetrieveCashDrawerShiftRequest
 type RetrieveCashDrawerShiftRequest struct {
@@ -43,10 +46,15 @@ func (m *RetrieveCashDrawerShiftRequest) validateLocationID(formats strfmt.Regis
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this retrieve cash drawer shift request based on context it is used
+func (m *RetrieveCashDrawerShiftRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

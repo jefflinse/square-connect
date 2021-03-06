@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -27,11 +28,6 @@ type Tender struct {
 	// the `total_money` of the corresponding `Payment` will be equal to the
 	// `amount_money` of the tender.
 	AmountMoney *Money `json:"amount_money,omitempty"`
-
-	// The details of the bank transfer tender.
-	//
-	// This value is present only if the value of `type` is `BANK_TRANSFER`.
-	BankTransferDetails *TenderBankTransferDetails `json:"bank_transfer_details,omitempty"`
 
 	// The details of the card tender.
 	//
@@ -100,10 +96,6 @@ func (m *Tender) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateBankTransferDetails(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateCardDetails(formats); err != nil {
 		res = append(res, err)
 	}
@@ -159,7 +151,6 @@ func (m *Tender) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateAdditionalRecipients(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdditionalRecipients) { // not required
 		return nil
 	}
@@ -184,7 +175,6 @@ func (m *Tender) validateAdditionalRecipients(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
@@ -201,26 +191,7 @@ func (m *Tender) validateAmountMoney(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Tender) validateBankTransferDetails(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.BankTransferDetails) { // not required
-		return nil
-	}
-
-	if m.BankTransferDetails != nil {
-		if err := m.BankTransferDetails.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("bank_transfer_details")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *Tender) validateCardDetails(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CardDetails) { // not required
 		return nil
 	}
@@ -238,7 +209,6 @@ func (m *Tender) validateCardDetails(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateCashDetails(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CashDetails) { // not required
 		return nil
 	}
@@ -256,12 +226,11 @@ func (m *Tender) validateCashDetails(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 32); err != nil {
+	if err := validate.MaxLength("created_at", "body", m.CreatedAt, 32); err != nil {
 		return err
 	}
 
@@ -269,12 +238,11 @@ func (m *Tender) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateCustomerID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomerID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("customer_id", "body", string(m.CustomerID), 191); err != nil {
+	if err := validate.MaxLength("customer_id", "body", m.CustomerID, 191); err != nil {
 		return err
 	}
 
@@ -282,12 +250,11 @@ func (m *Tender) validateCustomerID(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 192); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 192); err != nil {
 		return err
 	}
 
@@ -295,12 +262,11 @@ func (m *Tender) validateID(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateLocationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 50); err != nil {
+	if err := validate.MaxLength("location_id", "body", m.LocationID, 50); err != nil {
 		return err
 	}
 
@@ -308,12 +274,11 @@ func (m *Tender) validateLocationID(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateNote(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Note) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("note", "body", string(m.Note), 500); err != nil {
+	if err := validate.MaxLength("note", "body", m.Note, 500); err != nil {
 		return err
 	}
 
@@ -321,12 +286,11 @@ func (m *Tender) validateNote(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validatePaymentID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PaymentID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("payment_id", "body", string(m.PaymentID), 192); err != nil {
+	if err := validate.MaxLength("payment_id", "body", m.PaymentID, 192); err != nil {
 		return err
 	}
 
@@ -334,7 +298,6 @@ func (m *Tender) validatePaymentID(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateProcessingFeeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ProcessingFeeMoney) { // not required
 		return nil
 	}
@@ -352,7 +315,6 @@ func (m *Tender) validateProcessingFeeMoney(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateTipMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TipMoney) { // not required
 		return nil
 	}
@@ -370,12 +332,11 @@ func (m *Tender) validateTipMoney(formats strfmt.Registry) error {
 }
 
 func (m *Tender) validateTransactionID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TransactionID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("transaction_id", "body", string(m.TransactionID), 192); err != nil {
+	if err := validate.MaxLength("transaction_id", "body", m.TransactionID, 192); err != nil {
 		return err
 	}
 
@@ -386,6 +347,128 @@ func (m *Tender) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this tender based on the context it is used
+func (m *Tender) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdditionalRecipients(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCardDetails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCashDetails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProcessingFeeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTipMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Tender) contextValidateAdditionalRecipients(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AdditionalRecipients); i++ {
+
+		if m.AdditionalRecipients[i] != nil {
+			if err := m.AdditionalRecipients[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additional_recipients" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Tender) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Tender) contextValidateCardDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CardDetails != nil {
+		if err := m.CardDetails.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("card_details")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Tender) contextValidateCashDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CashDetails != nil {
+		if err := m.CashDetails.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cash_details")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Tender) contextValidateProcessingFeeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProcessingFeeMoney != nil {
+		if err := m.ProcessingFeeMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("processing_fee_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Tender) contextValidateTipMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TipMoney != nil {
+		if err := m.TipMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tip_money")
+			}
+			return err
+		}
 	}
 
 	return nil

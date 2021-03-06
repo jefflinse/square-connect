@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // DeleteCatalogObjectResponse delete catalog object response
+// Example: {"deleted_at":"2016-11-16T22:25:24.878Z","deleted_object_ids":["7SB3ZQYJ5GDMVFL7JK46JCHT","KQLFFHA6K6J3YQAQAWDQAL57"]}
 //
 // swagger:model DeleteCatalogObjectResponse
 type DeleteCatalogObjectResponse struct {
@@ -28,7 +30,7 @@ type DeleteCatalogObjectResponse struct {
 	// when its parent catalog item is deleted.
 	DeletedObjectIds []string `json:"deleted_object_ids"`
 
-	// Information on any errors encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 }
 
@@ -47,7 +49,6 @@ func (m *DeleteCatalogObjectResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DeleteCatalogObjectResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -59,6 +60,38 @@ func (m *DeleteCatalogObjectResponse) validateErrors(formats strfmt.Registry) er
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this delete catalog object response based on the context it is used
+func (m *DeleteCatalogObjectResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DeleteCatalogObjectResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

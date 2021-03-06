@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -13,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// DisputeState List of possible dispute states.
+// DisputeState The list of possible dispute states.
 //
 // swagger:model DisputeState
 type DisputeState string
@@ -65,7 +66,7 @@ func init() {
 }
 
 func (m DisputeState) validateDisputeStateEnum(path, location string, value DisputeState) error {
-	if err := validate.Enum(path, location, value, disputeStateEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, disputeStateEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -83,5 +84,10 @@ func (m DisputeState) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this dispute state based on context it is used
+func (m DisputeState) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

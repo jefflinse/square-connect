@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -22,6 +24,7 @@ type LoyaltyProgramRewardTier struct {
 	CreatedAt *string `json:"created_at"`
 
 	// Provides details about the reward tier definition.
+	// DEPRECATED at version 2020-12-16. Replaced by the `pricing_rule_reference` field.
 	// Required: true
 	Definition *LoyaltyProgramRewardDefinition `json:"definition"`
 
@@ -40,6 +43,13 @@ type LoyaltyProgramRewardTier struct {
 	// Required: true
 	// Minimum: 1
 	Points *int64 `json:"points"`
+
+	// A reference to the specific version of a `PRICING_RULE` catalog object that contains information about the reward tier discount.
+	//
+	// Use `object_id` and `catalog_version` with the `RetrieveCatalogObject` endpoint
+	// to get discount details. Make sure to set `include_related_objects` to true in the request to retrieve all catalog objects
+	// that define the discount. For more information, see [Get discount details for the reward](https://developer.squareup.com/docs/docs/loyalty-api/overview#get-discount-details).
+	PricingRuleReference *CatalogObjectReference `json:"pricing_rule_reference,omitempty"`
 }
 
 // Validate validates this loyalty program reward tier
@@ -63,6 +73,10 @@ func (m *LoyaltyProgramRewardTier) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePoints(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePricingRuleReference(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -105,11 +119,11 @@ func (m *LoyaltyProgramRewardTier) validateID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("id", "body", string(*m.ID), 1); err != nil {
+	if err := validate.MinLength("id", "body", *m.ID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("id", "body", string(*m.ID), 36); err != nil {
+	if err := validate.MaxLength("id", "body", *m.ID, 36); err != nil {
 		return err
 	}
 
@@ -122,7 +136,7 @@ func (m *LoyaltyProgramRewardTier) validateName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
@@ -135,8 +149,71 @@ func (m *LoyaltyProgramRewardTier) validatePoints(formats strfmt.Registry) error
 		return err
 	}
 
-	if err := validate.MinimumInt("points", "body", int64(*m.Points), 1, false); err != nil {
+	if err := validate.MinimumInt("points", "body", *m.Points, 1, false); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *LoyaltyProgramRewardTier) validatePricingRuleReference(formats strfmt.Registry) error {
+	if swag.IsZero(m.PricingRuleReference) { // not required
+		return nil
+	}
+
+	if m.PricingRuleReference != nil {
+		if err := m.PricingRuleReference.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pricing_rule_reference")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this loyalty program reward tier based on the context it is used
+func (m *LoyaltyProgramRewardTier) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDefinition(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePricingRuleReference(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LoyaltyProgramRewardTier) contextValidateDefinition(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Definition != nil {
+		if err := m.Definition.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("definition")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyProgramRewardTier) contextValidatePricingRuleReference(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PricingRuleReference != nil {
+		if err := m.PricingRuleReference.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pricing_rule_reference")
+			}
+			return err
+		}
 	}
 
 	return nil

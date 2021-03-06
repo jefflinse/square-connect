@@ -17,86 +17,105 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListCashDrawerShiftsParams creates a new ListCashDrawerShiftsParams object
-// with the default values initialized.
+// NewListCashDrawerShiftsParams creates a new ListCashDrawerShiftsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListCashDrawerShiftsParams() *ListCashDrawerShiftsParams {
-	var ()
 	return &ListCashDrawerShiftsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListCashDrawerShiftsParamsWithTimeout creates a new ListCashDrawerShiftsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListCashDrawerShiftsParamsWithTimeout(timeout time.Duration) *ListCashDrawerShiftsParams {
-	var ()
 	return &ListCashDrawerShiftsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListCashDrawerShiftsParamsWithContext creates a new ListCashDrawerShiftsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListCashDrawerShiftsParamsWithContext(ctx context.Context) *ListCashDrawerShiftsParams {
-	var ()
 	return &ListCashDrawerShiftsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListCashDrawerShiftsParamsWithHTTPClient creates a new ListCashDrawerShiftsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListCashDrawerShiftsParamsWithHTTPClient(client *http.Client) *ListCashDrawerShiftsParams {
-	var ()
 	return &ListCashDrawerShiftsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListCashDrawerShiftsParams contains all the parameters to send to the API endpoint
-for the list cash drawer shifts operation typically these are written to a http.Request
+/* ListCashDrawerShiftsParams contains all the parameters to send to the API endpoint
+   for the list cash drawer shifts operation.
+
+   Typically these are written to a http.Request.
 */
 type ListCashDrawerShiftsParams struct {
 
-	/*BeginTime
-	  The inclusive start time of the query on opened_at, in ISO 8601 format.
+	/* BeginTime.
 
+	   The inclusive start time of the query on opened_at, in ISO 8601 format.
 	*/
 	BeginTime *string
-	/*Cursor
-	  Opaque cursor for fetching the next page of results.
 
+	/* Cursor.
+
+	   Opaque cursor for fetching the next page of results.
 	*/
 	Cursor *string
-	/*EndTime
-	  The exclusive end date of the query on opened_at, in ISO 8601 format.
 
+	/* EndTime.
+
+	   The exclusive end date of the query on opened_at, in ISO 8601 format.
 	*/
 	EndTime *string
-	/*Limit
-	  Number of cash drawer shift events in a page of results (200 by
-	default, 1000 max).
 
+	/* Limit.
+
+	     Number of cash drawer shift events in a page of results (200 by
+	default, 1000 max).
 	*/
 	Limit *int64
-	/*LocationID
-	  The ID of the location to query for a list of cash drawer shifts.
 
+	/* LocationID.
+
+	   The ID of the location to query for a list of cash drawer shifts.
 	*/
 	LocationID string
-	/*SortOrder
-	  The order in which cash drawer shifts are listed in the response,
-	based on their opened_at field. Default value: ASC
 
+	/* SortOrder.
+
+	     The order in which cash drawer shifts are listed in the response,
+	based on their opened_at field. Default value: ASC
 	*/
 	SortOrder *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list cash drawer shifts params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCashDrawerShiftsParams) WithDefaults() *ListCashDrawerShiftsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list cash drawer shifts params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCashDrawerShiftsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list cash drawer shifts params
@@ -210,70 +229,75 @@ func (o *ListCashDrawerShiftsParams) WriteToRequest(r runtime.ClientRequest, reg
 
 		// query param begin_time
 		var qrBeginTime string
+
 		if o.BeginTime != nil {
 			qrBeginTime = *o.BeginTime
 		}
 		qBeginTime := qrBeginTime
 		if qBeginTime != "" {
+
 			if err := r.SetQueryParam("begin_time", qBeginTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Cursor != nil {
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EndTime != nil {
 
 		// query param end_time
 		var qrEndTime string
+
 		if o.EndTime != nil {
 			qrEndTime = *o.EndTime
 		}
 		qEndTime := qrEndTime
 		if qEndTime != "" {
+
 			if err := r.SetQueryParam("end_time", qEndTime); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// query param location_id
 	qrLocationID := o.LocationID
 	qLocationID := qrLocationID
 	if qLocationID != "" {
+
 		if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 			return err
 		}
@@ -283,16 +307,17 @@ func (o *ListCashDrawerShiftsParams) WriteToRequest(r runtime.ClientRequest, reg
 
 		// query param sort_order
 		var qrSortOrder string
+
 		if o.SortOrder != nil {
 			qrSortOrder = *o.SortOrder
 		}
 		qSortOrder := qrSortOrder
 		if qSortOrder != "" {
+
 			if err := r.SetQueryParam("sort_order", qSortOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchCatalogObjectsParams creates a new SearchCatalogObjectsParams object
-// with the default values initialized.
+// NewSearchCatalogObjectsParams creates a new SearchCatalogObjectsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchCatalogObjectsParams() *SearchCatalogObjectsParams {
-	var ()
 	return &SearchCatalogObjectsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchCatalogObjectsParamsWithTimeout creates a new SearchCatalogObjectsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchCatalogObjectsParamsWithTimeout(timeout time.Duration) *SearchCatalogObjectsParams {
-	var ()
 	return &SearchCatalogObjectsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchCatalogObjectsParamsWithContext creates a new SearchCatalogObjectsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchCatalogObjectsParamsWithContext(ctx context.Context) *SearchCatalogObjectsParams {
-	var ()
 	return &SearchCatalogObjectsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchCatalogObjectsParamsWithHTTPClient creates a new SearchCatalogObjectsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchCatalogObjectsParamsWithHTTPClient(client *http.Client) *SearchCatalogObjectsParams {
-	var ()
 	return &SearchCatalogObjectsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchCatalogObjectsParams contains all the parameters to send to the API endpoint
-for the search catalog objects operation typically these are written to a http.Request
+/* SearchCatalogObjectsParams contains all the parameters to send to the API endpoint
+   for the search catalog objects operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchCatalogObjectsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchCatalogObjectsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search catalog objects params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchCatalogObjectsParams) WithDefaults() *SearchCatalogObjectsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search catalog objects params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchCatalogObjectsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search catalog objects params
@@ -126,7 +140,6 @@ func (o *SearchCatalogObjectsParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

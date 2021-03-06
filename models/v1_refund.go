@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -129,7 +130,6 @@ func (m *V1Refund) Validate(formats strfmt.Registry) error {
 }
 
 func (m *V1Refund) validateRefundedAdditiveTax(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedAdditiveTax) { // not required
 		return nil
 	}
@@ -154,7 +154,6 @@ func (m *V1Refund) validateRefundedAdditiveTax(formats strfmt.Registry) error {
 }
 
 func (m *V1Refund) validateRefundedAdditiveTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedAdditiveTaxMoney) { // not required
 		return nil
 	}
@@ -172,7 +171,6 @@ func (m *V1Refund) validateRefundedAdditiveTaxMoney(formats strfmt.Registry) err
 }
 
 func (m *V1Refund) validateRefundedDiscountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedDiscountMoney) { // not required
 		return nil
 	}
@@ -190,7 +188,6 @@ func (m *V1Refund) validateRefundedDiscountMoney(formats strfmt.Registry) error 
 }
 
 func (m *V1Refund) validateRefundedInclusiveTax(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedInclusiveTax) { // not required
 		return nil
 	}
@@ -215,7 +212,6 @@ func (m *V1Refund) validateRefundedInclusiveTax(formats strfmt.Registry) error {
 }
 
 func (m *V1Refund) validateRefundedInclusiveTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedInclusiveTaxMoney) { // not required
 		return nil
 	}
@@ -233,7 +229,6 @@ func (m *V1Refund) validateRefundedInclusiveTaxMoney(formats strfmt.Registry) er
 }
 
 func (m *V1Refund) validateRefundedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedMoney) { // not required
 		return nil
 	}
@@ -251,7 +246,6 @@ func (m *V1Refund) validateRefundedMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Refund) validateRefundedProcessingFeeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedProcessingFeeMoney) { // not required
 		return nil
 	}
@@ -269,7 +263,6 @@ func (m *V1Refund) validateRefundedProcessingFeeMoney(formats strfmt.Registry) e
 }
 
 func (m *V1Refund) validateRefundedSurchargeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedSurchargeMoney) { // not required
 		return nil
 	}
@@ -287,7 +280,6 @@ func (m *V1Refund) validateRefundedSurchargeMoney(formats strfmt.Registry) error
 }
 
 func (m *V1Refund) validateRefundedSurcharges(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedSurcharges) { // not required
 		return nil
 	}
@@ -312,7 +304,6 @@ func (m *V1Refund) validateRefundedSurcharges(formats strfmt.Registry) error {
 }
 
 func (m *V1Refund) validateRefundedTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedTaxMoney) { // not required
 		return nil
 	}
@@ -330,13 +321,232 @@ func (m *V1Refund) validateRefundedTaxMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Refund) validateRefundedTipMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedTipMoney) { // not required
 		return nil
 	}
 
 	if m.RefundedTipMoney != nil {
 		if err := m.RefundedTipMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_tip_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 refund based on the context it is used
+func (m *V1Refund) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateRefundedAdditiveTax(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedAdditiveTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedDiscountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedInclusiveTax(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedInclusiveTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedProcessingFeeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedSurchargeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedSurcharges(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedTipMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedAdditiveTax(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.RefundedAdditiveTax); i++ {
+
+		if m.RefundedAdditiveTax[i] != nil {
+			if err := m.RefundedAdditiveTax[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("refunded_additive_tax" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedAdditiveTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedAdditiveTaxMoney != nil {
+		if err := m.RefundedAdditiveTaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_additive_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedDiscountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedDiscountMoney != nil {
+		if err := m.RefundedDiscountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_discount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedInclusiveTax(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.RefundedInclusiveTax); i++ {
+
+		if m.RefundedInclusiveTax[i] != nil {
+			if err := m.RefundedInclusiveTax[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("refunded_inclusive_tax" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedInclusiveTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedInclusiveTaxMoney != nil {
+		if err := m.RefundedInclusiveTaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_inclusive_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedMoney != nil {
+		if err := m.RefundedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedProcessingFeeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedProcessingFeeMoney != nil {
+		if err := m.RefundedProcessingFeeMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_processing_fee_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedSurchargeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedSurchargeMoney != nil {
+		if err := m.RefundedSurchargeMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_surcharge_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedSurcharges(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.RefundedSurcharges); i++ {
+
+		if m.RefundedSurcharges[i] != nil {
+			if err := m.RefundedSurcharges[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("refunded_surcharges" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedTaxMoney != nil {
+		if err := m.RefundedTaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Refund) contextValidateRefundedTipMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedTipMoney != nil {
+		if err := m.RefundedTipMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("refunded_tip_money")
 			}

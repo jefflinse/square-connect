@@ -17,75 +17,91 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListSubscriptionEventsParams creates a new ListSubscriptionEventsParams object
-// with the default values initialized.
+// NewListSubscriptionEventsParams creates a new ListSubscriptionEventsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListSubscriptionEventsParams() *ListSubscriptionEventsParams {
-	var ()
 	return &ListSubscriptionEventsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListSubscriptionEventsParamsWithTimeout creates a new ListSubscriptionEventsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListSubscriptionEventsParamsWithTimeout(timeout time.Duration) *ListSubscriptionEventsParams {
-	var ()
 	return &ListSubscriptionEventsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListSubscriptionEventsParamsWithContext creates a new ListSubscriptionEventsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListSubscriptionEventsParamsWithContext(ctx context.Context) *ListSubscriptionEventsParams {
-	var ()
 	return &ListSubscriptionEventsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListSubscriptionEventsParamsWithHTTPClient creates a new ListSubscriptionEventsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListSubscriptionEventsParamsWithHTTPClient(client *http.Client) *ListSubscriptionEventsParams {
-	var ()
 	return &ListSubscriptionEventsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListSubscriptionEventsParams contains all the parameters to send to the API endpoint
-for the list subscription events operation typically these are written to a http.Request
+/* ListSubscriptionEventsParams contains all the parameters to send to the API endpoint
+   for the list subscription events operation.
+
+   Typically these are written to a http.Request.
 */
 type ListSubscriptionEventsParams struct {
 
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
+	/* Cursor.
+
+	     A pagination cursor returned by a previous call to this endpoint.
 	Provide this to retrieve the next set of results for the original query.
 
 	For more information, see [Pagination](https://developer.squareup.com/docs/docs/working-with-apis/pagination).
-
 	*/
 	Cursor *string
-	/*Limit
-	  The upper limit on the number of subscription events to return
+
+	/* Limit.
+
+	     The upper limit on the number of subscription events to return
 	in the response.
 
 	Default: `200`
-
 	*/
 	Limit *int64
-	/*SubscriptionID
-	  The ID of the subscription to retrieve the events for.
 
+	/* SubscriptionID.
+
+	   The ID of the subscription to retrieve the events for.
 	*/
 	SubscriptionID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list subscription events params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListSubscriptionEventsParams) WithDefaults() *ListSubscriptionEventsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list subscription events params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListSubscriptionEventsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list subscription events params
@@ -166,32 +182,34 @@ func (o *ListSubscriptionEventsParams) WriteToRequest(r runtime.ClientRequest, r
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// path param subscription_id

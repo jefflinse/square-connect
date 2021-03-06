@@ -6,12 +6,15 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ListCustomersRequest Defines the query parameters that can be provided in a request to the
 // ListCustomers endpoint.
+// Example: {}
 //
 // swagger:model ListCustomersRequest
 type ListCustomersRequest struct {
@@ -38,6 +41,11 @@ type ListCustomersRequest struct {
 
 // Validate validates this list customers request
 func (m *ListCustomersRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this list customers request based on context it is used
+func (m *ListCustomersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

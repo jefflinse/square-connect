@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -139,7 +141,6 @@ func (m *OrderLineItemDiscount) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItemDiscount) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
@@ -157,7 +158,6 @@ func (m *OrderLineItemDiscount) validateAmountMoney(formats strfmt.Registry) err
 }
 
 func (m *OrderLineItemDiscount) validateAppliedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedMoney) { // not required
 		return nil
 	}
@@ -175,12 +175,11 @@ func (m *OrderLineItemDiscount) validateAppliedMoney(formats strfmt.Registry) er
 }
 
 func (m *OrderLineItemDiscount) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 192); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 192); err != nil {
 		return err
 	}
 
@@ -188,12 +187,11 @@ func (m *OrderLineItemDiscount) validateCatalogObjectID(formats strfmt.Registry)
 }
 
 func (m *OrderLineItemDiscount) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
@@ -201,12 +199,11 @@ func (m *OrderLineItemDiscount) validateName(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItemDiscount) validatePercentage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Percentage) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("percentage", "body", string(m.Percentage), 10); err != nil {
+	if err := validate.MaxLength("percentage", "body", m.Percentage, 10); err != nil {
 		return err
 	}
 
@@ -214,13 +211,58 @@ func (m *OrderLineItemDiscount) validatePercentage(formats strfmt.Registry) erro
 }
 
 func (m *OrderLineItemDiscount) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order line item discount based on the context it is used
+func (m *OrderLineItemDiscount) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAppliedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderLineItemDiscount) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItemDiscount) contextValidateAppliedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AppliedMoney != nil {
+		if err := m.AppliedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("applied_money")
+			}
+			return err
+		}
 	}
 
 	return nil

@@ -16,52 +16,66 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewCatalogInfoParams creates a new CatalogInfoParams object
-// with the default values initialized.
+// NewCatalogInfoParams creates a new CatalogInfoParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCatalogInfoParams() *CatalogInfoParams {
-
 	return &CatalogInfoParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCatalogInfoParamsWithTimeout creates a new CatalogInfoParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCatalogInfoParamsWithTimeout(timeout time.Duration) *CatalogInfoParams {
-
 	return &CatalogInfoParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCatalogInfoParamsWithContext creates a new CatalogInfoParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCatalogInfoParamsWithContext(ctx context.Context) *CatalogInfoParams {
-
 	return &CatalogInfoParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCatalogInfoParamsWithHTTPClient creates a new CatalogInfoParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCatalogInfoParamsWithHTTPClient(client *http.Client) *CatalogInfoParams {
-
 	return &CatalogInfoParams{
 		HTTPClient: client,
 	}
 }
 
-/*CatalogInfoParams contains all the parameters to send to the API endpoint
-for the catalog info operation typically these are written to a http.Request
+/* CatalogInfoParams contains all the parameters to send to the API endpoint
+   for the catalog info operation.
+
+   Typically these are written to a http.Request.
 */
 type CatalogInfoParams struct {
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the catalog info params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CatalogInfoParams) WithDefaults() *CatalogInfoParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the catalog info params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CatalogInfoParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the catalog info params

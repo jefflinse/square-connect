@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // RedeemLoyaltyRewardRequest A request to redeem a loyalty reward.
+// Example: {"request_body":{"idempotency_key":"98adc7f7-6963-473b-b29c-f3c9cdd7d994","location_id":"P034NEENMD09F"},"request_params":"?reward_id=9f18ac21-233a-31c3-be77-b45840f5a810"}
 //
 // swagger:model RedeemLoyaltyRewardRequest
 type RedeemLoyaltyRewardRequest struct {
@@ -54,11 +57,11 @@ func (m *RedeemLoyaltyRewardRequest) validateIdempotencyKey(formats strfmt.Regis
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 128); err != nil {
 		return err
 	}
 
@@ -71,10 +74,15 @@ func (m *RedeemLoyaltyRewardRequest) validateLocationID(formats strfmt.Registry)
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this redeem loyalty reward request based on context it is used
+func (m *RedeemLoyaltyRewardRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

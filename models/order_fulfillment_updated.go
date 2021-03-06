@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -60,7 +61,6 @@ func (m *OrderFulfillmentUpdated) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderFulfillmentUpdated) validateFulfillmentUpdate(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FulfillmentUpdate) { // not required
 		return nil
 	}
@@ -72,6 +72,38 @@ func (m *OrderFulfillmentUpdated) validateFulfillmentUpdate(formats strfmt.Regis
 
 		if m.FulfillmentUpdate[i] != nil {
 			if err := m.FulfillmentUpdate[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("fulfillment_update" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order fulfillment updated based on the context it is used
+func (m *OrderFulfillmentUpdated) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateFulfillmentUpdate(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderFulfillmentUpdated) contextValidateFulfillmentUpdate(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.FulfillmentUpdate); i++ {
+
+		if m.FulfillmentUpdate[i] != nil {
+			if err := m.FulfillmentUpdate[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("fulfillment_update" + "." + strconv.Itoa(i))
 				}

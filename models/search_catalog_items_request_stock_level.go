@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m SearchCatalogItemsRequestStockLevel) validateSearchCatalogItemsRequestStockLevelEnum(path, location string, value SearchCatalogItemsRequestStockLevel) error {
-	if err := validate.Enum(path, location, value, searchCatalogItemsRequestStockLevelEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, searchCatalogItemsRequestStockLevelEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m SearchCatalogItemsRequestStockLevel) Validate(formats strfmt.Registry) e
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this search catalog items request stock level based on context it is used
+func (m SearchCatalogItemsRequestStockLevel) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

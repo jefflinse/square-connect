@@ -25,23 +25,26 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CancelInvoice(params *CancelInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*CancelInvoiceOK, error)
+	CancelInvoice(params *CancelInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelInvoiceOK, error)
 
-	CreateInvoice(params *CreateInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*CreateInvoiceOK, error)
+	CreateInvoice(params *CreateInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateInvoiceOK, error)
 
-	DeleteInvoice(params *DeleteInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteInvoiceOK, error)
+	DeleteInvoice(params *DeleteInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteInvoiceOK, error)
 
-	GetInvoice(params *GetInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*GetInvoiceOK, error)
+	GetInvoice(params *GetInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetInvoiceOK, error)
 
-	ListInvoices(params *ListInvoicesParams, authInfo runtime.ClientAuthInfoWriter) (*ListInvoicesOK, error)
+	ListInvoices(params *ListInvoicesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListInvoicesOK, error)
 
-	PublishInvoice(params *PublishInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*PublishInvoiceOK, error)
+	PublishInvoice(params *PublishInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublishInvoiceOK, error)
 
-	SearchInvoices(params *SearchInvoicesParams, authInfo runtime.ClientAuthInfoWriter) (*SearchInvoicesOK, error)
+	SearchInvoices(params *SearchInvoicesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchInvoicesOK, error)
 
-	UpdateInvoice(params *UpdateInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateInvoiceOK, error)
+	UpdateInvoice(params *UpdateInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateInvoiceOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -52,15 +55,14 @@ type ClientService interface {
   Cancels an invoice. The seller cannot collect payments for
 the canceled invoice.
 
-You cannot cancel an invoice in a terminal state: `PAID`, `REFUNDED`, `CANCELED`, or `FAILED`.
+You cannot cancel an invoice in the `DRAFT` state or in a terminal state: `PAID`, `REFUNDED`, `CANCELED`, or `FAILED`.
 */
-func (a *Client) CancelInvoice(params *CancelInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*CancelInvoiceOK, error) {
+func (a *Client) CancelInvoice(params *CancelInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelInvoiceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCancelInvoiceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CancelInvoice",
 		Method:             "POST",
 		PathPattern:        "/v2/invoices/{invoice_id}/cancel",
@@ -72,7 +74,12 @@ func (a *Client) CancelInvoice(params *CancelInvoiceParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -95,13 +102,12 @@ for an order created using the Orders API.
 A draft invoice remains in your account and no action is taken.
 You must publish the invoice before Square can process it (send it to the customer's email address or charge the customer’s card on file).
 */
-func (a *Client) CreateInvoice(params *CreateInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*CreateInvoiceOK, error) {
+func (a *Client) CreateInvoice(params *CreateInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateInvoiceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateInvoiceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateInvoice",
 		Method:             "POST",
 		PathPattern:        "/v2/invoices",
@@ -113,7 +119,12 @@ func (a *Client) CreateInvoice(params *CreateInvoiceParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -132,16 +143,14 @@ func (a *Client) CreateInvoice(params *CreateInvoiceParams, authInfo runtime.Cli
 
   Deletes the specified invoice. When an invoice is deleted, the
 associated Order status changes to CANCELED. You can only delete a draft
-invoice (you cannot delete an invoice scheduled for publication, or a
-published invoice).
+invoice (you cannot delete a published invoice, including one that is scheduled for processing).
 */
-func (a *Client) DeleteInvoice(params *DeleteInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteInvoiceOK, error) {
+func (a *Client) DeleteInvoice(params *DeleteInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteInvoiceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteInvoiceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteInvoice",
 		Method:             "DELETE",
 		PathPattern:        "/v2/invoices/{invoice_id}",
@@ -153,7 +162,12 @@ func (a *Client) DeleteInvoice(params *DeleteInvoiceParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -172,13 +186,12 @@ func (a *Client) DeleteInvoice(params *DeleteInvoiceParams, authInfo runtime.Cli
 
   Retrieves an invoice by invoice ID.
 */
-func (a *Client) GetInvoice(params *GetInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*GetInvoiceOK, error) {
+func (a *Client) GetInvoice(params *GetInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetInvoiceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetInvoiceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetInvoice",
 		Method:             "GET",
 		PathPattern:        "/v2/invoices/{invoice_id}",
@@ -190,7 +203,12 @@ func (a *Client) GetInvoice(params *GetInvoiceParams, authInfo runtime.ClientAut
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -211,13 +229,12 @@ func (a *Client) GetInvoice(params *GetInvoiceParams, authInfo runtime.ClientAut
 is paginated. If truncated, the response includes a `cursor` that you
 use in a subsequent request to fetch the next set of invoices.
 */
-func (a *Client) ListInvoices(params *ListInvoicesParams, authInfo runtime.ClientAuthInfoWriter) (*ListInvoicesOK, error) {
+func (a *Client) ListInvoices(params *ListInvoicesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListInvoicesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListInvoicesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListInvoices",
 		Method:             "GET",
 		PathPattern:        "/v2/invoices",
@@ -229,7 +246,12 @@ func (a *Client) ListInvoices(params *ListInvoicesParams, authInfo runtime.Clien
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -258,13 +280,12 @@ based on the invoice configuration. For example, the status changes to `UNPAID` 
 Square emails the invoice or `PARTIALLY_PAID` if Square charge a card on file for a portion of the
 invoice amount).
 */
-func (a *Client) PublishInvoice(params *PublishInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*PublishInvoiceOK, error) {
+func (a *Client) PublishInvoice(params *PublishInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PublishInvoiceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewPublishInvoiceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "PublishInvoice",
 		Method:             "POST",
 		PathPattern:        "/v2/invoices/{invoice_id}/publish",
@@ -276,7 +297,12 @@ func (a *Client) PublishInvoice(params *PublishInvoiceParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -301,13 +327,12 @@ optionally one customer.
 The response is paginated. If truncated, the response includes a `cursor`
 that you use in a subsequent request to fetch the next set of invoices.
 */
-func (a *Client) SearchInvoices(params *SearchInvoicesParams, authInfo runtime.ClientAuthInfoWriter) (*SearchInvoicesOK, error) {
+func (a *Client) SearchInvoices(params *SearchInvoicesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchInvoicesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchInvoicesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchInvoices",
 		Method:             "POST",
 		PathPattern:        "/v2/invoices/search",
@@ -319,7 +344,12 @@ func (a *Client) SearchInvoices(params *SearchInvoicesParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -336,18 +366,17 @@ func (a *Client) SearchInvoices(params *SearchInvoicesParams, authInfo runtime.C
 /*
   UpdateInvoice updates invoice
 
-  Updates an invoice by modifying field values, clearing field values, or both
-as specified in the request.
-There are no restrictions to updating an invoice in a draft state.
-However, there are guidelines for updating a published invoice.
+  Updates an invoice by modifying fields, clearing fields, or both. For most updates, you can use a sparse
+`Invoice` object to add fields or change values, and use the `fields_to_clear` field to specify fields to clear.
+However, some restrictions apply. For example, you cannot change the `order_id` or `location_id` field, and you
+must provide the complete `custom_fields` list to update a custom field. Published invoices have additional restrictions.
 */
-func (a *Client) UpdateInvoice(params *UpdateInvoiceParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateInvoiceOK, error) {
+func (a *Client) UpdateInvoice(params *UpdateInvoiceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateInvoiceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateInvoiceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateInvoice",
 		Method:             "PUT",
 		PathPattern:        "/v2/invoices/{invoice_id}",
@@ -359,7 +388,12 @@ func (a *Client) UpdateInvoice(params *UpdateInvoiceParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

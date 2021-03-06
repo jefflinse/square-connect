@@ -16,64 +16,79 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRemoveGroupFromCustomerParams creates a new RemoveGroupFromCustomerParams object
-// with the default values initialized.
+// NewRemoveGroupFromCustomerParams creates a new RemoveGroupFromCustomerParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRemoveGroupFromCustomerParams() *RemoveGroupFromCustomerParams {
-	var ()
 	return &RemoveGroupFromCustomerParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRemoveGroupFromCustomerParamsWithTimeout creates a new RemoveGroupFromCustomerParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRemoveGroupFromCustomerParamsWithTimeout(timeout time.Duration) *RemoveGroupFromCustomerParams {
-	var ()
 	return &RemoveGroupFromCustomerParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRemoveGroupFromCustomerParamsWithContext creates a new RemoveGroupFromCustomerParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRemoveGroupFromCustomerParamsWithContext(ctx context.Context) *RemoveGroupFromCustomerParams {
-	var ()
 	return &RemoveGroupFromCustomerParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRemoveGroupFromCustomerParamsWithHTTPClient creates a new RemoveGroupFromCustomerParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRemoveGroupFromCustomerParamsWithHTTPClient(client *http.Client) *RemoveGroupFromCustomerParams {
-	var ()
 	return &RemoveGroupFromCustomerParams{
 		HTTPClient: client,
 	}
 }
 
-/*RemoveGroupFromCustomerParams contains all the parameters to send to the API endpoint
-for the remove group from customer operation typically these are written to a http.Request
+/* RemoveGroupFromCustomerParams contains all the parameters to send to the API endpoint
+   for the remove group from customer operation.
+
+   Typically these are written to a http.Request.
 */
 type RemoveGroupFromCustomerParams struct {
 
-	/*CustomerID
-	  The ID of the customer to remove from the group.
+	/* CustomerID.
 
+	   The ID of the customer to remove from the group.
 	*/
 	CustomerID string
-	/*GroupID
-	  The ID of the customer group to remove the customer from.
 
+	/* GroupID.
+
+	   The ID of the customer group to remove the customer from.
 	*/
 	GroupID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the remove group from customer params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RemoveGroupFromCustomerParams) WithDefaults() *RemoveGroupFromCustomerParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the remove group from customer params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RemoveGroupFromCustomerParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the remove group from customer params

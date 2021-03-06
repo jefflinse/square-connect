@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -41,7 +42,7 @@ func init() {
 }
 
 func (m TaxCalculationPhase) validateTaxCalculationPhaseEnum(path, location string, value TaxCalculationPhase) error {
-	if err := validate.Enum(path, location, value, taxCalculationPhaseEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, taxCalculationPhaseEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +60,10 @@ func (m TaxCalculationPhase) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this tax calculation phase based on context it is used
+func (m TaxCalculationPhase) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

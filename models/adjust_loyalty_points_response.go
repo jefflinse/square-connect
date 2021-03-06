@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // AdjustLoyaltyPointsResponse A response that includes the loyalty event that
 // resulted from the successful API call.
+// Example: {"event":{"adjust_points":{"loyalty_program_id":"d619f755-2d17-41f3-990d-c04ecedd64dd","points":10,"reason":"Complimentary points"},"created_at":"2020-05-08T21:42:32Z","id":"613a6fca-8d67-39d0-bad2-3b4bc45c8637","loyalty_account_id":"5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd","source":"LOYALTY_API","type":"ADJUST_POINTS"}}
 //
 // swagger:model AdjustLoyaltyPointsResponse
 type AdjustLoyaltyPointsResponse struct {
@@ -45,7 +47,6 @@ func (m *AdjustLoyaltyPointsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *AdjustLoyaltyPointsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -70,13 +71,62 @@ func (m *AdjustLoyaltyPointsResponse) validateErrors(formats strfmt.Registry) er
 }
 
 func (m *AdjustLoyaltyPointsResponse) validateEvent(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Event) { // not required
 		return nil
 	}
 
 	if m.Event != nil {
 		if err := m.Event.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("event")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this adjust loyalty points response based on the context it is used
+func (m *AdjustLoyaltyPointsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEvent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *AdjustLoyaltyPointsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *AdjustLoyaltyPointsResponse) contextValidateEvent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Event != nil {
+		if err := m.Event.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("event")
 			}

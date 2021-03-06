@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -44,6 +46,34 @@ func (m *LoyaltyEventDateTimeFilter) validateCreatedAt(formats strfmt.Registry) 
 
 	if m.CreatedAt != nil {
 		if err := m.CreatedAt.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("created_at")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this loyalty event date time filter based on the context it is used
+func (m *LoyaltyEventDateTimeFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LoyaltyEventDateTimeFilter) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatedAt != nil {
+		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("created_at")
 			}

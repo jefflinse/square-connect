@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // BulkCreateTeamMembersRequest Represents a bulk create request for `TeamMember` objects.
+// Example: {"request_body":{"team_members":{"idempotency-key-1":{"team_member":{"assigned_locations":{"assignment_type":"EXPLICIT_LOCATIONS","location_ids":["YSGH2WBKG94QZ","GA2Y9HSJ8KRYT"]},"email_address":"joe_doe@gmail.com","family_name":"Doe","given_name":"Joe","phone_number":"+14159283333","reference_id":"reference_id_1"}},"idempotency-key-2":{"team_member":{"assigned_locations":{"assignment_type":"ALL_CURRENT_AND_FUTURE_LOCATIONS"},"email_address":"jane_smith@gmail.com","family_name":"Smith","given_name":"Jane","phone_number":"+14159223334","reference_id":"reference_id_2"}}}}}
 //
 // swagger:model BulkCreateTeamMembersRequest
 type BulkCreateTeamMembersRequest struct {
@@ -38,6 +41,10 @@ func (m *BulkCreateTeamMembersRequest) Validate(formats strfmt.Registry) error {
 
 func (m *BulkCreateTeamMembersRequest) validateTeamMembers(formats strfmt.Registry) error {
 
+	if err := validate.Required("team_members", "body", m.TeamMembers); err != nil {
+		return err
+	}
+
 	for k := range m.TeamMembers {
 
 		if err := validate.Required("team_members"+"."+k, "body", m.TeamMembers[k]); err != nil {
@@ -45,6 +52,39 @@ func (m *BulkCreateTeamMembersRequest) validateTeamMembers(formats strfmt.Regist
 		}
 		if val, ok := m.TeamMembers[k]; ok {
 			if err := val.Validate(formats); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this bulk create team members request based on the context it is used
+func (m *BulkCreateTeamMembersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateTeamMembers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BulkCreateTeamMembersRequest) contextValidateTeamMembers(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := validate.Required("team_members", "body", m.TeamMembers); err != nil {
+		return err
+	}
+
+	for k := range m.TeamMembers {
+
+		if val, ok := m.TeamMembers[k]; ok {
+			if err := val.ContextValidate(ctx, formats); err != nil {
 				return err
 			}
 		}

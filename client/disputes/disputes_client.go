@@ -25,23 +25,26 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	AcceptDispute(params *AcceptDisputeParams, authInfo runtime.ClientAuthInfoWriter) (*AcceptDisputeOK, error)
+	AcceptDispute(params *AcceptDisputeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AcceptDisputeOK, error)
 
-	CreateDisputeEvidenceText(params *CreateDisputeEvidenceTextParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDisputeEvidenceTextOK, error)
+	CreateDisputeEvidenceText(params *CreateDisputeEvidenceTextParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateDisputeEvidenceTextOK, error)
 
-	ListDisputeEvidence(params *ListDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*ListDisputeEvidenceOK, error)
+	ListDisputeEvidence(params *ListDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListDisputeEvidenceOK, error)
 
-	ListDisputes(params *ListDisputesParams, authInfo runtime.ClientAuthInfoWriter) (*ListDisputesOK, error)
+	ListDisputes(params *ListDisputesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListDisputesOK, error)
 
-	RemoveDisputeEvidence(params *RemoveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveDisputeEvidenceOK, error)
+	RemoveDisputeEvidence(params *RemoveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveDisputeEvidenceOK, error)
 
-	RetrieveDispute(params *RetrieveDisputeParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveDisputeOK, error)
+	RetrieveDispute(params *RetrieveDisputeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveDisputeOK, error)
 
-	RetrieveDisputeEvidence(params *RetrieveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveDisputeEvidenceOK, error)
+	RetrieveDisputeEvidence(params *RetrieveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveDisputeEvidenceOK, error)
 
-	SubmitEvidence(params *SubmitEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*SubmitEvidenceOK, error)
+	SubmitEvidence(params *SubmitEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SubmitEvidenceOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -49,21 +52,18 @@ type ClientService interface {
 /*
   AcceptDispute accepts dispute
 
-  Accepts loss on a dispute. Square returns
-the disputed amount to the cardholder and updates the
-dispute state to ACCEPTED.
+  Accepts the loss on a dispute. Square returns the disputed amount to the cardholder and
+updates the dispute state to ACCEPTED.
 
-Square debits the disputed amount from the seller’s Square
-account. If the Square account balance does not have
-sufficient funds, Square debits the associated bank account.
+Square debits the disputed amount from the seller’s Square account. If the Square account
+does not have sufficient funds, Square debits the associated bank account.
 */
-func (a *Client) AcceptDispute(params *AcceptDisputeParams, authInfo runtime.ClientAuthInfoWriter) (*AcceptDisputeOK, error) {
+func (a *Client) AcceptDispute(params *AcceptDisputeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AcceptDisputeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAcceptDisputeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "AcceptDispute",
 		Method:             "POST",
 		PathPattern:        "/v2/disputes/{dispute_id}/accept",
@@ -75,7 +75,12 @@ func (a *Client) AcceptDispute(params *AcceptDisputeParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -94,13 +99,12 @@ func (a *Client) AcceptDispute(params *AcceptDisputeParams, authInfo runtime.Cli
 
   Uploads text to use as evidence for a dispute challenge.
 */
-func (a *Client) CreateDisputeEvidenceText(params *CreateDisputeEvidenceTextParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDisputeEvidenceTextOK, error) {
+func (a *Client) CreateDisputeEvidenceText(params *CreateDisputeEvidenceTextParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateDisputeEvidenceTextOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateDisputeEvidenceTextParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateDisputeEvidenceText",
 		Method:             "POST",
 		PathPattern:        "/v2/disputes/{dispute_id}/evidence_text",
@@ -112,7 +116,12 @@ func (a *Client) CreateDisputeEvidenceText(params *CreateDisputeEvidenceTextPara
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -131,13 +140,12 @@ func (a *Client) CreateDisputeEvidenceText(params *CreateDisputeEvidenceTextPara
 
   Returns a list of evidence associated with a dispute.
 */
-func (a *Client) ListDisputeEvidence(params *ListDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*ListDisputeEvidenceOK, error) {
+func (a *Client) ListDisputeEvidence(params *ListDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListDisputeEvidenceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListDisputeEvidenceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListDisputeEvidence",
 		Method:             "GET",
 		PathPattern:        "/v2/disputes/{dispute_id}/evidence",
@@ -149,7 +157,12 @@ func (a *Client) ListDisputeEvidence(params *ListDisputeEvidenceParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -166,16 +179,14 @@ func (a *Client) ListDisputeEvidence(params *ListDisputeEvidenceParams, authInfo
 /*
   ListDisputes lists disputes
 
-  Returns a list of disputes associated
-with a particular account.
+  Returns a list of disputes associated with a particular account.
 */
-func (a *Client) ListDisputes(params *ListDisputesParams, authInfo runtime.ClientAuthInfoWriter) (*ListDisputesOK, error) {
+func (a *Client) ListDisputes(params *ListDisputesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListDisputesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListDisputesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListDisputes",
 		Method:             "GET",
 		PathPattern:        "/v2/disputes",
@@ -187,7 +198,12 @@ func (a *Client) ListDisputes(params *ListDisputesParams, authInfo runtime.Clien
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -206,17 +222,15 @@ func (a *Client) ListDisputes(params *ListDisputesParams, authInfo runtime.Clien
 
   Removes specified evidence from a dispute.
 
-Square does not send the bank any evidence that
-is removed. Also, you cannot remove evidence after
+Square does not send the bank any evidence that is removed. Also, you cannot remove evidence after
 submitting it to the bank using [SubmitEvidence](/reference/square/disputes-api/submit-evidence).
 */
-func (a *Client) RemoveDisputeEvidence(params *RemoveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*RemoveDisputeEvidenceOK, error) {
+func (a *Client) RemoveDisputeEvidence(params *RemoveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RemoveDisputeEvidenceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRemoveDisputeEvidenceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RemoveDisputeEvidence",
 		Method:             "DELETE",
 		PathPattern:        "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
@@ -228,7 +242,12 @@ func (a *Client) RemoveDisputeEvidence(params *RemoveDisputeEvidenceParams, auth
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -245,15 +264,14 @@ func (a *Client) RemoveDisputeEvidence(params *RemoveDisputeEvidenceParams, auth
 /*
   RetrieveDispute retrieves dispute
 
-  Returns details of a specific dispute.
+  Returns details about a specific dispute.
 */
-func (a *Client) RetrieveDispute(params *RetrieveDisputeParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveDisputeOK, error) {
+func (a *Client) RetrieveDispute(params *RetrieveDisputeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveDisputeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveDisputeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveDispute",
 		Method:             "GET",
 		PathPattern:        "/v2/disputes/{dispute_id}",
@@ -265,7 +283,12 @@ func (a *Client) RetrieveDispute(params *RetrieveDisputeParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -284,17 +307,15 @@ func (a *Client) RetrieveDispute(params *RetrieveDisputeParams, authInfo runtime
 
   Returns the specific evidence metadata associated with a specific dispute.
 
-You must maintain a copy of the evidence you upload if you want to
-reference it later. You cannot download the evidence
-after you upload it.
+You must maintain a copy of the evidence you upload if you want to reference it later. You cannot
+download the evidence after you upload it.
 */
-func (a *Client) RetrieveDisputeEvidence(params *RetrieveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveDisputeEvidenceOK, error) {
+func (a *Client) RetrieveDisputeEvidence(params *RetrieveDisputeEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveDisputeEvidenceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveDisputeEvidenceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveDisputeEvidence",
 		Method:             "GET",
 		PathPattern:        "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
@@ -306,7 +327,12 @@ func (a *Client) RetrieveDisputeEvidence(params *RetrieveDisputeEvidenceParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -325,20 +351,17 @@ func (a *Client) RetrieveDisputeEvidence(params *RetrieveDisputeEvidenceParams, 
 
   Submits evidence to the cardholder's bank.
 
-Before submitting evidence, Square compiles all available evidence. This includes
-evidence uploaded using the
-[CreateDisputeEvidenceFile](/reference/square/disputes-api/create-dispute-evidence-file) and
-[CreateDisputeEvidenceText](/reference/square/disputes-api/create-dispute-evidence-text) endpoints,
-and evidence automatically provided by Square, when
-available.
+Before submitting evidence, Square compiles all available evidence. This includes evidence uploaded
+using the [CreateDisputeEvidenceFile](/reference/square/disputes-api/create-dispute-evidence-file) and
+[CreateDisputeEvidenceText](/reference/square/disputes-api/create-dispute-evidence-text) endpoints and
+evidence automatically provided by Square, when available.
 */
-func (a *Client) SubmitEvidence(params *SubmitEvidenceParams, authInfo runtime.ClientAuthInfoWriter) (*SubmitEvidenceOK, error) {
+func (a *Client) SubmitEvidence(params *SubmitEvidenceParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SubmitEvidenceOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSubmitEvidenceParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SubmitEvidence",
 		Method:             "POST",
 		PathPattern:        "/v2/disputes/{dispute_id}/submit-evidence",
@@ -350,7 +373,12 @@ func (a *Client) SubmitEvidence(params *SubmitEvidenceParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

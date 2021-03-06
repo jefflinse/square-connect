@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -43,7 +45,7 @@ type V1Employee struct {
 	// The ids of the employee's associated roles. Currently, you can specify only one or zero roles per employee.
 	RoleIds []string `json:"role_ids"`
 
-	// CWhether the employee is ACTIVE or INACTIVE. Inactive employees cannot sign in to Square Register.Merchants update this field from the Square Dashboard.
+	// Whether the employee is ACTIVE or INACTIVE. Inactive employees cannot sign in to Square Register.Merchants update this field from the Square Dashboard.
 	// See [V1EmployeeStatus](#type-v1employeestatus) for possible values
 	Status string `json:"status,omitempty"`
 
@@ -84,6 +86,11 @@ func (m *V1Employee) validateLastName(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this v1 employee based on context it is used
+func (m *V1Employee) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

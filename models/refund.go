@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -117,7 +118,6 @@ func (m *Refund) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Refund) validateAdditionalRecipients(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdditionalRecipients) { // not required
 		return nil
 	}
@@ -160,12 +160,11 @@ func (m *Refund) validateAmountMoney(formats strfmt.Registry) error {
 }
 
 func (m *Refund) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 32); err != nil {
+	if err := validate.MaxLength("created_at", "body", m.CreatedAt, 32); err != nil {
 		return err
 	}
 
@@ -178,7 +177,7 @@ func (m *Refund) validateID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MaxLength("id", "body", string(*m.ID), 255); err != nil {
+	if err := validate.MaxLength("id", "body", *m.ID, 255); err != nil {
 		return err
 	}
 
@@ -191,7 +190,7 @@ func (m *Refund) validateLocationID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(*m.LocationID), 50); err != nil {
+	if err := validate.MaxLength("location_id", "body", *m.LocationID, 50); err != nil {
 		return err
 	}
 
@@ -199,7 +198,6 @@ func (m *Refund) validateLocationID(formats strfmt.Registry) error {
 }
 
 func (m *Refund) validateProcessingFeeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ProcessingFeeMoney) { // not required
 		return nil
 	}
@@ -222,7 +220,7 @@ func (m *Refund) validateReason(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MaxLength("reason", "body", string(*m.Reason), 192); err != nil {
+	if err := validate.MaxLength("reason", "body", *m.Reason, 192); err != nil {
 		return err
 	}
 
@@ -244,7 +242,7 @@ func (m *Refund) validateTenderID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MaxLength("tender_id", "body", string(*m.TenderID), 192); err != nil {
+	if err := validate.MaxLength("tender_id", "body", *m.TenderID, 192); err != nil {
 		return err
 	}
 
@@ -257,8 +255,76 @@ func (m *Refund) validateTransactionID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MaxLength("transaction_id", "body", string(*m.TransactionID), 192); err != nil {
+	if err := validate.MaxLength("transaction_id", "body", *m.TransactionID, 192); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this refund based on the context it is used
+func (m *Refund) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdditionalRecipients(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProcessingFeeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Refund) contextValidateAdditionalRecipients(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AdditionalRecipients); i++ {
+
+		if m.AdditionalRecipients[i] != nil {
+			if err := m.AdditionalRecipients[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additional_recipients" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Refund) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Refund) contextValidateProcessingFeeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProcessingFeeMoney != nil {
+		if err := m.ProcessingFeeMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("processing_fee_money")
+			}
+			return err
+		}
 	}
 
 	return nil

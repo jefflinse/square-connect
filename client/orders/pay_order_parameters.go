@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewPayOrderParams creates a new PayOrderParams object
-// with the default values initialized.
+// NewPayOrderParams creates a new PayOrderParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewPayOrderParams() *PayOrderParams {
-	var ()
 	return &PayOrderParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewPayOrderParamsWithTimeout creates a new PayOrderParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewPayOrderParamsWithTimeout(timeout time.Duration) *PayOrderParams {
-	var ()
 	return &PayOrderParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewPayOrderParamsWithContext creates a new PayOrderParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewPayOrderParamsWithContext(ctx context.Context) *PayOrderParams {
-	var ()
 	return &PayOrderParams{
-
 		Context: ctx,
 	}
 }
 
 // NewPayOrderParamsWithHTTPClient creates a new PayOrderParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewPayOrderParamsWithHTTPClient(client *http.Client) *PayOrderParams {
-	var ()
 	return &PayOrderParams{
 		HTTPClient: client,
 	}
 }
 
-/*PayOrderParams contains all the parameters to send to the API endpoint
-for the pay order operation typically these are written to a http.Request
+/* PayOrderParams contains all the parameters to send to the API endpoint
+   for the pay order operation.
+
+   Typically these are written to a http.Request.
 */
 type PayOrderParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.PayOrderRequest
-	/*OrderID
-	  The ID of the order being paid.
 
+	/* OrderID.
+
+	   The ID of the order being paid.
 	*/
 	OrderID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the pay order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PayOrderParams) WithDefaults() *PayOrderParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the pay order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *PayOrderParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the pay order params
@@ -142,7 +157,6 @@ func (o *PayOrderParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Regi
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

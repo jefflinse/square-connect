@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -13,7 +14,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// CreateDisputeEvidenceTextResponse Defines fields in a CreateDisputeEvidenceText response.
+// CreateDisputeEvidenceTextResponse Defines the fields in a `CreateDisputeEvidenceText` response.
+// Example: {"evidence":{"dispute_id":"bVTprrwk0gygTLZ96VX1oB","evidence_id":"TOomLInj6iWmP3N8qfCXrB","evidence_text":"1Z8888888888888888","uploaded_at":"2018-10-18T16:01:10.000Z"}}
 //
 // swagger:model CreateDisputeEvidenceTextResponse
 type CreateDisputeEvidenceTextResponse struct {
@@ -44,7 +46,6 @@ func (m *CreateDisputeEvidenceTextResponse) Validate(formats strfmt.Registry) er
 }
 
 func (m *CreateDisputeEvidenceTextResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -69,13 +70,62 @@ func (m *CreateDisputeEvidenceTextResponse) validateErrors(formats strfmt.Regist
 }
 
 func (m *CreateDisputeEvidenceTextResponse) validateEvidence(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Evidence) { // not required
 		return nil
 	}
 
 	if m.Evidence != nil {
 		if err := m.Evidence.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("evidence")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create dispute evidence text response based on the context it is used
+func (m *CreateDisputeEvidenceTextResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEvidence(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateDisputeEvidenceTextResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CreateDisputeEvidenceTextResponse) contextValidateEvidence(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Evidence != nil {
+		if err := m.Evidence.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("evidence")
 			}

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // GetBankAccountByV1IDResponse Response object returned by GetBankAccountByV1Id.
+// Example: {"bank_account":{"account_number_suffix":"971","account_type":"CHECKING","bank_name":"Bank Name","country":"US","creditable":false,"currency":"USD","debitable":false,"holder_name":"Jane Doe","id":"w3yRgCGYQnwmdl0R3GB","location_id":"S8GWD5example","primary_bank_identification_number":"112200303","status":"VERIFICATION_IN_PROGRESS","version":5}}
 //
 // swagger:model GetBankAccountByV1IdResponse
 type GetBankAccountByV1IDResponse struct {
@@ -44,7 +46,6 @@ func (m *GetBankAccountByV1IDResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *GetBankAccountByV1IDResponse) validateBankAccount(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BankAccount) { // not required
 		return nil
 	}
@@ -62,7 +63,6 @@ func (m *GetBankAccountByV1IDResponse) validateBankAccount(formats strfmt.Regist
 }
 
 func (m *GetBankAccountByV1IDResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,6 +74,56 @@ func (m *GetBankAccountByV1IDResponse) validateErrors(formats strfmt.Registry) e
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this get bank account by v1 Id response based on the context it is used
+func (m *GetBankAccountByV1IDResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBankAccount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GetBankAccountByV1IDResponse) contextValidateBankAccount(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BankAccount != nil {
+		if err := m.BankAccount.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("bank_account")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GetBankAccountByV1IDResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

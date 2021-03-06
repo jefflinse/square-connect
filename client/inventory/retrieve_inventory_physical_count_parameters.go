@@ -16,60 +16,74 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveInventoryPhysicalCountParams creates a new RetrieveInventoryPhysicalCountParams object
-// with the default values initialized.
+// NewRetrieveInventoryPhysicalCountParams creates a new RetrieveInventoryPhysicalCountParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveInventoryPhysicalCountParams() *RetrieveInventoryPhysicalCountParams {
-	var ()
 	return &RetrieveInventoryPhysicalCountParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveInventoryPhysicalCountParamsWithTimeout creates a new RetrieveInventoryPhysicalCountParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveInventoryPhysicalCountParamsWithTimeout(timeout time.Duration) *RetrieveInventoryPhysicalCountParams {
-	var ()
 	return &RetrieveInventoryPhysicalCountParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveInventoryPhysicalCountParamsWithContext creates a new RetrieveInventoryPhysicalCountParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveInventoryPhysicalCountParamsWithContext(ctx context.Context) *RetrieveInventoryPhysicalCountParams {
-	var ()
 	return &RetrieveInventoryPhysicalCountParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveInventoryPhysicalCountParamsWithHTTPClient creates a new RetrieveInventoryPhysicalCountParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveInventoryPhysicalCountParamsWithHTTPClient(client *http.Client) *RetrieveInventoryPhysicalCountParams {
-	var ()
 	return &RetrieveInventoryPhysicalCountParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveInventoryPhysicalCountParams contains all the parameters to send to the API endpoint
-for the retrieve inventory physical count operation typically these are written to a http.Request
+/* RetrieveInventoryPhysicalCountParams contains all the parameters to send to the API endpoint
+   for the retrieve inventory physical count operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveInventoryPhysicalCountParams struct {
 
-	/*PhysicalCountID
-	  ID of the
-	`InventoryPhysicalCount` to retrieve.
+	/* PhysicalCountID.
 
+	     ID of the
+	`InventoryPhysicalCount` to retrieve.
 	*/
 	PhysicalCountID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve inventory physical count params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveInventoryPhysicalCountParams) WithDefaults() *RetrieveInventoryPhysicalCountParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve inventory physical count params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveInventoryPhysicalCountParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve inventory physical count params

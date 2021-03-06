@@ -6,14 +6,23 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ListCatalogRequest list catalog request
+// Example: {"request_params":"?types=category,tax"}
 //
 // swagger:model ListCatalogRequest
 type ListCatalogRequest struct {
+
+	// The specific version of the catalog objects to be included in the response.
+	// This allows you to retrieve historical
+	// versions of objects. The specified version value is matched against
+	// the `CatalogObject`s' `version` attribute.
+	CatalogVersion int64 `json:"catalog_version,omitempty"`
 
 	// The pagination cursor returned in the previous response. Leave unset for an initial request.
 	// See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
@@ -30,6 +39,11 @@ type ListCatalogRequest struct {
 
 // Validate validates this list catalog request
 func (m *ListCatalogRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this list catalog request based on context it is used
+func (m *ListCatalogRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

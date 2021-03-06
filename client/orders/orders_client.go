@@ -25,19 +25,24 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveOrdersOK, error)
+	BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveOrdersOK, error)
 
-	CalculateOrder(params *CalculateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateOrderOK, error)
+	CalculateOrder(params *CalculateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateOrderOK, error)
 
-	CreateOrder(params *CreateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CreateOrderOK, error)
+	CreateOrder(params *CreateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOrderOK, error)
 
-	PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInfoWriter) (*PayOrderOK, error)
+	PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PayOrderOK, error)
 
-	SearchOrders(params *SearchOrdersParams, authInfo runtime.ClientAuthInfoWriter) (*SearchOrdersOK, error)
+	RetrieveOrder(params *RetrieveOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveOrderOK, error)
 
-	UpdateOrder(params *UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateOrderOK, error)
+	SearchOrders(params *SearchOrdersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchOrdersOK, error)
+
+	UpdateOrder(params *UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateOrderOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -49,13 +54,12 @@ type ClientService interface {
 
 If a given Order ID does not exist, the ID is ignored instead of generating an error.
 */
-func (a *Client) BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveOrdersOK, error) {
+func (a *Client) BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveOrdersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBatchRetrieveOrdersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BatchRetrieveOrders",
 		Method:             "POST",
 		PathPattern:        "/v2/orders/batch-retrieve",
@@ -67,7 +71,12 @@ func (a *Client) BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -86,13 +95,12 @@ func (a *Client) BatchRetrieveOrders(params *BatchRetrieveOrdersParams, authInfo
 
   Calculates an [Order](#type-order).
 */
-func (a *Client) CalculateOrder(params *CalculateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateOrderOK, error) {
+func (a *Client) CalculateOrder(params *CalculateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateOrderOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCalculateOrderParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CalculateOrder",
 		Method:             "POST",
 		PathPattern:        "/v2/orders/calculate",
@@ -104,7 +112,12 @@ func (a *Client) CalculateOrder(params *CalculateOrderParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -129,13 +142,12 @@ guide.
 
 You can modify open orders using the [UpdateOrder](#endpoint-orders-updateorder) endpoint.
 */
-func (a *Client) CreateOrder(params *CreateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*CreateOrderOK, error) {
+func (a *Client) CreateOrder(params *CreateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOrderOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateOrderParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateOrder",
 		Method:             "POST",
 		PathPattern:        "/v2/orders",
@@ -147,7 +159,12 @@ func (a *Client) CreateOrder(params *CreateOrderParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -179,13 +196,12 @@ Any approved payments that reference the same `order_id` not specified in the
 - Be approved with [delayed capture](/payments-api/take-payments#delayed-capture).
 Using a delayed capture payment with PayOrder will complete the approved payment.
 */
-func (a *Client) PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInfoWriter) (*PayOrderOK, error) {
+func (a *Client) PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PayOrderOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewPayOrderParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "PayOrder",
 		Method:             "POST",
 		PathPattern:        "/v2/orders/{order_id}/pay",
@@ -197,7 +213,12 @@ func (a *Client) PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInf
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -208,6 +229,47 @@ func (a *Client) PayOrder(params *PayOrderParams, authInfo runtime.ClientAuthInf
 	// unexpected success response
 	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
 	msg := fmt.Sprintf("unexpected success response for PayOrder: API contract not enforced by server. Client expected to get an error, but got: %T", result)
+	panic(msg)
+}
+
+/*
+  RetrieveOrder retrieves order
+
+  Retrieves an [Order](#type-order) by ID.
+*/
+func (a *Client) RetrieveOrder(params *RetrieveOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveOrderOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewRetrieveOrderParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "RetrieveOrder",
+		Method:             "GET",
+		PathPattern:        "/v2/orders/{order_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &RetrieveOrderReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*RetrieveOrderOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	// safeguard: normally, absent a default response, unknown success responses return an error above: so this is a codegen issue
+	msg := fmt.Sprintf("unexpected success response for RetrieveOrder: API contract not enforced by server. Client expected to get an error, but got: %T", result)
 	panic(msg)
 }
 
@@ -232,13 +294,12 @@ offline mode may not be transmitted to Square for up to 72 hours. Offline
 orders have a `created_at` value that reflects the time the order was created,
 not the time it was subsequently transmitted to Square.
 */
-func (a *Client) SearchOrders(params *SearchOrdersParams, authInfo runtime.ClientAuthInfoWriter) (*SearchOrdersOK, error) {
+func (a *Client) SearchOrders(params *SearchOrdersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchOrdersOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchOrdersParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchOrders",
 		Method:             "POST",
 		PathPattern:        "/v2/orders/search",
@@ -250,7 +311,12 @@ func (a *Client) SearchOrders(params *SearchOrdersParams, authInfo runtime.Clien
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -282,13 +348,12 @@ identifying fields to clear.
 
 To pay for an order, please refer to the [Pay for Orders](/orders-api/pay-for-orders) guide.
 */
-func (a *Client) UpdateOrder(params *UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateOrderOK, error) {
+func (a *Client) UpdateOrder(params *UpdateOrderParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateOrderOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateOrderParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateOrder",
 		Method:             "PUT",
 		PathPattern:        "/v2/orders/{order_id}",
@@ -300,7 +365,12 @@ func (a *Client) UpdateOrder(params *UpdateOrderParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

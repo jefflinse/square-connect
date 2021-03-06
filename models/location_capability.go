@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -38,7 +39,7 @@ func init() {
 }
 
 func (m LocationCapability) validateLocationCapabilityEnum(path, location string, value LocationCapability) error {
-	if err := validate.Enum(path, location, value, locationCapabilityEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, locationCapabilityEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -56,5 +57,10 @@ func (m LocationCapability) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this location capability based on context it is used
+func (m LocationCapability) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

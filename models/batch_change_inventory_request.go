@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // BatchChangeInventoryRequest batch change inventory request
+// Example: {"request_body":{"changes":[{"physical_count":{"catalog_object_id":"W62UWFY35CWMYGVWK6TWJDNI","employee_id":"LRK57NSQ5X7PUD05","location_id":"C6W5YS5QM06F5","occurred_at":"2016-11-16T22:25:24.878Z","quantity":"53","reference_id":"1536bfbf-efed-48bf-b17d-a197141b2a92","state":"IN_STOCK"},"type":"PHYSICAL_COUNT"}],"idempotency_key":"8fc6a5b0-9fe8-4b46-b46b-2ef95793abbe","ignore_unchanged_counts":true}}
 //
 // swagger:model BatchChangeInventoryRequest
 type BatchChangeInventoryRequest struct {
@@ -51,7 +53,6 @@ func (m *BatchChangeInventoryRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *BatchChangeInventoryRequest) validateChanges(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Changes) { // not required
 		return nil
 	}
@@ -63,6 +64,38 @@ func (m *BatchChangeInventoryRequest) validateChanges(formats strfmt.Registry) e
 
 		if m.Changes[i] != nil {
 			if err := m.Changes[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("changes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this batch change inventory request based on the context it is used
+func (m *BatchChangeInventoryRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateChanges(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BatchChangeInventoryRequest) contextValidateChanges(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Changes); i++ {
+
+		if m.Changes[i] != nil {
+			if err := m.Changes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("changes" + "." + strconv.Itoa(i))
 				}

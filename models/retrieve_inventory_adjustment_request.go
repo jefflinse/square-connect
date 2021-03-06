@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // RetrieveInventoryAdjustmentRequest retrieve inventory adjustment request
+// Example: {}
 //
 // swagger:model RetrieveInventoryAdjustmentRequest
 type RetrieveInventoryAdjustmentRequest interface{}

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // GetShiftRequest A request to get a `Shift` by ID
+// Example: {}
 //
 // swagger:model GetShiftRequest
 type GetShiftRequest interface{}

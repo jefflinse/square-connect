@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewRegisterDomainParams creates a new RegisterDomainParams object
-// with the default values initialized.
+// NewRegisterDomainParams creates a new RegisterDomainParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRegisterDomainParams() *RegisterDomainParams {
-	var ()
 	return &RegisterDomainParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRegisterDomainParamsWithTimeout creates a new RegisterDomainParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRegisterDomainParamsWithTimeout(timeout time.Duration) *RegisterDomainParams {
-	var ()
 	return &RegisterDomainParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRegisterDomainParamsWithContext creates a new RegisterDomainParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRegisterDomainParamsWithContext(ctx context.Context) *RegisterDomainParams {
-	var ()
 	return &RegisterDomainParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRegisterDomainParamsWithHTTPClient creates a new RegisterDomainParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRegisterDomainParamsWithHTTPClient(client *http.Client) *RegisterDomainParams {
-	var ()
 	return &RegisterDomainParams{
 		HTTPClient: client,
 	}
 }
 
-/*RegisterDomainParams contains all the parameters to send to the API endpoint
-for the register domain operation typically these are written to a http.Request
+/* RegisterDomainParams contains all the parameters to send to the API endpoint
+   for the register domain operation.
+
+   Typically these are written to a http.Request.
 */
 type RegisterDomainParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.RegisterDomainRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the register domain params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RegisterDomainParams) WithDefaults() *RegisterDomainParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the register domain params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RegisterDomainParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the register domain params
@@ -126,7 +140,6 @@ func (o *RegisterDomainParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

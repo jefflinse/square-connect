@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewCancelSubscriptionParams creates a new CancelSubscriptionParams object
-// with the default values initialized.
+// NewCancelSubscriptionParams creates a new CancelSubscriptionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCancelSubscriptionParams() *CancelSubscriptionParams {
-	var ()
 	return &CancelSubscriptionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCancelSubscriptionParamsWithTimeout creates a new CancelSubscriptionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCancelSubscriptionParamsWithTimeout(timeout time.Duration) *CancelSubscriptionParams {
-	var ()
 	return &CancelSubscriptionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCancelSubscriptionParamsWithContext creates a new CancelSubscriptionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCancelSubscriptionParamsWithContext(ctx context.Context) *CancelSubscriptionParams {
-	var ()
 	return &CancelSubscriptionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCancelSubscriptionParamsWithHTTPClient creates a new CancelSubscriptionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCancelSubscriptionParamsWithHTTPClient(client *http.Client) *CancelSubscriptionParams {
-	var ()
 	return &CancelSubscriptionParams{
 		HTTPClient: client,
 	}
 }
 
-/*CancelSubscriptionParams contains all the parameters to send to the API endpoint
-for the cancel subscription operation typically these are written to a http.Request
+/* CancelSubscriptionParams contains all the parameters to send to the API endpoint
+   for the cancel subscription operation.
+
+   Typically these are written to a http.Request.
 */
 type CancelSubscriptionParams struct {
 
-	/*SubscriptionID
-	  The ID of the subscription to cancel.
+	/* SubscriptionID.
 
+	   The ID of the subscription to cancel.
 	*/
 	SubscriptionID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the cancel subscription params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CancelSubscriptionParams) WithDefaults() *CancelSubscriptionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the cancel subscription params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CancelSubscriptionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the cancel subscription params

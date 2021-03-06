@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // UpdateShiftRequest A request to update a `Shift` object.
+// Example: {"request_body":{"shift":{"breaks":[{"break_type_id":"REGS1EQR1TPZ5","end_at":"2019-01-25T06:16:00-05:00","expected_duration":"PT5M","id":"X7GAQYVVRRG6P","is_paid":true,"name":"Tea Break","start_at":"2019-01-25T06:11:00-05:00"}],"end_at":"2019-01-25T13:11:00-05:00","location_id":"PAA1RJZZKXBFG","start_at":"2019-01-25T03:11:00-05:00","team_member_id":"ormj0jJJZ5OZIzxrZYJI","version":1,"wage":{"hourly_rate":{"amount":1500,"currency":"USD"},"title":"Bartender"}}}}
 //
 // swagger:model UpdateShiftRequest
 type UpdateShiftRequest struct {
@@ -44,6 +47,34 @@ func (m *UpdateShiftRequest) validateShift(formats strfmt.Registry) error {
 
 	if m.Shift != nil {
 		if err := m.Shift.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("shift")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update shift request based on the context it is used
+func (m *UpdateShiftRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateShift(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateShiftRequest) contextValidateShift(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Shift != nil {
+		if err := m.Shift.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("shift")
 			}

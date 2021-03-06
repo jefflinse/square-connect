@@ -25,9 +25,12 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateMobileAuthorizationCode(params *CreateMobileAuthorizationCodeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateMobileAuthorizationCodeOK, error)
+	CreateMobileAuthorizationCode(params *CreateMobileAuthorizationCodeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateMobileAuthorizationCodeOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -48,13 +51,12 @@ Authorization: Bearer ACCESS_TOKEN
 Replace `ACCESS_TOKEN` with a
 [valid production authorization credential](/docs/build-basics/access-tokens).
 */
-func (a *Client) CreateMobileAuthorizationCode(params *CreateMobileAuthorizationCodeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateMobileAuthorizationCodeOK, error) {
+func (a *Client) CreateMobileAuthorizationCode(params *CreateMobileAuthorizationCodeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateMobileAuthorizationCodeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateMobileAuthorizationCodeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateMobileAuthorizationCode",
 		Method:             "POST",
 		PathPattern:        "/mobile/authorization-code",
@@ -66,7 +68,12 @@ func (a *Client) CreateMobileAuthorizationCode(params *CreateMobileAuthorization
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

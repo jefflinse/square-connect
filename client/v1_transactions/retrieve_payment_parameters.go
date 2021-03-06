@@ -16,64 +16,79 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrievePaymentParams creates a new RetrievePaymentParams object
-// with the default values initialized.
+// NewRetrievePaymentParams creates a new RetrievePaymentParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrievePaymentParams() *RetrievePaymentParams {
-	var ()
 	return &RetrievePaymentParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrievePaymentParamsWithTimeout creates a new RetrievePaymentParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrievePaymentParamsWithTimeout(timeout time.Duration) *RetrievePaymentParams {
-	var ()
 	return &RetrievePaymentParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrievePaymentParamsWithContext creates a new RetrievePaymentParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrievePaymentParamsWithContext(ctx context.Context) *RetrievePaymentParams {
-	var ()
 	return &RetrievePaymentParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrievePaymentParamsWithHTTPClient creates a new RetrievePaymentParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrievePaymentParamsWithHTTPClient(client *http.Client) *RetrievePaymentParams {
-	var ()
 	return &RetrievePaymentParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrievePaymentParams contains all the parameters to send to the API endpoint
-for the retrieve payment operation typically these are written to a http.Request
+/* RetrievePaymentParams contains all the parameters to send to the API endpoint
+   for the retrieve payment operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrievePaymentParams struct {
 
-	/*LocationID
-	  The ID of the payment's associated location.
+	/* LocationID.
 
+	   The ID of the payment's associated location.
 	*/
 	LocationID string
-	/*PaymentID
-	  The Square-issued payment ID. payment_id comes from Payment objects returned by the List Payments endpoint, Settlement objects returned by the List Settlements endpoint, or Refund objects returned by the List Refunds endpoint.
 
+	/* PaymentID.
+
+	   The Square-issued payment ID. payment_id comes from Payment objects returned by the List Payments endpoint, Settlement objects returned by the List Settlements endpoint, or Refund objects returned by the List Refunds endpoint.
 	*/
 	PaymentID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrievePaymentParams) WithDefaults() *RetrievePaymentParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve payment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrievePaymentParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve payment params

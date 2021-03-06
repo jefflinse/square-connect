@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // UpdateWageSettingResponse Represents a response from an update request, containing the updated `WageSetting` object
 // or error messages.
+// Example: {"wage_setting":{"created_at":"2019-07-10T17:26:48+00:00","is_overtime_exempt":true,"job_assignments":[{"annual_rate":{"amount":3000000,"currency":"USD"},"hourly_rate":{"amount":1443,"currency":"USD"},"job_title":"Manager","pay_type":"SALARY","weekly_hours":40},{"hourly_rate":{"amount":1200,"currency":"USD"},"job_title":"Cashier","pay_type":"HOURLY"}],"team_member_id":"-3oZQKPKVk6gUXU_V5Qa","updated_at":"2020-06-11T23:12:04+00:00","version":1}}
 //
 // swagger:model UpdateWageSettingResponse
 type UpdateWageSettingResponse struct {
@@ -45,7 +47,6 @@ func (m *UpdateWageSettingResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateWageSettingResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -70,13 +71,62 @@ func (m *UpdateWageSettingResponse) validateErrors(formats strfmt.Registry) erro
 }
 
 func (m *UpdateWageSettingResponse) validateWageSetting(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.WageSetting) { // not required
 		return nil
 	}
 
 	if m.WageSetting != nil {
 		if err := m.WageSetting.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("wage_setting")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update wage setting response based on the context it is used
+func (m *UpdateWageSettingResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWageSetting(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateWageSettingResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UpdateWageSettingResponse) contextValidateWageSetting(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WageSetting != nil {
+		if err := m.WageSetting.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("wage_setting")
 			}

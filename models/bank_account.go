@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -167,7 +169,7 @@ func (m *BankAccount) validateAccountNumberSuffix(formats strfmt.Registry) error
 		return err
 	}
 
-	if err := validate.MinLength("account_number_suffix", "body", string(*m.AccountNumberSuffix), 1); err != nil {
+	if err := validate.MinLength("account_number_suffix", "body", *m.AccountNumberSuffix, 1); err != nil {
 		return err
 	}
 
@@ -184,12 +186,11 @@ func (m *BankAccount) validateAccountType(formats strfmt.Registry) error {
 }
 
 func (m *BankAccount) validateBankName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BankName) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("bank_name", "body", string(m.BankName), 100); err != nil {
+	if err := validate.MaxLength("bank_name", "body", m.BankName, 100); err != nil {
 		return err
 	}
 
@@ -238,7 +239,7 @@ func (m *BankAccount) validateHolderName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("holder_name", "body", string(*m.HolderName), 1); err != nil {
+	if err := validate.MinLength("holder_name", "body", *m.HolderName, 1); err != nil {
 		return err
 	}
 
@@ -251,11 +252,11 @@ func (m *BankAccount) validateID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("id", "body", string(*m.ID), 1); err != nil {
+	if err := validate.MinLength("id", "body", *m.ID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("id", "body", string(*m.ID), 30); err != nil {
+	if err := validate.MaxLength("id", "body", *m.ID, 30); err != nil {
 		return err
 	}
 
@@ -268,7 +269,7 @@ func (m *BankAccount) validatePrimaryBankIdentificationNumber(formats strfmt.Reg
 		return err
 	}
 
-	if err := validate.MaxLength("primary_bank_identification_number", "body", string(*m.PrimaryBankIdentificationNumber), 40); err != nil {
+	if err := validate.MaxLength("primary_bank_identification_number", "body", *m.PrimaryBankIdentificationNumber, 40); err != nil {
 		return err
 	}
 
@@ -276,12 +277,11 @@ func (m *BankAccount) validatePrimaryBankIdentificationNumber(formats strfmt.Reg
 }
 
 func (m *BankAccount) validateSecondaryBankIdentificationNumber(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SecondaryBankIdentificationNumber) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("secondary_bank_identification_number", "body", string(m.SecondaryBankIdentificationNumber), 40); err != nil {
+	if err := validate.MaxLength("secondary_bank_identification_number", "body", m.SecondaryBankIdentificationNumber, 40); err != nil {
 		return err
 	}
 
@@ -294,6 +294,11 @@ func (m *BankAccount) validateStatus(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this bank account based on context it is used
+func (m *BankAccount) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

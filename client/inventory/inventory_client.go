@@ -25,21 +25,24 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	BatchChangeInventory(params *BatchChangeInventoryParams, authInfo runtime.ClientAuthInfoWriter) (*BatchChangeInventoryOK, error)
+	BatchChangeInventory(params *BatchChangeInventoryParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchChangeInventoryOK, error)
 
-	BatchRetrieveInventoryChanges(params *BatchRetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveInventoryChangesOK, error)
+	BatchRetrieveInventoryChanges(params *BatchRetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveInventoryChangesOK, error)
 
-	BatchRetrieveInventoryCounts(params *BatchRetrieveInventoryCountsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveInventoryCountsOK, error)
+	BatchRetrieveInventoryCounts(params *BatchRetrieveInventoryCountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveInventoryCountsOK, error)
 
-	RetrieveInventoryAdjustment(params *RetrieveInventoryAdjustmentParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryAdjustmentOK, error)
+	RetrieveInventoryAdjustment(params *RetrieveInventoryAdjustmentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryAdjustmentOK, error)
 
-	RetrieveInventoryChanges(params *RetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryChangesOK, error)
+	RetrieveInventoryChanges(params *RetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryChangesOK, error)
 
-	RetrieveInventoryCount(params *RetrieveInventoryCountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryCountOK, error)
+	RetrieveInventoryCount(params *RetrieveInventoryCountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryCountOK, error)
 
-	RetrieveInventoryPhysicalCount(params *RetrieveInventoryPhysicalCountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryPhysicalCountOK, error)
+	RetrieveInventoryPhysicalCount(params *RetrieveInventoryPhysicalCountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryPhysicalCountOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -53,13 +56,12 @@ On success: returns the current calculated counts for all objects
 referenced in the request.
 On failure: returns a list of related errors.
 */
-func (a *Client) BatchChangeInventory(params *BatchChangeInventoryParams, authInfo runtime.ClientAuthInfoWriter) (*BatchChangeInventoryOK, error) {
+func (a *Client) BatchChangeInventory(params *BatchChangeInventoryParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchChangeInventoryOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBatchChangeInventoryParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BatchChangeInventory",
 		Method:             "POST",
 		PathPattern:        "/v2/inventory/batch-change",
@@ -71,7 +73,12 @@ func (a *Client) BatchChangeInventory(params *BatchChangeInventoryParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -97,13 +104,12 @@ Results are paginated and sorted in ascending order according their
 BatchRetrieveInventoryChanges is a catch-all query endpoint for queries
 that cannot be handled by other, simpler endpoints.
 */
-func (a *Client) BatchRetrieveInventoryChanges(params *BatchRetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveInventoryChangesOK, error) {
+func (a *Client) BatchRetrieveInventoryChanges(params *BatchRetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveInventoryChangesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBatchRetrieveInventoryChangesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BatchRetrieveInventoryChanges",
 		Method:             "POST",
 		PathPattern:        "/v2/inventory/batch-retrieve-changes",
@@ -115,7 +121,12 @@ func (a *Client) BatchRetrieveInventoryChanges(params *BatchRetrieveInventoryCha
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -144,13 +155,12 @@ time (based on the server timestamp for the most recent change) are
 returned. This allows clients to perform a "sync" operation, for example
 in response to receiving a Webhook notification.
 */
-func (a *Client) BatchRetrieveInventoryCounts(params *BatchRetrieveInventoryCountsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveInventoryCountsOK, error) {
+func (a *Client) BatchRetrieveInventoryCounts(params *BatchRetrieveInventoryCountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveInventoryCountsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBatchRetrieveInventoryCountsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BatchRetrieveInventoryCounts",
 		Method:             "POST",
 		PathPattern:        "/v2/inventory/batch-retrieve-counts",
@@ -162,7 +172,12 @@ func (a *Client) BatchRetrieveInventoryCounts(params *BatchRetrieveInventoryCoun
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -182,13 +197,12 @@ func (a *Client) BatchRetrieveInventoryCounts(params *BatchRetrieveInventoryCoun
   Returns the [InventoryAdjustment](#type-inventoryadjustment) object
 with the provided `adjustment_id`.
 */
-func (a *Client) RetrieveInventoryAdjustment(params *RetrieveInventoryAdjustmentParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryAdjustmentOK, error) {
+func (a *Client) RetrieveInventoryAdjustment(params *RetrieveInventoryAdjustmentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryAdjustmentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveInventoryAdjustmentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveInventoryAdjustment",
 		Method:             "GET",
 		PathPattern:        "/v2/inventory/adjustment/{adjustment_id}",
@@ -200,7 +214,12 @@ func (a *Client) RetrieveInventoryAdjustment(params *RetrieveInventoryAdjustment
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -228,13 +247,12 @@ There are no limits on how far back the caller can page. This endpoint can be
 used to display recent changes for a specific item. For more
 sophisticated queries, use a batch endpoint.
 */
-func (a *Client) RetrieveInventoryChanges(params *RetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryChangesOK, error) {
+func (a *Client) RetrieveInventoryChanges(params *RetrieveInventoryChangesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryChangesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveInventoryChangesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveInventoryChanges",
 		Method:             "GET",
 		PathPattern:        "/v2/inventory/{catalog_object_id}/changes",
@@ -246,7 +264,12 @@ func (a *Client) RetrieveInventoryChanges(params *RetrieveInventoryChangesParams
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -268,13 +291,12 @@ func (a *Client) RetrieveInventoryChanges(params *RetrieveInventoryChangesParams
 [Location](#type-location)s. Responses are paginated and unsorted.
 For more sophisticated queries, use a batch endpoint.
 */
-func (a *Client) RetrieveInventoryCount(params *RetrieveInventoryCountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryCountOK, error) {
+func (a *Client) RetrieveInventoryCount(params *RetrieveInventoryCountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryCountOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveInventoryCountParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveInventoryCount",
 		Method:             "GET",
 		PathPattern:        "/v2/inventory/{catalog_object_id}",
@@ -286,7 +308,12 @@ func (a *Client) RetrieveInventoryCount(params *RetrieveInventoryCountParams, au
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -306,13 +333,12 @@ func (a *Client) RetrieveInventoryCount(params *RetrieveInventoryCountParams, au
   Returns the [InventoryPhysicalCount](#type-inventoryphysicalcount)
 object with the provided `physical_count_id`.
 */
-func (a *Client) RetrieveInventoryPhysicalCount(params *RetrieveInventoryPhysicalCountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveInventoryPhysicalCountOK, error) {
+func (a *Client) RetrieveInventoryPhysicalCount(params *RetrieveInventoryPhysicalCountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveInventoryPhysicalCountOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveInventoryPhysicalCountParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveInventoryPhysicalCount",
 		Method:             "GET",
 		PathPattern:        "/v2/inventory/physical-count/{physical_count_id}",
@@ -324,7 +350,12 @@ func (a *Client) RetrieveInventoryPhysicalCount(params *RetrieveInventoryPhysica
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

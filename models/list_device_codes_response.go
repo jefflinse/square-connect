@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // ListDeviceCodesResponse list device codes response
+// Example: {"device_codes":[{"code":"EBCARJ","created_at":"2020-02-06T18:44:33.000Z","device_id":"907CS13101300122","id":"B3Z6NAMYQSMTM","location_id":"B5E4484SHHNYH","name":"Counter 1","pair_by":"2020-02-06T18:49:33.000Z","product_type":"TERMINAL_API","status":"PAIRED","status_changed_at":"2020-02-06T18:47:28.000Z"},{"code":"GVXNYN","created_at":"2020-02-07T19:55:04.000Z","id":"YKGMJMYK8H4PQ","location_id":"A6SYFRSV4WAFW","name":"Unused device code","pair_by":"2020-02-07T20:00:04.000Z","product_type":"TERMINAL_API","status":"UNPAIRED","status_changed_at":"2020-02-07T19:55:04.000Z"}]}
 //
 // swagger:model ListDeviceCodesResponse
 type ListDeviceCodesResponse struct {
@@ -51,7 +53,6 @@ func (m *ListDeviceCodesResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListDeviceCodesResponse) validateDeviceCodes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeviceCodes) { // not required
 		return nil
 	}
@@ -76,7 +77,6 @@ func (m *ListDeviceCodesResponse) validateDeviceCodes(formats strfmt.Registry) e
 }
 
 func (m *ListDeviceCodesResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -88,6 +88,60 @@ func (m *ListDeviceCodesResponse) validateErrors(formats strfmt.Registry) error 
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list device codes response based on the context it is used
+func (m *ListDeviceCodesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDeviceCodes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListDeviceCodesResponse) contextValidateDeviceCodes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.DeviceCodes); i++ {
+
+		if m.DeviceCodes[i] != nil {
+			if err := m.DeviceCodes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("device_codes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListDeviceCodesResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

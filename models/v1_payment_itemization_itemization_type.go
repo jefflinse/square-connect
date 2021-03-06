@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -53,7 +54,7 @@ func init() {
 }
 
 func (m V1PaymentItemizationItemizationType) validateV1PaymentItemizationItemizationTypeEnum(path, location string, value V1PaymentItemizationItemizationType) error {
-	if err := validate.Enum(path, location, value, v1PaymentItemizationItemizationTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, v1PaymentItemizationItemizationTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -71,5 +72,10 @@ func (m V1PaymentItemizationItemizationType) Validate(formats strfmt.Registry) e
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this v1 payment itemization itemization type based on context it is used
+func (m V1PaymentItemizationItemizationType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

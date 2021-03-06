@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // UpdateWorkweekConfigResponse The response to a request to update a `WorkweekConfig` object. Contains
 // the updated `WorkweekConfig` object. May contain a set of `Error` objects if
 // the request resulted in errors.
+// Example: {"workweek_config":{"created_at":"2016-02-04T00:58:24Z","id":"FY4VCAQN700GM","start_of_day_local_time":"10:00","start_of_week":"MON","updated_at":"2019-02-28T01:04:35Z","version":11}}
 //
 // swagger:model UpdateWorkweekConfigResponse
 type UpdateWorkweekConfigResponse struct {
@@ -46,7 +48,6 @@ func (m *UpdateWorkweekConfigResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateWorkweekConfigResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -71,13 +72,62 @@ func (m *UpdateWorkweekConfigResponse) validateErrors(formats strfmt.Registry) e
 }
 
 func (m *UpdateWorkweekConfigResponse) validateWorkweekConfig(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.WorkweekConfig) { // not required
 		return nil
 	}
 
 	if m.WorkweekConfig != nil {
 		if err := m.WorkweekConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("workweek_config")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update workweek config response based on the context it is used
+func (m *UpdateWorkweekConfigResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWorkweekConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateWorkweekConfigResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UpdateWorkweekConfigResponse) contextValidateWorkweekConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WorkweekConfig != nil {
+		if err := m.WorkweekConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("workweek_config")
 			}

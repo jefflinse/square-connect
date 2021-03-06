@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -49,7 +51,6 @@ func (m *V1SettlementEntry) Validate(formats strfmt.Registry) error {
 }
 
 func (m *V1SettlementEntry) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
@@ -67,13 +68,58 @@ func (m *V1SettlementEntry) validateAmountMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1SettlementEntry) validateFeeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FeeMoney) { // not required
 		return nil
 	}
 
 	if m.FeeMoney != nil {
 		if err := m.FeeMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("fee_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 settlement entry based on the context it is used
+func (m *V1SettlementEntry) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFeeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1SettlementEntry) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1SettlementEntry) contextValidateFeeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.FeeMoney != nil {
+		if err := m.FeeMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("fee_money")
 			}

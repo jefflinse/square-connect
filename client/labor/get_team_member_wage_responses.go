@@ -29,9 +29,8 @@ func (o *GetTeamMemberWageReader) ReadResponse(response runtime.ClientResponse, 
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewGetTeamMemberWageOK() *GetTeamMemberWageOK {
 	return &GetTeamMemberWageOK{}
 }
 
-/*GetTeamMemberWageOK handles this case with default header values.
+/* GetTeamMemberWageOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type GetTeamMemberWageOK struct {
 func (o *GetTeamMemberWageOK) Error() string {
 	return fmt.Sprintf("[GET /v2/labor/team-member-wages/{id}][%d] getTeamMemberWageOK  %+v", 200, o.Payload)
 }
-
 func (o *GetTeamMemberWageOK) GetPayload() *models.GetTeamMemberWageResponse {
 	return o.Payload
 }

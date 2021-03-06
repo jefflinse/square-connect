@@ -16,60 +16,74 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveLocationParams creates a new RetrieveLocationParams object
-// with the default values initialized.
+// NewRetrieveLocationParams creates a new RetrieveLocationParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveLocationParams() *RetrieveLocationParams {
-	var ()
 	return &RetrieveLocationParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveLocationParamsWithTimeout creates a new RetrieveLocationParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveLocationParamsWithTimeout(timeout time.Duration) *RetrieveLocationParams {
-	var ()
 	return &RetrieveLocationParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveLocationParamsWithContext creates a new RetrieveLocationParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveLocationParamsWithContext(ctx context.Context) *RetrieveLocationParams {
-	var ()
 	return &RetrieveLocationParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveLocationParamsWithHTTPClient creates a new RetrieveLocationParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveLocationParamsWithHTTPClient(client *http.Client) *RetrieveLocationParams {
-	var ()
 	return &RetrieveLocationParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveLocationParams contains all the parameters to send to the API endpoint
-for the retrieve location operation typically these are written to a http.Request
+/* RetrieveLocationParams contains all the parameters to send to the API endpoint
+   for the retrieve location operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveLocationParams struct {
 
-	/*LocationID
-	  The ID of the location to retrieve. If you specify the string "main",
-	then the endpoint returns the main location.
+	/* LocationID.
 
+	     The ID of the location to retrieve. If you specify the string "main",
+	then the endpoint returns the main location.
 	*/
 	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve location params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveLocationParams) WithDefaults() *RetrieveLocationParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve location params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveLocationParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve location params

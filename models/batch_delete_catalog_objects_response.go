@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // BatchDeleteCatalogObjectsResponse batch delete catalog objects response
+// Example: {"deleted_at":"2016-11-16T22:25:24.878Z","deleted_object_ids":["W62UWFY35CWMYGVWK6TWJDNI","AA27W3M2GGTF3H6AVPNB77CK"]}
 //
 // swagger:model BatchDeleteCatalogObjectsResponse
 type BatchDeleteCatalogObjectsResponse struct {
@@ -24,7 +26,7 @@ type BatchDeleteCatalogObjectsResponse struct {
 	// The IDs of all CatalogObjects deleted by this request.
 	DeletedObjectIds []string `json:"deleted_object_ids"`
 
-	// The set of Errors encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 }
 
@@ -43,7 +45,6 @@ func (m *BatchDeleteCatalogObjectsResponse) Validate(formats strfmt.Registry) er
 }
 
 func (m *BatchDeleteCatalogObjectsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -55,6 +56,38 @@ func (m *BatchDeleteCatalogObjectsResponse) validateErrors(formats strfmt.Regist
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this batch delete catalog objects response based on the context it is used
+func (m *BatchDeleteCatalogObjectsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BatchDeleteCatalogObjectsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

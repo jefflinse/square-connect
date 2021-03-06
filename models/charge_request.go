@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -18,6 +19,7 @@ import (
 // a request to the [Charge](#endpoint-charge) endpoint.
 //
 // Deprecated - recommend using [CreatePayment](#endpoint-payments-createpayment)
+// Example: {"request_body":{"additional_recipients":[{"amount_money":{"amount":20,"currency":"USD"},"description":"Application fees","location_id":"057P5VYJ4A5X1"}],"amount_money":{"amount":200,"currency":"USD"},"billing_address":{"address_line_1":"500 Electric Ave","address_line_2":"Suite 600","administrative_district_level_1":"NY","country":"US","locality":"New York","postal_code":"10003"},"card_nonce":"card_nonce_from_square_123","delay_capture":false,"idempotency_key":"74ae1696-b1e3-4328-af6d-f1e04d947a13","note":"some optional note","reference_id":"some optional reference id","shipping_address":{"address_line_1":"123 Main St","administrative_district_level_1":"CA","country":"US","locality":"San Francisco","postal_code":"94114"}}}
 //
 // swagger:model ChargeRequest
 type ChargeRequest struct {
@@ -189,7 +191,6 @@ func (m *ChargeRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateAdditionalRecipients(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdditionalRecipients) { // not required
 		return nil
 	}
@@ -232,7 +233,6 @@ func (m *ChargeRequest) validateAmountMoney(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateBillingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BillingAddress) { // not required
 		return nil
 	}
@@ -250,12 +250,11 @@ func (m *ChargeRequest) validateBillingAddress(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateCardNonce(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CardNonce) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("card_nonce", "body", string(m.CardNonce), 192); err != nil {
+	if err := validate.MaxLength("card_nonce", "body", m.CardNonce, 192); err != nil {
 		return err
 	}
 
@@ -263,12 +262,11 @@ func (m *ChargeRequest) validateCardNonce(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateCustomerCardID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomerCardID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("customer_card_id", "body", string(m.CustomerCardID), 192); err != nil {
+	if err := validate.MaxLength("customer_card_id", "body", m.CustomerCardID, 192); err != nil {
 		return err
 	}
 
@@ -276,12 +274,11 @@ func (m *ChargeRequest) validateCustomerCardID(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateCustomerID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomerID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("customer_id", "body", string(m.CustomerID), 50); err != nil {
+	if err := validate.MaxLength("customer_id", "body", m.CustomerID, 50); err != nil {
 		return err
 	}
 
@@ -294,11 +291,11 @@ func (m *ChargeRequest) validateIdempotencyKey(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 192); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 192); err != nil {
 		return err
 	}
 
@@ -306,12 +303,11 @@ func (m *ChargeRequest) validateIdempotencyKey(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateNote(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Note) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("note", "body", string(m.Note), 60); err != nil {
+	if err := validate.MaxLength("note", "body", m.Note, 60); err != nil {
 		return err
 	}
 
@@ -319,12 +315,11 @@ func (m *ChargeRequest) validateNote(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateOrderID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OrderID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("order_id", "body", string(m.OrderID), 192); err != nil {
+	if err := validate.MaxLength("order_id", "body", m.OrderID, 192); err != nil {
 		return err
 	}
 
@@ -332,12 +327,11 @@ func (m *ChargeRequest) validateOrderID(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateReferenceID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReferenceID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("reference_id", "body", string(m.ReferenceID), 40); err != nil {
+	if err := validate.MaxLength("reference_id", "body", m.ReferenceID, 40); err != nil {
 		return err
 	}
 
@@ -345,13 +339,98 @@ func (m *ChargeRequest) validateReferenceID(formats strfmt.Registry) error {
 }
 
 func (m *ChargeRequest) validateShippingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ShippingAddress) { // not required
 		return nil
 	}
 
 	if m.ShippingAddress != nil {
 		if err := m.ShippingAddress.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("shipping_address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this charge request based on the context it is used
+func (m *ChargeRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdditionalRecipients(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateBillingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShippingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ChargeRequest) contextValidateAdditionalRecipients(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AdditionalRecipients); i++ {
+
+		if m.AdditionalRecipients[i] != nil {
+			if err := m.AdditionalRecipients[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additional_recipients" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ChargeRequest) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ChargeRequest) contextValidateBillingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BillingAddress != nil {
+		if err := m.BillingAddress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("billing_address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ChargeRequest) contextValidateShippingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ShippingAddress != nil {
+		if err := m.ShippingAddress.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("shipping_address")
 			}

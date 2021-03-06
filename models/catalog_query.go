@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,13 +15,20 @@ import (
 
 // CatalogQuery A query composed of one or more different types of filters to narrow the scope of targeted objects when calling the `SearchCatalogObjects` endpoint.
 //
-// Although a query can have multiple filters, only one query is allowed per call to [SearchCatalogObjects](#endpoint-Catalog-SearchCatalogObjects).
+// Although a query can have multiple filters, only certain query types can be combined per call to [SearchCatalogObjects](#endpoint-Catalog-SearchCatalogObjects).
+// Any combination of the following types may be used together:
+// - [exact_query](#type-CatalogExactQuery)
+// - [prefix_query](#type-CatalogPrefixQuery)
+// - [range_query](#type-CatalogRangeQuery)
+// - [sorted_attribute_query](#type-CatalogSortedAttribute)
+// - [text_query](#type-CatalogTextQuery)
+// All other query types cannot be combined with any others.
 //
 // When a query filter is based on an attribute, the attribute must be searchable.
 // Searchable attributes are listed as follows, along their parent types that can be searched for with applicable query filters.
 //
-// Searchable attribute and objects queryable by searchable attributes **
-// - `name`:  `CatalogItem`, `CatalogItemVariation`, `CatelogCatogry`, `CatalogTax`, `CatalogDiscount`, `CatalogModifier`, 'CatalogModifierList`, `CatalogItemOption`, `CatalogItemOptionValue`
+// * Searchable attribute and objects queryable by searchable attributes **
+// - `name`:  `CatalogItem`, `CatalogItemVariation`, `CatalogCategory`, `CatalogTax`, `CatalogDiscount`, `CatalogModifier`, 'CatalogModifierList`, `CatalogItemOption`, `CatalogItemOptionValue`
 // - `description`: `CatalogItem`, `CatalogItemOptionValue`
 // - `abbreviation`: `CatalogItem`
 // - `upc`: `CatalogItemVariation`
@@ -44,24 +53,29 @@ type CatalogQuery struct {
 	// A query expression to return items that contains the specified item options (as identified the corresponding `CatalogItemOption` IDs).
 	ItemsForItemOptionsQuery *CatalogQueryItemsForItemOptions `json:"items_for_item_options_query,omitempty"`
 
-	// A query expression to return items that have any of the given modifier list (as identifieid by the coresponding `CatalogModifierList`s IDs) enabled.
+	// A query expression to return items that have any of the given modifier list (as identified by the corresponding `CatalogModifierList`s IDs) enabled.
 	ItemsForModifierListQuery *CatalogQueryItemsForModifierList `json:"items_for_modifier_list_query,omitempty"`
 
 	// A query expression to return items that have any of the specified taxes (as identified by the corresponding `CatalogTax` object IDs) enabled.
 	ItemsForTaxQuery *CatalogQueryItemsForTax `json:"items_for_tax_query,omitempty"`
 
 	// A prefix query expression to return objects with attribute values
-	// that have a prefix matching the specified string value. Value maching is case insensitive.
+	// that have a prefix matching the specified string value. Value matching is case insensitive.
 	PrefixQuery *CatalogQueryPrefix `json:"prefix_query,omitempty"`
 
-	// A range query expression to return objects with numberic values
+	// A range query expression to return objects with numeric values
 	// that lie in the specified range.
 	RangeQuery *CatalogQueryRange `json:"range_query,omitempty"`
+
+	// A set query expression to return objects with attribute name and value
+	// matching the specified attribute name and any of the specified attribute values exactly.
+	// Value matching is case insensitive.
+	SetQuery *CatalogQuerySet `json:"set_query,omitempty"`
 
 	// A query expression to sort returned query result by the given attribute.
 	SortedAttributeQuery *CatalogQuerySortedAttribute `json:"sorted_attribute_query,omitempty"`
 
-	// A text query expression to return objectd whose searchable attributes contain all of the given
+	// A text query expression to return objects whose searchable attributes contain all of the given
 	// keywords, irrespective of their order. For example, if a `CatalogItem` contains custom attribute values of
 	// `{"name": "t-shirt"}` and `{"description": "Small, Purple"}`, the query filter of `{"keywords": ["shirt", "sma", "purp"]}`
 	// returns this item.
@@ -100,6 +114,10 @@ func (m *CatalogQuery) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateSetQuery(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateSortedAttributeQuery(formats); err != nil {
 		res = append(res, err)
 	}
@@ -115,7 +133,6 @@ func (m *CatalogQuery) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogQuery) validateExactQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ExactQuery) { // not required
 		return nil
 	}
@@ -133,7 +150,6 @@ func (m *CatalogQuery) validateExactQuery(formats strfmt.Registry) error {
 }
 
 func (m *CatalogQuery) validateItemVariationsForItemOptionValuesQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemVariationsForItemOptionValuesQuery) { // not required
 		return nil
 	}
@@ -151,7 +167,6 @@ func (m *CatalogQuery) validateItemVariationsForItemOptionValuesQuery(formats st
 }
 
 func (m *CatalogQuery) validateItemsForItemOptionsQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemsForItemOptionsQuery) { // not required
 		return nil
 	}
@@ -169,7 +184,6 @@ func (m *CatalogQuery) validateItemsForItemOptionsQuery(formats strfmt.Registry)
 }
 
 func (m *CatalogQuery) validateItemsForModifierListQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemsForModifierListQuery) { // not required
 		return nil
 	}
@@ -187,7 +201,6 @@ func (m *CatalogQuery) validateItemsForModifierListQuery(formats strfmt.Registry
 }
 
 func (m *CatalogQuery) validateItemsForTaxQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemsForTaxQuery) { // not required
 		return nil
 	}
@@ -205,7 +218,6 @@ func (m *CatalogQuery) validateItemsForTaxQuery(formats strfmt.Registry) error {
 }
 
 func (m *CatalogQuery) validatePrefixQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PrefixQuery) { // not required
 		return nil
 	}
@@ -223,7 +235,6 @@ func (m *CatalogQuery) validatePrefixQuery(formats strfmt.Registry) error {
 }
 
 func (m *CatalogQuery) validateRangeQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RangeQuery) { // not required
 		return nil
 	}
@@ -240,8 +251,24 @@ func (m *CatalogQuery) validateRangeQuery(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *CatalogQuery) validateSortedAttributeQuery(formats strfmt.Registry) error {
+func (m *CatalogQuery) validateSetQuery(formats strfmt.Registry) error {
+	if swag.IsZero(m.SetQuery) { // not required
+		return nil
+	}
 
+	if m.SetQuery != nil {
+		if err := m.SetQuery.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("set_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) validateSortedAttributeQuery(formats strfmt.Registry) error {
 	if swag.IsZero(m.SortedAttributeQuery) { // not required
 		return nil
 	}
@@ -259,13 +286,202 @@ func (m *CatalogQuery) validateSortedAttributeQuery(formats strfmt.Registry) err
 }
 
 func (m *CatalogQuery) validateTextQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TextQuery) { // not required
 		return nil
 	}
 
 	if m.TextQuery != nil {
 		if err := m.TextQuery.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("text_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog query based on the context it is used
+func (m *CatalogQuery) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateExactQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemVariationsForItemOptionValuesQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemsForItemOptionsQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemsForModifierListQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemsForTaxQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePrefixQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRangeQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSetQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSortedAttributeQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTextQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateExactQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExactQuery != nil {
+		if err := m.ExactQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("exact_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateItemVariationsForItemOptionValuesQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemVariationsForItemOptionValuesQuery != nil {
+		if err := m.ItemVariationsForItemOptionValuesQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("item_variations_for_item_option_values_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateItemsForItemOptionsQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemsForItemOptionsQuery != nil {
+		if err := m.ItemsForItemOptionsQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("items_for_item_options_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateItemsForModifierListQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemsForModifierListQuery != nil {
+		if err := m.ItemsForModifierListQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("items_for_modifier_list_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateItemsForTaxQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemsForTaxQuery != nil {
+		if err := m.ItemsForTaxQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("items_for_tax_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidatePrefixQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PrefixQuery != nil {
+		if err := m.PrefixQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("prefix_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateRangeQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RangeQuery != nil {
+		if err := m.RangeQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("range_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateSetQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SetQuery != nil {
+		if err := m.SetQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("set_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateSortedAttributeQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SortedAttributeQuery != nil {
+		if err := m.SortedAttributeQuery.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sorted_attribute_query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogQuery) contextValidateTextQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TextQuery != nil {
+		if err := m.TextQuery.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("text_query")
 			}

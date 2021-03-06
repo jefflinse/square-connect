@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // UpdateSubscriptionResponse Defines the fields that are included in the response from the
 // [UpdateSubscription](#endpoint-subscriptions-updatesubscription) endpoint.
+// Example: {"subscription":{"created_at":"2020-08-03T21:53:10Z","customer_id":"CHFGVKYY8RSV93M5KCYTG4PN0G","id":"9ba40961-995a-4a3d-8c53-048c40cafc13","location_id":"S8GWD5R9QB376","plan_id":"6JHXF3B2CW3YKHDV4XEM674H","price_override_money":{"amount":2000,"currency":"USD"},"status":"ACTIVE","timezone":"America/Los_Angeles","version":1594311617331}}
 //
 // swagger:model UpdateSubscriptionResponse
 type UpdateSubscriptionResponse struct {
@@ -45,7 +47,6 @@ func (m *UpdateSubscriptionResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateSubscriptionResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -70,13 +71,62 @@ func (m *UpdateSubscriptionResponse) validateErrors(formats strfmt.Registry) err
 }
 
 func (m *UpdateSubscriptionResponse) validateSubscription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Subscription) { // not required
 		return nil
 	}
 
 	if m.Subscription != nil {
 		if err := m.Subscription.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("subscription")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update subscription response based on the context it is used
+func (m *UpdateSubscriptionResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSubscription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateSubscriptionResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UpdateSubscriptionResponse) contextValidateSubscription(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Subscription != nil {
+		if err := m.Subscription.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("subscription")
 			}

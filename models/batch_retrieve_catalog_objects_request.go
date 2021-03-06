@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,9 +15,15 @@ import (
 )
 
 // BatchRetrieveCatalogObjectsRequest batch retrieve catalog objects request
+// Example: {"request_body":{"include_related_objects":true,"object_ids":["W62UWFY35CWMYGVWK6TWJDNI","AA27W3M2GGTF3H6AVPNB77CK"]}}
 //
 // swagger:model BatchRetrieveCatalogObjectsRequest
 type BatchRetrieveCatalogObjectsRequest struct {
+
+	// The specific version of the catalog objects to be included in the response.
+	// This allows you to retrieve historical versions of objects. The specified version value is matched against
+	// the `CatalogObject`s' `version` attribute.
+	CatalogVersion int64 `json:"catalog_version,omitempty"`
 
 	// If `true`, the response will include additional objects that are related to the
 	// requested objects, as follows:
@@ -53,6 +61,11 @@ func (m *BatchRetrieveCatalogObjectsRequest) validateObjectIds(formats strfmt.Re
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this batch retrieve catalog objects request based on context it is used
+func (m *BatchRetrieveCatalogObjectsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // ObtainTokenRequest obtain token request
+// Example: {"request_body":{"client_id":"APPLICATION_ID","client_secret":"APPLICATION_SECRET","code":"CODE_FROM_AUTHORIZE","grant_type":"authorization_code"}}
 //
 // swagger:model ObtainTokenRequest
 type ObtainTokenRequest struct {
@@ -51,6 +54,21 @@ type ObtainTokenRequest struct {
 	// A valid refresh token is required if `grant_type` is set to `refresh_token` ,
 	// to indicate the application wants a replacement for an expired OAuth access token.
 	RefreshToken string `json:"refresh_token,omitempty"`
+
+	// __OPTIONAL__
+	//
+	// A JSON list of strings representing the permissions the application is requesting.
+	// For example: "`["MERCHANT_PROFILE_READ","PAYMENTS_READ","BANK_ACCOUNTS_READ"]`"
+	// The access token returned in the response is granted the permissions
+	// that comprise the intersection between the requested list of permissions, and those
+	// that belong to the provided refresh token.
+	Scopes []string `json:"scopes"`
+
+	// __OPTIONAL__
+	//
+	// A boolean indicating a request for a short-lived access token.
+	// The short-lived access token returned in the response will expire in 24 hours.
+	ShortLived bool `json:"short_lived,omitempty"`
 }
 
 // Validate validates this obtain token request
@@ -99,6 +117,11 @@ func (m *ObtainTokenRequest) validateGrantType(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this obtain token request based on context it is used
+func (m *ObtainTokenRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

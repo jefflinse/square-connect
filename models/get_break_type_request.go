@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // GetBreakTypeRequest A request to GET a `BreakType` by ID
+// Example: {}
 //
 // swagger:model GetBreakTypeRequest
 type GetBreakTypeRequest interface{}

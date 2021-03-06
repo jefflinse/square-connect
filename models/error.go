@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -19,14 +21,12 @@ import (
 // swagger:model Error
 type Error struct {
 
-	// The high-level category for the error. See `ErrorCategory`
-	// for possible values.
+	// The high-level category for the error.
 	// See [ErrorCategory](#type-errorcategory) for possible values
 	// Required: true
 	Category *string `json:"category"`
 
-	// The specific code of the error. See `ErrorCode` for possible
-	// values
+	// The specific code of the error.
 	// See [ErrorCode](#type-errorcode) for possible values
 	// Required: true
 	Code *string `json:"code"`
@@ -72,6 +72,11 @@ func (m *Error) validateCode(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this error based on context it is used
+func (m *Error) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

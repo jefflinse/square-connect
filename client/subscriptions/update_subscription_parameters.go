@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateSubscriptionParams creates a new UpdateSubscriptionParams object
-// with the default values initialized.
+// NewUpdateSubscriptionParams creates a new UpdateSubscriptionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateSubscriptionParams() *UpdateSubscriptionParams {
-	var ()
 	return &UpdateSubscriptionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateSubscriptionParamsWithTimeout creates a new UpdateSubscriptionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateSubscriptionParamsWithTimeout(timeout time.Duration) *UpdateSubscriptionParams {
-	var ()
 	return &UpdateSubscriptionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateSubscriptionParamsWithContext creates a new UpdateSubscriptionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateSubscriptionParamsWithContext(ctx context.Context) *UpdateSubscriptionParams {
-	var ()
 	return &UpdateSubscriptionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateSubscriptionParamsWithHTTPClient creates a new UpdateSubscriptionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateSubscriptionParamsWithHTTPClient(client *http.Client) *UpdateSubscriptionParams {
-	var ()
 	return &UpdateSubscriptionParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateSubscriptionParams contains all the parameters to send to the API endpoint
-for the update subscription operation typically these are written to a http.Request
+/* UpdateSubscriptionParams contains all the parameters to send to the API endpoint
+   for the update subscription operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateSubscriptionParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateSubscriptionRequest
-	/*SubscriptionID
-	  The ID for the subscription to update.
 
+	/* SubscriptionID.
+
+	   The ID for the subscription to update.
 	*/
 	SubscriptionID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update subscription params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateSubscriptionParams) WithDefaults() *UpdateSubscriptionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update subscription params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateSubscriptionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update subscription params
@@ -142,7 +157,6 @@ func (o *UpdateSubscriptionParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -13,7 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// LoyaltyProgramRewardDefinitionType The type of discount the reward tier offers.
+// LoyaltyProgramRewardDefinitionType The type of discount the reward tier offers. DEPRECATED at version 2020-12-16. Discount details
+// are now defined using a catalog pricing rule and other catalog objects. For more information, see
+// [Get discount details for the reward](https://developer.squareup.com/docs/docs/loyalty-api/overview#get-discount-details).
 //
 // swagger:model LoyaltyProgramRewardDefinitionType
 type LoyaltyProgramRewardDefinitionType string
@@ -41,7 +44,7 @@ func init() {
 }
 
 func (m LoyaltyProgramRewardDefinitionType) validateLoyaltyProgramRewardDefinitionTypeEnum(path, location string, value LoyaltyProgramRewardDefinitionType) error {
-	if err := validate.Enum(path, location, value, loyaltyProgramRewardDefinitionTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, loyaltyProgramRewardDefinitionTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -59,5 +62,10 @@ func (m LoyaltyProgramRewardDefinitionType) Validate(formats strfmt.Registry) er
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this loyalty program reward definition type based on context it is used
+func (m LoyaltyProgramRewardDefinitionType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CatalogModifier A modifier applicable to items at the time of sale.
+// Example: {"object":{"modifier_data":{"name":"Almond Milk","price_money":{"amount":250,"currency":"USD"}},"present_at_all_locations":true,"type":"MODIFIER"}}
 //
 // swagger:model CatalogModifier
 type CatalogModifier struct {
@@ -50,12 +53,11 @@ func (m *CatalogModifier) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogModifier) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
@@ -63,13 +65,40 @@ func (m *CatalogModifier) validateName(formats strfmt.Registry) error {
 }
 
 func (m *CatalogModifier) validatePriceMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PriceMoney) { // not required
 		return nil
 	}
 
 	if m.PriceMoney != nil {
 		if err := m.PriceMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("price_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog modifier based on the context it is used
+func (m *CatalogModifier) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePriceMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogModifier) contextValidatePriceMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PriceMoney != nil {
+		if err := m.PriceMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("price_money")
 			}

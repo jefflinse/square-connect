@@ -16,78 +16,90 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListDisputesParams creates a new ListDisputesParams object
-// with the default values initialized.
+// NewListDisputesParams creates a new ListDisputesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListDisputesParams() *ListDisputesParams {
-	var ()
 	return &ListDisputesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListDisputesParamsWithTimeout creates a new ListDisputesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListDisputesParamsWithTimeout(timeout time.Duration) *ListDisputesParams {
-	var ()
 	return &ListDisputesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListDisputesParamsWithContext creates a new ListDisputesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListDisputesParamsWithContext(ctx context.Context) *ListDisputesParams {
-	var ()
 	return &ListDisputesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListDisputesParamsWithHTTPClient creates a new ListDisputesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListDisputesParamsWithHTTPClient(client *http.Client) *ListDisputesParams {
-	var ()
 	return &ListDisputesParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListDisputesParams contains all the parameters to send to the API endpoint
-for the list disputes operation typically these are written to a http.Request
+/* ListDisputesParams contains all the parameters to send to the API endpoint
+   for the list disputes operation.
+
+   Typically these are written to a http.Request.
 */
 type ListDisputesParams struct {
 
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
-	Provide this to retrieve the next set of results for the original query.
-	For more information, see [Paginating](https://developer.squareup.com/docs/basics/api101/pagination).
+	/* Cursor.
 
+	     A pagination cursor returned by a previous call to this endpoint.
+	Provide this cursor to retrieve the next set of results for the original query.
+	For more information, see [Pagination](https://developer.squareup.com/docs/basics/api101/pagination).
 	*/
 	Cursor *string
-	/*LocationID
-	  The ID of the location for which to return
-	a list of disputes. If not specified,
-	the endpoint returns all open disputes
-	(dispute status is not `INQUIRY_CLOSED`, `WON`, or
-	`LOST`) associated with all locations.
 
+	/* LocationID.
+
+	     The ID of the location for which to return a list of disputes. If not specified, the endpoint returns
+	all open disputes (the dispute status is not `INQUIRY_CLOSED`, `WON`, or `LOST`) associated with all locations.
 	*/
 	LocationID *string
-	/*States
-	  The dispute states to filter the result.
-	If not specified, the endpoint
-	returns all open disputes (dispute status is not
-	`INQUIRY_CLOSED`, `WON`, or `LOST`).
 
+	/* States.
+
+	     The dispute states to filter the result.
+	If not specified, the endpoint returns all open disputes (the dispute status is not `INQUIRY_CLOSED`, `WON`,
+	or `LOST`).
 	*/
 	States *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list disputes params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListDisputesParams) WithDefaults() *ListDisputesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list disputes params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListDisputesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list disputes params
@@ -168,48 +180,51 @@ func (o *ListDisputesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LocationID != nil {
 
 		// query param location_id
 		var qrLocationID string
+
 		if o.LocationID != nil {
 			qrLocationID = *o.LocationID
 		}
 		qLocationID := qrLocationID
 		if qLocationID != "" {
+
 			if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.States != nil {
 
 		// query param states
 		var qrStates string
+
 		if o.States != nil {
 			qrStates = *o.States
 		}
 		qStates := qrStates
 		if qStates != "" {
+
 			if err := r.SetQueryParam("states", qStates); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

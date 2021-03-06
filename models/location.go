@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -62,6 +64,12 @@ type Location struct {
 	// The Facebook profile URL of the location. The URL should begin with 'facebook.com/'.
 	FacebookURL string `json:"facebook_url,omitempty"`
 
+	// The URL of a full-format logo image for the location. The Seller must choose this logo in the
+	// Seller dashboard (Receipts section) for the logo to appear on transactions (such as receipts, invoices)
+	// that Square generates on behalf of the Seller. This image can have an aspect ratio of 2:1 or greater
+	// and is recommended to be at least 1280x648 pixels.
+	FullFormatLogoURL string `json:"full_format_logo_url,omitempty"`
+
 	// The Square-issued ID of the location.
 	ID string `json:"id,omitempty"`
 
@@ -72,7 +80,10 @@ type Location struct {
 	// [BCP 47 format](https://tools.ietf.org/html/bcp47#appendix-A).
 	LanguageCode string `json:"language_code,omitempty"`
 
-	// The URL of the logo image for the location.
+	// The URL of the logo image for the location. The Seller must choose this logo in the Seller
+	// dashboard (Receipts section) for the logo to appear on transactions (such as receipts, invoices)
+	// that Square generates on behalf of the Seller. This image should have an aspect ratio
+	// close to 1:1 and is recommended to be at least 200x200 pixels.
 	LogoURL string `json:"logo_url,omitempty"`
 
 	// The merchant category code (MCC) of the location, as standardized by ISO 18245.
@@ -84,6 +95,7 @@ type Location struct {
 
 	// The name of the location.
 	// This information appears in the dashboard as the nickname.
+	// A location name must be unique within a seller account.
 	Name string `json:"name,omitempty"`
 
 	// The phone number of the location in human readable format.
@@ -134,7 +146,6 @@ func (m *Location) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Location) validateAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Address) { // not required
 		return nil
 	}
@@ -152,7 +163,6 @@ func (m *Location) validateAddress(formats strfmt.Registry) error {
 }
 
 func (m *Location) validateBusinessHours(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BusinessHours) { // not required
 		return nil
 	}
@@ -170,13 +180,76 @@ func (m *Location) validateBusinessHours(formats strfmt.Registry) error {
 }
 
 func (m *Location) validateCoordinates(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Coordinates) { // not required
 		return nil
 	}
 
 	if m.Coordinates != nil {
 		if err := m.Coordinates.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("coordinates")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this location based on the context it is used
+func (m *Location) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateBusinessHours(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCoordinates(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Location) contextValidateAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Address != nil {
+		if err := m.Address.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Location) contextValidateBusinessHours(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BusinessHours != nil {
+		if err := m.BusinessHours.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("business_hours")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Location) contextValidateCoordinates(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Coordinates != nil {
+		if err := m.Coordinates.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("coordinates")
 			}

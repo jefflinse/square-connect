@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // CreateLocationResponse Response object returned by the [CreateLocation](#endpoint-createlocation) endpoint.
+// Example: {"location":{"address":{"address_line_1":"1234 Peachtree St. NE","administrative_district_level_1":"GA","locality":"Atlanta","postal_code":"30309"},"capabilities":["CREDIT_CARD_PROCESSING"],"coordinates":{"latitude":33.788567,"longitude":-84.466947},"country":"US","created_at":"2019-07-19T17:58:25Z","currency":"USD","description":"My new location.","id":"LOCATION_ID","instagram_username":"instagram","language_code":"en-US","mcc":"1234","merchant_id":"MERCHANT_ID","name":"New location name","status":"ACTIVE","twitter_username":"twitter","type":"PHYSICAL","website_url":"examplewebsite.com"}}
 //
 // swagger:model CreateLocationResponse
 type CreateLocationResponse struct {
@@ -44,7 +46,6 @@ func (m *CreateLocationResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CreateLocationResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -69,13 +70,62 @@ func (m *CreateLocationResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *CreateLocationResponse) validateLocation(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Location) { // not required
 		return nil
 	}
 
 	if m.Location != nil {
 		if err := m.Location.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("location")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create location response based on the context it is used
+func (m *CreateLocationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateLocationResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CreateLocationResponse) contextValidateLocation(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Location != nil {
+		if err := m.Location.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("location")
 			}

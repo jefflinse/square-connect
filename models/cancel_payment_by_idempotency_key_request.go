@@ -6,18 +6,21 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
-// CancelPaymentByIdempotencyKeyRequest Specifies idempotency key of a payment to cancel.
+// CancelPaymentByIdempotencyKeyRequest Specifies the idempotency key of a payment to cancel.
+// Example: {"request_body":{"idempotency_key":"a7e36d40-d24b-11e8-b568-0800200c9a66"}}
 //
 // swagger:model CancelPaymentByIdempotencyKeyRequest
 type CancelPaymentByIdempotencyKeyRequest struct {
 
-	// `idempotency_key` identifying the payment to be canceled.
+	// The `idempotency_key` identifying the payment to be canceled.
 	// Required: true
 	// Max Length: 45
 	// Min Length: 1
@@ -44,14 +47,19 @@ func (m *CancelPaymentByIdempotencyKeyRequest) validateIdempotencyKey(formats st
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 45); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 45); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this cancel payment by idempotency key request based on context it is used
+func (m *CancelPaymentByIdempotencyKeyRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

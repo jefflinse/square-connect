@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -62,6 +64,11 @@ type CatalogInfoResponseLimits struct {
 
 // Validate validates this catalog info response limits
 func (m *CatalogInfoResponseLimits) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this catalog info response limits based on context it is used
+func (m *CatalogInfoResponseLimits) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CreateBreakTypeRequest A request to create a new `BreakType`
+// Example: {"request_body":{"break_type":{"break_name":"Lunch Break","expected_duration":"PT30M","is_paid":true,"location_id":"CGJN03P1D08GF"},"idempotency_key":"PAD3NG5KSN2GL"}}
 //
 // swagger:model CreateBreakTypeRequest
 type CreateBreakTypeRequest struct {
@@ -63,13 +66,40 @@ func (m *CreateBreakTypeRequest) validateBreakType(formats strfmt.Registry) erro
 }
 
 func (m *CreateBreakTypeRequest) validateIdempotencyKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.IdempotencyKey) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", m.IdempotencyKey, 128); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create break type request based on the context it is used
+func (m *CreateBreakTypeRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBreakType(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateBreakTypeRequest) contextValidateBreakType(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BreakType != nil {
+		if err := m.BreakType.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("break_type")
+			}
+			return err
+		}
 	}
 
 	return nil

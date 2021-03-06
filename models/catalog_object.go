@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -19,7 +20,7 @@ import (
 // The type of a particular `CatalogObject` is determined by the value of the
 // `type` attribute and only the corresponding data attribute can be set on the `CatalogObject` instance.
 // For example, the following list shows some instances of `CatalogObject` of a given `type` and
-// their corresponding data atrribute that can be set:
+// their corresponding data attribute that can be set:
 // - For a `CatalogObject` of the `ITEM` type, set the `item_data` attribute to yield the `CatalogItem` object.
 // - For a `CatalogObject` of the `ITEM_VARIATION` type, set the `item_variation_data` attribute to yield the `CatalogItemVariation` object.
 // - For a `CatalogObject` of the `MODIFIER` type, set the `modifier_data` attribute to yield the `CatalogModifier` object.
@@ -37,6 +38,7 @@ import (
 //
 // For a more detailed discussion of the Catalog data model, please see the
 // [Design a Catalog](/catalog-api/design-a-catalog) guide.
+// Example: {"catalog_object":{"absent_at_location_ids":["{{ LOCATIONID-1 }}","{{ LOCATIONID-N }}"],"category_data":"{{ CatalogCategory object only if type=CATEGORY }}","connect_v1_ids":{"catalog_v1_id":"{{ itemID from Catalog v1 }}","location_id":"{{ location where v1 ID is used }}"},"discount_data":"{{ CatalogDiscount object only if type=DISCOUNT }}","id":"{{ set by Catalog during object creation }}","is_deleted":"{{ [true | false] }}","item_data":"{{ CatalogItem object only if type=ITEM }}","item_variation_data":"{{ CatalogItemVariation object only if type=ITEM_VARIATION }}","modifier_data":"{{ CatalogModifier object only if type=MODIFIER }}","modifier_list_data":"{{ CatalogModifierList object only if type=MODIFIER_LIST }}","present_at_all_locations":"{{ [true | false] }}","present_at_location_ids":["{{ LOCATIONID-1 }}","{{ LOCATIONID-N }}"],"tax_data":"{{ CatalogTax object only if type=TAX }}","type":"{{ [ITEM | ITEM_VARIATION | MODIFIER | MODIFIER_LIST | CATEGORY | DISCOUNT | TAX] }}","updated_at":"{{ date \u0026 time of most recent update }}","version":"{{ version of the CatalogObject }}"}}
 //
 // swagger:model CatalogObject
 type CatalogObject struct {
@@ -63,9 +65,9 @@ type CatalogObject struct {
 	// If the `CatalogCustomAttributeDefinition` object is
 	// defined by another application, the `CatalogCustomAttributeDefinition`'s key attribute value is prefixed by
 	// the defining application ID. For example, if the `CatalogCustomAttributeDefinition` has a `key` attribute of
-	// "cocoa_brand" and the defining application ID is "abcd1234", the key in the map is "abcd1234:cocoa_brand" if the
-	// application making the request is different from the application defining the custom attribute definition.
-	// Otherwise, the key used in the map is simply "cocoa-brand".
+	// `"cocoa_brand"` and the defining application ID is `"abcd1234"`, the key in the map is `"abcd1234:cocoa_brand"`
+	// if the application making the request is different from the application defining the custom attribute definition.
+	// Otherwise, the key used in the map is simply `"cocoa_brand"`.
 	//
 	// Application-defined custom attributes that are set at a global (location-independent) level.
 	// Custom attribute values are intended to store additional information about a catalog object
@@ -255,7 +257,6 @@ func (m *CatalogObject) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateCatalogV1Ids(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogV1Ids) { // not required
 		return nil
 	}
@@ -280,7 +281,6 @@ func (m *CatalogObject) validateCatalogV1Ids(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateCategoryData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CategoryData) { // not required
 		return nil
 	}
@@ -298,7 +298,6 @@ func (m *CatalogObject) validateCategoryData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateCustomAttributeDefinitionData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomAttributeDefinitionData) { // not required
 		return nil
 	}
@@ -316,7 +315,6 @@ func (m *CatalogObject) validateCustomAttributeDefinitionData(formats strfmt.Reg
 }
 
 func (m *CatalogObject) validateCustomAttributeValues(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomAttributeValues) { // not required
 		return nil
 	}
@@ -338,7 +336,6 @@ func (m *CatalogObject) validateCustomAttributeValues(formats strfmt.Registry) e
 }
 
 func (m *CatalogObject) validateDiscountData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DiscountData) { // not required
 		return nil
 	}
@@ -361,7 +358,7 @@ func (m *CatalogObject) validateID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("id", "body", string(*m.ID), 1); err != nil {
+	if err := validate.MinLength("id", "body", *m.ID, 1); err != nil {
 		return err
 	}
 
@@ -369,7 +366,6 @@ func (m *CatalogObject) validateID(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateImageData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ImageData) { // not required
 		return nil
 	}
@@ -387,7 +383,6 @@ func (m *CatalogObject) validateImageData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateItemData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemData) { // not required
 		return nil
 	}
@@ -405,7 +400,6 @@ func (m *CatalogObject) validateItemData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateItemOptionData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemOptionData) { // not required
 		return nil
 	}
@@ -423,7 +417,6 @@ func (m *CatalogObject) validateItemOptionData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateItemOptionValueData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemOptionValueData) { // not required
 		return nil
 	}
@@ -441,7 +434,6 @@ func (m *CatalogObject) validateItemOptionValueData(formats strfmt.Registry) err
 }
 
 func (m *CatalogObject) validateItemVariationData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ItemVariationData) { // not required
 		return nil
 	}
@@ -459,7 +451,6 @@ func (m *CatalogObject) validateItemVariationData(formats strfmt.Registry) error
 }
 
 func (m *CatalogObject) validateMeasurementUnitData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.MeasurementUnitData) { // not required
 		return nil
 	}
@@ -477,7 +468,6 @@ func (m *CatalogObject) validateMeasurementUnitData(formats strfmt.Registry) err
 }
 
 func (m *CatalogObject) validateModifierData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ModifierData) { // not required
 		return nil
 	}
@@ -495,7 +485,6 @@ func (m *CatalogObject) validateModifierData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateModifierListData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ModifierListData) { // not required
 		return nil
 	}
@@ -513,7 +502,6 @@ func (m *CatalogObject) validateModifierListData(formats strfmt.Registry) error 
 }
 
 func (m *CatalogObject) validatePricingRuleData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PricingRuleData) { // not required
 		return nil
 	}
@@ -531,7 +519,6 @@ func (m *CatalogObject) validatePricingRuleData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateProductSetData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ProductSetData) { // not required
 		return nil
 	}
@@ -549,7 +536,6 @@ func (m *CatalogObject) validateProductSetData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateQuickAmountsSettingsData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.QuickAmountsSettingsData) { // not required
 		return nil
 	}
@@ -567,7 +553,6 @@ func (m *CatalogObject) validateQuickAmountsSettingsData(formats strfmt.Registry
 }
 
 func (m *CatalogObject) validateSubscriptionPlanData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SubscriptionPlanData) { // not required
 		return nil
 	}
@@ -585,7 +570,6 @@ func (m *CatalogObject) validateSubscriptionPlanData(formats strfmt.Registry) er
 }
 
 func (m *CatalogObject) validateTaxData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TaxData) { // not required
 		return nil
 	}
@@ -603,7 +587,6 @@ func (m *CatalogObject) validateTaxData(formats strfmt.Registry) error {
 }
 
 func (m *CatalogObject) validateTimePeriodData(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TimePeriodData) { // not required
 		return nil
 	}
@@ -624,6 +607,363 @@ func (m *CatalogObject) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog object based on the context it is used
+func (m *CatalogObject) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCatalogV1Ids(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCategoryData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCustomAttributeDefinitionData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCustomAttributeValues(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDiscountData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImageData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemOptionData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemOptionValueData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemVariationData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateMeasurementUnitData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifierData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifierListData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePricingRuleData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProductSetData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQuickAmountsSettingsData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSubscriptionPlanData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTaxData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTimePeriodData(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogObject) contextValidateCatalogV1Ids(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.CatalogV1Ids); i++ {
+
+		if m.CatalogV1Ids[i] != nil {
+			if err := m.CatalogV1Ids[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("catalog_v1_ids" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateCategoryData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CategoryData != nil {
+		if err := m.CategoryData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("category_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateCustomAttributeDefinitionData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CustomAttributeDefinitionData != nil {
+		if err := m.CustomAttributeDefinitionData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("custom_attribute_definition_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateCustomAttributeValues(ctx context.Context, formats strfmt.Registry) error {
+
+	for k := range m.CustomAttributeValues {
+
+		if val, ok := m.CustomAttributeValues[k]; ok {
+			if err := val.ContextValidate(ctx, formats); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateDiscountData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DiscountData != nil {
+		if err := m.DiscountData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("discount_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateImageData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ImageData != nil {
+		if err := m.ImageData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("image_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateItemData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemData != nil {
+		if err := m.ItemData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("item_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateItemOptionData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemOptionData != nil {
+		if err := m.ItemOptionData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("item_option_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateItemOptionValueData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemOptionValueData != nil {
+		if err := m.ItemOptionValueData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("item_option_value_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateItemVariationData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ItemVariationData != nil {
+		if err := m.ItemVariationData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("item_variation_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateMeasurementUnitData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MeasurementUnitData != nil {
+		if err := m.MeasurementUnitData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("measurement_unit_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateModifierData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ModifierData != nil {
+		if err := m.ModifierData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("modifier_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateModifierListData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ModifierListData != nil {
+		if err := m.ModifierListData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("modifier_list_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidatePricingRuleData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PricingRuleData != nil {
+		if err := m.PricingRuleData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pricing_rule_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateProductSetData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProductSetData != nil {
+		if err := m.ProductSetData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("product_set_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateQuickAmountsSettingsData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.QuickAmountsSettingsData != nil {
+		if err := m.QuickAmountsSettingsData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("quick_amounts_settings_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateSubscriptionPlanData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SubscriptionPlanData != nil {
+		if err := m.SubscriptionPlanData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("subscription_plan_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateTaxData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TaxData != nil {
+		if err := m.TaxData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tax_data")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogObject) contextValidateTimePeriodData(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TimePeriodData != nil {
+		if err := m.TimePeriodData.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("time_period_data")
+			}
+			return err
+		}
 	}
 
 	return nil

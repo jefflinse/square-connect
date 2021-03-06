@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -13,20 +14,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ListDisputesResponse Defines fields in a ListDisputes response.
+// ListDisputesResponse Defines fields in a `ListDisputes` response.
+// Example: {"cursor":"G1aSTRm48CLjJsg6Sg3hQN1b1OMaoVuG","disputes":[{"amount_money":{"amount":1000,"currency":"USD"},"brand_dispute_id":"100000809947","card_brand":"visa","created_at":"2018-10-12T02:20:25.577Z","dispute_id":"OnY1AZwhSi775rbNIK4gv","disputed_payments":[{"payment_id":"APgIq6RX2jM6DKDhMHiC6QEkuaB"}],"due_at":"2018-10-11T00:00:00.000Z","reason":"NO_KNOWLEDGE","state":"EVIDENCE_REQUIRED","updated_at":"2018-10-12T02:20:25.577Z"}]}
 //
 // swagger:model ListDisputesResponse
 type ListDisputesResponse struct {
 
 	// The pagination cursor to be used in a subsequent request.
-	// If unset, this is the final response.
-	// For more information, see [Paginating](https://developer.squareup.com/docs/basics/api101/pagination).
+	// If unset, this is the final response. For more information, see [Pagination](https://developer.squareup.com/docs/basics/api101/pagination).
 	Cursor string `json:"cursor,omitempty"`
 
-	// The list of Disputes.
+	// The list of disputes.
 	Disputes []*Dispute `json:"disputes"`
 
-	// Information on errors encountered during the request.
+	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors"`
 }
 
@@ -49,7 +50,6 @@ func (m *ListDisputesResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListDisputesResponse) validateDisputes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Disputes) { // not required
 		return nil
 	}
@@ -74,7 +74,6 @@ func (m *ListDisputesResponse) validateDisputes(formats strfmt.Registry) error {
 }
 
 func (m *ListDisputesResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -86,6 +85,60 @@ func (m *ListDisputesResponse) validateErrors(formats strfmt.Registry) error {
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list disputes response based on the context it is used
+func (m *ListDisputesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDisputes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListDisputesResponse) contextValidateDisputes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Disputes); i++ {
+
+		if m.Disputes[i] != nil {
+			if err := m.Disputes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("disputes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListDisputesResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

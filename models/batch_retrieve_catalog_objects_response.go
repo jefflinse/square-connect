@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,11 +15,12 @@ import (
 )
 
 // BatchRetrieveCatalogObjectsResponse batch retrieve catalog objects response
+// Example: {"objects":[{"id":"W62UWFY35CWMYGVWK6TWJDNI","is_deleted":false,"item_data":{"category_id":"BJNQCF2FJ6S6UIDT65ABHLRX","description":"Hot Leaf Juice","name":"Tea","tax_ids":["HURXQOOAIC4IZSI2BEXQRYFY"],"variations":[{"id":"2TZFAOHWGG7PAK2QEXWYPZSP","is_deleted":false,"item_variation_data":{"item_id":"W62UWFY35CWMYGVWK6TWJDNI","name":"Mug","ordinal":0,"price_money":{"amount":150,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2016-11-16T22:25:24.878Z","version":1479335124878}]},"present_at_all_locations":true,"type":"ITEM","updated_at":"2016-11-16T22:25:24.878Z","version":1479335124878},{"id":"AA27W3M2GGTF3H6AVPNB77CK","is_deleted":false,"item_data":{"category_id":"BJNQCF2FJ6S6UIDT65ABHLRX","description":"Hot Bean Juice","name":"Coffee","tax_ids":["HURXQOOAIC4IZSI2BEXQRYFY"],"variations":[{"id":"LBTYIHNHU52WOIHWT7SNRIYH","is_deleted":false,"item_variation_data":{"item_id":"AA27W3M2GGTF3H6AVPNB77CK","name":"Regular","ordinal":0,"price_money":{"amount":250,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2016-11-16T22:25:24.878Z","version":1479335124878},{"id":"PKYIC7HGGKW5CYVSCVDEIMHY","is_deleted":false,"item_variation_data":{"item_id":"AA27W3M2GGTF3H6AVPNB77CK","name":"Large","ordinal":1,"price_money":{"amount":350,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2016-11-16T22:25:24.878Z","version":1479335124878}]},"present_at_all_locations":true,"type":"ITEM","updated_at":"2016-11-16T22:25:24.878Z","version":1479335124878}],"related_objects":[{"category_data":{"name":"Beverages"},"id":"BJNQCF2FJ6S6UIDT65ABHLRX","is_deleted":false,"present_at_all_locations":true,"type":"CATEGORY","updated_at":"2016-11-16T22:25:24.878Z","version":1479335124878},{"id":"HURXQOOAIC4IZSI2BEXQRYFY","is_deleted":false,"present_at_all_locations":true,"tax_data":{"calculation_phase":"TAX_SUBTOTAL_PHASE","enabled":true,"inclusion_type":"ADDITIVE","name":"Sales Tax","percentage":"5.0"},"type":"TAX","updated_at":"2016-11-16T22:25:24.878Z","version":1479335124878}]}
 //
 // swagger:model BatchRetrieveCatalogObjectsResponse
 type BatchRetrieveCatalogObjectsResponse struct {
 
-	// The set of `Error`s encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 
 	// A list of `CatalogObject`s returned.
@@ -51,7 +53,6 @@ func (m *BatchRetrieveCatalogObjectsResponse) Validate(formats strfmt.Registry) 
 }
 
 func (m *BatchRetrieveCatalogObjectsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -76,7 +77,6 @@ func (m *BatchRetrieveCatalogObjectsResponse) validateErrors(formats strfmt.Regi
 }
 
 func (m *BatchRetrieveCatalogObjectsResponse) validateObjects(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Objects) { // not required
 		return nil
 	}
@@ -101,7 +101,6 @@ func (m *BatchRetrieveCatalogObjectsResponse) validateObjects(formats strfmt.Reg
 }
 
 func (m *BatchRetrieveCatalogObjectsResponse) validateRelatedObjects(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RelatedObjects) { // not required
 		return nil
 	}
@@ -113,6 +112,82 @@ func (m *BatchRetrieveCatalogObjectsResponse) validateRelatedObjects(formats str
 
 		if m.RelatedObjects[i] != nil {
 			if err := m.RelatedObjects[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("related_objects" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this batch retrieve catalog objects response based on the context it is used
+func (m *BatchRetrieveCatalogObjectsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjects(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRelatedObjects(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BatchRetrieveCatalogObjectsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BatchRetrieveCatalogObjectsResponse) contextValidateObjects(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Objects); i++ {
+
+		if m.Objects[i] != nil {
+			if err := m.Objects[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("objects" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BatchRetrieveCatalogObjectsResponse) contextValidateRelatedObjects(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.RelatedObjects); i++ {
+
+		if m.RelatedObjects[i] != nil {
+			if err := m.RelatedObjects[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("related_objects" + "." + strconv.Itoa(i))
 				}

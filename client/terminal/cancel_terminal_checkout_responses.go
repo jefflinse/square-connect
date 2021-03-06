@@ -29,9 +29,8 @@ func (o *CancelTerminalCheckoutReader) ReadResponse(response runtime.ClientRespo
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCancelTerminalCheckoutOK() *CancelTerminalCheckoutOK {
 	return &CancelTerminalCheckoutOK{}
 }
 
-/*CancelTerminalCheckoutOK handles this case with default header values.
+/* CancelTerminalCheckoutOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CancelTerminalCheckoutOK struct {
 func (o *CancelTerminalCheckoutOK) Error() string {
 	return fmt.Sprintf("[POST /v2/terminals/checkouts/{checkout_id}/cancel][%d] cancelTerminalCheckoutOK  %+v", 200, o.Payload)
 }
-
 func (o *CancelTerminalCheckoutOK) GetPayload() *models.CancelTerminalCheckoutResponse {
 	return o.Payload
 }

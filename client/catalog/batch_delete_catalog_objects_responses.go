@@ -29,9 +29,8 @@ func (o *BatchDeleteCatalogObjectsReader) ReadResponse(response runtime.ClientRe
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewBatchDeleteCatalogObjectsOK() *BatchDeleteCatalogObjectsOK {
 	return &BatchDeleteCatalogObjectsOK{}
 }
 
-/*BatchDeleteCatalogObjectsOK handles this case with default header values.
+/* BatchDeleteCatalogObjectsOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type BatchDeleteCatalogObjectsOK struct {
 func (o *BatchDeleteCatalogObjectsOK) Error() string {
 	return fmt.Sprintf("[POST /v2/catalog/batch-delete][%d] batchDeleteCatalogObjectsOK  %+v", 200, o.Payload)
 }
-
 func (o *BatchDeleteCatalogObjectsOK) GetPayload() *models.BatchDeleteCatalogObjectsResponse {
 	return o.Payload
 }

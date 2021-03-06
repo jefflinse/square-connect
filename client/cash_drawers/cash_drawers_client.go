@@ -25,13 +25,16 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListCashDrawerShiftEvents(params *ListCashDrawerShiftEventsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCashDrawerShiftEventsOK, error)
+	ListCashDrawerShiftEvents(params *ListCashDrawerShiftEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCashDrawerShiftEventsOK, error)
 
-	ListCashDrawerShifts(params *ListCashDrawerShiftsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCashDrawerShiftsOK, error)
+	ListCashDrawerShifts(params *ListCashDrawerShiftsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCashDrawerShiftsOK, error)
 
-	RetrieveCashDrawerShift(params *RetrieveCashDrawerShiftParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCashDrawerShiftOK, error)
+	RetrieveCashDrawerShift(params *RetrieveCashDrawerShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCashDrawerShiftOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -41,13 +44,12 @@ type ClientService interface {
 
   Provides a paginated list of events for a single cash drawer shift.
 */
-func (a *Client) ListCashDrawerShiftEvents(params *ListCashDrawerShiftEventsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCashDrawerShiftEventsOK, error) {
+func (a *Client) ListCashDrawerShiftEvents(params *ListCashDrawerShiftEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCashDrawerShiftEventsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListCashDrawerShiftEventsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListCashDrawerShiftEvents",
 		Method:             "GET",
 		PathPattern:        "/v2/cash-drawers/shifts/{shift_id}/events",
@@ -59,7 +61,12 @@ func (a *Client) ListCashDrawerShiftEvents(params *ListCashDrawerShiftEventsPara
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -79,13 +86,12 @@ func (a *Client) ListCashDrawerShiftEvents(params *ListCashDrawerShiftEventsPara
   Provides the details for all of the cash drawer shifts for a location
 in a date range.
 */
-func (a *Client) ListCashDrawerShifts(params *ListCashDrawerShiftsParams, authInfo runtime.ClientAuthInfoWriter) (*ListCashDrawerShiftsOK, error) {
+func (a *Client) ListCashDrawerShifts(params *ListCashDrawerShiftsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCashDrawerShiftsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListCashDrawerShiftsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListCashDrawerShifts",
 		Method:             "GET",
 		PathPattern:        "/v2/cash-drawers/shifts",
@@ -97,7 +103,12 @@ func (a *Client) ListCashDrawerShifts(params *ListCashDrawerShiftsParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -115,15 +126,14 @@ func (a *Client) ListCashDrawerShifts(params *ListCashDrawerShiftsParams, authIn
   RetrieveCashDrawerShift retrieves cash drawer shift
 
   Provides the summary details for a single cash drawer shift. See
-RetrieveCashDrawerShiftEvents for a list of cash drawer shift events.
+[ListCashDrawerShiftEvents](#endpoint-CashDrawers-ListCashDrawerShiftEvents) for a list of cash drawer shift events.
 */
-func (a *Client) RetrieveCashDrawerShift(params *RetrieveCashDrawerShiftParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCashDrawerShiftOK, error) {
+func (a *Client) RetrieveCashDrawerShift(params *RetrieveCashDrawerShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCashDrawerShiftOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveCashDrawerShiftParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveCashDrawerShift",
 		Method:             "GET",
 		PathPattern:        "/v2/cash-drawers/shifts/{shift_id}",
@@ -135,7 +145,12 @@ func (a *Client) RetrieveCashDrawerShift(params *RetrieveCashDrawerShiftParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

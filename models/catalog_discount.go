@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CatalogDiscount A discount applicable to items.
+// Example: {"object":{"discount_data":{"discount_type":"FIXED_PERCENTAGE","label_color":"red","name":"Welcome to the Dark(Roast) Side!","percentage":"5.4","pin_required":false},"id":"#Maythe4th","present_at_all_locations":true,"type":"DISCOUNT"}}
 //
 // swagger:model CatalogDiscount
 type CatalogDiscount struct {
@@ -77,7 +80,6 @@ func (m *CatalogDiscount) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogDiscount) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
@@ -95,13 +97,40 @@ func (m *CatalogDiscount) validateAmountMoney(formats strfmt.Registry) error {
 }
 
 func (m *CatalogDiscount) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog discount based on the context it is used
+func (m *CatalogDiscount) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogDiscount) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
 	}
 
 	return nil

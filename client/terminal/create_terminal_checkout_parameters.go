@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateTerminalCheckoutParams creates a new CreateTerminalCheckoutParams object
-// with the default values initialized.
+// NewCreateTerminalCheckoutParams creates a new CreateTerminalCheckoutParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateTerminalCheckoutParams() *CreateTerminalCheckoutParams {
-	var ()
 	return &CreateTerminalCheckoutParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateTerminalCheckoutParamsWithTimeout creates a new CreateTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateTerminalCheckoutParamsWithTimeout(timeout time.Duration) *CreateTerminalCheckoutParams {
-	var ()
 	return &CreateTerminalCheckoutParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateTerminalCheckoutParamsWithContext creates a new CreateTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateTerminalCheckoutParamsWithContext(ctx context.Context) *CreateTerminalCheckoutParams {
-	var ()
 	return &CreateTerminalCheckoutParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateTerminalCheckoutParamsWithHTTPClient creates a new CreateTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateTerminalCheckoutParamsWithHTTPClient(client *http.Client) *CreateTerminalCheckoutParams {
-	var ()
 	return &CreateTerminalCheckoutParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateTerminalCheckoutParams contains all the parameters to send to the API endpoint
-for the create terminal checkout operation typically these are written to a http.Request
+/* CreateTerminalCheckoutParams contains all the parameters to send to the API endpoint
+   for the create terminal checkout operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateTerminalCheckoutParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateTerminalCheckoutRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create terminal checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateTerminalCheckoutParams) WithDefaults() *CreateTerminalCheckoutParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create terminal checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateTerminalCheckoutParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create terminal checkout params
@@ -126,7 +140,6 @@ func (o *CreateTerminalCheckoutParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

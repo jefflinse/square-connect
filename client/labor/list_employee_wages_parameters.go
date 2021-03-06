@@ -17,70 +17,86 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListEmployeeWagesParams creates a new ListEmployeeWagesParams object
-// with the default values initialized.
+// NewListEmployeeWagesParams creates a new ListEmployeeWagesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListEmployeeWagesParams() *ListEmployeeWagesParams {
-	var ()
 	return &ListEmployeeWagesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListEmployeeWagesParamsWithTimeout creates a new ListEmployeeWagesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListEmployeeWagesParamsWithTimeout(timeout time.Duration) *ListEmployeeWagesParams {
-	var ()
 	return &ListEmployeeWagesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListEmployeeWagesParamsWithContext creates a new ListEmployeeWagesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListEmployeeWagesParamsWithContext(ctx context.Context) *ListEmployeeWagesParams {
-	var ()
 	return &ListEmployeeWagesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListEmployeeWagesParamsWithHTTPClient creates a new ListEmployeeWagesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListEmployeeWagesParamsWithHTTPClient(client *http.Client) *ListEmployeeWagesParams {
-	var ()
 	return &ListEmployeeWagesParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListEmployeeWagesParams contains all the parameters to send to the API endpoint
-for the list employee wages operation typically these are written to a http.Request
+/* ListEmployeeWagesParams contains all the parameters to send to the API endpoint
+   for the list employee wages operation.
+
+   Typically these are written to a http.Request.
 */
 type ListEmployeeWagesParams struct {
 
-	/*Cursor
-	  Pointer to the next page of Employee Wage results to fetch.
+	/* Cursor.
 
+	   Pointer to the next page of Employee Wage results to fetch.
 	*/
 	Cursor *string
-	/*EmployeeID
-	  Filter wages returned to only those that are associated with the specified employee.
 
+	/* EmployeeID.
+
+	   Filter wages returned to only those that are associated with the specified employee.
 	*/
 	EmployeeID *string
-	/*Limit
-	  Maximum number of Employee Wages to return per page. Can range between
-	1 and 200. The default is the maximum at 200.
 
+	/* Limit.
+
+	     Maximum number of Employee Wages to return per page. Can range between
+	1 and 200. The default is the maximum at 200.
 	*/
 	Limit *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list employee wages params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListEmployeeWagesParams) WithDefaults() *ListEmployeeWagesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list employee wages params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListEmployeeWagesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list employee wages params
@@ -161,48 +177,51 @@ func (o *ListEmployeeWagesParams) WriteToRequest(r runtime.ClientRequest, reg st
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.EmployeeID != nil {
 
 		// query param employee_id
 		var qrEmployeeID string
+
 		if o.EmployeeID != nil {
 			qrEmployeeID = *o.EmployeeID
 		}
 		qEmployeeID := qrEmployeeID
 		if qEmployeeID != "" {
+
 			if err := r.SetQueryParam("employee_id", qEmployeeID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

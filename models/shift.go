@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -102,7 +103,6 @@ func (m *Shift) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Shift) validateBreaks(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Breaks) { // not required
 		return nil
 	}
@@ -127,12 +127,11 @@ func (m *Shift) validateBreaks(formats strfmt.Registry) error {
 }
 
 func (m *Shift) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 255); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 255); err != nil {
 		return err
 	}
 
@@ -145,7 +144,7 @@ func (m *Shift) validateStartAt(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("start_at", "body", string(*m.StartAt), 1); err != nil {
+	if err := validate.MinLength("start_at", "body", *m.StartAt, 1); err != nil {
 		return err
 	}
 
@@ -153,13 +152,62 @@ func (m *Shift) validateStartAt(formats strfmt.Registry) error {
 }
 
 func (m *Shift) validateWage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Wage) { // not required
 		return nil
 	}
 
 	if m.Wage != nil {
 		if err := m.Wage.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("wage")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this shift based on the context it is used
+func (m *Shift) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBreaks(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWage(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Shift) contextValidateBreaks(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Breaks); i++ {
+
+		if m.Breaks[i] != nil {
+			if err := m.Breaks[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("breaks" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *Shift) contextValidateWage(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Wage != nil {
+		if err := m.Wage.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("wage")
 			}

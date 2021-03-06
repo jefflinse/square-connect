@@ -7,6 +7,7 @@ package models
 
 // DeleteCustomerGroupRequest Defines the fields that can be provided in a request to the
 // [DeleteCustomerGroup](#endpoint-deletecustomergroup) endpoint.
+// Example: {"request_body":{}}
 //
 // swagger:model DeleteCustomerGroupRequest
 type DeleteCustomerGroupRequest interface{}

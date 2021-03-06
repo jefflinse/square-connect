@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -83,7 +85,6 @@ func (m *OrderFulfillmentRecipient) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderFulfillmentRecipient) validateAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Address) { // not required
 		return nil
 	}
@@ -101,12 +102,11 @@ func (m *OrderFulfillmentRecipient) validateAddress(formats strfmt.Registry) err
 }
 
 func (m *OrderFulfillmentRecipient) validateCustomerID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CustomerID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("customer_id", "body", string(m.CustomerID), 191); err != nil {
+	if err := validate.MaxLength("customer_id", "body", m.CustomerID, 191); err != nil {
 		return err
 	}
 
@@ -114,12 +114,11 @@ func (m *OrderFulfillmentRecipient) validateCustomerID(formats strfmt.Registry) 
 }
 
 func (m *OrderFulfillmentRecipient) validateDisplayName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DisplayName) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("display_name", "body", string(m.DisplayName), 255); err != nil {
+	if err := validate.MaxLength("display_name", "body", m.DisplayName, 255); err != nil {
 		return err
 	}
 
@@ -127,12 +126,11 @@ func (m *OrderFulfillmentRecipient) validateDisplayName(formats strfmt.Registry)
 }
 
 func (m *OrderFulfillmentRecipient) validateEmailAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EmailAddress) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("email_address", "body", string(m.EmailAddress), 255); err != nil {
+	if err := validate.MaxLength("email_address", "body", m.EmailAddress, 255); err != nil {
 		return err
 	}
 
@@ -140,13 +138,40 @@ func (m *OrderFulfillmentRecipient) validateEmailAddress(formats strfmt.Registry
 }
 
 func (m *OrderFulfillmentRecipient) validatePhoneNumber(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PhoneNumber) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("phone_number", "body", string(m.PhoneNumber), 17); err != nil {
+	if err := validate.MaxLength("phone_number", "body", m.PhoneNumber, 17); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order fulfillment recipient based on the context it is used
+func (m *OrderFulfillmentRecipient) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderFulfillmentRecipient) contextValidateAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Address != nil {
+		if err := m.Address.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("address")
+			}
+			return err
+		}
 	}
 
 	return nil

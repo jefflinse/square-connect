@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // ListDeviceCodesRequest list device codes request
+// Example: {"request_body":{}}
 //
 // swagger:model ListDeviceCodesRequest
 type ListDeviceCodesRequest struct {
@@ -29,10 +32,20 @@ type ListDeviceCodesRequest struct {
 	// Returns DeviceCodes of all product types if empty.
 	// See [ProductType](#type-producttype) for possible values
 	ProductType string `json:"product_type,omitempty"`
+
+	// If specified, returns DeviceCodes with the specified statuses.
+	// Returns DeviceCodes of status `PAIRED` and `UNPAIRED` if empty.
+	// See [DeviceCodeStatus](#type-devicecodestatus) for possible values
+	Status []string `json:"status"`
 }
 
 // Validate validates this list device codes request
 func (m *ListDeviceCodesRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this list device codes request based on context it is used
+func (m *ListDeviceCodesRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

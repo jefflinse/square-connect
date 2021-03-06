@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // SearchLoyaltyEventsRequest A request to search for loyalty events.
+// Example: {"request_body":{"limit":30,"query":{"filter":{"order_filter":{"order_id":"PyATxhYLfsMqpVkcKJITPydgEYfZY"}}}}}
 //
 // swagger:model SearchLoyaltyEventsRequest
 type SearchLoyaltyEventsRequest struct {
@@ -55,16 +58,15 @@ func (m *SearchLoyaltyEventsRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchLoyaltyEventsRequest) validateLimit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Limit) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("limit", "body", int64(m.Limit), 1, false); err != nil {
+	if err := validate.MinimumInt("limit", "body", m.Limit, 1, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("limit", "body", int64(m.Limit), 30, false); err != nil {
+	if err := validate.MaximumInt("limit", "body", m.Limit, 30, false); err != nil {
 		return err
 	}
 
@@ -72,13 +74,40 @@ func (m *SearchLoyaltyEventsRequest) validateLimit(formats strfmt.Registry) erro
 }
 
 func (m *SearchLoyaltyEventsRequest) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
 
 	if m.Query != nil {
 		if err := m.Query.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search loyalty events request based on the context it is used
+func (m *SearchLoyaltyEventsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchLoyaltyEventsRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("query")
 			}

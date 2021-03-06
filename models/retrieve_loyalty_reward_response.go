@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // RetrieveLoyaltyRewardResponse A response that includes the loyalty reward.
+// Example: {"reward":{"created_at":"2020-05-08T21:55:42Z","id":"9f18ac21-233a-31c3-be77-b45840f5a810","loyalty_account_id":"5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd","points":10,"redeemed_at":"2020-05-08T21:56:00Z","reward_tier_id":"e1b39225-9da5-43d1-a5db-782cdd8ad94f","status":"REDEEMED","updated_at":"2020-05-08T21:56:00Z"}}
 //
 // swagger:model RetrieveLoyaltyRewardResponse
 type RetrieveLoyaltyRewardResponse struct {
@@ -44,7 +46,6 @@ func (m *RetrieveLoyaltyRewardResponse) Validate(formats strfmt.Registry) error 
 }
 
 func (m *RetrieveLoyaltyRewardResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -69,13 +70,62 @@ func (m *RetrieveLoyaltyRewardResponse) validateErrors(formats strfmt.Registry) 
 }
 
 func (m *RetrieveLoyaltyRewardResponse) validateReward(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Reward) { // not required
 		return nil
 	}
 
 	if m.Reward != nil {
 		if err := m.Reward.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("reward")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve loyalty reward response based on the context it is used
+func (m *RetrieveLoyaltyRewardResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReward(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveLoyaltyRewardResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *RetrieveLoyaltyRewardResponse) contextValidateReward(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Reward != nil {
+		if err := m.Reward.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("reward")
 			}

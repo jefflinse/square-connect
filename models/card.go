@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -100,7 +102,6 @@ func (m *Card) Validate(formats strfmt.Registry) error {
 }
 
 func (m *Card) validateBillingAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BillingAddress) { // not required
 		return nil
 	}
@@ -118,12 +119,11 @@ func (m *Card) validateBillingAddress(formats strfmt.Registry) error {
 }
 
 func (m *Card) validateBin(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Bin) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("bin", "body", string(m.Bin), 6); err != nil {
+	if err := validate.MaxLength("bin", "body", m.Bin, 6); err != nil {
 		return err
 	}
 
@@ -131,12 +131,11 @@ func (m *Card) validateBin(formats strfmt.Registry) error {
 }
 
 func (m *Card) validateCardholderName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CardholderName) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("cardholder_name", "body", string(m.CardholderName), 96); err != nil {
+	if err := validate.MaxLength("cardholder_name", "body", m.CardholderName, 96); err != nil {
 		return err
 	}
 
@@ -144,12 +143,11 @@ func (m *Card) validateCardholderName(formats strfmt.Registry) error {
 }
 
 func (m *Card) validateFingerprint(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Fingerprint) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("fingerprint", "body", string(m.Fingerprint), 255); err != nil {
+	if err := validate.MaxLength("fingerprint", "body", m.Fingerprint, 255); err != nil {
 		return err
 	}
 
@@ -157,12 +155,11 @@ func (m *Card) validateFingerprint(formats strfmt.Registry) error {
 }
 
 func (m *Card) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 64); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 64); err != nil {
 		return err
 	}
 
@@ -170,13 +167,40 @@ func (m *Card) validateID(formats strfmt.Registry) error {
 }
 
 func (m *Card) validateLast4(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Last4) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("last_4", "body", string(m.Last4), 4); err != nil {
+	if err := validate.MaxLength("last_4", "body", m.Last4, 4); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this card based on the context it is used
+func (m *Card) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateBillingAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Card) contextValidateBillingAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BillingAddress != nil {
+		if err := m.BillingAddress.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("billing_address")
+			}
+			return err
+		}
 	}
 
 	return nil

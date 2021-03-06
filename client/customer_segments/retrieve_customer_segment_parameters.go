@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveCustomerSegmentParams creates a new RetrieveCustomerSegmentParams object
-// with the default values initialized.
+// NewRetrieveCustomerSegmentParams creates a new RetrieveCustomerSegmentParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveCustomerSegmentParams() *RetrieveCustomerSegmentParams {
-	var ()
 	return &RetrieveCustomerSegmentParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveCustomerSegmentParamsWithTimeout creates a new RetrieveCustomerSegmentParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveCustomerSegmentParamsWithTimeout(timeout time.Duration) *RetrieveCustomerSegmentParams {
-	var ()
 	return &RetrieveCustomerSegmentParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveCustomerSegmentParamsWithContext creates a new RetrieveCustomerSegmentParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveCustomerSegmentParamsWithContext(ctx context.Context) *RetrieveCustomerSegmentParams {
-	var ()
 	return &RetrieveCustomerSegmentParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveCustomerSegmentParamsWithHTTPClient creates a new RetrieveCustomerSegmentParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveCustomerSegmentParamsWithHTTPClient(client *http.Client) *RetrieveCustomerSegmentParams {
-	var ()
 	return &RetrieveCustomerSegmentParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveCustomerSegmentParams contains all the parameters to send to the API endpoint
-for the retrieve customer segment operation typically these are written to a http.Request
+/* RetrieveCustomerSegmentParams contains all the parameters to send to the API endpoint
+   for the retrieve customer segment operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveCustomerSegmentParams struct {
 
-	/*SegmentID
-	  The Square-issued ID of the customer segment.
+	/* SegmentID.
 
+	   The Square-issued ID of the customer segment.
 	*/
 	SegmentID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve customer segment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveCustomerSegmentParams) WithDefaults() *RetrieveCustomerSegmentParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve customer segment params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveCustomerSegmentParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve customer segment params

@@ -6,13 +6,16 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
-// CreateDisputeEvidenceTextRequest Defines parameters for a CreateDisputeEvidenceText request.
+// CreateDisputeEvidenceTextRequest Defines the parameters for a `CreateDisputeEvidenceText` request.
+// Example: {"request_body":{"evidence_text":"1Z8888888888888888","evidence_type":"TRACKING_NUMBER","idempotency_key":"ed3ee3933d946f1514d505d173c82648"}}
 //
 // swagger:model CreateDisputeEvidenceTextRequest
 type CreateDisputeEvidenceTextRequest struct {
@@ -27,8 +30,7 @@ type CreateDisputeEvidenceTextRequest struct {
 	// See [DisputeEvidenceType](#type-disputeevidencetype) for possible values
 	EvidenceType string `json:"evidence_type,omitempty"`
 
-	// Unique ID. For more information,
-	// see [Idempotency](https://developer.squareup.com/docs/docs/working-with-apis/idempotency).
+	// The Unique ID. For more information, see [Idempotency](https://developer.squareup.com/docs/docs/working-with-apis/idempotency).
 	// Required: true
 	// Max Length: 45
 	// Min Length: 1
@@ -59,11 +61,11 @@ func (m *CreateDisputeEvidenceTextRequest) validateEvidenceText(formats strfmt.R
 		return err
 	}
 
-	if err := validate.MinLength("evidence_text", "body", string(*m.EvidenceText), 1); err != nil {
+	if err := validate.MinLength("evidence_text", "body", *m.EvidenceText, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("evidence_text", "body", string(*m.EvidenceText), 500); err != nil {
+	if err := validate.MaxLength("evidence_text", "body", *m.EvidenceText, 500); err != nil {
 		return err
 	}
 
@@ -76,14 +78,19 @@ func (m *CreateDisputeEvidenceTextRequest) validateIdempotencyKey(formats strfmt
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 45); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 45); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this create dispute evidence text request based on context it is used
+func (m *CreateDisputeEvidenceTextRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

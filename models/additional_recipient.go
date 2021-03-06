@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -88,11 +90,11 @@ func (m *AdditionalRecipient) validateDescription(formats strfmt.Registry) error
 		return err
 	}
 
-	if err := validate.MinLength("description", "body", string(*m.Description), 1); err != nil {
+	if err := validate.MinLength("description", "body", *m.Description, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("description", "body", string(*m.Description), 100); err != nil {
+	if err := validate.MaxLength("description", "body", *m.Description, 100); err != nil {
 		return err
 	}
 
@@ -105,11 +107,11 @@ func (m *AdditionalRecipient) validateLocationID(formats strfmt.Registry) error 
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(*m.LocationID), 50); err != nil {
+	if err := validate.MaxLength("location_id", "body", *m.LocationID, 50); err != nil {
 		return err
 	}
 
@@ -117,13 +119,40 @@ func (m *AdditionalRecipient) validateLocationID(formats strfmt.Registry) error 
 }
 
 func (m *AdditionalRecipient) validateReceivableID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReceivableID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("receivable_id", "body", string(m.ReceivableID), 192); err != nil {
+	if err := validate.MaxLength("receivable_id", "body", m.ReceivableID, 192); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this additional recipient based on the context it is used
+func (m *AdditionalRecipient) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *AdditionalRecipient) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
 	}
 
 	return nil

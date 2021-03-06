@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetBreakTypeParams creates a new GetBreakTypeParams object
-// with the default values initialized.
+// NewGetBreakTypeParams creates a new GetBreakTypeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetBreakTypeParams() *GetBreakTypeParams {
-	var ()
 	return &GetBreakTypeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGetBreakTypeParamsWithTimeout creates a new GetBreakTypeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGetBreakTypeParamsWithTimeout(timeout time.Duration) *GetBreakTypeParams {
-	var ()
 	return &GetBreakTypeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGetBreakTypeParamsWithContext creates a new GetBreakTypeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGetBreakTypeParamsWithContext(ctx context.Context) *GetBreakTypeParams {
-	var ()
 	return &GetBreakTypeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGetBreakTypeParamsWithHTTPClient creates a new GetBreakTypeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGetBreakTypeParamsWithHTTPClient(client *http.Client) *GetBreakTypeParams {
-	var ()
 	return &GetBreakTypeParams{
 		HTTPClient: client,
 	}
 }
 
-/*GetBreakTypeParams contains all the parameters to send to the API endpoint
-for the get break type operation typically these are written to a http.Request
+/* GetBreakTypeParams contains all the parameters to send to the API endpoint
+   for the get break type operation.
+
+   Typically these are written to a http.Request.
 */
 type GetBreakTypeParams struct {
 
-	/*ID
-	  UUID for the `BreakType` being retrieved.
+	/* ID.
 
+	   UUID for the `BreakType` being retrieved.
 	*/
 	ID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the get break type params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetBreakTypeParams) WithDefaults() *GetBreakTypeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the get break type params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetBreakTypeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get break type params

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // ListEmployeeWagesRequest A request for a set of `EmployeeWage` objects
+// Example: {"request_params":"?employee_id=33fJchumvVdJwxV0H6L9\u0026limit=4\u0026cursor=s4R0Z6ecFTzTC4jz8sUDBQTudX3KE313OT9fCt3VUgsXM4sMgED"}
 //
 // swagger:model ListEmployeeWagesRequest
 type ListEmployeeWagesRequest struct {
@@ -45,19 +48,23 @@ func (m *ListEmployeeWagesRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListEmployeeWagesRequest) validateLimit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Limit) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("limit", "body", int64(m.Limit), 1, false); err != nil {
+	if err := validate.MinimumInt("limit", "body", m.Limit, 1, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("limit", "body", int64(m.Limit), 200, false); err != nil {
+	if err := validate.MaximumInt("limit", "body", m.Limit, 200, false); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this list employee wages request based on context it is used
+func (m *ListEmployeeWagesRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

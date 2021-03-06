@@ -29,9 +29,8 @@ func (o *RetrieveDisputeReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewRetrieveDisputeOK() *RetrieveDisputeOK {
 	return &RetrieveDisputeOK{}
 }
 
-/*RetrieveDisputeOK handles this case with default header values.
+/* RetrieveDisputeOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type RetrieveDisputeOK struct {
 func (o *RetrieveDisputeOK) Error() string {
 	return fmt.Sprintf("[GET /v2/disputes/{dispute_id}][%d] retrieveDisputeOK  %+v", 200, o.Payload)
 }
-
 func (o *RetrieveDisputeOK) GetPayload() *models.RetrieveDisputeResponse {
 	return o.Payload
 }

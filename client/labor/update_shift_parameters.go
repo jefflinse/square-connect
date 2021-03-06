@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateShiftParams creates a new UpdateShiftParams object
-// with the default values initialized.
+// NewUpdateShiftParams creates a new UpdateShiftParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateShiftParams() *UpdateShiftParams {
-	var ()
 	return &UpdateShiftParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateShiftParamsWithTimeout creates a new UpdateShiftParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateShiftParamsWithTimeout(timeout time.Duration) *UpdateShiftParams {
-	var ()
 	return &UpdateShiftParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateShiftParamsWithContext creates a new UpdateShiftParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateShiftParamsWithContext(ctx context.Context) *UpdateShiftParams {
-	var ()
 	return &UpdateShiftParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateShiftParamsWithHTTPClient creates a new UpdateShiftParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateShiftParamsWithHTTPClient(client *http.Client) *UpdateShiftParams {
-	var ()
 	return &UpdateShiftParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateShiftParams contains all the parameters to send to the API endpoint
-for the update shift operation typically these are written to a http.Request
+/* UpdateShiftParams contains all the parameters to send to the API endpoint
+   for the update shift operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateShiftParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.UpdateShiftRequest
-	/*ID
-	  ID of the object being updated.
 
+	/* ID.
+
+	   ID of the object being updated.
 	*/
 	ID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update shift params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateShiftParams) WithDefaults() *UpdateShiftParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update shift params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateShiftParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update shift params
@@ -142,7 +157,6 @@ func (o *UpdateShiftParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

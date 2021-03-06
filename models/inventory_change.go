@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -62,7 +64,6 @@ func (m *InventoryChange) Validate(formats strfmt.Registry) error {
 }
 
 func (m *InventoryChange) validateAdjustment(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Adjustment) { // not required
 		return nil
 	}
@@ -80,7 +81,6 @@ func (m *InventoryChange) validateAdjustment(formats strfmt.Registry) error {
 }
 
 func (m *InventoryChange) validatePhysicalCount(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PhysicalCount) { // not required
 		return nil
 	}
@@ -98,13 +98,76 @@ func (m *InventoryChange) validatePhysicalCount(formats strfmt.Registry) error {
 }
 
 func (m *InventoryChange) validateTransfer(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Transfer) { // not required
 		return nil
 	}
 
 	if m.Transfer != nil {
 		if err := m.Transfer.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("transfer")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this inventory change based on the context it is used
+func (m *InventoryChange) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdjustment(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePhysicalCount(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTransfer(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *InventoryChange) contextValidateAdjustment(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Adjustment != nil {
+		if err := m.Adjustment.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("adjustment")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *InventoryChange) contextValidatePhysicalCount(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PhysicalCount != nil {
+		if err := m.PhysicalCount.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("physical_count")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *InventoryChange) contextValidateTransfer(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Transfer != nil {
+		if err := m.Transfer.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("transfer")
 			}

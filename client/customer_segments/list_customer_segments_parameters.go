@@ -16,62 +16,76 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListCustomerSegmentsParams creates a new ListCustomerSegmentsParams object
-// with the default values initialized.
+// NewListCustomerSegmentsParams creates a new ListCustomerSegmentsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListCustomerSegmentsParams() *ListCustomerSegmentsParams {
-	var ()
 	return &ListCustomerSegmentsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListCustomerSegmentsParamsWithTimeout creates a new ListCustomerSegmentsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListCustomerSegmentsParamsWithTimeout(timeout time.Duration) *ListCustomerSegmentsParams {
-	var ()
 	return &ListCustomerSegmentsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListCustomerSegmentsParamsWithContext creates a new ListCustomerSegmentsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListCustomerSegmentsParamsWithContext(ctx context.Context) *ListCustomerSegmentsParams {
-	var ()
 	return &ListCustomerSegmentsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListCustomerSegmentsParamsWithHTTPClient creates a new ListCustomerSegmentsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListCustomerSegmentsParamsWithHTTPClient(client *http.Client) *ListCustomerSegmentsParams {
-	var ()
 	return &ListCustomerSegmentsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListCustomerSegmentsParams contains all the parameters to send to the API endpoint
-for the list customer segments operation typically these are written to a http.Request
+/* ListCustomerSegmentsParams contains all the parameters to send to the API endpoint
+   for the list customer segments operation.
+
+   Typically these are written to a http.Request.
 */
 type ListCustomerSegmentsParams struct {
 
-	/*Cursor
-	  A pagination cursor returned by previous calls to __ListCustomerSegments__.
+	/* Cursor.
+
+	     A pagination cursor returned by previous calls to __ListCustomerSegments__.
 	Used to retrieve the next set of query results.
 
 	See the [Pagination guide](https://developer.squareup.com/docs/docs/working-with-apis/pagination) for more information.
-
 	*/
 	Cursor *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list customer segments params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCustomerSegmentsParams) WithDefaults() *ListCustomerSegmentsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list customer segments params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCustomerSegmentsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list customer segments params
@@ -130,16 +144,17 @@ func (o *ListCustomerSegmentsParams) WriteToRequest(r runtime.ClientRequest, reg
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

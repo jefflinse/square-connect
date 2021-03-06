@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewRenewTokenParams creates a new RenewTokenParams object
-// with the default values initialized.
+// NewRenewTokenParams creates a new RenewTokenParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRenewTokenParams() *RenewTokenParams {
-	var ()
 	return &RenewTokenParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRenewTokenParamsWithTimeout creates a new RenewTokenParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRenewTokenParamsWithTimeout(timeout time.Duration) *RenewTokenParams {
-	var ()
 	return &RenewTokenParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRenewTokenParamsWithContext creates a new RenewTokenParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRenewTokenParamsWithContext(ctx context.Context) *RenewTokenParams {
-	var ()
 	return &RenewTokenParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRenewTokenParamsWithHTTPClient creates a new RenewTokenParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRenewTokenParamsWithHTTPClient(client *http.Client) *RenewTokenParams {
-	var ()
 	return &RenewTokenParams{
 		HTTPClient: client,
 	}
 }
 
-/*RenewTokenParams contains all the parameters to send to the API endpoint
-for the renew token operation typically these are written to a http.Request
+/* RenewTokenParams contains all the parameters to send to the API endpoint
+   for the renew token operation.
+
+   Typically these are written to a http.Request.
 */
 type RenewTokenParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.RenewTokenRequest
-	/*ClientID
-	  Your application ID, available from the [application dashboard](https://connect.squareup.com/apps).
 
+	/* ClientID.
+
+	   Your application ID, available from the [application dashboard](https://connect.squareup.com/apps).
 	*/
 	ClientID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the renew token params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RenewTokenParams) WithDefaults() *RenewTokenParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the renew token params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RenewTokenParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the renew token params
@@ -142,7 +157,6 @@ func (o *RenewTokenParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Re
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

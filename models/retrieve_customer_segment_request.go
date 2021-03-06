@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // RetrieveCustomerSegmentRequest Defines the valid parameters for requests to __RetrieveCustomerSegmentRequest__.
+// Example: {"request_body":{}}
 //
 // swagger:model RetrieveCustomerSegmentRequest
 type RetrieveCustomerSegmentRequest interface{}

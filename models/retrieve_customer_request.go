@@ -7,6 +7,7 @@ package models
 
 // RetrieveCustomerRequest Defines the fields that are included in requests to the RetrieveCustomer
 // endpoint.
+// Example: {}
 //
 // swagger:model RetrieveCustomerRequest
 type RetrieveCustomerRequest interface{}

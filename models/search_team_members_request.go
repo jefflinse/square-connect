@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // SearchTeamMembersRequest Represents a search request for a filtered list of `TeamMember` objects.
+// Example: {"request_body":{"limit":10,"query":{"filter":{"location_ids":["0G5P3VGACMMQZ"],"status":"ACTIVE"}}}}
 //
 // swagger:model SearchTeamMembersRequest
 type SearchTeamMembersRequest struct {
@@ -49,16 +52,15 @@ func (m *SearchTeamMembersRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchTeamMembersRequest) validateLimit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Limit) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("limit", "body", int64(m.Limit), 1, false); err != nil {
+	if err := validate.MinimumInt("limit", "body", m.Limit, 1, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("limit", "body", int64(m.Limit), 25, false); err != nil {
+	if err := validate.MaximumInt("limit", "body", m.Limit, 25, false); err != nil {
 		return err
 	}
 
@@ -66,13 +68,40 @@ func (m *SearchTeamMembersRequest) validateLimit(formats strfmt.Registry) error 
 }
 
 func (m *SearchTeamMembersRequest) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
 
 	if m.Query != nil {
 		if err := m.Query.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search team members request based on the context it is used
+func (m *SearchTeamMembersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchTeamMembersRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("query")
 			}

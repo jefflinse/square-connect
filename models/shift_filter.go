@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -76,7 +77,6 @@ func (m *ShiftFilter) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ShiftFilter) validateEnd(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.End) { // not required
 		return nil
 	}
@@ -101,7 +101,7 @@ func (m *ShiftFilter) validateLocationIds(formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.LocationIds); i++ {
 
-		if err := validate.MinLength("location_ids"+"."+strconv.Itoa(i), "body", string(m.LocationIds[i]), 1); err != nil {
+		if err := validate.MinLength("location_ids"+"."+strconv.Itoa(i), "body", m.LocationIds[i], 1); err != nil {
 			return err
 		}
 
@@ -111,7 +111,6 @@ func (m *ShiftFilter) validateLocationIds(formats strfmt.Registry) error {
 }
 
 func (m *ShiftFilter) validateStart(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Start) { // not required
 		return nil
 	}
@@ -136,7 +135,7 @@ func (m *ShiftFilter) validateTeamMemberIds(formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.TeamMemberIds); i++ {
 
-		if err := validate.MinLength("team_member_ids"+"."+strconv.Itoa(i), "body", string(m.TeamMemberIds[i]), 1); err != nil {
+		if err := validate.MinLength("team_member_ids"+"."+strconv.Itoa(i), "body", m.TeamMemberIds[i], 1); err != nil {
 			return err
 		}
 
@@ -146,13 +145,76 @@ func (m *ShiftFilter) validateTeamMemberIds(formats strfmt.Registry) error {
 }
 
 func (m *ShiftFilter) validateWorkday(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Workday) { // not required
 		return nil
 	}
 
 	if m.Workday != nil {
 		if err := m.Workday.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("workday")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this shift filter based on the context it is used
+func (m *ShiftFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateEnd(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStart(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWorkday(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ShiftFilter) contextValidateEnd(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.End != nil {
+		if err := m.End.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("end")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ShiftFilter) contextValidateStart(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Start != nil {
+		if err := m.Start.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("start")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ShiftFilter) contextValidateWorkday(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Workday != nil {
+		if err := m.Workday.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("workday")
 			}

@@ -17,66 +17,81 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewDeleteInvoiceParams creates a new DeleteInvoiceParams object
-// with the default values initialized.
+// NewDeleteInvoiceParams creates a new DeleteInvoiceParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewDeleteInvoiceParams() *DeleteInvoiceParams {
-	var ()
 	return &DeleteInvoiceParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewDeleteInvoiceParamsWithTimeout creates a new DeleteInvoiceParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewDeleteInvoiceParamsWithTimeout(timeout time.Duration) *DeleteInvoiceParams {
-	var ()
 	return &DeleteInvoiceParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewDeleteInvoiceParamsWithContext creates a new DeleteInvoiceParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewDeleteInvoiceParamsWithContext(ctx context.Context) *DeleteInvoiceParams {
-	var ()
 	return &DeleteInvoiceParams{
-
 		Context: ctx,
 	}
 }
 
 // NewDeleteInvoiceParamsWithHTTPClient creates a new DeleteInvoiceParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewDeleteInvoiceParamsWithHTTPClient(client *http.Client) *DeleteInvoiceParams {
-	var ()
 	return &DeleteInvoiceParams{
 		HTTPClient: client,
 	}
 }
 
-/*DeleteInvoiceParams contains all the parameters to send to the API endpoint
-for the delete invoice operation typically these are written to a http.Request
+/* DeleteInvoiceParams contains all the parameters to send to the API endpoint
+   for the delete invoice operation.
+
+   Typically these are written to a http.Request.
 */
 type DeleteInvoiceParams struct {
 
-	/*InvoiceID
-	  The ID of the invoice to delete.
+	/* InvoiceID.
 
+	   The ID of the invoice to delete.
 	*/
 	InvoiceID string
-	/*Version
-	  The version of the `invoice` to delete.
+
+	/* Version.
+
+	     The version of the `invoice` to delete.
 	If you do not know the version, you can call `GetInvoice` or
 	`ListInvoices`.
-
 	*/
 	Version *int64
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the delete invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteInvoiceParams) WithDefaults() *DeleteInvoiceParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the delete invoice params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *DeleteInvoiceParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the delete invoice params
@@ -151,16 +166,17 @@ func (o *DeleteInvoiceParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 
 		// query param version
 		var qrVersion int64
+
 		if o.Version != nil {
 			qrVersion = *o.Version
 		}
 		qVersion := swag.FormatInt64(qrVersion)
 		if qVersion != "" {
+
 			if err := r.SetQueryParam("version", qVersion); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

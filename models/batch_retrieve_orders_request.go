@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 
 // BatchRetrieveOrdersRequest Defines the fields that are included in requests to the
 // BatchRetrieveOrders endpoint.
+// Example: {"request_body":{"location_id":"057P5VYJ4A5X1","order_ids":["CAISEM82RcpmcFBM0TfOyiHV3es","CAISENgvlJ6jLWAzERDzjyHVybY"]}}
 //
 // swagger:model BatchRetrieveOrdersRequest
 type BatchRetrieveOrdersRequest struct {
@@ -51,12 +53,17 @@ func (m *BatchRetrieveOrdersRequest) validateOrderIds(formats strfmt.Registry) e
 
 	for i := 0; i < len(m.OrderIds); i++ {
 
-		if err := validate.MinLength("order_ids"+"."+strconv.Itoa(i), "body", string(m.OrderIds[i]), 1); err != nil {
+		if err := validate.MinLength("order_ids"+"."+strconv.Itoa(i), "body", m.OrderIds[i], 1); err != nil {
 			return err
 		}
 
 	}
 
+	return nil
+}
+
+// ContextValidate validates this batch retrieve orders request based on context it is used
+func (m *BatchRetrieveOrdersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

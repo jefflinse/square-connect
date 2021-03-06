@@ -25,11 +25,14 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListEmployees(params *ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEmployeesOK, error)
+	ListEmployees(params *ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEmployeesOK, error)
 
-	RetrieveEmployee(params *RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveEmployeeOK, error)
+	RetrieveEmployee(params *RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveEmployeeOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -37,13 +40,12 @@ type ClientService interface {
 /*
   ListEmployees lists employees
 */
-func (a *Client) ListEmployees(params *ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEmployeesOK, error) {
+func (a *Client) ListEmployees(params *ListEmployeesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEmployeesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListEmployeesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListEmployees",
 		Method:             "GET",
 		PathPattern:        "/v2/employees",
@@ -55,7 +57,12 @@ func (a *Client) ListEmployees(params *ListEmployeesParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -72,13 +79,12 @@ func (a *Client) ListEmployees(params *ListEmployeesParams, authInfo runtime.Cli
 /*
   RetrieveEmployee retrieves employee
 */
-func (a *Client) RetrieveEmployee(params *RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveEmployeeOK, error) {
+func (a *Client) RetrieveEmployee(params *RetrieveEmployeeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveEmployeeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveEmployeeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveEmployee",
 		Method:             "GET",
 		PathPattern:        "/v2/employees/{id}",
@@ -90,7 +96,12 @@ func (a *Client) RetrieveEmployee(params *RetrieveEmployeeParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

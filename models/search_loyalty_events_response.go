@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // SearchLoyaltyEventsResponse A response that contains loyalty events that satisfy the search
 // criteria, in order by the `created_at` date.
+// Example: {"events":[{"accumulate_points":{"loyalty_program_id":"d619f755-2d17-41f3-990d-c04ecedd64dd","order_id":"PyATxhYLfsMqpVkcKJITPydgEYfZY","points":5},"created_at":"2020-05-08T22:01:30Z","id":"c27c8465-806e-36f2-b4b3-71f5887b5ba8","location_id":"P034NEENMD09F","loyalty_account_id":"5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd","source":"LOYALTY_API","type":"ACCUMULATE_POINTS"},{"created_at":"2020-05-08T22:01:15Z","id":"e4a5cbc3-a4d0-3779-98e9-e578885d9430","location_id":"P034NEENMD09F","loyalty_account_id":"5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd","redeem_reward":{"loyalty_program_id":"d619f755-2d17-41f3-990d-c04ecedd64dd","order_id":"PyATxhYLfsMqpVkcKJITPydgEYfZY","reward_id":"d03f79f4-815f-3500-b851-cc1e68a457f9"},"source":"LOYALTY_API","type":"REDEEM_REWARD"},{"create_reward":{"loyalty_program_id":"d619f755-2d17-41f3-990d-c04ecedd64dd","points":-10,"reward_id":"d03f79f4-815f-3500-b851-cc1e68a457f9"},"created_at":"2020-05-08T22:00:44Z","id":"5e127479-0b03-3671-ab1e-15faea8b7188","loyalty_account_id":"5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd","source":"LOYALTY_API","type":"CREATE_REWARD"}]}
 //
 // swagger:model SearchLoyaltyEventsResponse
 type SearchLoyaltyEventsResponse struct {
@@ -51,7 +53,6 @@ func (m *SearchLoyaltyEventsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchLoyaltyEventsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -76,7 +77,6 @@ func (m *SearchLoyaltyEventsResponse) validateErrors(formats strfmt.Registry) er
 }
 
 func (m *SearchLoyaltyEventsResponse) validateEvents(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Events) { // not required
 		return nil
 	}
@@ -88,6 +88,60 @@ func (m *SearchLoyaltyEventsResponse) validateEvents(formats strfmt.Registry) er
 
 		if m.Events[i] != nil {
 			if err := m.Events[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("events" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search loyalty events response based on the context it is used
+func (m *SearchLoyaltyEventsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEvents(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchLoyaltyEventsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchLoyaltyEventsResponse) contextValidateEvents(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Events); i++ {
+
+		if m.Events[i] != nil {
+			if err := m.Events[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("events" + "." + strconv.Itoa(i))
 				}

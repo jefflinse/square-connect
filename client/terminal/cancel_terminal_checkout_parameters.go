@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewCancelTerminalCheckoutParams creates a new CancelTerminalCheckoutParams object
-// with the default values initialized.
+// NewCancelTerminalCheckoutParams creates a new CancelTerminalCheckoutParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCancelTerminalCheckoutParams() *CancelTerminalCheckoutParams {
-	var ()
 	return &CancelTerminalCheckoutParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCancelTerminalCheckoutParamsWithTimeout creates a new CancelTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCancelTerminalCheckoutParamsWithTimeout(timeout time.Duration) *CancelTerminalCheckoutParams {
-	var ()
 	return &CancelTerminalCheckoutParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCancelTerminalCheckoutParamsWithContext creates a new CancelTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCancelTerminalCheckoutParamsWithContext(ctx context.Context) *CancelTerminalCheckoutParams {
-	var ()
 	return &CancelTerminalCheckoutParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCancelTerminalCheckoutParamsWithHTTPClient creates a new CancelTerminalCheckoutParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCancelTerminalCheckoutParamsWithHTTPClient(client *http.Client) *CancelTerminalCheckoutParams {
-	var ()
 	return &CancelTerminalCheckoutParams{
 		HTTPClient: client,
 	}
 }
 
-/*CancelTerminalCheckoutParams contains all the parameters to send to the API endpoint
-for the cancel terminal checkout operation typically these are written to a http.Request
+/* CancelTerminalCheckoutParams contains all the parameters to send to the API endpoint
+   for the cancel terminal checkout operation.
+
+   Typically these are written to a http.Request.
 */
 type CancelTerminalCheckoutParams struct {
 
-	/*CheckoutID
-	  Unique ID for the desired `TerminalCheckout`
+	/* CheckoutID.
 
+	   Unique ID for the desired `TerminalCheckout`
 	*/
 	CheckoutID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the cancel terminal checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CancelTerminalCheckoutParams) WithDefaults() *CancelTerminalCheckoutParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the cancel terminal checkout params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CancelTerminalCheckoutParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the cancel terminal checkout params

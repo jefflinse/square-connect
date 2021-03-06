@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -52,7 +54,7 @@ func (m *CatalogQueryPrefix) validateAttributeName(formats strfmt.Registry) erro
 		return err
 	}
 
-	if err := validate.MinLength("attribute_name", "body", string(*m.AttributeName), 1); err != nil {
+	if err := validate.MinLength("attribute_name", "body", *m.AttributeName, 1); err != nil {
 		return err
 	}
 
@@ -65,10 +67,15 @@ func (m *CatalogQueryPrefix) validateAttributePrefix(formats strfmt.Registry) er
 		return err
 	}
 
-	if err := validate.MinLength("attribute_prefix", "body", string(*m.AttributePrefix), 1); err != nil {
+	if err := validate.MinLength("attribute_prefix", "body", *m.AttributePrefix, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this catalog query prefix based on context it is used
+func (m *CatalogQueryPrefix) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,13 +6,15 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
-// CatalogQueryExact The query filter to return the serch result by exact match of the specified attribute name and value.
+// CatalogQueryExact The query filter to return the search result by exact match of the specified attribute name and value.
 //
 // swagger:model CatalogQueryExact
 type CatalogQueryExact struct {
@@ -52,7 +54,7 @@ func (m *CatalogQueryExact) validateAttributeName(formats strfmt.Registry) error
 		return err
 	}
 
-	if err := validate.MinLength("attribute_name", "body", string(*m.AttributeName), 1); err != nil {
+	if err := validate.MinLength("attribute_name", "body", *m.AttributeName, 1); err != nil {
 		return err
 	}
 
@@ -65,6 +67,11 @@ func (m *CatalogQueryExact) validateAttributeValue(formats strfmt.Registry) erro
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this catalog query exact based on context it is used
+func (m *CatalogQueryExact) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,26 +6,28 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
-// ProcessingFee Represents Square processing fee.
+// ProcessingFee Represents the Square processing fee.
 //
 // swagger:model ProcessingFee
 type ProcessingFee struct {
 
-	// The fee amount assessed or adjusted by Square. May be negative.
+	// The fee amount, which might be negative, that is assessed or adjusted by Square.
 	//
 	// Positive values represent funds being assessed, while negative values represent
 	// funds being returned.
 	AmountMoney *Money `json:"amount_money,omitempty"`
 
-	// Timestamp of when the fee takes effect, in RFC 3339 format.
+	// The timestamp of when the fee takes effect, in RFC 3339 format.
 	EffectiveAt string `json:"effective_at,omitempty"`
 
-	// The type of fee assessed or adjusted. Can be one of: `INITIAL`, `ADJUSTMENT`.
+	// The type of fee assessed or adjusted. The fee type can be `INITIAL` or `ADJUSTMENT`.
 	Type string `json:"type,omitempty"`
 }
 
@@ -44,13 +46,40 @@ func (m *ProcessingFee) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ProcessingFee) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
 
 	if m.AmountMoney != nil {
 		if err := m.AmountMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this processing fee based on the context it is used
+func (m *ProcessingFee) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ProcessingFee) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("amount_money")
 			}

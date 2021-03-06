@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // UpdateLocationResponse Response object returned by the [UpdateLocation](#endpoint-updatelocation) endpoint.
+// Example: {"location":{"address":{"address_line_1":"1234 Peachtree St. NE","administrative_district_level_1":"GA","locality":"Atlanta","postal_code":"30309"},"business_email":"example@squareup.com","business_hours":{"periods":[{"day_of_week":"MON","end_local_time":"17:00","start_local_time":"09:00"}]},"business_name":"Business Name","capabilities":["CREDIT_CARD_PROCESSING"],"coordinates":{"latitude":33.788567,"longitude":-84.466947},"country":"US","created_at":"2019-07-19T17:58:25Z","currency":"USD","description":"Updated description","id":"LOCATION_ID","instagram_username":"instagram","language_code":"en-US","mcc":"1234","merchant_id":"MERCHANT_ID","name":"Updated nickname","phone_number":"5559211234","status":"ACTIVE","timezone":"America/New_York","twitter_username":"twitter","type":"MOBILE","website_url":"examplewebsite.com"}}
 //
 // swagger:model UpdateLocationResponse
 type UpdateLocationResponse struct {
@@ -44,7 +46,6 @@ func (m *UpdateLocationResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateLocationResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -69,13 +70,62 @@ func (m *UpdateLocationResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *UpdateLocationResponse) validateLocation(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Location) { // not required
 		return nil
 	}
 
 	if m.Location != nil {
 		if err := m.Location.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("location")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update location response based on the context it is used
+func (m *UpdateLocationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateLocationResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UpdateLocationResponse) contextValidateLocation(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Location != nil {
+		if err := m.Location.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("location")
 			}

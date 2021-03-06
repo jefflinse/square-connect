@@ -29,9 +29,8 @@ func (o *UpdateCustomerReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewUpdateCustomerOK() *UpdateCustomerOK {
 	return &UpdateCustomerOK{}
 }
 
-/*UpdateCustomerOK handles this case with default header values.
+/* UpdateCustomerOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type UpdateCustomerOK struct {
 func (o *UpdateCustomerOK) Error() string {
 	return fmt.Sprintf("[PUT /v2/customers/{customer_id}][%d] updateCustomerOK  %+v", 200, o.Payload)
 }
-
 func (o *UpdateCustomerOK) GetPayload() *models.UpdateCustomerResponse {
 	return o.Payload
 }

@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewAdjustLoyaltyPointsParams creates a new AdjustLoyaltyPointsParams object
-// with the default values initialized.
+// NewAdjustLoyaltyPointsParams creates a new AdjustLoyaltyPointsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAdjustLoyaltyPointsParams() *AdjustLoyaltyPointsParams {
-	var ()
 	return &AdjustLoyaltyPointsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAdjustLoyaltyPointsParamsWithTimeout creates a new AdjustLoyaltyPointsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAdjustLoyaltyPointsParamsWithTimeout(timeout time.Duration) *AdjustLoyaltyPointsParams {
-	var ()
 	return &AdjustLoyaltyPointsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAdjustLoyaltyPointsParamsWithContext creates a new AdjustLoyaltyPointsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAdjustLoyaltyPointsParamsWithContext(ctx context.Context) *AdjustLoyaltyPointsParams {
-	var ()
 	return &AdjustLoyaltyPointsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAdjustLoyaltyPointsParamsWithHTTPClient creates a new AdjustLoyaltyPointsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAdjustLoyaltyPointsParamsWithHTTPClient(client *http.Client) *AdjustLoyaltyPointsParams {
-	var ()
 	return &AdjustLoyaltyPointsParams{
 		HTTPClient: client,
 	}
 }
 
-/*AdjustLoyaltyPointsParams contains all the parameters to send to the API endpoint
-for the adjust loyalty points operation typically these are written to a http.Request
+/* AdjustLoyaltyPointsParams contains all the parameters to send to the API endpoint
+   for the adjust loyalty points operation.
+
+   Typically these are written to a http.Request.
 */
 type AdjustLoyaltyPointsParams struct {
 
-	/*AccountID
-	  The ID of the `loyalty account` in which to adjust the points.
+	/* AccountID.
 
+	   The ID of the `loyalty account` in which to adjust the points.
 	*/
 	AccountID string
-	/*Body
-	  An object containing the fields to POST for the request.
+
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.AdjustLoyaltyPointsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the adjust loyalty points params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AdjustLoyaltyPointsParams) WithDefaults() *AdjustLoyaltyPointsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the adjust loyalty points params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AdjustLoyaltyPointsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the adjust loyalty points params
@@ -147,7 +162,6 @@ func (o *AdjustLoyaltyPointsParams) WriteToRequest(r runtime.ClientRequest, reg 
 	if err := r.SetPathParam("account_id", o.AccountID); err != nil {
 		return err
 	}
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchSubscriptionsParams creates a new SearchSubscriptionsParams object
-// with the default values initialized.
+// NewSearchSubscriptionsParams creates a new SearchSubscriptionsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchSubscriptionsParams() *SearchSubscriptionsParams {
-	var ()
 	return &SearchSubscriptionsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchSubscriptionsParamsWithTimeout creates a new SearchSubscriptionsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchSubscriptionsParamsWithTimeout(timeout time.Duration) *SearchSubscriptionsParams {
-	var ()
 	return &SearchSubscriptionsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchSubscriptionsParamsWithContext creates a new SearchSubscriptionsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchSubscriptionsParamsWithContext(ctx context.Context) *SearchSubscriptionsParams {
-	var ()
 	return &SearchSubscriptionsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchSubscriptionsParamsWithHTTPClient creates a new SearchSubscriptionsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchSubscriptionsParamsWithHTTPClient(client *http.Client) *SearchSubscriptionsParams {
-	var ()
 	return &SearchSubscriptionsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchSubscriptionsParams contains all the parameters to send to the API endpoint
-for the search subscriptions operation typically these are written to a http.Request
+/* SearchSubscriptionsParams contains all the parameters to send to the API endpoint
+   for the search subscriptions operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchSubscriptionsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchSubscriptionsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search subscriptions params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchSubscriptionsParams) WithDefaults() *SearchSubscriptionsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search subscriptions params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchSubscriptionsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search subscriptions params
@@ -126,7 +140,6 @@ func (o *SearchSubscriptionsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

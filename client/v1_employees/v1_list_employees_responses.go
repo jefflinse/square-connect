@@ -29,9 +29,8 @@ func (o *V1ListEmployeesReader) ReadResponse(response runtime.ClientResponse, co
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewV1ListEmployeesOK() *V1ListEmployeesOK {
 	return &V1ListEmployeesOK{}
 }
 
-/*V1ListEmployeesOK handles this case with default header values.
+/* V1ListEmployeesOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type V1ListEmployeesOK struct {
 func (o *V1ListEmployeesOK) Error() string {
 	return fmt.Sprintf("[GET /v1/me/employees][%d] v1ListEmployeesOK  %+v", 200, o.Payload)
 }
-
 func (o *V1ListEmployeesOK) GetPayload() []*models.V1Employee {
 	return o.Payload
 }

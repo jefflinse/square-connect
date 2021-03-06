@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -89,7 +91,6 @@ func (m *OrderFulfillment) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderFulfillment) validatePickupDetails(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PickupDetails) { // not required
 		return nil
 	}
@@ -107,7 +108,6 @@ func (m *OrderFulfillment) validatePickupDetails(formats strfmt.Registry) error 
 }
 
 func (m *OrderFulfillment) validateShipmentDetails(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ShipmentDetails) { // not required
 		return nil
 	}
@@ -125,13 +125,58 @@ func (m *OrderFulfillment) validateShipmentDetails(formats strfmt.Registry) erro
 }
 
 func (m *OrderFulfillment) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order fulfillment based on the context it is used
+func (m *OrderFulfillment) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePickupDetails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateShipmentDetails(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderFulfillment) contextValidatePickupDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PickupDetails != nil {
+		if err := m.PickupDetails.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pickup_details")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderFulfillment) contextValidateShipmentDetails(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ShipmentDetails != nil {
+		if err := m.ShipmentDetails.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("shipment_details")
+			}
+			return err
+		}
 	}
 
 	return nil

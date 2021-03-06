@@ -29,9 +29,8 @@ func (o *CreateCustomerCardReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCreateCustomerCardOK() *CreateCustomerCardOK {
 	return &CreateCustomerCardOK{}
 }
 
-/*CreateCustomerCardOK handles this case with default header values.
+/* CreateCustomerCardOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CreateCustomerCardOK struct {
 func (o *CreateCustomerCardOK) Error() string {
 	return fmt.Sprintf("[POST /v2/customers/{customer_id}/cards][%d] createCustomerCardOK  %+v", 200, o.Payload)
 }
-
 func (o *CreateCustomerCardOK) GetPayload() *models.CreateCustomerCardResponse {
 	return o.Payload
 }

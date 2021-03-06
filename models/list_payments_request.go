@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -14,50 +16,52 @@ import (
 
 // ListPaymentsRequest Retrieves a list of payments taken by the account making the request.
 //
-// Max results per page: 100
+// The maximum results per page is 100.
+// Example: {"request_body":{}}
 //
 // swagger:model ListPaymentsRequest
 type ListPaymentsRequest struct {
 
-	// Timestamp for the beginning of the reporting period, in RFC 3339 format.
+	// The timestamp for the beginning of the reporting period, in RFC 3339 format.
 	// Inclusive. Default: The current time minus one year.
 	BeginTime string `json:"begin_time,omitempty"`
 
-	// The brand of `Payment` card. For example, `VISA`
+	// The brand of the payment card (for example, VISA).
 	CardBrand string `json:"card_brand,omitempty"`
 
 	// A pagination cursor returned by a previous call to this endpoint.
-	// Provide this to retrieve the next set of results for the original query.
+	// Provide this cursor to retrieve the next set of results for the original query.
 	//
-	// See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
+	// For more information, see [Pagination](https://developer.squareup.com/docs/basics/api101/pagination).
 	Cursor string `json:"cursor,omitempty"`
 
-	// Timestamp for the end of the requested reporting period, in RFC 3339 format.
+	// The timestamp for the end of the reporting period, in RFC 3339 format.
 	//
 	// Default: The current time.
 	EndTime string `json:"end_time,omitempty"`
 
-	// The last 4 digits of `Payment` card.
+	// The last four digits of a payment card.
 	Last4 string `json:"last_4,omitempty"`
 
-	// Maximum number of results to be returned in a single page.
+	// The maximum number of results to be returned in a single page.
 	// It is possible to receive fewer results than the specified limit on a given page.
 	//
-	// If the supplied value is greater than 100, at most 100 results will be returned.
+	// The default value of 100 is also the maximum allowed value. If the provided value is
+	// greater than 100, it is ignored and the default value is used instead.
 	//
 	// Default: `100`
 	Limit int64 `json:"limit,omitempty"`
 
 	// Limit results to the location supplied. By default, results are returned
-	// for the default (main) location associated with the merchant.
+	// for the default (main) location associated with the seller.
 	LocationID string `json:"location_id,omitempty"`
 
-	// The order in which results are listed.
-	// - `ASC` - oldest to newest
-	// - `DESC` - newest to oldest (default).
+	// The order in which results are listed:
+	// - `ASC` - Oldest to newest.
+	// - `DESC` - Newest to oldest (default).
 	SortOrder string `json:"sort_order,omitempty"`
 
-	// The exact amount in the total_money for a `Payment`.
+	// The exact amount in the `total_money` for a payment.
 	// Minimum: 0
 	Total *int64 `json:"total,omitempty"`
 }
@@ -77,15 +81,19 @@ func (m *ListPaymentsRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListPaymentsRequest) validateTotal(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Total) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("total", "body", int64(*m.Total), 0, false); err != nil {
+	if err := validate.MinimumInt("total", "body", *m.Total, 0, false); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this list payments request based on context it is used
+func (m *ListPaymentsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

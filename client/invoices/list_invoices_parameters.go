@@ -17,74 +17,90 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListInvoicesParams creates a new ListInvoicesParams object
-// with the default values initialized.
+// NewListInvoicesParams creates a new ListInvoicesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListInvoicesParams() *ListInvoicesParams {
-	var ()
 	return &ListInvoicesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListInvoicesParamsWithTimeout creates a new ListInvoicesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListInvoicesParamsWithTimeout(timeout time.Duration) *ListInvoicesParams {
-	var ()
 	return &ListInvoicesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListInvoicesParamsWithContext creates a new ListInvoicesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListInvoicesParamsWithContext(ctx context.Context) *ListInvoicesParams {
-	var ()
 	return &ListInvoicesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListInvoicesParamsWithHTTPClient creates a new ListInvoicesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListInvoicesParamsWithHTTPClient(client *http.Client) *ListInvoicesParams {
-	var ()
 	return &ListInvoicesParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListInvoicesParams contains all the parameters to send to the API endpoint
-for the list invoices operation typically these are written to a http.Request
+/* ListInvoicesParams contains all the parameters to send to the API endpoint
+   for the list invoices operation.
+
+   Typically these are written to a http.Request.
 */
 type ListInvoicesParams struct {
 
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
+	/* Cursor.
+
+	     A pagination cursor returned by a previous call to this endpoint.
 	Provide this cursor to retrieve the next set of results for your original query.
 
 	For more information, see [Pagination](https://developer.squareup.com/docs/docs/working-with-apis/pagination).
-
 	*/
 	Cursor *string
-	/*Limit
-	  The maximum number of invoices to return (200 is the maximum `limit`).
+
+	/* Limit.
+
+	     The maximum number of invoices to return (200 is the maximum `limit`).
 	If not provided, the server
 	uses a default limit of 100 invoices.
-
 	*/
 	Limit *int64
-	/*LocationID
-	  The ID of the location for which to list invoices.
 
+	/* LocationID.
+
+	   The ID of the location for which to list invoices.
 	*/
 	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list invoices params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListInvoicesParams) WithDefaults() *ListInvoicesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list invoices params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListInvoicesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list invoices params
@@ -165,38 +181,41 @@ func (o *ListInvoicesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	// query param location_id
 	qrLocationID := o.LocationID
 	qLocationID := qrLocationID
 	if qLocationID != "" {
+
 		if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 			return err
 		}

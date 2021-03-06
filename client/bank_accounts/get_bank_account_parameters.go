@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetBankAccountParams creates a new GetBankAccountParams object
-// with the default values initialized.
+// NewGetBankAccountParams creates a new GetBankAccountParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetBankAccountParams() *GetBankAccountParams {
-	var ()
 	return &GetBankAccountParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGetBankAccountParamsWithTimeout creates a new GetBankAccountParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGetBankAccountParamsWithTimeout(timeout time.Duration) *GetBankAccountParams {
-	var ()
 	return &GetBankAccountParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGetBankAccountParamsWithContext creates a new GetBankAccountParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGetBankAccountParamsWithContext(ctx context.Context) *GetBankAccountParams {
-	var ()
 	return &GetBankAccountParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGetBankAccountParamsWithHTTPClient creates a new GetBankAccountParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGetBankAccountParamsWithHTTPClient(client *http.Client) *GetBankAccountParams {
-	var ()
 	return &GetBankAccountParams{
 		HTTPClient: client,
 	}
 }
 
-/*GetBankAccountParams contains all the parameters to send to the API endpoint
-for the get bank account operation typically these are written to a http.Request
+/* GetBankAccountParams contains all the parameters to send to the API endpoint
+   for the get bank account operation.
+
+   Typically these are written to a http.Request.
 */
 type GetBankAccountParams struct {
 
-	/*BankAccountID
-	  Square-issued ID of the desired `BankAccount`.
+	/* BankAccountID.
 
+	   Square-issued ID of the desired `BankAccount`.
 	*/
 	BankAccountID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the get bank account params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetBankAccountParams) WithDefaults() *GetBankAccountParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the get bank account params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetBankAccountParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get bank account params

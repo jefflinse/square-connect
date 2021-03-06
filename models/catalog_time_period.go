@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -15,7 +17,7 @@ import (
 // swagger:model CatalogTimePeriod
 type CatalogTimePeriod struct {
 
-	// An iCalendar (RFC5545) [event](https://tools.ietf.org/html/rfc5545#section-3.6.1), which
+	// An iCalendar (RFC 5545) [event](https://tools.ietf.org/html/rfc5545#section-3.6.1), which
 	// specifies the name, timing, duration and recurrence of this time period.
 	//
 	// Example:
@@ -35,6 +37,11 @@ type CatalogTimePeriod struct {
 
 // Validate validates this catalog time period
 func (m *CatalogTimePeriod) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this catalog time period based on context it is used
+func (m *CatalogTimePeriod) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

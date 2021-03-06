@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // RevokeTokenRequest revoke token request
+// Example: {"request_body":{"access_token":"ACCESS_TOKEN","client_id":"CLIENT_ID"}}
 //
 // swagger:model RevokeTokenRequest
 type RevokeTokenRequest struct {
@@ -35,6 +38,11 @@ type RevokeTokenRequest struct {
 
 // Validate validates this revoke token request
 func (m *RevokeTokenRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this revoke token request based on context it is used
+func (m *RevokeTokenRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

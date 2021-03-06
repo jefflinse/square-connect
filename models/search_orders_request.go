@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -16,6 +18,7 @@ import (
 // SearchOrders will return all results for all of the merchant’s locations. When fetching additional
 // pages using a `cursor`, the `query` must be equal to the `query` used to fetch the first page of
 // results.
+// Example: {"request_body":{"limit":3,"location_ids":["057P5VYJ4A5X1","18YC4JDH91E1H"],"query":{"filter":{"date_time_filter":{"closed_at":{"end_at":"2019-03-04T21:54:45+00:00","start_at":"2018-03-03T20:00:00+00:00"}},"state_filter":{"states":["COMPLETED"]}},"sort":{"sort_field":"CLOSED_AT","sort_order":"DESC"}},"return_entries":true}}
 //
 // swagger:model SearchOrdersRequest
 type SearchOrdersRequest struct {
@@ -72,12 +75,11 @@ func (m *SearchOrdersRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchOrdersRequest) validateLimit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Limit) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("limit", "body", int64(m.Limit), 1, false); err != nil {
+	if err := validate.MinimumInt("limit", "body", m.Limit, 1, false); err != nil {
 		return err
 	}
 
@@ -85,13 +87,40 @@ func (m *SearchOrdersRequest) validateLimit(formats strfmt.Registry) error {
 }
 
 func (m *SearchOrdersRequest) validateQuery(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Query) { // not required
 		return nil
 	}
 
 	if m.Query != nil {
 		if err := m.Query.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("query")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search orders request based on the context it is used
+func (m *SearchOrdersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateQuery(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchOrdersRequest) contextValidateQuery(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Query != nil {
+		if err := m.Query.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("query")
 			}

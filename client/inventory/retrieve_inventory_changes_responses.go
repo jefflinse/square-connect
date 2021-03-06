@@ -29,9 +29,8 @@ func (o *RetrieveInventoryChangesReader) ReadResponse(response runtime.ClientRes
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewRetrieveInventoryChangesOK() *RetrieveInventoryChangesOK {
 	return &RetrieveInventoryChangesOK{}
 }
 
-/*RetrieveInventoryChangesOK handles this case with default header values.
+/* RetrieveInventoryChangesOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type RetrieveInventoryChangesOK struct {
 func (o *RetrieveInventoryChangesOK) Error() string {
 	return fmt.Sprintf("[GET /v2/inventory/{catalog_object_id}/changes][%d] retrieveInventoryChangesOK  %+v", 200, o.Payload)
 }
-
 func (o *RetrieveInventoryChangesOK) GetPayload() *models.RetrieveInventoryChangesResponse {
 	return o.Payload
 }

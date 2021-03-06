@@ -14,72 +14,99 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
-// NewListCatalogParams creates a new ListCatalogParams object
-// with the default values initialized.
+// NewListCatalogParams creates a new ListCatalogParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListCatalogParams() *ListCatalogParams {
-	var ()
 	return &ListCatalogParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListCatalogParamsWithTimeout creates a new ListCatalogParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListCatalogParamsWithTimeout(timeout time.Duration) *ListCatalogParams {
-	var ()
 	return &ListCatalogParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListCatalogParamsWithContext creates a new ListCatalogParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListCatalogParamsWithContext(ctx context.Context) *ListCatalogParams {
-	var ()
 	return &ListCatalogParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListCatalogParamsWithHTTPClient creates a new ListCatalogParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListCatalogParamsWithHTTPClient(client *http.Client) *ListCatalogParams {
-	var ()
 	return &ListCatalogParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListCatalogParams contains all the parameters to send to the API endpoint
-for the list catalog operation typically these are written to a http.Request
+/* ListCatalogParams contains all the parameters to send to the API endpoint
+   for the list catalog operation.
+
+   Typically these are written to a http.Request.
 */
 type ListCatalogParams struct {
 
-	/*Cursor
-	  The pagination cursor returned in the previous response. Leave unset for an initial request.
-	See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
+	/* CatalogVersion.
 
+	     The specific version of the catalog objects to be included in the response.
+	This allows you to retrieve historical
+	versions of objects. The specified version value is matched against
+	the `CatalogObject`s' `version` attribute.
+
+	     Format: int64
+	*/
+	CatalogVersion *int64
+
+	/* Cursor.
+
+	     The pagination cursor returned in the previous response. Leave unset for an initial request.
+	See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
 	*/
 	Cursor *string
-	/*Types
-	  An optional case-insensitive, comma-separated list of object types to retrieve, for example
+
+	/* Types.
+
+	     An optional case-insensitive, comma-separated list of object types to retrieve, for example
 	`ITEM,ITEM_VARIATION,CATEGORY,IMAGE`.
 
 	The legal values are taken from the CatalogObjectType enum:
 	`ITEM`, `ITEM_VARIATION`, `CATEGORY`, `DISCOUNT`, `TAX`,
 	`MODIFIER`, `MODIFIER_LIST`, or `IMAGE`.
-
 	*/
 	Types *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list catalog params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCatalogParams) WithDefaults() *ListCatalogParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list catalog params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCatalogParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list catalog params
@@ -115,6 +142,17 @@ func (o *ListCatalogParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCatalogVersion adds the catalogVersion to the list catalog params
+func (o *ListCatalogParams) WithCatalogVersion(catalogVersion *int64) *ListCatalogParams {
+	o.SetCatalogVersion(catalogVersion)
+	return o
+}
+
+// SetCatalogVersion adds the catalogVersion to the list catalog params
+func (o *ListCatalogParams) SetCatalogVersion(catalogVersion *int64) {
+	o.CatalogVersion = catalogVersion
+}
+
 // WithCursor adds the cursor to the list catalog params
 func (o *ListCatalogParams) WithCursor(cursor *string) *ListCatalogParams {
 	o.SetCursor(cursor)
@@ -145,36 +183,55 @@ func (o *ListCatalogParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 	}
 	var res []error
 
+	if o.CatalogVersion != nil {
+
+		// query param catalog_version
+		var qrCatalogVersion int64
+
+		if o.CatalogVersion != nil {
+			qrCatalogVersion = *o.CatalogVersion
+		}
+		qCatalogVersion := swag.FormatInt64(qrCatalogVersion)
+		if qCatalogVersion != "" {
+
+			if err := r.SetQueryParam("catalog_version", qCatalogVersion); err != nil {
+				return err
+			}
+		}
+	}
+
 	if o.Cursor != nil {
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Types != nil {
 
 		// query param types
 		var qrTypes string
+
 		if o.Types != nil {
 			qrTypes = *o.Types
 		}
 		qTypes := qrTypes
 		if qTypes != "" {
+
 			if err := r.SetQueryParam("types", qTypes); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

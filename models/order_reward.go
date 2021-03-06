@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -53,7 +55,7 @@ func (m *OrderReward) validateID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("id", "body", string(*m.ID), 1); err != nil {
+	if err := validate.MinLength("id", "body", *m.ID, 1); err != nil {
 		return err
 	}
 
@@ -66,10 +68,15 @@ func (m *OrderReward) validateRewardTierID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("reward_tier_id", "body", string(*m.RewardTierID), 1); err != nil {
+	if err := validate.MinLength("reward_tier_id", "body", *m.RewardTierID, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this order reward based on context it is used
+func (m *OrderReward) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

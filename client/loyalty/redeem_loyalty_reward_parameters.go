@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewRedeemLoyaltyRewardParams creates a new RedeemLoyaltyRewardParams object
-// with the default values initialized.
+// NewRedeemLoyaltyRewardParams creates a new RedeemLoyaltyRewardParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRedeemLoyaltyRewardParams() *RedeemLoyaltyRewardParams {
-	var ()
 	return &RedeemLoyaltyRewardParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRedeemLoyaltyRewardParamsWithTimeout creates a new RedeemLoyaltyRewardParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRedeemLoyaltyRewardParamsWithTimeout(timeout time.Duration) *RedeemLoyaltyRewardParams {
-	var ()
 	return &RedeemLoyaltyRewardParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRedeemLoyaltyRewardParamsWithContext creates a new RedeemLoyaltyRewardParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRedeemLoyaltyRewardParamsWithContext(ctx context.Context) *RedeemLoyaltyRewardParams {
-	var ()
 	return &RedeemLoyaltyRewardParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRedeemLoyaltyRewardParamsWithHTTPClient creates a new RedeemLoyaltyRewardParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRedeemLoyaltyRewardParamsWithHTTPClient(client *http.Client) *RedeemLoyaltyRewardParams {
-	var ()
 	return &RedeemLoyaltyRewardParams{
 		HTTPClient: client,
 	}
 }
 
-/*RedeemLoyaltyRewardParams contains all the parameters to send to the API endpoint
-for the redeem loyalty reward operation typically these are written to a http.Request
+/* RedeemLoyaltyRewardParams contains all the parameters to send to the API endpoint
+   for the redeem loyalty reward operation.
+
+   Typically these are written to a http.Request.
 */
 type RedeemLoyaltyRewardParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.RedeemLoyaltyRewardRequest
-	/*RewardID
-	  The ID of the `loyalty reward` to redeem.
 
+	/* RewardID.
+
+	   The ID of the `loyalty reward` to redeem.
 	*/
 	RewardID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the redeem loyalty reward params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RedeemLoyaltyRewardParams) WithDefaults() *RedeemLoyaltyRewardParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the redeem loyalty reward params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RedeemLoyaltyRewardParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the redeem loyalty reward params
@@ -142,7 +157,6 @@ func (o *RedeemLoyaltyRewardParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

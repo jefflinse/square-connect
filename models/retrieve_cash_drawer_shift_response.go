@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // RetrieveCashDrawerShiftResponse retrieve cash drawer shift response
+// Example: {"cash_drawer_shift":{"cash_paid_in_money":{"amount":10000,"currency":"USD"},"cash_paid_out_money":{"amount":-10000,"currency":"USD"},"cash_payment_money":{"amount":100,"currency":"USD"},"cash_refunds_money":{"amount":-100,"currency":"USD"},"closed_at":"2019-11-22T00:44:49.000Z","closed_cash_money":{"amount":9970,"currency":"USD"},"closing_employee_id":"","description":"Misplaced some change","device":{"name":"My iPad"},"ended_at":"2019-11-22T00:44:49.000Z","ending_employee_id":"","expected_cash_money":{"amount":10000,"currency":"USD"},"id":"DCC99978-09A6-4926-849F-300BE9C5793A","opened_at":"2019-11-22T00:42:54.000Z","opened_cash_money":{"amount":10000,"currency":"USD"},"opening_employee_id":"","state":"CLOSED"}}
 //
 // swagger:model RetrieveCashDrawerShiftResponse
 type RetrieveCashDrawerShiftResponse struct {
@@ -44,7 +46,6 @@ func (m *RetrieveCashDrawerShiftResponse) Validate(formats strfmt.Registry) erro
 }
 
 func (m *RetrieveCashDrawerShiftResponse) validateCashDrawerShift(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CashDrawerShift) { // not required
 		return nil
 	}
@@ -62,7 +63,6 @@ func (m *RetrieveCashDrawerShiftResponse) validateCashDrawerShift(formats strfmt
 }
 
 func (m *RetrieveCashDrawerShiftResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,6 +74,56 @@ func (m *RetrieveCashDrawerShiftResponse) validateErrors(formats strfmt.Registry
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve cash drawer shift response based on the context it is used
+func (m *RetrieveCashDrawerShiftResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCashDrawerShift(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveCashDrawerShiftResponse) contextValidateCashDrawerShift(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CashDrawerShift != nil {
+		if err := m.CashDrawerShift.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cash_drawer_shift")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RetrieveCashDrawerShiftResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

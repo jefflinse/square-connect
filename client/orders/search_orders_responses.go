@@ -29,9 +29,8 @@ func (o *SearchOrdersReader) ReadResponse(response runtime.ClientResponse, consu
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewSearchOrdersOK() *SearchOrdersOK {
 	return &SearchOrdersOK{}
 }
 
-/*SearchOrdersOK handles this case with default header values.
+/* SearchOrdersOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type SearchOrdersOK struct {
 func (o *SearchOrdersOK) Error() string {
 	return fmt.Sprintf("[POST /v2/orders/search][%d] searchOrdersOK  %+v", 200, o.Payload)
 }
-
 func (o *SearchOrdersOK) GetPayload() *models.SearchOrdersResponse {
 	return o.Payload
 }

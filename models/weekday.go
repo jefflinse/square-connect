@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -56,7 +57,7 @@ func init() {
 }
 
 func (m Weekday) validateWeekdayEnum(path, location string, value Weekday) error {
-	if err := validate.Enum(path, location, value, weekdayEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, weekdayEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -74,5 +75,10 @@ func (m Weekday) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this weekday based on context it is used
+func (m Weekday) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

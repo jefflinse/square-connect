@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // AdjustLoyaltyPointsRequest A request to adjust (add or subtract) points manually.
+// Example: {"request_body":{"adjust":{"points":10,"reason":"Complimentary points"},"idempotency_key":"bc29a517-3dc9-450e-aa76-fae39ee849d1"},"request_params":"?account_id=5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd"}
 //
 // swagger:model AdjustLoyaltyPointsRequest
 type AdjustLoyaltyPointsRequest struct {
@@ -71,12 +74,40 @@ func (m *AdjustLoyaltyPointsRequest) validateIdempotencyKey(formats strfmt.Regis
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 128); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this adjust loyalty points request based on the context it is used
+func (m *AdjustLoyaltyPointsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdjustPoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *AdjustLoyaltyPointsRequest) contextValidateAdjustPoints(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AdjustPoints != nil {
+		if err := m.AdjustPoints.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("adjust_points")
+			}
+			return err
+		}
 	}
 
 	return nil

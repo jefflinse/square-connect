@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // ListPaymentsResponse Defines the fields that are included in the response body of
 // a request to the [ListPayments](#endpoint-payments-listpayments) endpoint.
+// Example: {"cursor":"2TTnuq0yRYDdBRSFF2XuFkgO1Bclt4ZHNI7YrFNeyZ6rL1WZXkdnLn10H8fBIwFKdKW1Af6ifRa","payments":[{"amount_money":{"amount":1000,"currency":"USD"},"card_details":{"auth_result_code":"NQbV3A","avs_status":"AVS_ACCEPTED","card":{"card_brand":"VISA","exp_month":2,"exp_year":2022,"fingerprint":"sq-1-lHpUJIUyqOPQmH89b6GuQEljmc-mZmu4kSTaMlkLDkJI7NVjAl4Zirn2sk3OeyVKVA","last_4":"1111"},"card_payment_timeline":{"authorized_at":"2019-07-09T14:36:13.798Z"},"cvv_status":"CVV_ACCEPTED","entry_method":"KEYED","status":"AUTHORIZED"},"created_at":"2019-07-09T14:36:13.745Z","id":"ifrBnAil7rRfDtd27cdf9g9WO8paB","location_id":"QLIJX16Q3UZ0A","order_id":"MvfIilKnIYKBium4rauH67wFzRxv","source_type":"CARD","status":"APPROVED","total_money":{"amount":1000,"currency":"USD"},"updated_at":"2019-07-09T14:36:13.883Z"},{"amount_money":{"amount":1000,"currency":"USD"},"card_details":{"auth_result_code":"vPIr0K","avs_status":"AVS_ACCEPTED","card":{"card_brand":"VISA","exp_month":7,"exp_year":2026,"fingerprint":"sq-1-TpmjbNBMFdibiIjpQI5LiRgNUBC7u1689i0TgHjnlyHEWYB7tnn-K4QbW4ttvtaqXw","last_4":"2796"},"card_payment_timeline":{"authorized_at":"2019-07-08T01:00:51.617Z","captured_at":"2019-07-08T01:13:58.508Z"},"cvv_status":"CVV_ACCEPTED","entry_method":"ON_FILE","status":"CAPTURED"},"created_at":"2019-07-08T01:00:51.607Z","customer_id":"RDX9Z4XTIZR7MRZJUXNY9HUK6I","id":"GQTFp1ZlXdpoW4o6eGiZhbjosiDFf","location_id":"XTI0H92143A39","order_id":"m2Hr8Hk8A3CTyQQ1k4ynExg92tO3","processing_fee":[{"amount_money":{"amount":59,"currency":"USD"},"effective_at":"2019-07-08T03:00:53.000Z","type":"INITIAL"}],"source_type":"CARD","status":"COMPLETED","total_money":{"amount":1000,"currency":"USD"},"updated_at":"2019-07-08T01:13:58.508Z"}]}
 //
 // swagger:model ListPaymentsResponse
 type ListPaymentsResponse struct {
@@ -22,13 +24,13 @@ type ListPaymentsResponse struct {
 	// The pagination cursor to be used in a subsequent request. If empty,
 	// this is the final response.
 	//
-	// See [Pagination](https://developer.squareup.com/docs/basics/api101/pagination) for more information.
+	// For more information, see [Pagination](https://developer.squareup.com/docs/basics/api101/pagination).
 	Cursor string `json:"cursor,omitempty"`
 
-	// Information on errors encountered during the request.
+	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors"`
 
-	// The requested list of `Payment`s.
+	// The requested list of payments.
 	Payments []*Payment `json:"payments"`
 }
 
@@ -51,7 +53,6 @@ func (m *ListPaymentsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListPaymentsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -76,7 +77,6 @@ func (m *ListPaymentsResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *ListPaymentsResponse) validatePayments(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Payments) { // not required
 		return nil
 	}
@@ -88,6 +88,60 @@ func (m *ListPaymentsResponse) validatePayments(formats strfmt.Registry) error {
 
 		if m.Payments[i] != nil {
 			if err := m.Payments[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("payments" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list payments response based on the context it is used
+func (m *ListPaymentsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePayments(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListPaymentsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListPaymentsResponse) contextValidatePayments(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Payments); i++ {
+
+		if m.Payments[i] != nil {
+			if err := m.Payments[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("payments" + "." + strconv.Itoa(i))
 				}

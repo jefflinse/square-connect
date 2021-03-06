@@ -25,11 +25,14 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListMerchants(params *ListMerchantsParams, authInfo runtime.ClientAuthInfoWriter) (*ListMerchantsOK, error)
+	ListMerchants(params *ListMerchantsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListMerchantsOK, error)
 
-	RetrieveMerchant(params *RetrieveMerchantParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveMerchantOK, error)
+	RetrieveMerchant(params *RetrieveMerchantParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveMerchantOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -46,13 +49,12 @@ to get the information for the  merchant that granted you access.
 If you know the merchant ID, you can also use the [RetrieveMerchant](#endpoint-merchants-retrievemerchant)
 endpoint to get the merchant information.
 */
-func (a *Client) ListMerchants(params *ListMerchantsParams, authInfo runtime.ClientAuthInfoWriter) (*ListMerchantsOK, error) {
+func (a *Client) ListMerchants(params *ListMerchantsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListMerchantsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListMerchantsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListMerchants",
 		Method:             "GET",
 		PathPattern:        "/v2/merchants",
@@ -64,7 +66,12 @@ func (a *Client) ListMerchants(params *ListMerchantsParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -83,13 +90,12 @@ func (a *Client) ListMerchants(params *ListMerchantsParams, authInfo runtime.Cli
 
   Retrieve a `Merchant` object for the given `merchant_id`.
 */
-func (a *Client) RetrieveMerchant(params *RetrieveMerchantParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveMerchantOK, error) {
+func (a *Client) RetrieveMerchant(params *RetrieveMerchantParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveMerchantOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveMerchantParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveMerchant",
 		Method:             "GET",
 		PathPattern:        "/v2/merchants/{merchant_id}",
@@ -101,7 +107,12 @@ func (a *Client) RetrieveMerchant(params *RetrieveMerchantParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

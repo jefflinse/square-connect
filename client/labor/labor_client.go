@@ -25,39 +25,42 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateBreakType(params *CreateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateBreakTypeOK, error)
+	CreateBreakType(params *CreateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateBreakTypeOK, error)
 
-	CreateShift(params *CreateShiftParams, authInfo runtime.ClientAuthInfoWriter) (*CreateShiftOK, error)
+	CreateShift(params *CreateShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateShiftOK, error)
 
-	DeleteBreakType(params *DeleteBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteBreakTypeOK, error)
+	DeleteBreakType(params *DeleteBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteBreakTypeOK, error)
 
-	DeleteShift(params *DeleteShiftParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteShiftOK, error)
+	DeleteShift(params *DeleteShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteShiftOK, error)
 
-	GetBreakType(params *GetBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*GetBreakTypeOK, error)
+	GetBreakType(params *GetBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBreakTypeOK, error)
 
-	GetEmployeeWage(params *GetEmployeeWageParams, authInfo runtime.ClientAuthInfoWriter) (*GetEmployeeWageOK, error)
+	GetEmployeeWage(params *GetEmployeeWageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetEmployeeWageOK, error)
 
-	GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInfoWriter) (*GetShiftOK, error)
+	GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetShiftOK, error)
 
-	GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo runtime.ClientAuthInfoWriter) (*GetTeamMemberWageOK, error)
+	GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTeamMemberWageOK, error)
 
-	ListBreakTypes(params *ListBreakTypesParams, authInfo runtime.ClientAuthInfoWriter) (*ListBreakTypesOK, error)
+	ListBreakTypes(params *ListBreakTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListBreakTypesOK, error)
 
-	ListEmployeeWages(params *ListEmployeeWagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEmployeeWagesOK, error)
+	ListEmployeeWages(params *ListEmployeeWagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEmployeeWagesOK, error)
 
-	ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListTeamMemberWagesOK, error)
+	ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTeamMemberWagesOK, error)
 
-	ListWorkweekConfigs(params *ListWorkweekConfigsParams, authInfo runtime.ClientAuthInfoWriter) (*ListWorkweekConfigsOK, error)
+	ListWorkweekConfigs(params *ListWorkweekConfigsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListWorkweekConfigsOK, error)
 
-	SearchShifts(params *SearchShiftsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchShiftsOK, error)
+	SearchShifts(params *SearchShiftsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchShiftsOK, error)
 
-	UpdateBreakType(params *UpdateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateBreakTypeOK, error)
+	UpdateBreakType(params *UpdateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateBreakTypeOK, error)
 
-	UpdateShift(params *UpdateShiftParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateShiftOK, error)
+	UpdateShift(params *UpdateShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateShiftOK, error)
 
-	UpdateWorkweekConfig(params *UpdateWorkweekConfigParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateWorkweekConfigOK, error)
+	UpdateWorkweekConfig(params *UpdateWorkweekConfigParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateWorkweekConfigOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -80,13 +83,12 @@ You can only have 3 `BreakType` instances per location. If you attempt to add a 
 `BreakType` for a location, an `INVALID_REQUEST_ERROR` "Exceeded limit of 3 breaks per location."
 is returned.
 */
-func (a *Client) CreateBreakType(params *CreateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateBreakTypeOK, error) {
+func (a *Client) CreateBreakType(params *CreateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateBreakTypeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateBreakTypeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateBreakType",
 		Method:             "POST",
 		PathPattern:        "/v2/labor/break-types",
@@ -98,7 +100,12 @@ func (a *Client) CreateBreakType(params *CreateBreakTypeParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -134,13 +141,12 @@ shift with an `OPEN` status.
 must not be before the `Shift.start_at`. A break `end_at` must not be after
 the `Shift.end_at`
 */
-func (a *Client) CreateShift(params *CreateShiftParams, authInfo runtime.ClientAuthInfoWriter) (*CreateShiftOK, error) {
+func (a *Client) CreateShift(params *CreateShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateShiftOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateShiftParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateShift",
 		Method:             "POST",
 		PathPattern:        "/v2/labor/shifts",
@@ -152,7 +158,12 @@ func (a *Client) CreateShift(params *CreateShiftParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -173,13 +184,12 @@ func (a *Client) CreateShift(params *CreateShiftParams, authInfo runtime.ClientA
 
 A `BreakType` can be deleted even if it is referenced from a `Shift`.
 */
-func (a *Client) DeleteBreakType(params *DeleteBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteBreakTypeOK, error) {
+func (a *Client) DeleteBreakType(params *DeleteBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteBreakTypeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteBreakTypeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteBreakType",
 		Method:             "DELETE",
 		PathPattern:        "/v2/labor/break-types/{id}",
@@ -191,7 +201,12 @@ func (a *Client) DeleteBreakType(params *DeleteBreakTypeParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -210,13 +225,12 @@ func (a *Client) DeleteBreakType(params *DeleteBreakTypeParams, authInfo runtime
 
   Deletes a `Shift`.
 */
-func (a *Client) DeleteShift(params *DeleteShiftParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteShiftOK, error) {
+func (a *Client) DeleteShift(params *DeleteShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteShiftOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteShiftParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteShift",
 		Method:             "DELETE",
 		PathPattern:        "/v2/labor/shifts/{id}",
@@ -228,7 +242,12 @@ func (a *Client) DeleteShift(params *DeleteShiftParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -247,13 +266,12 @@ func (a *Client) DeleteShift(params *DeleteShiftParams, authInfo runtime.ClientA
 
   Returns a single `BreakType` specified by id.
 */
-func (a *Client) GetBreakType(params *GetBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*GetBreakTypeOK, error) {
+func (a *Client) GetBreakType(params *GetBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBreakTypeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetBreakTypeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetBreakType",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/break-types/{id}",
@@ -265,7 +283,12 @@ func (a *Client) GetBreakType(params *GetBreakTypeParams, authInfo runtime.Clien
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -284,13 +307,12 @@ func (a *Client) GetBreakType(params *GetBreakTypeParams, authInfo runtime.Clien
 
   Returns a single `EmployeeWage` specified by id.
 */
-func (a *Client) GetEmployeeWage(params *GetEmployeeWageParams, authInfo runtime.ClientAuthInfoWriter) (*GetEmployeeWageOK, error) {
+func (a *Client) GetEmployeeWage(params *GetEmployeeWageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetEmployeeWageOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetEmployeeWageParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetEmployeeWage",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/employee-wages/{id}",
@@ -302,7 +324,12 @@ func (a *Client) GetEmployeeWage(params *GetEmployeeWageParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -321,13 +348,12 @@ func (a *Client) GetEmployeeWage(params *GetEmployeeWageParams, authInfo runtime
 
   Returns a single `Shift` specified by id.
 */
-func (a *Client) GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInfoWriter) (*GetShiftOK, error) {
+func (a *Client) GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetShiftOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetShiftParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetShift",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/shifts/{id}",
@@ -339,7 +365,12 @@ func (a *Client) GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInf
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -358,13 +389,12 @@ func (a *Client) GetShift(params *GetShiftParams, authInfo runtime.ClientAuthInf
 
   Returns a single `TeamMemberWage` specified by id.
 */
-func (a *Client) GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo runtime.ClientAuthInfoWriter) (*GetTeamMemberWageOK, error) {
+func (a *Client) GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTeamMemberWageOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetTeamMemberWageParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetTeamMemberWage",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/team-member-wages/{id}",
@@ -376,7 +406,12 @@ func (a *Client) GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo run
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -395,13 +430,12 @@ func (a *Client) GetTeamMemberWage(params *GetTeamMemberWageParams, authInfo run
 
   Returns a paginated list of `BreakType` instances for a business.
 */
-func (a *Client) ListBreakTypes(params *ListBreakTypesParams, authInfo runtime.ClientAuthInfoWriter) (*ListBreakTypesOK, error) {
+func (a *Client) ListBreakTypes(params *ListBreakTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListBreakTypesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListBreakTypesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListBreakTypes",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/break-types",
@@ -413,7 +447,12 @@ func (a *Client) ListBreakTypes(params *ListBreakTypesParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -432,13 +471,12 @@ func (a *Client) ListBreakTypes(params *ListBreakTypesParams, authInfo runtime.C
 
   Returns a paginated list of `EmployeeWage` instances for a business.
 */
-func (a *Client) ListEmployeeWages(params *ListEmployeeWagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListEmployeeWagesOK, error) {
+func (a *Client) ListEmployeeWages(params *ListEmployeeWagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListEmployeeWagesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListEmployeeWagesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListEmployeeWages",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/employee-wages",
@@ -450,7 +488,12 @@ func (a *Client) ListEmployeeWages(params *ListEmployeeWagesParams, authInfo run
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -469,13 +512,12 @@ func (a *Client) ListEmployeeWages(params *ListEmployeeWagesParams, authInfo run
 
   Returns a paginated list of `TeamMemberWage` instances for a business.
 */
-func (a *Client) ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo runtime.ClientAuthInfoWriter) (*ListTeamMemberWagesOK, error) {
+func (a *Client) ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListTeamMemberWagesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListTeamMemberWagesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListTeamMemberWages",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/team-member-wages",
@@ -487,7 +529,12 @@ func (a *Client) ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -506,13 +553,12 @@ func (a *Client) ListTeamMemberWages(params *ListTeamMemberWagesParams, authInfo
 
   Returns a list of `WorkweekConfig` instances for a business.
 */
-func (a *Client) ListWorkweekConfigs(params *ListWorkweekConfigsParams, authInfo runtime.ClientAuthInfoWriter) (*ListWorkweekConfigsOK, error) {
+func (a *Client) ListWorkweekConfigs(params *ListWorkweekConfigsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListWorkweekConfigsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListWorkweekConfigsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListWorkweekConfigs",
 		Method:             "GET",
 		PathPattern:        "/v2/labor/workweek-configs",
@@ -524,7 +570,12 @@ func (a *Client) ListWorkweekConfigs(params *ListWorkweekConfigsParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -556,13 +607,12 @@ The list can be sorted by:
 - `created_at`
 - `updated_at`
 */
-func (a *Client) SearchShifts(params *SearchShiftsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchShiftsOK, error) {
+func (a *Client) SearchShifts(params *SearchShiftsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchShiftsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchShiftsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchShifts",
 		Method:             "POST",
 		PathPattern:        "/v2/labor/shifts/search",
@@ -574,7 +624,12 @@ func (a *Client) SearchShifts(params *SearchShiftsParams, authInfo runtime.Clien
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -593,13 +648,12 @@ func (a *Client) SearchShifts(params *SearchShiftsParams, authInfo runtime.Clien
 
   Updates an existing `BreakType`.
 */
-func (a *Client) UpdateBreakType(params *UpdateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateBreakTypeOK, error) {
+func (a *Client) UpdateBreakType(params *UpdateBreakTypeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateBreakTypeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateBreakTypeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateBreakType",
 		Method:             "PUT",
 		PathPattern:        "/v2/labor/break-types/{id}",
@@ -611,7 +665,12 @@ func (a *Client) UpdateBreakType(params *UpdateBreakTypeParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -636,13 +695,12 @@ the `end_at` property set to a valid RFC-3339 datetime string.
 When closing a `Shift`, all `Break` instances in the shift must be complete with `end_at`
 set on each `Break`.
 */
-func (a *Client) UpdateShift(params *UpdateShiftParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateShiftOK, error) {
+func (a *Client) UpdateShift(params *UpdateShiftParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateShiftOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateShiftParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateShift",
 		Method:             "PUT",
 		PathPattern:        "/v2/labor/shifts/{id}",
@@ -654,7 +712,12 @@ func (a *Client) UpdateShift(params *UpdateShiftParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -673,13 +736,12 @@ func (a *Client) UpdateShift(params *UpdateShiftParams, authInfo runtime.ClientA
 
   Updates a `WorkweekConfig`.
 */
-func (a *Client) UpdateWorkweekConfig(params *UpdateWorkweekConfigParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateWorkweekConfigOK, error) {
+func (a *Client) UpdateWorkweekConfig(params *UpdateWorkweekConfigParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateWorkweekConfigOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateWorkweekConfigParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateWorkweekConfig",
 		Method:             "PUT",
 		PathPattern:        "/v2/labor/workweek-configs/{id}",
@@ -691,7 +753,12 @@ func (a *Client) UpdateWorkweekConfig(params *UpdateWorkweekConfigParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

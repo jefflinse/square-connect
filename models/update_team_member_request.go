@@ -6,12 +6,15 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // UpdateTeamMemberRequest Represents an update request for a `TeamMember` object.
+// Example: {"request_body":{"team_member":{"assigned_locations":{"assignment_type":"EXPLICIT_LOCATIONS","location_ids":["YSGH2WBKG94QZ","GA2Y9HSJ8KRYT"]},"email_address":"joe_doe@gmail.com","family_name":"Doe","given_name":"Joe","phone_number":"+14159283333","reference_id":"reference_id_1","status":"ACTIVE"}}}
 //
 // swagger:model UpdateTeamMemberRequest
 type UpdateTeamMemberRequest struct {
@@ -35,13 +38,40 @@ func (m *UpdateTeamMemberRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpdateTeamMemberRequest) validateTeamMember(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TeamMember) { // not required
 		return nil
 	}
 
 	if m.TeamMember != nil {
 		if err := m.TeamMember.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("team_member")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update team member request based on the context it is used
+func (m *UpdateTeamMemberRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateTeamMember(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateTeamMemberRequest) contextValidateTeamMember(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TeamMember != nil {
+		if err := m.TeamMember.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("team_member")
 			}

@@ -29,9 +29,8 @@ func (o *UpdateEmployeeRoleReader) ReadResponse(response runtime.ClientResponse,
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewUpdateEmployeeRoleOK() *UpdateEmployeeRoleOK {
 	return &UpdateEmployeeRoleOK{}
 }
 
-/*UpdateEmployeeRoleOK handles this case with default header values.
+/* UpdateEmployeeRoleOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type UpdateEmployeeRoleOK struct {
 func (o *UpdateEmployeeRoleOK) Error() string {
 	return fmt.Sprintf("[PUT /v1/me/roles/{role_id}][%d] updateEmployeeRoleOK  %+v", 200, o.Payload)
 }
-
 func (o *UpdateEmployeeRoleOK) GetPayload() *models.V1EmployeeRole {
 	return o.Payload
 }

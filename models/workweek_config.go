@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -71,7 +73,7 @@ func (m *WorkweekConfig) validateStartOfDayLocalTime(formats strfmt.Registry) er
 		return err
 	}
 
-	if err := validate.MinLength("start_of_day_local_time", "body", string(*m.StartOfDayLocalTime), 1); err != nil {
+	if err := validate.MinLength("start_of_day_local_time", "body", *m.StartOfDayLocalTime, 1); err != nil {
 		return err
 	}
 
@@ -84,6 +86,11 @@ func (m *WorkweekConfig) validateStartOfWeek(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this workweek config based on context it is used
+func (m *WorkweekConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

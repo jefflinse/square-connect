@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -46,10 +48,15 @@ func (m *CatalogModifierOverride) validateModifierID(formats strfmt.Registry) er
 		return err
 	}
 
-	if err := validate.MinLength("modifier_id", "body", string(*m.ModifierID), 1); err != nil {
+	if err := validate.MinLength("modifier_id", "body", *m.ModifierID, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this catalog modifier override based on context it is used
+func (m *CatalogModifierOverride) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

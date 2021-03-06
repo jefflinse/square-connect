@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -47,7 +48,7 @@ func init() {
 }
 
 func (m CatalogCustomAttributeDefinitionType) validateCatalogCustomAttributeDefinitionTypeEnum(path, location string, value CatalogCustomAttributeDefinitionType) error {
-	if err := validate.Enum(path, location, value, catalogCustomAttributeDefinitionTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, catalogCustomAttributeDefinitionTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -65,5 +66,10 @@ func (m CatalogCustomAttributeDefinitionType) Validate(formats strfmt.Registry) 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this catalog custom attribute definition type based on context it is used
+func (m CatalogCustomAttributeDefinitionType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

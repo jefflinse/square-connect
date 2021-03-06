@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -35,8 +36,8 @@ const (
 	// TenderTypeNOSALE captures enum value "NO_SALE"
 	TenderTypeNOSALE TenderType = "NO_SALE"
 
-	// TenderTypeBANKTRANSFER captures enum value "BANK_TRANSFER"
-	TenderTypeBANKTRANSFER TenderType = "BANK_TRANSFER"
+	// TenderTypeWALLET captures enum value "WALLET"
+	TenderTypeWALLET TenderType = "WALLET"
 
 	// TenderTypeOTHER captures enum value "OTHER"
 	TenderTypeOTHER TenderType = "OTHER"
@@ -47,7 +48,7 @@ var tenderTypeEnum []interface{}
 
 func init() {
 	var res []TenderType
-	if err := json.Unmarshal([]byte(`["CARD","CASH","THIRD_PARTY_CARD","SQUARE_GIFT_CARD","NO_SALE","BANK_TRANSFER","OTHER"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["CARD","CASH","THIRD_PARTY_CARD","SQUARE_GIFT_CARD","NO_SALE","WALLET","OTHER"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -56,7 +57,7 @@ func init() {
 }
 
 func (m TenderType) validateTenderTypeEnum(path, location string, value TenderType) error {
-	if err := validate.Enum(path, location, value, tenderTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, tenderTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -74,5 +75,10 @@ func (m TenderType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this tender type based on context it is used
+func (m TenderType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

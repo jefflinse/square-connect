@@ -16,58 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewCaptureTransactionParams creates a new CaptureTransactionParams object
-// with the default values initialized.
+// NewCaptureTransactionParams creates a new CaptureTransactionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCaptureTransactionParams() *CaptureTransactionParams {
-	var ()
 	return &CaptureTransactionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCaptureTransactionParamsWithTimeout creates a new CaptureTransactionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCaptureTransactionParamsWithTimeout(timeout time.Duration) *CaptureTransactionParams {
-	var ()
 	return &CaptureTransactionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCaptureTransactionParamsWithContext creates a new CaptureTransactionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCaptureTransactionParamsWithContext(ctx context.Context) *CaptureTransactionParams {
-	var ()
 	return &CaptureTransactionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCaptureTransactionParamsWithHTTPClient creates a new CaptureTransactionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCaptureTransactionParamsWithHTTPClient(client *http.Client) *CaptureTransactionParams {
-	var ()
 	return &CaptureTransactionParams{
 		HTTPClient: client,
 	}
 }
 
-/*CaptureTransactionParams contains all the parameters to send to the API endpoint
-for the capture transaction operation typically these are written to a http.Request
+/* CaptureTransactionParams contains all the parameters to send to the API endpoint
+   for the capture transaction operation.
+
+   Typically these are written to a http.Request.
 */
 type CaptureTransactionParams struct {
 
-	/*LocationID*/
+	// LocationID.
 	LocationID string
-	/*TransactionID*/
+
+	// TransactionID.
 	TransactionID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the capture transaction params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CaptureTransactionParams) WithDefaults() *CaptureTransactionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the capture transaction params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CaptureTransactionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the capture transaction params

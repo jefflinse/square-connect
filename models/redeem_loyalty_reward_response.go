@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // RedeemLoyaltyRewardResponse A response that includes the `LoyaltyEvent` published for redeeming the reward.
+// Example: {"event":{"created_at":"2020-05-08T21:56:00Z","id":"67377a6e-dbdc-369d-aa16-2e7ed422e71f","location_id":"P034NEENMD09F","loyalty_account_id":"5adcb100-07f1-4ee7-b8c6-6bb9ebc474bd","redeem_reward":{"loyalty_program_id":"d619f755-2d17-41f3-990d-c04ecedd64dd","reward_id":"9f18ac21-233a-31c3-be77-b45840f5a810"},"source":"LOYALTY_API","type":"REDEEM_REWARD"}}
 //
 // swagger:model RedeemLoyaltyRewardResponse
 type RedeemLoyaltyRewardResponse struct {
@@ -44,7 +46,6 @@ func (m *RedeemLoyaltyRewardResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RedeemLoyaltyRewardResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -69,13 +70,62 @@ func (m *RedeemLoyaltyRewardResponse) validateErrors(formats strfmt.Registry) er
 }
 
 func (m *RedeemLoyaltyRewardResponse) validateEvent(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Event) { // not required
 		return nil
 	}
 
 	if m.Event != nil {
 		if err := m.Event.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("event")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this redeem loyalty reward response based on the context it is used
+func (m *RedeemLoyaltyRewardResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateEvent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RedeemLoyaltyRewardResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *RedeemLoyaltyRewardResponse) contextValidateEvent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Event != nil {
+		if err := m.Event.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("event")
 			}

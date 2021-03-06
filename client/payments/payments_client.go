@@ -25,19 +25,22 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CancelPayment(params *CancelPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CancelPaymentOK, error)
+	CancelPayment(params *CancelPaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPaymentOK, error)
 
-	CancelPaymentByIdempotencyKey(params *CancelPaymentByIdempotencyKeyParams, authInfo runtime.ClientAuthInfoWriter) (*CancelPaymentByIdempotencyKeyOK, error)
+	CancelPaymentByIdempotencyKey(params *CancelPaymentByIdempotencyKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPaymentByIdempotencyKeyOK, error)
 
-	CompletePayment(params *CompletePaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CompletePaymentOK, error)
+	CompletePayment(params *CompletePaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CompletePaymentOK, error)
 
-	CreatePayment(params *CreatePaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CreatePaymentOK, error)
+	CreatePayment(params *CreatePaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePaymentOK, error)
 
-	GetPayment(params *GetPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*GetPaymentOK, error)
+	GetPayment(params *GetPaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPaymentOK, error)
 
-	ListPayments(params *ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter) (*ListPaymentsOK, error)
+	ListPayments(params *ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPaymentsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -45,16 +48,15 @@ type ClientService interface {
 /*
   CancelPayment cancels payment
 
-  Cancels (voids) a payment. If you set `autocomplete` to false when creating a payment,
+  Cancels (voids) a payment. If you set `autocomplete` to `false` when creating a payment,
 you can cancel the payment using this endpoint.
 */
-func (a *Client) CancelPayment(params *CancelPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CancelPaymentOK, error) {
+func (a *Client) CancelPayment(params *CancelPaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPaymentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCancelPaymentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CancelPayment",
 		Method:             "POST",
 		PathPattern:        "/v2/payments/{payment_id}/cancel",
@@ -66,7 +68,12 @@ func (a *Client) CancelPayment(params *CancelPaymentParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -86,22 +93,21 @@ func (a *Client) CancelPayment(params *CancelPaymentParams, authInfo runtime.Cli
   Cancels (voids) a payment identified by the idempotency key that is specified in the
 request.
 
-Use this method when status of a CreatePayment request is unknown. For example, after you send a
-CreatePayment request a network error occurs and you don't get a response. In this case, you can
+Use this method when the status of a `CreatePayment` request is unknown (for example, after you send a
+`CreatePayment` request, a network error occurs and you do not get a response). In this case, you can
 direct Square to cancel the payment using this endpoint. In the request, you provide the same
-idempotency key that you provided in your CreatePayment request you want  to cancel. After
-cancelling the payment, you can submit your CreatePayment request again.
+idempotency key that you provided in your `CreatePayment` request that you want to cancel. After
+canceling the payment, you can submit your `CreatePayment` request again.
 
-Note that if no payment with the specified idempotency key is found, no action is taken, the end
-point returns successfully.
+Note that if no payment with the specified idempotency key is found, no action is taken and the endpoint
+returns successfully.
 */
-func (a *Client) CancelPaymentByIdempotencyKey(params *CancelPaymentByIdempotencyKeyParams, authInfo runtime.ClientAuthInfoWriter) (*CancelPaymentByIdempotencyKeyOK, error) {
+func (a *Client) CancelPaymentByIdempotencyKey(params *CancelPaymentByIdempotencyKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CancelPaymentByIdempotencyKeyOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCancelPaymentByIdempotencyKeyParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CancelPaymentByIdempotencyKey",
 		Method:             "POST",
 		PathPattern:        "/v2/payments/cancel",
@@ -113,7 +119,12 @@ func (a *Client) CancelPaymentByIdempotencyKey(params *CancelPaymentByIdempotenc
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -133,16 +144,15 @@ func (a *Client) CancelPaymentByIdempotencyKey(params *CancelPaymentByIdempotenc
   Completes (captures) a payment.
 
 By default, payments are set to complete immediately after they are created.
-If you set autocomplete to false when creating a payment, you can complete (capture)
+If you set `autocomplete` to `false` when creating a payment, you can complete (capture)
 the payment using this endpoint.
 */
-func (a *Client) CompletePayment(params *CompletePaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CompletePaymentOK, error) {
+func (a *Client) CompletePayment(params *CompletePaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CompletePaymentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCompletePaymentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CompletePayment",
 		Method:             "POST",
 		PathPattern:        "/v2/payments/{payment_id}/complete",
@@ -154,7 +164,12 @@ func (a *Client) CompletePayment(params *CompletePaymentParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -171,25 +186,24 @@ func (a *Client) CompletePayment(params *CompletePaymentParams, authInfo runtime
 /*
   CreatePayment creates payment
 
-  Charges a payment source, for example, a card
-represented by customer's card on file or a card nonce. In addition
-to the payment source, the request must also include the
+  Charges a payment source (for example, a card
+represented by customer's card on file or a card nonce). In addition
+to the payment source, the request must include the
 amount to accept for the payment.
 
-There are several optional parameters that you can include in the request.
-For example, tip money, whether to autocomplete the payment, or a reference ID
-to correlate this payment with another system.
+There are several optional parameters that you can include in the request
+(for example, tip money, whether to autocomplete the payment, or a reference ID
+to correlate this payment with another system).
 
 The `PAYMENTS_WRITE_ADDITIONAL_RECIPIENTS` OAuth permission is required
 to enable application fees.
 */
-func (a *Client) CreatePayment(params *CreatePaymentParams, authInfo runtime.ClientAuthInfoWriter) (*CreatePaymentOK, error) {
+func (a *Client) CreatePayment(params *CreatePaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePaymentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreatePaymentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreatePayment",
 		Method:             "POST",
 		PathPattern:        "/v2/payments",
@@ -201,7 +215,12 @@ func (a *Client) CreatePayment(params *CreatePaymentParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -218,15 +237,14 @@ func (a *Client) CreatePayment(params *CreatePaymentParams, authInfo runtime.Cli
 /*
   GetPayment gets payment
 
-  Retrieves details for a specific Payment.
+  Retrieves details for a specific payment.
 */
-func (a *Client) GetPayment(params *GetPaymentParams, authInfo runtime.ClientAuthInfoWriter) (*GetPaymentOK, error) {
+func (a *Client) GetPayment(params *GetPaymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPaymentOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetPaymentParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetPayment",
 		Method:             "GET",
 		PathPattern:        "/v2/payments/{payment_id}",
@@ -238,7 +256,12 @@ func (a *Client) GetPayment(params *GetPaymentParams, authInfo runtime.ClientAut
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -257,15 +280,14 @@ func (a *Client) GetPayment(params *GetPaymentParams, authInfo runtime.ClientAut
 
   Retrieves a list of payments taken by the account making the request.
 
-Max results per page: 100
+The maximum results per page is 100.
 */
-func (a *Client) ListPayments(params *ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter) (*ListPaymentsOK, error) {
+func (a *Client) ListPayments(params *ListPaymentsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPaymentsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListPaymentsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListPayments",
 		Method:             "GET",
 		PathPattern:        "/v2/payments",
@@ -277,7 +299,12 @@ func (a *Client) ListPayments(params *ListPaymentsParams, authInfo runtime.Clien
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

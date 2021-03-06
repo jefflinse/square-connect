@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CatalogCategory A category to which a `CatalogItem` instance belongs.
+// Example: {"object":{"category_data":{"name":"Beverages"},"id":"#Beverages","present_at_all_locations":true,"type":"CATEGORY"}}
 //
 // swagger:model CatalogCategory
 type CatalogCategory struct {
@@ -37,15 +40,19 @@ func (m *CatalogCategory) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogCategory) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this catalog category based on context it is used
+func (m *CatalogCategory) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

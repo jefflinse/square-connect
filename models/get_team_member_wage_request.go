@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // GetTeamMemberWageRequest A request to get an `TeamMemberWage`
+// Example: {}
 //
 // swagger:model GetTeamMemberWageRequest
 type GetTeamMemberWageRequest interface{}

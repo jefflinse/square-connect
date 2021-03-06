@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -68,7 +70,6 @@ func (m *SearchOrdersDateTimeFilter) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchOrdersDateTimeFilter) validateClosedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ClosedAt) { // not required
 		return nil
 	}
@@ -86,7 +87,6 @@ func (m *SearchOrdersDateTimeFilter) validateClosedAt(formats strfmt.Registry) e
 }
 
 func (m *SearchOrdersDateTimeFilter) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
@@ -104,13 +104,76 @@ func (m *SearchOrdersDateTimeFilter) validateCreatedAt(formats strfmt.Registry) 
 }
 
 func (m *SearchOrdersDateTimeFilter) validateUpdatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UpdatedAt) { // not required
 		return nil
 	}
 
 	if m.UpdatedAt != nil {
 		if err := m.UpdatedAt.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("updated_at")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search orders date time filter based on the context it is used
+func (m *SearchOrdersDateTimeFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateClosedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateUpdatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchOrdersDateTimeFilter) contextValidateClosedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ClosedAt != nil {
+		if err := m.ClosedAt.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("closed_at")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersDateTimeFilter) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatedAt != nil {
+		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("created_at")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersDateTimeFilter) contextValidateUpdatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.UpdatedAt != nil {
+		if err := m.UpdatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("updated_at")
 			}

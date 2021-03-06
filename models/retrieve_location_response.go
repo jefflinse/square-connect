@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // RetrieveLocationResponse Defines the fields that the
 // [RetrieveLocation](#endpoint-retrievelocation) endpoint returns
 // in a response.
+// Example: {"location":{"address":{"address_line_1":"123 Main St","administrative_district_level_1":"CA","country":"US","locality":"San Francisco","postal_code":"94114"},"business_name":"Jet Fuel Coffee","capabilities":["CREDIT_CARD_PROCESSING"],"country":"US","created_at":"2016-09-19T17:33:12Z","currency":"USD","id":"18YC4JDH91E1H","language_code":"en-US","merchant_id":"3MYCJG5GVYQ8Q","name":"Jet Fuel Coffee - Grant Park","phone_number":"+1 650-354-7217","status":"ACTIVE","timezone":"America/Los_Angeles"}}
 //
 // swagger:model RetrieveLocationResponse
 type RetrieveLocationResponse struct {
@@ -46,7 +48,6 @@ func (m *RetrieveLocationResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RetrieveLocationResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -71,13 +72,62 @@ func (m *RetrieveLocationResponse) validateErrors(formats strfmt.Registry) error
 }
 
 func (m *RetrieveLocationResponse) validateLocation(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Location) { // not required
 		return nil
 	}
 
 	if m.Location != nil {
 		if err := m.Location.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("location")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve location response based on the context it is used
+func (m *RetrieveLocationResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocation(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveLocationResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *RetrieveLocationResponse) contextValidateLocation(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Location != nil {
+		if err := m.Location.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("location")
 			}

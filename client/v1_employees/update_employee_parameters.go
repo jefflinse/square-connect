@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewUpdateEmployeeParams creates a new UpdateEmployeeParams object
-// with the default values initialized.
+// NewUpdateEmployeeParams creates a new UpdateEmployeeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewUpdateEmployeeParams() *UpdateEmployeeParams {
-	var ()
 	return &UpdateEmployeeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewUpdateEmployeeParamsWithTimeout creates a new UpdateEmployeeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewUpdateEmployeeParamsWithTimeout(timeout time.Duration) *UpdateEmployeeParams {
-	var ()
 	return &UpdateEmployeeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewUpdateEmployeeParamsWithContext creates a new UpdateEmployeeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewUpdateEmployeeParamsWithContext(ctx context.Context) *UpdateEmployeeParams {
-	var ()
 	return &UpdateEmployeeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewUpdateEmployeeParamsWithHTTPClient creates a new UpdateEmployeeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewUpdateEmployeeParamsWithHTTPClient(client *http.Client) *UpdateEmployeeParams {
-	var ()
 	return &UpdateEmployeeParams{
 		HTTPClient: client,
 	}
 }
 
-/*UpdateEmployeeParams contains all the parameters to send to the API endpoint
-for the update employee operation typically these are written to a http.Request
+/* UpdateEmployeeParams contains all the parameters to send to the API endpoint
+   for the update employee operation.
+
+   Typically these are written to a http.Request.
 */
 type UpdateEmployeeParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.V1Employee
-	/*EmployeeID
-	  The ID of the role to modify.
 
+	/* EmployeeID.
+
+	   The ID of the role to modify.
 	*/
 	EmployeeID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the update employee params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateEmployeeParams) WithDefaults() *UpdateEmployeeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the update employee params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *UpdateEmployeeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the update employee params
@@ -142,7 +157,6 @@ func (o *UpdateEmployeeParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

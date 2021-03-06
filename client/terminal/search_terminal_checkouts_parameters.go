@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchTerminalCheckoutsParams creates a new SearchTerminalCheckoutsParams object
-// with the default values initialized.
+// NewSearchTerminalCheckoutsParams creates a new SearchTerminalCheckoutsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchTerminalCheckoutsParams() *SearchTerminalCheckoutsParams {
-	var ()
 	return &SearchTerminalCheckoutsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchTerminalCheckoutsParamsWithTimeout creates a new SearchTerminalCheckoutsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchTerminalCheckoutsParamsWithTimeout(timeout time.Duration) *SearchTerminalCheckoutsParams {
-	var ()
 	return &SearchTerminalCheckoutsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchTerminalCheckoutsParamsWithContext creates a new SearchTerminalCheckoutsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchTerminalCheckoutsParamsWithContext(ctx context.Context) *SearchTerminalCheckoutsParams {
-	var ()
 	return &SearchTerminalCheckoutsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchTerminalCheckoutsParamsWithHTTPClient creates a new SearchTerminalCheckoutsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchTerminalCheckoutsParamsWithHTTPClient(client *http.Client) *SearchTerminalCheckoutsParams {
-	var ()
 	return &SearchTerminalCheckoutsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchTerminalCheckoutsParams contains all the parameters to send to the API endpoint
-for the search terminal checkouts operation typically these are written to a http.Request
+/* SearchTerminalCheckoutsParams contains all the parameters to send to the API endpoint
+   for the search terminal checkouts operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchTerminalCheckoutsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchTerminalCheckoutsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search terminal checkouts params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchTerminalCheckoutsParams) WithDefaults() *SearchTerminalCheckoutsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search terminal checkouts params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchTerminalCheckoutsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search terminal checkouts params
@@ -126,7 +140,6 @@ func (o *SearchTerminalCheckoutsParams) WriteToRequest(r runtime.ClientRequest, 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

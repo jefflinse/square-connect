@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,24 +15,34 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// InvoicePaymentRequest Describes a specific payment request in an invoice. You can have
-// up to nine payment requests for an invoice.
+// InvoicePaymentRequest Represents a payment request for an [invoice](#type-Invoice). Invoices can specify a maximum
+// of 13 payment requests, with up to 12 `INSTALLMENT` request types.
+//
+// For more information,
+// see [Payment requests](/docs/invoices-api/overview#payment-requests).
 //
 // swagger:model InvoicePaymentRequest
 type InvoicePaymentRequest struct {
 
-	// If the request method is `CHARGE_CARD_ON_FILE`, this field provides the
-	// card to charge.
+	// The payment method for an automatic payment.
+	//
+	// The default value is `NONE`.
+	// See [InvoiceAutomaticPaymentSource](#type-invoiceautomaticpaymentsource) for possible values
+	AutomaticPaymentSource string `json:"automatic_payment_source,omitempty"`
+
+	// The ID of the card on file to charge for the payment request. To get the customer’s card on file,
+	// use the `customer_id` of the invoice recipient to call `RetrieveCustomer`
+	// in the Customers API. Then, get the ID of the target card from the `cards` field in the response.
 	// Max Length: 255
 	// Min Length: 1
 	CardID string `json:"card_id,omitempty"`
 
-	// The payment request amount, computed using the order amount and information from the various payment request fields (`invoice_request_type`,
+	// The amount of the payment request, computed using the order amount and information from the various payment request fields (`request_type`,
 	// `fixed_amount_requested_money`, and `percentage_requested`).
 	ComputedAmountMoney *Money `json:"computed_amount_money,omitempty"`
 
-	// The due date (in the invoice location's time zone) for the payment request.
-	// After this date, the invoice becomes overdue.
+	// The due date (in the invoice location's time zone) for the payment request, in `YYYY-MM-DD` format.
+	// After this date, the invoice becomes overdue. This field is required to create a payment request.
 	DueDate string `json:"due_date,omitempty"`
 
 	// If the payment request specifies `DEPOSIT` or `INSTALLMENT` as the
@@ -55,11 +66,15 @@ type InvoicePaymentRequest struct {
 	// A list of one or more reminders to send for the payment request.
 	Reminders []*InvoicePaymentReminder `json:"reminders"`
 
-	// Indicates how Square processes the payment request.
+	// Indicates how Square processes the payment request. DEPRECATED at version 2021-01-21. Replaced by the `Invoice.delivery_method` and `InvoicePaymentRequest.automatic_payment_source` fields.
+	//
+	// One of the following is required when creating an invoice:
+	// - (Recommended) The `delivery_method` field of the invoice. To configure an automatic payment, the `automatic_payment_source` field of the payment request is also required.
+	// - This `request_method` field. Note that `invoice` objects returned in responses do not include `request_method`.
 	// See [InvoiceRequestMethod](#type-invoicerequestmethod) for possible values
 	RequestMethod string `json:"request_method,omitempty"`
 
-	// Identifies the payment request type. This type defines how the payment request amount is determined.
+	// Identifies the payment request type. This type defines how the payment request amount is determined. This field is required to create a payment request.
 	// See [InvoiceRequestType](#type-invoicerequesttype) for possible values
 	RequestType string `json:"request_type,omitempty"`
 
@@ -127,16 +142,15 @@ func (m *InvoicePaymentRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *InvoicePaymentRequest) validateCardID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CardID) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("card_id", "body", string(m.CardID), 1); err != nil {
+	if err := validate.MinLength("card_id", "body", m.CardID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("card_id", "body", string(m.CardID), 255); err != nil {
+	if err := validate.MaxLength("card_id", "body", m.CardID, 255); err != nil {
 		return err
 	}
 
@@ -144,7 +158,6 @@ func (m *InvoicePaymentRequest) validateCardID(formats strfmt.Registry) error {
 }
 
 func (m *InvoicePaymentRequest) validateComputedAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ComputedAmountMoney) { // not required
 		return nil
 	}
@@ -162,7 +175,6 @@ func (m *InvoicePaymentRequest) validateComputedAmountMoney(formats strfmt.Regis
 }
 
 func (m *InvoicePaymentRequest) validateFixedAmountRequestedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FixedAmountRequestedMoney) { // not required
 		return nil
 	}
@@ -180,7 +192,6 @@ func (m *InvoicePaymentRequest) validateFixedAmountRequestedMoney(formats strfmt
 }
 
 func (m *InvoicePaymentRequest) validateReminders(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Reminders) { // not required
 		return nil
 	}
@@ -205,7 +216,6 @@ func (m *InvoicePaymentRequest) validateReminders(formats strfmt.Registry) error
 }
 
 func (m *InvoicePaymentRequest) validateRoundingAdjustmentIncludedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RoundingAdjustmentIncludedMoney) { // not required
 		return nil
 	}
@@ -223,7 +233,6 @@ func (m *InvoicePaymentRequest) validateRoundingAdjustmentIncludedMoney(formats 
 }
 
 func (m *InvoicePaymentRequest) validateTotalCompletedAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalCompletedAmountMoney) { // not required
 		return nil
 	}
@@ -241,17 +250,120 @@ func (m *InvoicePaymentRequest) validateTotalCompletedAmountMoney(formats strfmt
 }
 
 func (m *InvoicePaymentRequest) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("uid", "body", string(m.UID), 1); err != nil {
+	if err := validate.MinLength("uid", "body", m.UID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 255); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 255); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this invoice payment request based on the context it is used
+func (m *InvoicePaymentRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateComputedAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateFixedAmountRequestedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateReminders(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRoundingAdjustmentIncludedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalCompletedAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *InvoicePaymentRequest) contextValidateComputedAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ComputedAmountMoney != nil {
+		if err := m.ComputedAmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("computed_amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *InvoicePaymentRequest) contextValidateFixedAmountRequestedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.FixedAmountRequestedMoney != nil {
+		if err := m.FixedAmountRequestedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("fixed_amount_requested_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *InvoicePaymentRequest) contextValidateReminders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Reminders); i++ {
+
+		if m.Reminders[i] != nil {
+			if err := m.Reminders[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("reminders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *InvoicePaymentRequest) contextValidateRoundingAdjustmentIncludedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RoundingAdjustmentIncludedMoney != nil {
+		if err := m.RoundingAdjustmentIncludedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("rounding_adjustment_included_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *InvoicePaymentRequest) contextValidateTotalCompletedAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalCompletedAmountMoney != nil {
+		if err := m.TotalCompletedAmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_completed_amount_money")
+			}
+			return err
+		}
 	}
 
 	return nil

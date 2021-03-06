@@ -29,9 +29,8 @@ func (o *GetBankAccountReader) ReadResponse(response runtime.ClientResponse, con
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewGetBankAccountOK() *GetBankAccountOK {
 	return &GetBankAccountOK{}
 }
 
-/*GetBankAccountOK handles this case with default header values.
+/* GetBankAccountOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type GetBankAccountOK struct {
 func (o *GetBankAccountOK) Error() string {
 	return fmt.Sprintf("[GET /v2/bank-accounts/{bank_account_id}][%d] getBankAccountOK  %+v", 200, o.Payload)
 }
-
 func (o *GetBankAccountOK) GetPayload() *models.GetBankAccountResponse {
 	return o.Payload
 }

@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCreateCustomerCardParams creates a new CreateCustomerCardParams object
-// with the default values initialized.
+// NewCreateCustomerCardParams creates a new CreateCustomerCardParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCreateCustomerCardParams() *CreateCustomerCardParams {
-	var ()
 	return &CreateCustomerCardParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCreateCustomerCardParamsWithTimeout creates a new CreateCustomerCardParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCreateCustomerCardParamsWithTimeout(timeout time.Duration) *CreateCustomerCardParams {
-	var ()
 	return &CreateCustomerCardParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCreateCustomerCardParamsWithContext creates a new CreateCustomerCardParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCreateCustomerCardParamsWithContext(ctx context.Context) *CreateCustomerCardParams {
-	var ()
 	return &CreateCustomerCardParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCreateCustomerCardParamsWithHTTPClient creates a new CreateCustomerCardParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCreateCustomerCardParamsWithHTTPClient(client *http.Client) *CreateCustomerCardParams {
-	var ()
 	return &CreateCustomerCardParams{
 		HTTPClient: client,
 	}
 }
 
-/*CreateCustomerCardParams contains all the parameters to send to the API endpoint
-for the create customer card operation typically these are written to a http.Request
+/* CreateCustomerCardParams contains all the parameters to send to the API endpoint
+   for the create customer card operation.
+
+   Typically these are written to a http.Request.
 */
 type CreateCustomerCardParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CreateCustomerCardRequest
-	/*CustomerID
-	  The Square ID of the customer profile the card is linked to.
 
+	/* CustomerID.
+
+	   The Square ID of the customer profile the card is linked to.
 	*/
 	CustomerID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the create customer card params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateCustomerCardParams) WithDefaults() *CreateCustomerCardParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the create customer card params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CreateCustomerCardParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the create customer card params
@@ -142,7 +157,6 @@ func (o *CreateCustomerCardParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -127,12 +129,11 @@ func (m *OrderFulfillmentShipmentDetails) Validate(formats strfmt.Registry) erro
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateCancelReason(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CancelReason) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("cancel_reason", "body", string(m.CancelReason), 100); err != nil {
+	if err := validate.MaxLength("cancel_reason", "body", m.CancelReason, 100); err != nil {
 		return err
 	}
 
@@ -140,12 +141,11 @@ func (m *OrderFulfillmentShipmentDetails) validateCancelReason(formats strfmt.Re
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateCarrier(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Carrier) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("carrier", "body", string(m.Carrier), 50); err != nil {
+	if err := validate.MaxLength("carrier", "body", m.Carrier, 50); err != nil {
 		return err
 	}
 
@@ -153,12 +153,11 @@ func (m *OrderFulfillmentShipmentDetails) validateCarrier(formats strfmt.Registr
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateFailureReason(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.FailureReason) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("failure_reason", "body", string(m.FailureReason), 100); err != nil {
+	if err := validate.MaxLength("failure_reason", "body", m.FailureReason, 100); err != nil {
 		return err
 	}
 
@@ -166,7 +165,6 @@ func (m *OrderFulfillmentShipmentDetails) validateFailureReason(formats strfmt.R
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateRecipient(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Recipient) { // not required
 		return nil
 	}
@@ -184,12 +182,11 @@ func (m *OrderFulfillmentShipmentDetails) validateRecipient(formats strfmt.Regis
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateShippingNote(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ShippingNote) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("shipping_note", "body", string(m.ShippingNote), 500); err != nil {
+	if err := validate.MaxLength("shipping_note", "body", m.ShippingNote, 500); err != nil {
 		return err
 	}
 
@@ -197,12 +194,11 @@ func (m *OrderFulfillmentShipmentDetails) validateShippingNote(formats strfmt.Re
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateShippingType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ShippingType) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("shipping_type", "body", string(m.ShippingType), 50); err != nil {
+	if err := validate.MaxLength("shipping_type", "body", m.ShippingType, 50); err != nil {
 		return err
 	}
 
@@ -210,12 +206,11 @@ func (m *OrderFulfillmentShipmentDetails) validateShippingType(formats strfmt.Re
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateTrackingNumber(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TrackingNumber) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("tracking_number", "body", string(m.TrackingNumber), 100); err != nil {
+	if err := validate.MaxLength("tracking_number", "body", m.TrackingNumber, 100); err != nil {
 		return err
 	}
 
@@ -223,13 +218,40 @@ func (m *OrderFulfillmentShipmentDetails) validateTrackingNumber(formats strfmt.
 }
 
 func (m *OrderFulfillmentShipmentDetails) validateTrackingURL(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TrackingURL) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("tracking_url", "body", string(m.TrackingURL), 2000); err != nil {
+	if err := validate.MaxLength("tracking_url", "body", m.TrackingURL, 2000); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order fulfillment shipment details based on the context it is used
+func (m *OrderFulfillmentShipmentDetails) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateRecipient(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderFulfillmentShipmentDetails) contextValidateRecipient(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Recipient != nil {
+		if err := m.Recipient.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("recipient")
+			}
+			return err
+		}
 	}
 
 	return nil

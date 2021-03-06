@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CancelInvoiceRequest Describes a `CancelInvoice` request.
+// Example: {"request_body":{"version":0}}
 //
 // swagger:model CancelInvoiceRequest
 type CancelInvoiceRequest struct {
@@ -44,6 +47,11 @@ func (m *CancelInvoiceRequest) validateVersion(formats strfmt.Registry) error {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this cancel invoice request based on context it is used
+func (m *CancelInvoiceRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -20,16 +22,21 @@ type BusinessHoursPeriod struct {
 	DayOfWeek string `json:"day_of_week,omitempty"`
 
 	// The end time of a business hours period, specified in local time using partial-time
-	// RFC3339 format.
+	// RFC 3339 format.
 	EndLocalTime string `json:"end_local_time,omitempty"`
 
 	// The start time of a business hours period, specified in local time using partial-time
-	// RFC3339 format.
+	// RFC 3339 format.
 	StartLocalTime string `json:"start_local_time,omitempty"`
 }
 
 // Validate validates this business hours period
 func (m *BusinessHoursPeriod) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this business hours period based on context it is used
+func (m *BusinessHoursPeriod) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

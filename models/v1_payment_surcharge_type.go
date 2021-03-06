@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -44,7 +45,7 @@ func init() {
 }
 
 func (m V1PaymentSurchargeType) validateV1PaymentSurchargeTypeEnum(path, location string, value V1PaymentSurchargeType) error {
-	if err := validate.Enum(path, location, value, v1PaymentSurchargeTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, v1PaymentSurchargeTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -62,5 +63,10 @@ func (m V1PaymentSurchargeType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this v1 payment surcharge type based on context it is used
+func (m V1PaymentSurchargeType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

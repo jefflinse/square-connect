@@ -16,60 +16,74 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveMerchantParams creates a new RetrieveMerchantParams object
-// with the default values initialized.
+// NewRetrieveMerchantParams creates a new RetrieveMerchantParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveMerchantParams() *RetrieveMerchantParams {
-	var ()
 	return &RetrieveMerchantParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveMerchantParamsWithTimeout creates a new RetrieveMerchantParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveMerchantParamsWithTimeout(timeout time.Duration) *RetrieveMerchantParams {
-	var ()
 	return &RetrieveMerchantParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveMerchantParamsWithContext creates a new RetrieveMerchantParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveMerchantParamsWithContext(ctx context.Context) *RetrieveMerchantParams {
-	var ()
 	return &RetrieveMerchantParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveMerchantParamsWithHTTPClient creates a new RetrieveMerchantParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveMerchantParamsWithHTTPClient(client *http.Client) *RetrieveMerchantParams {
-	var ()
 	return &RetrieveMerchantParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveMerchantParams contains all the parameters to send to the API endpoint
-for the retrieve merchant operation typically these are written to a http.Request
+/* RetrieveMerchantParams contains all the parameters to send to the API endpoint
+   for the retrieve merchant operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveMerchantParams struct {
 
-	/*MerchantID
-	  The ID of the merchant to retrieve. If the string "me" is supplied as the ID,
-	then retrieve the merchant that is currently accessible to this call.
+	/* MerchantID.
 
+	     The ID of the merchant to retrieve. If the string "me" is supplied as the ID,
+	then retrieve the merchant that is currently accessible to this call.
 	*/
 	MerchantID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve merchant params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveMerchantParams) WithDefaults() *RetrieveMerchantParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve merchant params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveMerchantParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve merchant params

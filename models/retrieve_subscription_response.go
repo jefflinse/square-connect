@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // RetrieveSubscriptionResponse Defines the fields that are included in the response from the
 // [RetrieveSubscription](#endpoint-subscriptions-retrievesubscription) endpoint.
+// Example: {"subscription":{"charged_through_date":"2020-06-11","created_at":"2020-08-03T21:53:10Z","customer_id":"CHFGVKYY8RSV93M5KCYTG4PN0G","id":"8151fc89-da15-4eb9-a685-1a70883cebfc","invoice_ids":["grebK0Q_l8H4fqoMMVvt-Q","rcX_i3sNmHTGKhI4W2mceA"],"location_id":"S8GWD5R9QB376","paid_until_date":"2020-06-11","plan_id":"6JHXF3B2CW3YKHDV4XEM674H","price_override_money":{"amount":1000,"currency":"USD"},"start_date":"2020-05-11","status":"ACTIVE","timezone":"America/Los_Angeles"}}
 //
 // swagger:model RetrieveSubscriptionResponse
 type RetrieveSubscriptionResponse struct {
@@ -45,7 +47,6 @@ func (m *RetrieveSubscriptionResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RetrieveSubscriptionResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -70,13 +71,62 @@ func (m *RetrieveSubscriptionResponse) validateErrors(formats strfmt.Registry) e
 }
 
 func (m *RetrieveSubscriptionResponse) validateSubscription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Subscription) { // not required
 		return nil
 	}
 
 	if m.Subscription != nil {
 		if err := m.Subscription.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("subscription")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve subscription response based on the context it is used
+func (m *RetrieveSubscriptionResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSubscription(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveSubscriptionResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *RetrieveSubscriptionResponse) contextValidateSubscription(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Subscription != nil {
+		if err := m.Subscription.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("subscription")
 			}

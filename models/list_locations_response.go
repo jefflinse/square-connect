@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -17,6 +18,7 @@ import (
 // a request to the __ListLocations__ endpoint.
 //
 // One of `errors` or `locations` is present in a given response (never both).
+// Example: {"locations":[{"address":{"address_line_1":"123 Main St","administrative_district_level_1":"CA","country":"US","locality":"San Francisco","postal_code":"94114"},"business_name":"Pumbaa's business name","capabilities":["CREDIT_CARD_PROCESSING"],"country":"US","created_at":"2016-09-19T17:33:12Z","currency":"USD","id":"18YC4JDH91E1H","language_code":"en-US","merchant_id":"3MYCJG5GVYQ8Q","name":"your location name","phone_number":"+1 650-354-7217","status":"ACTIVE","timezone":"America/Los_Angeles"}]}
 //
 // swagger:model ListLocationsResponse
 type ListLocationsResponse struct {
@@ -47,7 +49,6 @@ func (m *ListLocationsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListLocationsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -72,7 +73,6 @@ func (m *ListLocationsResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *ListLocationsResponse) validateLocations(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Locations) { // not required
 		return nil
 	}
@@ -84,6 +84,60 @@ func (m *ListLocationsResponse) validateLocations(formats strfmt.Registry) error
 
 		if m.Locations[i] != nil {
 			if err := m.Locations[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("locations" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list locations response based on the context it is used
+func (m *ListLocationsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListLocationsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListLocationsResponse) contextValidateLocations(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Locations); i++ {
+
+		if m.Locations[i] != nil {
+			if err := m.Locations[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("locations" + "." + strconv.Itoa(i))
 				}

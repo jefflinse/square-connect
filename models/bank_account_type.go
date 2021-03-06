@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -50,7 +51,7 @@ func init() {
 }
 
 func (m BankAccountType) validateBankAccountTypeEnum(path, location string, value BankAccountType) error {
-	if err := validate.Enum(path, location, value, bankAccountTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, bankAccountTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -68,5 +69,10 @@ func (m BankAccountType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this bank account type based on context it is used
+func (m BankAccountType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

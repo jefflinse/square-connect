@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // BatchRetrieveOrdersResponse Defines the fields that are included in the response body of
 // a request to the BatchRetrieveOrders endpoint.
+// Example: {"orders":[{"id":"CAISEM82RcpmcFBM0TfOyiHV3es","line_items":[{"base_price_money":{"amount":1599,"currency":"USD"},"name":"Awesome product","quantity":"1","total_money":{"amount":1599,"currency":"USD"},"uid":"945986d1-9586-11e6-ad5a-28cfe92138cf"},{"base_price_money":{"amount":2000,"currency":"USD"},"name":"Another awesome product","quantity":"3","total_money":{"amount":6000,"currency":"USD"},"uid":"a8f4168c-9586-11e6-bdf0-28cfe92138cf"}],"location_id":"057P5VYJ4A5X1","reference_id":"my-order-001","total_money":{"amount":7599,"currency":"USD"}}]}
 //
 // swagger:model BatchRetrieveOrdersResponse
 type BatchRetrieveOrdersResponse struct {
@@ -45,7 +47,6 @@ func (m *BatchRetrieveOrdersResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *BatchRetrieveOrdersResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -70,7 +71,6 @@ func (m *BatchRetrieveOrdersResponse) validateErrors(formats strfmt.Registry) er
 }
 
 func (m *BatchRetrieveOrdersResponse) validateOrders(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Orders) { // not required
 		return nil
 	}
@@ -82,6 +82,60 @@ func (m *BatchRetrieveOrdersResponse) validateOrders(formats strfmt.Registry) er
 
 		if m.Orders[i] != nil {
 			if err := m.Orders[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("orders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this batch retrieve orders response based on the context it is used
+func (m *BatchRetrieveOrdersResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrders(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BatchRetrieveOrdersResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BatchRetrieveOrdersResponse) contextValidateOrders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Orders); i++ {
+
+		if m.Orders[i] != nil {
+			if err := m.Orders[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("orders" + "." + strconv.Itoa(i))
 				}

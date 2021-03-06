@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,7 +15,7 @@ import (
 )
 
 // LoyaltyAccountMapping Associates a loyalty account with the buyer's phone number.
-// or more information, see
+// For more information, see
 // [Loyalty Overview](/docs/loyalty/overview).
 //
 // swagger:model LoyaltyAccountMapping
@@ -60,12 +62,11 @@ func (m *LoyaltyAccountMapping) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyAccountMapping) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 36); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 36); err != nil {
 		return err
 	}
 
@@ -87,10 +88,15 @@ func (m *LoyaltyAccountMapping) validateValue(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("value", "body", string(*m.Value), 1); err != nil {
+	if err := validate.MinLength("value", "body", *m.Value, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty account mapping based on context it is used
+func (m *LoyaltyAccountMapping) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

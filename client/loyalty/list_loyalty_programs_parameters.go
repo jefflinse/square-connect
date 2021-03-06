@@ -16,52 +16,66 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListLoyaltyProgramsParams creates a new ListLoyaltyProgramsParams object
-// with the default values initialized.
+// NewListLoyaltyProgramsParams creates a new ListLoyaltyProgramsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListLoyaltyProgramsParams() *ListLoyaltyProgramsParams {
-
 	return &ListLoyaltyProgramsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListLoyaltyProgramsParamsWithTimeout creates a new ListLoyaltyProgramsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListLoyaltyProgramsParamsWithTimeout(timeout time.Duration) *ListLoyaltyProgramsParams {
-
 	return &ListLoyaltyProgramsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListLoyaltyProgramsParamsWithContext creates a new ListLoyaltyProgramsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListLoyaltyProgramsParamsWithContext(ctx context.Context) *ListLoyaltyProgramsParams {
-
 	return &ListLoyaltyProgramsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListLoyaltyProgramsParamsWithHTTPClient creates a new ListLoyaltyProgramsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListLoyaltyProgramsParamsWithHTTPClient(client *http.Client) *ListLoyaltyProgramsParams {
-
 	return &ListLoyaltyProgramsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListLoyaltyProgramsParams contains all the parameters to send to the API endpoint
-for the list loyalty programs operation typically these are written to a http.Request
+/* ListLoyaltyProgramsParams contains all the parameters to send to the API endpoint
+   for the list loyalty programs operation.
+
+   Typically these are written to a http.Request.
 */
 type ListLoyaltyProgramsParams struct {
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list loyalty programs params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListLoyaltyProgramsParams) WithDefaults() *ListLoyaltyProgramsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list loyalty programs params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListLoyaltyProgramsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list loyalty programs params

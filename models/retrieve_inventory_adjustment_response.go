@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // RetrieveInventoryAdjustmentResponse retrieve inventory adjustment response
+// Example: {"adjustment":{"catalog_object_id":"W62UWFY35CWMYGVWK6TWJDNI","catalog_object_type":"ITEM_VARIATION","created_at":"2016-11-17T13:02:15.142Z","employee_id":"LRK57NSQ5X7PUD05","from_state":"IN_STOCK","id":"UDMOEO78BG6GYWA2XDRYX3KB","location_id":"C6W5YS5QM06F5","occurred_at":"2016-11-16T25:44:22.837Z","quantity":"7","reference_id":"4a366069-4096-47a2-99a5-0084ac879509","source":{"application_id":"416ff29c-86c4-4feb-b58c-9705f21f3ea0","name":"Square Point of Sale 4.37","product":"SQUARE_POS"},"to_state":"SOLD","total_price_money":{"amount":4550,"currency":"USD"}},"errors":[]}
 //
 // swagger:model RetrieveInventoryAdjustmentResponse
 type RetrieveInventoryAdjustmentResponse struct {
@@ -44,7 +46,6 @@ func (m *RetrieveInventoryAdjustmentResponse) Validate(formats strfmt.Registry) 
 }
 
 func (m *RetrieveInventoryAdjustmentResponse) validateAdjustment(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Adjustment) { // not required
 		return nil
 	}
@@ -62,7 +63,6 @@ func (m *RetrieveInventoryAdjustmentResponse) validateAdjustment(formats strfmt.
 }
 
 func (m *RetrieveInventoryAdjustmentResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,6 +74,56 @@ func (m *RetrieveInventoryAdjustmentResponse) validateErrors(formats strfmt.Regi
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve inventory adjustment response based on the context it is used
+func (m *RetrieveInventoryAdjustmentResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdjustment(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveInventoryAdjustmentResponse) contextValidateAdjustment(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Adjustment != nil {
+		if err := m.Adjustment.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("adjustment")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RetrieveInventoryAdjustmentResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -20,7 +22,6 @@ import (
 type CatalogProductSet struct {
 
 	// If set to `true`, the product set will include every item in the catalog.
-	//
 	// Only one of `product_ids_all`, `product_ids_any`, or `all_products` can be set.
 	AllProducts bool `json:"all_products,omitempty"`
 
@@ -66,6 +67,11 @@ type CatalogProductSet struct {
 
 // Validate validates this catalog product set
 func (m *CatalogProductSet) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this catalog product set based on context it is used
+func (m *CatalogProductSet) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

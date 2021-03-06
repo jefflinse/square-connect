@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -88,7 +90,7 @@ func (m *Break) validateBreakTypeID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("break_type_id", "body", string(*m.BreakTypeID), 1); err != nil {
+	if err := validate.MinLength("break_type_id", "body", *m.BreakTypeID, 1); err != nil {
 		return err
 	}
 
@@ -101,7 +103,7 @@ func (m *Break) validateExpectedDuration(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("expected_duration", "body", string(*m.ExpectedDuration), 1); err != nil {
+	if err := validate.MinLength("expected_duration", "body", *m.ExpectedDuration, 1); err != nil {
 		return err
 	}
 
@@ -123,7 +125,7 @@ func (m *Break) validateName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
@@ -136,10 +138,15 @@ func (m *Break) validateStartAt(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("start_at", "body", string(*m.StartAt), 1); err != nil {
+	if err := validate.MinLength("start_at", "body", *m.StartAt, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this break based on context it is used
+func (m *Break) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -44,7 +45,6 @@ func (m *RetrieveEmployeeResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RetrieveEmployeeResponse) validateEmployee(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Employee) { // not required
 		return nil
 	}
@@ -62,7 +62,6 @@ func (m *RetrieveEmployeeResponse) validateEmployee(formats strfmt.Registry) err
 }
 
 func (m *RetrieveEmployeeResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,6 +73,56 @@ func (m *RetrieveEmployeeResponse) validateErrors(formats strfmt.Registry) error
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this retrieve employee response based on the context it is used
+func (m *RetrieveEmployeeResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateEmployee(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RetrieveEmployeeResponse) contextValidateEmployee(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Employee != nil {
+		if err := m.Employee.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("employee")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RetrieveEmployeeResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

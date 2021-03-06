@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,13 +17,14 @@ import (
 // RefundPaymentResponse Defines the fields that are included in the response body of
 // a request to the [RefundPayment](#endpoint-refunds-refundpayment) endpoint.
 //
-// Note: if there are errors processing the request, the refund field may not be
-// present, or it may be present in a FAILED state.
+// Note: If there are errors processing the request, the refund field might not be
+// present or it might be present in a FAILED state.
+// Example: {"refund":{"amount_money":{"amount":100,"currency":"USD"},"created_at":"2018-10-17T20:41:55.520Z","id":"UNOE3kv2BZwqHlJ830RCt5YCuaB_xVteEWVFkXDvKN1ddidfJWipt8p9whmElKT5mZtJ7wZ","payment_id":"UNOE3kv2BZwqHlJ830RCt5YCuaB","status":"PENDING","updated_at":"2018-10-17T20:41:55.520Z"}}
 //
 // swagger:model RefundPaymentResponse
 type RefundPaymentResponse struct {
 
-	// Information on errors encountered during the request.
+	// Information about errors encountered during the request.
 	Errors []*Error `json:"errors"`
 
 	// The successfully created `PaymentRefund`.
@@ -48,7 +50,6 @@ func (m *RefundPaymentResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *RefundPaymentResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -73,13 +74,62 @@ func (m *RefundPaymentResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *RefundPaymentResponse) validateRefund(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Refund) { // not required
 		return nil
 	}
 
 	if m.Refund != nil {
 		if err := m.Refund.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refund")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this refund payment response based on the context it is used
+func (m *RefundPaymentResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefund(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RefundPaymentResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *RefundPaymentResponse) contextValidateRefund(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Refund != nil {
+		if err := m.Refund.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("refund")
 			}

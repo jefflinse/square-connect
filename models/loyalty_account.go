@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -21,6 +22,8 @@ import (
 type LoyaltyAccount struct {
 
 	// The available point balance in the loyalty account.
+	//
+	// Your application should be able to handle loyalty accounts that have a negative point balance (`balance` is less than 0). This might occur if a seller makes a manual adjustment or as a result of a refund or exchange.
 	Balance int64 `json:"balance,omitempty"`
 
 	// The timestamp when the loyalty account was created, in RFC 3339 format.
@@ -83,12 +86,11 @@ func (m *LoyaltyAccount) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyAccount) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 36); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 36); err != nil {
 		return err
 	}
 
@@ -96,12 +98,11 @@ func (m *LoyaltyAccount) validateID(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyAccount) validateLifetimePoints(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LifetimePoints) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("lifetime_points", "body", int64(*m.LifetimePoints), 0, false); err != nil {
+	if err := validate.MinimumInt("lifetime_points", "body", *m.LifetimePoints, 0, false); err != nil {
 		return err
 	}
 
@@ -139,12 +140,44 @@ func (m *LoyaltyAccount) validateProgramID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("program_id", "body", string(*m.ProgramID), 1); err != nil {
+	if err := validate.MinLength("program_id", "body", *m.ProgramID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("program_id", "body", string(*m.ProgramID), 36); err != nil {
+	if err := validate.MaxLength("program_id", "body", *m.ProgramID, 36); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this loyalty account based on the context it is used
+func (m *LoyaltyAccount) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateMappings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LoyaltyAccount) contextValidateMappings(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Mappings); i++ {
+
+		if m.Mappings[i] != nil {
+			if err := m.Mappings[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("mappings" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
 
 	return nil

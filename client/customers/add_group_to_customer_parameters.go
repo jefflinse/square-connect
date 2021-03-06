@@ -16,64 +16,79 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewAddGroupToCustomerParams creates a new AddGroupToCustomerParams object
-// with the default values initialized.
+// NewAddGroupToCustomerParams creates a new AddGroupToCustomerParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewAddGroupToCustomerParams() *AddGroupToCustomerParams {
-	var ()
 	return &AddGroupToCustomerParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewAddGroupToCustomerParamsWithTimeout creates a new AddGroupToCustomerParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewAddGroupToCustomerParamsWithTimeout(timeout time.Duration) *AddGroupToCustomerParams {
-	var ()
 	return &AddGroupToCustomerParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewAddGroupToCustomerParamsWithContext creates a new AddGroupToCustomerParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewAddGroupToCustomerParamsWithContext(ctx context.Context) *AddGroupToCustomerParams {
-	var ()
 	return &AddGroupToCustomerParams{
-
 		Context: ctx,
 	}
 }
 
 // NewAddGroupToCustomerParamsWithHTTPClient creates a new AddGroupToCustomerParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewAddGroupToCustomerParamsWithHTTPClient(client *http.Client) *AddGroupToCustomerParams {
-	var ()
 	return &AddGroupToCustomerParams{
 		HTTPClient: client,
 	}
 }
 
-/*AddGroupToCustomerParams contains all the parameters to send to the API endpoint
-for the add group to customer operation typically these are written to a http.Request
+/* AddGroupToCustomerParams contains all the parameters to send to the API endpoint
+   for the add group to customer operation.
+
+   Typically these are written to a http.Request.
 */
 type AddGroupToCustomerParams struct {
 
-	/*CustomerID
-	  The ID of the customer to add to a group.
+	/* CustomerID.
 
+	   The ID of the customer to add to a group.
 	*/
 	CustomerID string
-	/*GroupID
-	  The ID of the customer group to add the customer to.
 
+	/* GroupID.
+
+	   The ID of the customer group to add the customer to.
 	*/
 	GroupID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the add group to customer params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AddGroupToCustomerParams) WithDefaults() *AddGroupToCustomerParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the add group to customer params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *AddGroupToCustomerParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the add group to customer params

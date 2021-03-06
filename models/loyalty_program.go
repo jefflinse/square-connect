@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -138,7 +139,7 @@ func (m *LoyaltyProgram) validateCreatedAt(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("created_at", "body", string(*m.CreatedAt), 1); err != nil {
+	if err := validate.MinLength("created_at", "body", *m.CreatedAt, 1); err != nil {
 		return err
 	}
 
@@ -146,7 +147,6 @@ func (m *LoyaltyProgram) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyProgram) validateExpirationPolicy(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ExpirationPolicy) { // not required
 		return nil
 	}
@@ -169,11 +169,11 @@ func (m *LoyaltyProgram) validateID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("id", "body", string(*m.ID), 1); err != nil {
+	if err := validate.MinLength("id", "body", *m.ID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("id", "body", string(*m.ID), 36); err != nil {
+	if err := validate.MaxLength("id", "body", *m.ID, 36); err != nil {
 		return err
 	}
 
@@ -188,7 +188,7 @@ func (m *LoyaltyProgram) validateLocationIds(formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.LocationIds); i++ {
 
-		if err := validate.MinLength("location_ids"+"."+strconv.Itoa(i), "body", string(m.LocationIds[i]), 1); err != nil {
+		if err := validate.MinLength("location_ids"+"."+strconv.Itoa(i), "body", m.LocationIds[i], 1); err != nil {
 			return err
 		}
 
@@ -255,8 +255,98 @@ func (m *LoyaltyProgram) validateUpdatedAt(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("updated_at", "body", string(*m.UpdatedAt), 1); err != nil {
+	if err := validate.MinLength("updated_at", "body", *m.UpdatedAt, 1); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this loyalty program based on the context it is used
+func (m *LoyaltyProgram) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAccrualRules(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExpirationPolicy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRewardTiers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTerminology(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LoyaltyProgram) contextValidateAccrualRules(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AccrualRules); i++ {
+
+		if m.AccrualRules[i] != nil {
+			if err := m.AccrualRules[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("accrual_rules" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LoyaltyProgram) contextValidateExpirationPolicy(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExpirationPolicy != nil {
+		if err := m.ExpirationPolicy.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("expiration_policy")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyProgram) contextValidateRewardTiers(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.RewardTiers); i++ {
+
+		if m.RewardTiers[i] != nil {
+			if err := m.RewardTiers[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("reward_tiers" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *LoyaltyProgram) contextValidateTerminology(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Terminology != nil {
+		if err := m.Terminology.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("terminology")
+			}
+			return err
+		}
 	}
 
 	return nil

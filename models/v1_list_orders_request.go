@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -22,13 +24,18 @@ type V1ListOrdersRequest struct {
 	// The maximum number of payments to return in a single response. This value cannot exceed 200.
 	Limit int64 `json:"limit,omitempty"`
 
-	// TThe order in which payments are listed in the response.
+	// The order in which payments are listed in the response.
 	// See [SortOrder](#type-sortorder) for possible values
 	Order string `json:"order,omitempty"`
 }
 
 // Validate validates this v1 list orders request
 func (m *V1ListOrdersRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this v1 list orders request based on context it is used
+func (m *V1ListOrdersRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

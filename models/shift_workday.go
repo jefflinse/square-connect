@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -46,13 +48,40 @@ func (m *ShiftWorkday) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ShiftWorkday) validateDateRange(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DateRange) { // not required
 		return nil
 	}
 
 	if m.DateRange != nil {
 		if err := m.DateRange.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("date_range")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this shift workday based on the context it is used
+func (m *ShiftWorkday) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDateRange(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ShiftWorkday) contextValidateDateRange(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DateRange != nil {
+		if err := m.DateRange.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("date_range")
 			}

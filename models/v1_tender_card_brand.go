@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -62,7 +63,7 @@ func init() {
 }
 
 func (m V1TenderCardBrand) validateV1TenderCardBrandEnum(path, location string, value V1TenderCardBrand) error {
-	if err := validate.Enum(path, location, value, v1TenderCardBrandEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, v1TenderCardBrandEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -80,5 +81,10 @@ func (m V1TenderCardBrand) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this v1 tender card brand based on context it is used
+func (m V1TenderCardBrand) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

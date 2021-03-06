@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // DeleteBreakTypeRequest A request to delete a `BreakType`
+// Example: {}
 //
 // swagger:model DeleteBreakTypeRequest
 type DeleteBreakTypeRequest interface{}

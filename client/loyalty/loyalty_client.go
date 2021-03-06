@@ -25,33 +25,36 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	AccumulateLoyaltyPoints(params *AccumulateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter) (*AccumulateLoyaltyPointsOK, error)
+	AccumulateLoyaltyPoints(params *AccumulateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AccumulateLoyaltyPointsOK, error)
 
-	AdjustLoyaltyPoints(params *AdjustLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter) (*AdjustLoyaltyPointsOK, error)
+	AdjustLoyaltyPoints(params *AdjustLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AdjustLoyaltyPointsOK, error)
 
-	CalculateLoyaltyPoints(params *CalculateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateLoyaltyPointsOK, error)
+	CalculateLoyaltyPoints(params *CalculateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateLoyaltyPointsOK, error)
 
-	CreateLoyaltyAccount(params *CreateLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter) (*CreateLoyaltyAccountOK, error)
+	CreateLoyaltyAccount(params *CreateLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateLoyaltyAccountOK, error)
 
-	CreateLoyaltyReward(params *CreateLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*CreateLoyaltyRewardOK, error)
+	CreateLoyaltyReward(params *CreateLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateLoyaltyRewardOK, error)
 
-	DeleteLoyaltyReward(params *DeleteLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteLoyaltyRewardOK, error)
+	DeleteLoyaltyReward(params *DeleteLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteLoyaltyRewardOK, error)
 
-	ListLoyaltyPrograms(params *ListLoyaltyProgramsParams, authInfo runtime.ClientAuthInfoWriter) (*ListLoyaltyProgramsOK, error)
+	ListLoyaltyPrograms(params *ListLoyaltyProgramsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListLoyaltyProgramsOK, error)
 
-	RedeemLoyaltyReward(params *RedeemLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*RedeemLoyaltyRewardOK, error)
+	RedeemLoyaltyReward(params *RedeemLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RedeemLoyaltyRewardOK, error)
 
-	RetrieveLoyaltyAccount(params *RetrieveLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveLoyaltyAccountOK, error)
+	RetrieveLoyaltyAccount(params *RetrieveLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveLoyaltyAccountOK, error)
 
-	RetrieveLoyaltyReward(params *RetrieveLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveLoyaltyRewardOK, error)
+	RetrieveLoyaltyReward(params *RetrieveLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveLoyaltyRewardOK, error)
 
-	SearchLoyaltyAccounts(params *SearchLoyaltyAccountsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchLoyaltyAccountsOK, error)
+	SearchLoyaltyAccounts(params *SearchLoyaltyAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchLoyaltyAccountsOK, error)
 
-	SearchLoyaltyEvents(params *SearchLoyaltyEventsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchLoyaltyEventsOK, error)
+	SearchLoyaltyEvents(params *SearchLoyaltyEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchLoyaltyEventsOK, error)
 
-	SearchLoyaltyRewards(params *SearchLoyaltyRewardsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchLoyaltyRewardsOK, error)
+	SearchLoyaltyRewards(params *SearchLoyaltyRewardsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchLoyaltyRewardsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -66,19 +69,16 @@ The endpoint reads the order to compute points to add to the buyer's account.
 - If you are not using the Orders API to manage orders,
 you first perform a client-side computation to compute the points.
 For spend-based and visit-based programs, you can call
-`CalculateLoyaltyPoints` to compute the points. For more information,
+[CalculateLoyaltyPoints](#endpoint-Loyalty-CalculateLoyaltyPoints) to compute the points. For more information,
 see [Loyalty Program Overview](/docs/loyalty/overview).
 You then provide the points in a request to this endpoint.
-
-For more information, see [Accumulate points](/docs/loyalty-api/overview/#accumulate-points).
 */
-func (a *Client) AccumulateLoyaltyPoints(params *AccumulateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter) (*AccumulateLoyaltyPointsOK, error) {
+func (a *Client) AccumulateLoyaltyPoints(params *AccumulateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AccumulateLoyaltyPointsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAccumulateLoyaltyPointsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "AccumulateLoyaltyPoints",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/accounts/{account_id}/accumulate",
@@ -90,7 +90,12 @@ func (a *Client) AccumulateLoyaltyPoints(params *AccumulateLoyaltyPointsParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -110,16 +115,15 @@ func (a *Client) AccumulateLoyaltyPoints(params *AccumulateLoyaltyPointsParams, 
   Adds points to or subtracts points from a buyer's account.
 
 Use this endpoint only when you need to manually adjust points. Otherwise, in your application flow, you call
-[AccumulateLoyaltyPoints](/reference/square/loyalty-api/accumulate-loyalty-points)
+[AccumulateLoyaltyPoints](#endpoint-Loyalty-AccumulateLoyaltyPoints)
 to add points when a buyer pays for the purchase.
 */
-func (a *Client) AdjustLoyaltyPoints(params *AdjustLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter) (*AdjustLoyaltyPointsOK, error) {
+func (a *Client) AdjustLoyaltyPoints(params *AdjustLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*AdjustLoyaltyPointsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewAdjustLoyaltyPointsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "AdjustLoyaltyPoints",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/accounts/{account_id}/adjust",
@@ -131,7 +135,12 @@ func (a *Client) AdjustLoyaltyPoints(params *AdjustLoyaltyPointsParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -158,13 +167,12 @@ the request for the endpoint to calculate the points.
 An application might call this endpoint to show the points that a buyer can earn with the
 specific purchase.
 */
-func (a *Client) CalculateLoyaltyPoints(params *CalculateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter) (*CalculateLoyaltyPointsOK, error) {
+func (a *Client) CalculateLoyaltyPoints(params *CalculateLoyaltyPointsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateLoyaltyPointsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCalculateLoyaltyPointsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CalculateLoyaltyPoints",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/programs/{program_id}/calculate",
@@ -176,7 +184,12 @@ func (a *Client) CalculateLoyaltyPoints(params *CalculateLoyaltyPointsParams, au
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -193,16 +206,14 @@ func (a *Client) CalculateLoyaltyPoints(params *CalculateLoyaltyPointsParams, au
 /*
   CreateLoyaltyAccount creates loyalty account
 
-  Creates a loyalty account. For more information, see
-[Create a loyalty account](/docs/loyalty-api/overview/#loyalty-overview-create-account).
+  Creates a loyalty account.
 */
-func (a *Client) CreateLoyaltyAccount(params *CreateLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter) (*CreateLoyaltyAccountOK, error) {
+func (a *Client) CreateLoyaltyAccount(params *CreateLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateLoyaltyAccountOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateLoyaltyAccountParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateLoyaltyAccount",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/accounts",
@@ -214,7 +225,12 @@ func (a *Client) CreateLoyaltyAccount(params *CreateLoyaltyAccountParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -239,16 +255,13 @@ to lock for this reward.
 
 After a reward is created, the points are locked and
 not available for the buyer to redeem another reward.
-For more information, see
-[Loyalty rewards](/docs/loyalty-api/overview/#loyalty-overview-loyalty-rewards).
 */
-func (a *Client) CreateLoyaltyReward(params *CreateLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*CreateLoyaltyRewardOK, error) {
+func (a *Client) CreateLoyaltyReward(params *CreateLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateLoyaltyRewardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateLoyaltyRewardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateLoyaltyReward",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/rewards",
@@ -260,7 +273,12 @@ func (a *Client) CreateLoyaltyReward(params *CreateLoyaltyRewardParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -281,21 +299,18 @@ func (a *Client) CreateLoyaltyReward(params *CreateLoyaltyRewardParams, authInfo
 
 - Returns the loyalty points back to the loyalty account.
 - If an order ID was specified when the reward was created
-(see [CreateLoyaltyReward](/reference/square/loyalty-api/create-loyalty-reward)),
+(see [CreateLoyaltyReward](#endpoint-Loyalty-CreateLoyaltyReward)),
 it updates the order by removing the reward and related
 discounts.
 
 You cannot delete a reward that has reached the terminal state (REDEEMED).
-For more information, see
-[Loyalty rewards](/docs/loyalty-api/overview/#loyalty-overview-loyalty-rewards).
 */
-func (a *Client) DeleteLoyaltyReward(params *DeleteLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteLoyaltyRewardOK, error) {
+func (a *Client) DeleteLoyaltyReward(params *DeleteLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteLoyaltyRewardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteLoyaltyRewardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteLoyaltyReward",
 		Method:             "DELETE",
 		PathPattern:        "/v2/loyalty/rewards/{reward_id}",
@@ -307,7 +322,12 @@ func (a *Client) DeleteLoyaltyReward(params *DeleteLoyaltyRewardParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -325,17 +345,14 @@ func (a *Client) DeleteLoyaltyReward(params *DeleteLoyaltyRewardParams, authInfo
   ListLoyaltyPrograms lists loyalty programs
 
   Returns a list of loyalty programs in the seller's account.
-Currently, a seller can only have one loyalty program. For more information, see
-[Loyalty Overview](/docs/loyalty/overview).
-.
+Currently, a seller can only have one loyalty program.
 */
-func (a *Client) ListLoyaltyPrograms(params *ListLoyaltyProgramsParams, authInfo runtime.ClientAuthInfoWriter) (*ListLoyaltyProgramsOK, error) {
+func (a *Client) ListLoyaltyPrograms(params *ListLoyaltyProgramsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListLoyaltyProgramsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListLoyaltyProgramsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListLoyaltyPrograms",
 		Method:             "GET",
 		PathPattern:        "/v2/loyalty/programs",
@@ -347,7 +364,12 @@ func (a *Client) ListLoyaltyPrograms(params *ListLoyaltyProgramsParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -366,7 +388,7 @@ func (a *Client) ListLoyaltyPrograms(params *ListLoyaltyProgramsParams, authInfo
 
   Redeems a loyalty reward.
 
-The endpoint sets the reward to the terminal state (`REDEEMED`).
+The endpoint sets the reward to the `REDEEMED` terminal state.
 
 If you are using your own order processing system (not using the
 Orders API), you call this endpoint after the buyer paid for the
@@ -375,17 +397,13 @@ purchase.
 After the reward reaches the terminal state, it cannot be deleted.
 In other words, points used for the reward cannot be returned
 to the account.
-
-For more information, see
-[Loyalty rewards](/docs/loyalty-api/overview/#loyalty-overview-loyalty-rewards).
 */
-func (a *Client) RedeemLoyaltyReward(params *RedeemLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*RedeemLoyaltyRewardOK, error) {
+func (a *Client) RedeemLoyaltyReward(params *RedeemLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RedeemLoyaltyRewardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRedeemLoyaltyRewardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RedeemLoyaltyReward",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/rewards/{reward_id}/redeem",
@@ -397,7 +415,12 @@ func (a *Client) RedeemLoyaltyReward(params *RedeemLoyaltyRewardParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -416,13 +439,12 @@ func (a *Client) RedeemLoyaltyReward(params *RedeemLoyaltyRewardParams, authInfo
 
   Retrieves a loyalty account.
 */
-func (a *Client) RetrieveLoyaltyAccount(params *RetrieveLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveLoyaltyAccountOK, error) {
+func (a *Client) RetrieveLoyaltyAccount(params *RetrieveLoyaltyAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveLoyaltyAccountOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveLoyaltyAccountParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveLoyaltyAccount",
 		Method:             "GET",
 		PathPattern:        "/v2/loyalty/accounts/{account_id}",
@@ -434,7 +456,12 @@ func (a *Client) RetrieveLoyaltyAccount(params *RetrieveLoyaltyAccountParams, au
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -453,13 +480,12 @@ func (a *Client) RetrieveLoyaltyAccount(params *RetrieveLoyaltyAccountParams, au
 
   Retrieves a loyalty reward.
 */
-func (a *Client) RetrieveLoyaltyReward(params *RetrieveLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveLoyaltyRewardOK, error) {
+func (a *Client) RetrieveLoyaltyReward(params *RetrieveLoyaltyRewardParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveLoyaltyRewardOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveLoyaltyRewardParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveLoyaltyReward",
 		Method:             "GET",
 		PathPattern:        "/v2/loyalty/rewards/{reward_id}",
@@ -471,7 +497,12 @@ func (a *Client) RetrieveLoyaltyReward(params *RetrieveLoyaltyRewardParams, auth
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -488,17 +519,18 @@ func (a *Client) RetrieveLoyaltyReward(params *RetrieveLoyaltyRewardParams, auth
 /*
   SearchLoyaltyAccounts searches loyalty accounts
 
-  Searches for loyalty accounts.
-In the current implementation, you can search for a loyalty account using the phone number associated with the account.
-If no phone number is provided, all loyalty accounts are returned.
+  Searches for loyalty accounts in a loyalty program.
+
+You can search for a loyalty account using the phone number or customer ID associated with the account. To return all loyalty accounts, specify an empty `query` object or omit it entirely.
+
+Search results are sorted by `created_at` in ascending order.
 */
-func (a *Client) SearchLoyaltyAccounts(params *SearchLoyaltyAccountsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchLoyaltyAccountsOK, error) {
+func (a *Client) SearchLoyaltyAccounts(params *SearchLoyaltyAccountsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchLoyaltyAccountsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchLoyaltyAccountsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchLoyaltyAccounts",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/accounts/search",
@@ -510,7 +542,12 @@ func (a *Client) SearchLoyaltyAccounts(params *SearchLoyaltyAccountsParams, auth
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -533,16 +570,13 @@ A Square loyalty program maintains a ledger of events that occur during the life
 buyer's loyalty account. Each change in the point balance
 (for example, points earned, points redeemed, and points expired) is
 recorded in the ledger. Using this endpoint, you can search the ledger for events.
-For more information, see
-[Loyalty events](/docs/loyalty-api/overview/#loyalty-events).
 */
-func (a *Client) SearchLoyaltyEvents(params *SearchLoyaltyEventsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchLoyaltyEventsOK, error) {
+func (a *Client) SearchLoyaltyEvents(params *SearchLoyaltyEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchLoyaltyEventsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchLoyaltyEventsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchLoyaltyEvents",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/events/search",
@@ -554,7 +588,12 @@ func (a *Client) SearchLoyaltyEvents(params *SearchLoyaltyEventsParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -576,18 +615,14 @@ func (a *Client) SearchLoyaltyEvents(params *SearchLoyaltyEventsParams, authInfo
 In the current implementation, the endpoint supports search by the reward `status`.
 
 If you know a reward ID, use the
-[RetrieveLoyaltyReward](/reference/square/loyalty-api/retrieve-loyalty-reward) endpoint.
-
-For more information about loyalty rewards, see
-[Loyalty Rewards](/docs/loyalty-api/overview/#loyalty-rewards).
+[RetrieveLoyaltyReward](#endpoint-Loyalty-RetrieveLoyaltyReward) endpoint.
 */
-func (a *Client) SearchLoyaltyRewards(params *SearchLoyaltyRewardsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchLoyaltyRewardsOK, error) {
+func (a *Client) SearchLoyaltyRewards(params *SearchLoyaltyRewardsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchLoyaltyRewardsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchLoyaltyRewardsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchLoyaltyRewards",
 		Method:             "POST",
 		PathPattern:        "/v2/loyalty/rewards/search",
@@ -599,7 +634,12 @@ func (a *Client) SearchLoyaltyRewards(params *SearchLoyaltyRewardsParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

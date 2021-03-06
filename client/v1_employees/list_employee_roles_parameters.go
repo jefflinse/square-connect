@@ -17,70 +17,86 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// NewListEmployeeRolesParams creates a new ListEmployeeRolesParams object
-// with the default values initialized.
+// NewListEmployeeRolesParams creates a new ListEmployeeRolesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListEmployeeRolesParams() *ListEmployeeRolesParams {
-	var ()
 	return &ListEmployeeRolesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListEmployeeRolesParamsWithTimeout creates a new ListEmployeeRolesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListEmployeeRolesParamsWithTimeout(timeout time.Duration) *ListEmployeeRolesParams {
-	var ()
 	return &ListEmployeeRolesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListEmployeeRolesParamsWithContext creates a new ListEmployeeRolesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListEmployeeRolesParamsWithContext(ctx context.Context) *ListEmployeeRolesParams {
-	var ()
 	return &ListEmployeeRolesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListEmployeeRolesParamsWithHTTPClient creates a new ListEmployeeRolesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListEmployeeRolesParamsWithHTTPClient(client *http.Client) *ListEmployeeRolesParams {
-	var ()
 	return &ListEmployeeRolesParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListEmployeeRolesParams contains all the parameters to send to the API endpoint
-for the list employee roles operation typically these are written to a http.Request
+/* ListEmployeeRolesParams contains all the parameters to send to the API endpoint
+   for the list employee roles operation.
+
+   Typically these are written to a http.Request.
 */
 type ListEmployeeRolesParams struct {
 
-	/*BatchToken
-	  A pagination cursor to retrieve the next set of results for your
-	original query to the endpoint.
+	/* BatchToken.
 
+	     A pagination cursor to retrieve the next set of results for your
+	original query to the endpoint.
 	*/
 	BatchToken *string
-	/*Limit
-	  The maximum integer number of employee entities to return in a single response. Default 100, maximum 200.
 
+	/* Limit.
+
+	   The maximum integer number of employee entities to return in a single response. Default 100, maximum 200.
 	*/
 	Limit *int64
-	/*Order
-	  The order in which employees are listed in the response, based on their created_at field.Default value: ASC
 
+	/* Order.
+
+	   The order in which employees are listed in the response, based on their created_at field.Default value: ASC
 	*/
 	Order *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list employee roles params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListEmployeeRolesParams) WithDefaults() *ListEmployeeRolesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list employee roles params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListEmployeeRolesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list employee roles params
@@ -161,48 +177,51 @@ func (o *ListEmployeeRolesParams) WriteToRequest(r runtime.ClientRequest, reg st
 
 		// query param batch_token
 		var qrBatchToken string
+
 		if o.BatchToken != nil {
 			qrBatchToken = *o.BatchToken
 		}
 		qBatchToken := qrBatchToken
 		if qBatchToken != "" {
+
 			if err := r.SetQueryParam("batch_token", qBatchToken); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Limit != nil {
 
 		// query param limit
 		var qrLimit int64
+
 		if o.Limit != nil {
 			qrLimit = *o.Limit
 		}
 		qLimit := swag.FormatInt64(qrLimit)
 		if qLimit != "" {
+
 			if err := r.SetQueryParam("limit", qLimit); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.Order != nil {
 
 		// query param order
 		var qrOrder string
+
 		if o.Order != nil {
 			qrOrder = *o.Order
 		}
 		qOrder := qrOrder
 		if qOrder != "" {
+
 			if err := r.SetQueryParam("order", qOrder); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

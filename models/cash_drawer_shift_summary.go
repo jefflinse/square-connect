@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -77,7 +79,6 @@ func (m *CashDrawerShiftSummary) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CashDrawerShiftSummary) validateClosedCashMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ClosedCashMoney) { // not required
 		return nil
 	}
@@ -95,7 +96,6 @@ func (m *CashDrawerShiftSummary) validateClosedCashMoney(formats strfmt.Registry
 }
 
 func (m *CashDrawerShiftSummary) validateExpectedCashMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ExpectedCashMoney) { // not required
 		return nil
 	}
@@ -113,13 +113,76 @@ func (m *CashDrawerShiftSummary) validateExpectedCashMoney(formats strfmt.Regist
 }
 
 func (m *CashDrawerShiftSummary) validateOpenedCashMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OpenedCashMoney) { // not required
 		return nil
 	}
 
 	if m.OpenedCashMoney != nil {
 		if err := m.OpenedCashMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("opened_cash_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this cash drawer shift summary based on the context it is used
+func (m *CashDrawerShiftSummary) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateClosedCashMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExpectedCashMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOpenedCashMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CashDrawerShiftSummary) contextValidateClosedCashMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ClosedCashMoney != nil {
+		if err := m.ClosedCashMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("closed_cash_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CashDrawerShiftSummary) contextValidateExpectedCashMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExpectedCashMoney != nil {
+		if err := m.ExpectedCashMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("expected_cash_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CashDrawerShiftSummary) contextValidateOpenedCashMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OpenedCashMoney != nil {
+		if err := m.OpenedCashMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("opened_cash_money")
 			}

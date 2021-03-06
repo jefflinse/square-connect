@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,11 +15,12 @@ import (
 )
 
 // BatchUpsertCatalogObjectsResponse batch upsert catalog objects response
+// Example: {"id_mappings":[{"client_object_id":"#Tea","object_id":"ZSDZN34NAXDLC6D5ZQMNSOUM"},{"client_object_id":"#Coffee","object_id":"PJMCEBHHUS3OKDB6PYUHLCPP"},{"client_object_id":"#Beverages","object_id":"LYT72K3WGJFFCIMB63XARP3I"},{"client_object_id":"#SalesTax","object_id":"XHSHLHNWSI3HVI4BW5ZUZXI3"},{"client_object_id":"#Tea_Mug","object_id":"NAYHET5R52MIYCEF34ZMAHFM"},{"client_object_id":"#Coffee_Regular","object_id":"OTYDX45SPG7LJQUVCBZI4INH"},{"client_object_id":"#Coffee_Large","object_id":"GZDA3JB37FYVOPI4AOEBOITI"}],"objects":[{"id":"ZSDZN34NAXDLC6D5ZQMNSOUM","is_deleted":false,"item_data":{"category_id":"LYT72K3WGJFFCIMB63XARP3I","description":"Hot Leaf Juice","name":"Tea","tax_ids":["XHSHLHNWSI3HVI4BW5ZUZXI3"],"variations":[{"id":"NAYHET5R52MIYCEF34ZMAHFM","is_deleted":false,"item_variation_data":{"item_id":"ZSDZN34NAXDLC6D5ZQMNSOUM","name":"Mug","ordinal":0,"price_money":{"amount":150,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2017-05-10T18:48:39.798Z","version":1494442119798}]},"present_at_all_locations":true,"type":"ITEM","updated_at":"2017-05-10T18:48:39.798Z","version":1494442119798},{"id":"PJMCEBHHUS3OKDB6PYUHLCPP","is_deleted":false,"item_data":{"category_id":"LYT72K3WGJFFCIMB63XARP3I","description":"Hot Bean Juice","name":"Coffee","tax_ids":["XHSHLHNWSI3HVI4BW5ZUZXI3"],"variations":[{"id":"OTYDX45SPG7LJQUVCBZI4INH","is_deleted":false,"item_variation_data":{"item_id":"PJMCEBHHUS3OKDB6PYUHLCPP","name":"Regular","ordinal":0,"price_money":{"amount":250,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2017-05-10T18:48:39.798Z","version":1494442119798},{"id":"GZDA3JB37FYVOPI4AOEBOITI","is_deleted":false,"item_variation_data":{"item_id":"PJMCEBHHUS3OKDB6PYUHLCPP","name":"Large","ordinal":1,"price_money":{"amount":350,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2017-05-10T18:48:39.798Z","version":1494442119798}]},"present_at_all_locations":true,"type":"ITEM","updated_at":"2017-05-10T18:48:39.798Z","version":1494442119798},{"category_data":{"name":"Beverages"},"id":"LYT72K3WGJFFCIMB63XARP3I","is_deleted":false,"present_at_all_locations":true,"type":"CATEGORY","updated_at":"2017-05-10T18:48:39.798Z","version":1494442119798},{"id":"XHSHLHNWSI3HVI4BW5ZUZXI3","is_deleted":false,"present_at_all_locations":true,"tax_data":{"applies_to_custom_amounts":true,"calculation_phase":"TAX_SUBTOTAL_PHASE","enabled":true,"inclusion_type":"ADDITIVE","name":"Sales Tax","percentage":"5.0"},"type":"TAX","updated_at":"2017-05-10T18:48:39.798Z","version":1494442119798}]}
 //
 // swagger:model BatchUpsertCatalogObjectsResponse
 type BatchUpsertCatalogObjectsResponse struct {
 
-	// Information on any errors that encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 
 	// The mapping between client and server IDs for this upsert.
@@ -54,7 +56,6 @@ func (m *BatchUpsertCatalogObjectsResponse) Validate(formats strfmt.Registry) er
 }
 
 func (m *BatchUpsertCatalogObjectsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -79,7 +80,6 @@ func (m *BatchUpsertCatalogObjectsResponse) validateErrors(formats strfmt.Regist
 }
 
 func (m *BatchUpsertCatalogObjectsResponse) validateIDMappings(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.IDMappings) { // not required
 		return nil
 	}
@@ -104,7 +104,6 @@ func (m *BatchUpsertCatalogObjectsResponse) validateIDMappings(formats strfmt.Re
 }
 
 func (m *BatchUpsertCatalogObjectsResponse) validateObjects(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Objects) { // not required
 		return nil
 	}
@@ -116,6 +115,82 @@ func (m *BatchUpsertCatalogObjectsResponse) validateObjects(formats strfmt.Regis
 
 		if m.Objects[i] != nil {
 			if err := m.Objects[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("objects" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this batch upsert catalog objects response based on the context it is used
+func (m *BatchUpsertCatalogObjectsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIDMappings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateObjects(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BatchUpsertCatalogObjectsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BatchUpsertCatalogObjectsResponse) contextValidateIDMappings(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.IDMappings); i++ {
+
+		if m.IDMappings[i] != nil {
+			if err := m.IDMappings[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("id_mappings" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BatchUpsertCatalogObjectsResponse) contextValidateObjects(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Objects); i++ {
+
+		if m.Objects[i] != nil {
+			if err := m.Objects[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("objects" + "." + strconv.Itoa(i))
 				}

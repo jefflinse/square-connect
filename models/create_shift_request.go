@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // CreateShiftRequest Represents a request to create a `Shift`
+// Example: {"request_body":{"idempotency_key":"HIDSNG5KS478L","shift":{"breaks":[{"break_type_id":"REGS1EQR1TPZ5","end_at":"2019-01-25T06:16:00-05:00","expected_duration":"PT5M","is_paid":true,"name":"Tea Break","start_at":"2019-01-25T06:11:00-05:00"}],"end_at":"2019-01-25T13:11:00-05:00","location_id":"PAA1RJZZKXBFG","start_at":"2019-01-25T03:11:00-05:00","team_member_id":"ormj0jJJZ5OZIzxrZYJI","wage":{"hourly_rate":{"amount":1100,"currency":"USD"},"title":"Barista"}}}}
 //
 // swagger:model CreateShiftRequest
 type CreateShiftRequest struct {
@@ -45,12 +48,11 @@ func (m *CreateShiftRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CreateShiftRequest) validateIdempotencyKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.IdempotencyKey) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(m.IdempotencyKey), 128); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", m.IdempotencyKey, 128); err != nil {
 		return err
 	}
 
@@ -65,6 +67,34 @@ func (m *CreateShiftRequest) validateShift(formats strfmt.Registry) error {
 
 	if m.Shift != nil {
 		if err := m.Shift.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("shift")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create shift request based on the context it is used
+func (m *CreateShiftRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateShift(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateShiftRequest) contextValidateShift(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Shift != nil {
+		if err := m.Shift.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("shift")
 			}

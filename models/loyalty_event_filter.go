@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -66,7 +68,6 @@ func (m *LoyaltyEventFilter) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEventFilter) validateDateTimeFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DateTimeFilter) { // not required
 		return nil
 	}
@@ -84,7 +85,6 @@ func (m *LoyaltyEventFilter) validateDateTimeFilter(formats strfmt.Registry) err
 }
 
 func (m *LoyaltyEventFilter) validateLocationFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationFilter) { // not required
 		return nil
 	}
@@ -102,7 +102,6 @@ func (m *LoyaltyEventFilter) validateLocationFilter(formats strfmt.Registry) err
 }
 
 func (m *LoyaltyEventFilter) validateLoyaltyAccountFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LoyaltyAccountFilter) { // not required
 		return nil
 	}
@@ -120,7 +119,6 @@ func (m *LoyaltyEventFilter) validateLoyaltyAccountFilter(formats strfmt.Registr
 }
 
 func (m *LoyaltyEventFilter) validateOrderFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OrderFilter) { // not required
 		return nil
 	}
@@ -138,13 +136,112 @@ func (m *LoyaltyEventFilter) validateOrderFilter(formats strfmt.Registry) error 
 }
 
 func (m *LoyaltyEventFilter) validateTypeFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TypeFilter) { // not required
 		return nil
 	}
 
 	if m.TypeFilter != nil {
 		if err := m.TypeFilter.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("type_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this loyalty event filter based on the context it is used
+func (m *LoyaltyEventFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateDateTimeFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLocationFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateLoyaltyAccountFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrderFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTypeFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LoyaltyEventFilter) contextValidateDateTimeFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DateTimeFilter != nil {
+		if err := m.DateTimeFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("date_time_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEventFilter) contextValidateLocationFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LocationFilter != nil {
+		if err := m.LocationFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("location_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEventFilter) contextValidateLoyaltyAccountFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.LoyaltyAccountFilter != nil {
+		if err := m.LoyaltyAccountFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("loyalty_account_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEventFilter) contextValidateOrderFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OrderFilter != nil {
+		if err := m.OrderFilter.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("order_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEventFilter) contextValidateTypeFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TypeFilter != nil {
+		if err := m.TypeFilter.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("type_filter")
 			}

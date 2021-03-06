@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -14,6 +16,7 @@ import (
 
 // CreateSubscriptionRequest Defines parameters in a
 // [CreateSubscription](#endpoint-subscriptions-createsubscription) endpoint request.
+// Example: {"request_body":{"card_id":"ccof:qy5x8hHGYsgLrp4Q4GB","customer_id":"CHFGVKYY8RSV93M5KCYTG4PN0G","idempotency_key":"8193148c-9586-11e6-99f9-28cfe92138cf","location_id":"S8GWD5R9QB376","plan_id":"6JHXF3B2CW3YKHDV4XEM674H","price_override_money":{"amount":100,"currency":"USD"},"start_date":"2020-08-01","tax_percentage":"5","timezone":"America/Los_Angeles"}}
 //
 // swagger:model CreateSubscriptionRequest
 type CreateSubscriptionRequest struct {
@@ -116,7 +119,7 @@ func (m *CreateSubscriptionRequest) validateCustomerID(formats strfmt.Registry) 
 		return err
 	}
 
-	if err := validate.MinLength("customer_id", "body", string(*m.CustomerID), 1); err != nil {
+	if err := validate.MinLength("customer_id", "body", *m.CustomerID, 1); err != nil {
 		return err
 	}
 
@@ -129,7 +132,7 @@ func (m *CreateSubscriptionRequest) validateIdempotencyKey(formats strfmt.Regist
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
@@ -142,7 +145,7 @@ func (m *CreateSubscriptionRequest) validateLocationID(formats strfmt.Registry) 
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
@@ -155,7 +158,7 @@ func (m *CreateSubscriptionRequest) validatePlanID(formats strfmt.Registry) erro
 		return err
 	}
 
-	if err := validate.MinLength("plan_id", "body", string(*m.PlanID), 1); err != nil {
+	if err := validate.MinLength("plan_id", "body", *m.PlanID, 1); err != nil {
 		return err
 	}
 
@@ -163,7 +166,6 @@ func (m *CreateSubscriptionRequest) validatePlanID(formats strfmt.Registry) erro
 }
 
 func (m *CreateSubscriptionRequest) validatePriceOverrideMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.PriceOverrideMoney) { // not required
 		return nil
 	}
@@ -181,13 +183,40 @@ func (m *CreateSubscriptionRequest) validatePriceOverrideMoney(formats strfmt.Re
 }
 
 func (m *CreateSubscriptionRequest) validateTaxPercentage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TaxPercentage) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("tax_percentage", "body", string(m.TaxPercentage), 10); err != nil {
+	if err := validate.MaxLength("tax_percentage", "body", m.TaxPercentage, 10); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create subscription request based on the context it is used
+func (m *CreateSubscriptionRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidatePriceOverrideMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateSubscriptionRequest) contextValidatePriceOverrideMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PriceOverrideMoney != nil {
+		if err := m.PriceOverrideMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("price_override_money")
+			}
+			return err
+		}
 	}
 
 	return nil

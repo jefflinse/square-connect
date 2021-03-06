@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -60,16 +62,15 @@ func (m *DisputeEvidence) Validate(formats strfmt.Registry) error {
 }
 
 func (m *DisputeEvidence) validateDisputeID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DisputeID) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("dispute_id", "body", string(m.DisputeID), 1); err != nil {
+	if err := validate.MinLength("dispute_id", "body", m.DisputeID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("dispute_id", "body", string(m.DisputeID), 40); err != nil {
+	if err := validate.MaxLength("dispute_id", "body", m.DisputeID, 40); err != nil {
 		return err
 	}
 
@@ -77,16 +78,15 @@ func (m *DisputeEvidence) validateDisputeID(formats strfmt.Registry) error {
 }
 
 func (m *DisputeEvidence) validateEvidenceID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EvidenceID) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("evidence_id", "body", string(m.EvidenceID), 1); err != nil {
+	if err := validate.MinLength("evidence_id", "body", m.EvidenceID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("evidence_id", "body", string(m.EvidenceID), 40); err != nil {
+	if err := validate.MaxLength("evidence_id", "body", m.EvidenceID, 40); err != nil {
 		return err
 	}
 
@@ -94,19 +94,23 @@ func (m *DisputeEvidence) validateEvidenceID(formats strfmt.Registry) error {
 }
 
 func (m *DisputeEvidence) validateUploadedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UploadedAt) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("uploaded_at", "body", string(m.UploadedAt), 1); err != nil {
+	if err := validate.MinLength("uploaded_at", "body", m.UploadedAt, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("uploaded_at", "body", string(m.UploadedAt), 40); err != nil {
+	if err := validate.MaxLength("uploaded_at", "body", m.UploadedAt, 40); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this dispute evidence based on context it is used
+func (m *DisputeEvidence) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -215,7 +216,6 @@ func (m *V1Payment) Validate(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateAdditiveTax(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdditiveTax) { // not required
 		return nil
 	}
@@ -240,7 +240,6 @@ func (m *V1Payment) validateAdditiveTax(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateAdditiveTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdditiveTaxMoney) { // not required
 		return nil
 	}
@@ -258,7 +257,6 @@ func (m *V1Payment) validateAdditiveTaxMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateDevice(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Device) { // not required
 		return nil
 	}
@@ -276,7 +274,6 @@ func (m *V1Payment) validateDevice(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateDiscountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DiscountMoney) { // not required
 		return nil
 	}
@@ -294,7 +291,6 @@ func (m *V1Payment) validateDiscountMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateGrossSalesMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GrossSalesMoney) { // not required
 		return nil
 	}
@@ -312,7 +308,6 @@ func (m *V1Payment) validateGrossSalesMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateInclusiveTax(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.InclusiveTax) { // not required
 		return nil
 	}
@@ -337,7 +332,6 @@ func (m *V1Payment) validateInclusiveTax(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateInclusiveTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.InclusiveTaxMoney) { // not required
 		return nil
 	}
@@ -355,7 +349,6 @@ func (m *V1Payment) validateInclusiveTaxMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateItemizations(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Itemizations) { // not required
 		return nil
 	}
@@ -380,7 +373,6 @@ func (m *V1Payment) validateItemizations(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateNetSalesMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NetSalesMoney) { // not required
 		return nil
 	}
@@ -398,7 +390,6 @@ func (m *V1Payment) validateNetSalesMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateNetTotalMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NetTotalMoney) { // not required
 		return nil
 	}
@@ -416,7 +407,6 @@ func (m *V1Payment) validateNetTotalMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateProcessingFeeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ProcessingFeeMoney) { // not required
 		return nil
 	}
@@ -434,7 +424,6 @@ func (m *V1Payment) validateProcessingFeeMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateRefundedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RefundedMoney) { // not required
 		return nil
 	}
@@ -452,7 +441,6 @@ func (m *V1Payment) validateRefundedMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateRefunds(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Refunds) { // not required
 		return nil
 	}
@@ -477,7 +465,6 @@ func (m *V1Payment) validateRefunds(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateSurchargeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SurchargeMoney) { // not required
 		return nil
 	}
@@ -495,7 +482,6 @@ func (m *V1Payment) validateSurchargeMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateSurcharges(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Surcharges) { // not required
 		return nil
 	}
@@ -520,7 +506,6 @@ func (m *V1Payment) validateSurcharges(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateSwedishRoundingMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SwedishRoundingMoney) { // not required
 		return nil
 	}
@@ -538,7 +523,6 @@ func (m *V1Payment) validateSwedishRoundingMoney(formats strfmt.Registry) error 
 }
 
 func (m *V1Payment) validateTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TaxMoney) { // not required
 		return nil
 	}
@@ -556,7 +540,6 @@ func (m *V1Payment) validateTaxMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateTender(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Tender) { // not required
 		return nil
 	}
@@ -581,7 +564,6 @@ func (m *V1Payment) validateTender(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateTipMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TipMoney) { // not required
 		return nil
 	}
@@ -599,13 +581,406 @@ func (m *V1Payment) validateTipMoney(formats strfmt.Registry) error {
 }
 
 func (m *V1Payment) validateTotalCollectedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalCollectedMoney) { // not required
 		return nil
 	}
 
 	if m.TotalCollectedMoney != nil {
 		if err := m.TotalCollectedMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_collected_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this v1 payment based on the context it is used
+func (m *V1Payment) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAdditiveTax(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAdditiveTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDevice(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDiscountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGrossSalesMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInclusiveTax(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateInclusiveTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItemizations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNetSalesMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNetTotalMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProcessingFeeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefundedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRefunds(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSurchargeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSurcharges(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSwedishRoundingMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTender(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTipMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalCollectedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *V1Payment) contextValidateAdditiveTax(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AdditiveTax); i++ {
+
+		if m.AdditiveTax[i] != nil {
+			if err := m.AdditiveTax[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("additive_tax" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateAdditiveTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AdditiveTaxMoney != nil {
+		if err := m.AdditiveTaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("additive_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateDevice(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Device != nil {
+		if err := m.Device.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("device")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateDiscountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DiscountMoney != nil {
+		if err := m.DiscountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("discount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateGrossSalesMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GrossSalesMoney != nil {
+		if err := m.GrossSalesMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("gross_sales_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateInclusiveTax(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.InclusiveTax); i++ {
+
+		if m.InclusiveTax[i] != nil {
+			if err := m.InclusiveTax[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("inclusive_tax" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateInclusiveTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.InclusiveTaxMoney != nil {
+		if err := m.InclusiveTaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("inclusive_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateItemizations(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Itemizations); i++ {
+
+		if m.Itemizations[i] != nil {
+			if err := m.Itemizations[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("itemizations" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateNetSalesMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NetSalesMoney != nil {
+		if err := m.NetSalesMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("net_sales_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateNetTotalMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NetTotalMoney != nil {
+		if err := m.NetTotalMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("net_total_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateProcessingFeeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProcessingFeeMoney != nil {
+		if err := m.ProcessingFeeMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("processing_fee_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateRefundedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RefundedMoney != nil {
+		if err := m.RefundedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("refunded_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateRefunds(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Refunds); i++ {
+
+		if m.Refunds[i] != nil {
+			if err := m.Refunds[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("refunds" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateSurchargeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SurchargeMoney != nil {
+		if err := m.SurchargeMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("surcharge_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateSurcharges(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Surcharges); i++ {
+
+		if m.Surcharges[i] != nil {
+			if err := m.Surcharges[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("surcharges" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateSwedishRoundingMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SwedishRoundingMoney != nil {
+		if err := m.SwedishRoundingMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("swedish_rounding_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TaxMoney != nil {
+		if err := m.TaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateTender(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Tender); i++ {
+
+		if m.Tender[i] != nil {
+			if err := m.Tender[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("tender" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateTipMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TipMoney != nil {
+		if err := m.TipMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("tip_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *V1Payment) contextValidateTotalCollectedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalCollectedMoney != nil {
+		if err := m.TotalCollectedMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("total_collected_money")
 			}

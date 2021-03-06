@@ -18,71 +18,87 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewV1UpdateOrderParams creates a new V1UpdateOrderParams object
-// with the default values initialized.
+// NewV1UpdateOrderParams creates a new V1UpdateOrderParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewV1UpdateOrderParams() *V1UpdateOrderParams {
-	var ()
 	return &V1UpdateOrderParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewV1UpdateOrderParamsWithTimeout creates a new V1UpdateOrderParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewV1UpdateOrderParamsWithTimeout(timeout time.Duration) *V1UpdateOrderParams {
-	var ()
 	return &V1UpdateOrderParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewV1UpdateOrderParamsWithContext creates a new V1UpdateOrderParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewV1UpdateOrderParamsWithContext(ctx context.Context) *V1UpdateOrderParams {
-	var ()
 	return &V1UpdateOrderParams{
-
 		Context: ctx,
 	}
 }
 
 // NewV1UpdateOrderParamsWithHTTPClient creates a new V1UpdateOrderParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewV1UpdateOrderParamsWithHTTPClient(client *http.Client) *V1UpdateOrderParams {
-	var ()
 	return &V1UpdateOrderParams{
 		HTTPClient: client,
 	}
 }
 
-/*V1UpdateOrderParams contains all the parameters to send to the API endpoint
-for the v1 update order operation typically these are written to a http.Request
+/* V1UpdateOrderParams contains all the parameters to send to the API endpoint
+   for the v1 update order operation.
+
+   Typically these are written to a http.Request.
 */
 type V1UpdateOrderParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.V1UpdateOrderRequest
-	/*LocationID
-	  The ID of the order's associated location.
 
+	/* LocationID.
+
+	   The ID of the order's associated location.
 	*/
 	LocationID string
-	/*OrderID
-	  The order's Square-issued ID. You obtain this value from Order objects returned by the List Orders endpoint
 
+	/* OrderID.
+
+	   The order's Square-issued ID. You obtain this value from Order objects returned by the List Orders endpoint
 	*/
 	OrderID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the v1 update order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1UpdateOrderParams) WithDefaults() *V1UpdateOrderParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the v1 update order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1UpdateOrderParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the v1 update order params
@@ -158,7 +174,6 @@ func (o *V1UpdateOrderParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

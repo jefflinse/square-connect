@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // UpdateItemTaxesRequest update item taxes request
+// Example: {"request_body":{"item_ids":["H42BRLUJ5KTZTTMPVSLFAACQ","2JXOBJIHCWBQ4NZ3RIXQGJA6"],"taxes_to_disable":["AQCEGCEBBQONINDOHRGZISEX"],"taxes_to_enable":["4WRCNHCJZDVLSNDQ35PP6YAD"]}}
 //
 // swagger:model UpdateItemTaxesRequest
 type UpdateItemTaxesRequest struct {
@@ -48,6 +51,11 @@ func (m *UpdateItemTaxesRequest) validateItemIds(formats strfmt.Registry) error 
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this update item taxes request based on context it is used
+func (m *UpdateItemTaxesRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

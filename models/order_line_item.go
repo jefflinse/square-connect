@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -81,12 +82,17 @@ type OrderLineItem struct {
 	Modifiers []*OrderLineItemModifier `json:"modifiers"`
 
 	// The name of the line item.
-	// Max Length: 500
+	// Max Length: 512
 	Name string `json:"name,omitempty"`
 
 	// The note of the line item.
-	// Max Length: 500
+	// Max Length: 2000
 	Note string `json:"note,omitempty"`
+
+	// Describes pricing adjustments that are blocked from manual and
+	// automatic application to a line item. For more information, see
+	// [Apply Taxes and Discounts](https://developer.squareup.com/docs/docs/orders-api/apply-taxes-and-discounts).
+	PricingBlocklists *OrderLineItemPricingBlocklists `json:"pricing_blocklists,omitempty"`
 
 	// The quantity purchased, formatted as a decimal number.
 	// For example: `"3"`.
@@ -163,6 +169,10 @@ func (m *OrderLineItem) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validatePricingBlocklists(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateQuantity(formats); err != nil {
 		res = append(res, err)
 	}
@@ -202,7 +212,6 @@ func (m *OrderLineItem) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateAppliedDiscounts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedDiscounts) { // not required
 		return nil
 	}
@@ -227,7 +236,6 @@ func (m *OrderLineItem) validateAppliedDiscounts(formats strfmt.Registry) error 
 }
 
 func (m *OrderLineItem) validateAppliedTaxes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedTaxes) { // not required
 		return nil
 	}
@@ -252,7 +260,6 @@ func (m *OrderLineItem) validateAppliedTaxes(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateBasePriceMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.BasePriceMoney) { // not required
 		return nil
 	}
@@ -270,12 +277,11 @@ func (m *OrderLineItem) validateBasePriceMoney(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 192); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 192); err != nil {
 		return err
 	}
 
@@ -283,7 +289,6 @@ func (m *OrderLineItem) validateCatalogObjectID(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateGrossSalesMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.GrossSalesMoney) { // not required
 		return nil
 	}
@@ -301,7 +306,6 @@ func (m *OrderLineItem) validateGrossSalesMoney(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateModifiers(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Modifiers) { // not required
 		return nil
 	}
@@ -326,12 +330,11 @@ func (m *OrderLineItem) validateModifiers(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 500); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 512); err != nil {
 		return err
 	}
 
@@ -339,13 +342,29 @@ func (m *OrderLineItem) validateName(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateNote(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Note) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("note", "body", string(m.Note), 500); err != nil {
+	if err := validate.MaxLength("note", "body", m.Note, 2000); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) validatePricingBlocklists(formats strfmt.Registry) error {
+	if swag.IsZero(m.PricingBlocklists) { // not required
+		return nil
+	}
+
+	if m.PricingBlocklists != nil {
+		if err := m.PricingBlocklists.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pricing_blocklists")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -357,11 +376,11 @@ func (m *OrderLineItem) validateQuantity(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("quantity", "body", string(*m.Quantity), 1); err != nil {
+	if err := validate.MinLength("quantity", "body", *m.Quantity, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("quantity", "body", string(*m.Quantity), 12); err != nil {
+	if err := validate.MaxLength("quantity", "body", *m.Quantity, 12); err != nil {
 		return err
 	}
 
@@ -369,7 +388,6 @@ func (m *OrderLineItem) validateQuantity(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateQuantityUnit(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.QuantityUnit) { // not required
 		return nil
 	}
@@ -387,7 +405,6 @@ func (m *OrderLineItem) validateQuantityUnit(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateTotalDiscountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalDiscountMoney) { // not required
 		return nil
 	}
@@ -405,7 +422,6 @@ func (m *OrderLineItem) validateTotalDiscountMoney(formats strfmt.Registry) erro
 }
 
 func (m *OrderLineItem) validateTotalMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalMoney) { // not required
 		return nil
 	}
@@ -423,7 +439,6 @@ func (m *OrderLineItem) validateTotalMoney(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateTotalTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalTaxMoney) { // not required
 		return nil
 	}
@@ -441,12 +456,11 @@ func (m *OrderLineItem) validateTotalTaxMoney(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
 	}
 
@@ -454,12 +468,11 @@ func (m *OrderLineItem) validateUID(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateVariationName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.VariationName) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("variation_name", "body", string(m.VariationName), 255); err != nil {
+	if err := validate.MaxLength("variation_name", "body", m.VariationName, 255); err != nil {
 		return err
 	}
 
@@ -467,13 +480,232 @@ func (m *OrderLineItem) validateVariationName(formats strfmt.Registry) error {
 }
 
 func (m *OrderLineItem) validateVariationTotalPriceMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.VariationTotalPriceMoney) { // not required
 		return nil
 	}
 
 	if m.VariationTotalPriceMoney != nil {
 		if err := m.VariationTotalPriceMoney.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("variation_total_price_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order line item based on the context it is used
+func (m *OrderLineItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAppliedDiscounts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAppliedTaxes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateBasePriceMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateGrossSalesMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateModifiers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidatePricingBlocklists(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateQuantityUnit(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalDiscountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVariationTotalPriceMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateAppliedDiscounts(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AppliedDiscounts); i++ {
+
+		if m.AppliedDiscounts[i] != nil {
+			if err := m.AppliedDiscounts[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("applied_discounts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateAppliedTaxes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AppliedTaxes); i++ {
+
+		if m.AppliedTaxes[i] != nil {
+			if err := m.AppliedTaxes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("applied_taxes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateBasePriceMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BasePriceMoney != nil {
+		if err := m.BasePriceMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("base_price_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateGrossSalesMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.GrossSalesMoney != nil {
+		if err := m.GrossSalesMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("gross_sales_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateModifiers(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Modifiers); i++ {
+
+		if m.Modifiers[i] != nil {
+			if err := m.Modifiers[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("modifiers" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidatePricingBlocklists(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.PricingBlocklists != nil {
+		if err := m.PricingBlocklists.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("pricing_blocklists")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateQuantityUnit(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.QuantityUnit != nil {
+		if err := m.QuantityUnit.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("quantity_unit")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateTotalDiscountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalDiscountMoney != nil {
+		if err := m.TotalDiscountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_discount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateTotalMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalMoney != nil {
+		if err := m.TotalMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateTotalTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalTaxMoney != nil {
+		if err := m.TotalTaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_tax_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderLineItem) contextValidateVariationTotalPriceMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.VariationTotalPriceMoney != nil {
+		if err := m.VariationTotalPriceMoney.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("variation_total_price_money")
 			}

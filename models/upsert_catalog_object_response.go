@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // UpsertCatalogObjectResponse upsert catalog object response
+// Example: {"catalog_object":{"id":"7SB3ZQYJ5GDMVFL7JK46JCHT","is_deleted":false,"item_data":{"abbreviation":"Ch","description":"Hot chocolate","name":"Cocoa"},"type":"ITEM","updated_at":"2016-11-16T22:32:42.996Z","version":1479335562996},"id_mappings":[{"client_object_id":"#Cocoa","object_id":"7SB3ZQYJ5GDMVFL7JK46JCHT"}]}
 //
 // swagger:model UpsertCatalogObjectResponse
 type UpsertCatalogObjectResponse struct {
@@ -21,7 +23,7 @@ type UpsertCatalogObjectResponse struct {
 	// The successfully created or updated CatalogObject.
 	CatalogObject *CatalogObject `json:"catalog_object,omitempty"`
 
-	// Information on any errors encountered.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 
 	// The mapping between client and server IDs for this upsert.
@@ -51,7 +53,6 @@ func (m *UpsertCatalogObjectResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *UpsertCatalogObjectResponse) validateCatalogObject(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObject) { // not required
 		return nil
 	}
@@ -69,7 +70,6 @@ func (m *UpsertCatalogObjectResponse) validateCatalogObject(formats strfmt.Regis
 }
 
 func (m *UpsertCatalogObjectResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -94,7 +94,6 @@ func (m *UpsertCatalogObjectResponse) validateErrors(formats strfmt.Registry) er
 }
 
 func (m *UpsertCatalogObjectResponse) validateIDMappings(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.IDMappings) { // not required
 		return nil
 	}
@@ -106,6 +105,78 @@ func (m *UpsertCatalogObjectResponse) validateIDMappings(formats strfmt.Registry
 
 		if m.IDMappings[i] != nil {
 			if err := m.IDMappings[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("id_mappings" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this upsert catalog object response based on the context it is used
+func (m *UpsertCatalogObjectResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCatalogObject(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateIDMappings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpsertCatalogObjectResponse) contextValidateCatalogObject(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CatalogObject != nil {
+		if err := m.CatalogObject.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("catalog_object")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *UpsertCatalogObjectResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UpsertCatalogObjectResponse) contextValidateIDMappings(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.IDMappings); i++ {
+
+		if m.IDMappings[i] != nil {
+			if err := m.IDMappings[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("id_mappings" + "." + strconv.Itoa(i))
 				}

@@ -6,25 +6,31 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // RetrieveCatalogObjectRequest retrieve catalog object request
+// Example: {"request_params":"?include_related_objects=true"}
 //
 // swagger:model RetrieveCatalogObjectRequest
 type RetrieveCatalogObjectRequest struct {
 
+	// Requests objects as of a specific version of the catalog. This allows you to retrieve historical
+	// versions of objects. The value to retrieve a specific version of an object can be found
+	// in the version field of `CatalogObject`s.
+	CatalogVersion int64 `json:"catalog_version,omitempty"`
+
 	// If `true`, the response will include additional objects that are related to the
 	// requested object, as follows:
 	//
-	// If the `object` field of the response contains a CatalogItem,
-	// its associated CatalogCategory, CatalogTax objects,
-	// CatalogImages and CatalogModifierLists
-	// will be returned in the `related_objects` field of the response. If the `object`
-	// field of the response contains a CatalogItemVariation,
-	// its parent CatalogItem will be returned in the `related_objects` field of
-	// the response.
+	// If the `object` field of the response contains a `CatalogItem`, its associated
+	// `CatalogCategory`, `CatalogTax`, `CatalogImage` and `CatalogModifierList` objects will
+	// be returned in the `related_objects` field of the response. If the `object` field of
+	// the response contains a `CatalogItemVariation`, its parent `CatalogItem` will be returned
+	// in the `related_objects` field of the response.
 	//
 	// Default value: `false`
 	IncludeRelatedObjects bool `json:"include_related_objects,omitempty"`
@@ -32,6 +38,11 @@ type RetrieveCatalogObjectRequest struct {
 
 // Validate validates this retrieve catalog object request
 func (m *RetrieveCatalogObjectRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this retrieve catalog object request based on context it is used
+func (m *RetrieveCatalogObjectRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchOrdersParams creates a new SearchOrdersParams object
-// with the default values initialized.
+// NewSearchOrdersParams creates a new SearchOrdersParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchOrdersParams() *SearchOrdersParams {
-	var ()
 	return &SearchOrdersParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchOrdersParamsWithTimeout creates a new SearchOrdersParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchOrdersParamsWithTimeout(timeout time.Duration) *SearchOrdersParams {
-	var ()
 	return &SearchOrdersParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchOrdersParamsWithContext creates a new SearchOrdersParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchOrdersParamsWithContext(ctx context.Context) *SearchOrdersParams {
-	var ()
 	return &SearchOrdersParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchOrdersParamsWithHTTPClient creates a new SearchOrdersParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchOrdersParamsWithHTTPClient(client *http.Client) *SearchOrdersParams {
-	var ()
 	return &SearchOrdersParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchOrdersParams contains all the parameters to send to the API endpoint
-for the search orders operation typically these are written to a http.Request
+/* SearchOrdersParams contains all the parameters to send to the API endpoint
+   for the search orders operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchOrdersParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchOrdersRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search orders params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchOrdersParams) WithDefaults() *SearchOrdersParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search orders params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchOrdersParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search orders params
@@ -126,7 +140,6 @@ func (o *SearchOrdersParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -128,7 +130,6 @@ func (m *LoyaltyEvent) Validate(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEvent) validateAccumulatePoints(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AccumulatePoints) { // not required
 		return nil
 	}
@@ -146,7 +147,6 @@ func (m *LoyaltyEvent) validateAccumulatePoints(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEvent) validateAdjustPoints(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AdjustPoints) { // not required
 		return nil
 	}
@@ -164,7 +164,6 @@ func (m *LoyaltyEvent) validateAdjustPoints(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEvent) validateCreateReward(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreateReward) { // not required
 		return nil
 	}
@@ -187,7 +186,7 @@ func (m *LoyaltyEvent) validateCreatedAt(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("created_at", "body", string(*m.CreatedAt), 1); err != nil {
+	if err := validate.MinLength("created_at", "body", *m.CreatedAt, 1); err != nil {
 		return err
 	}
 
@@ -195,7 +194,6 @@ func (m *LoyaltyEvent) validateCreatedAt(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEvent) validateDeleteReward(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.DeleteReward) { // not required
 		return nil
 	}
@@ -213,7 +211,6 @@ func (m *LoyaltyEvent) validateDeleteReward(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEvent) validateExpirePoints(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ExpirePoints) { // not required
 		return nil
 	}
@@ -236,7 +233,7 @@ func (m *LoyaltyEvent) validateID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("id", "body", string(*m.ID), 1); err != nil {
+	if err := validate.MinLength("id", "body", *m.ID, 1); err != nil {
 		return err
 	}
 
@@ -249,11 +246,11 @@ func (m *LoyaltyEvent) validateLoyaltyAccountID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("loyalty_account_id", "body", string(*m.LoyaltyAccountID), 1); err != nil {
+	if err := validate.MinLength("loyalty_account_id", "body", *m.LoyaltyAccountID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("loyalty_account_id", "body", string(*m.LoyaltyAccountID), 36); err != nil {
+	if err := validate.MaxLength("loyalty_account_id", "body", *m.LoyaltyAccountID, 36); err != nil {
 		return err
 	}
 
@@ -261,7 +258,6 @@ func (m *LoyaltyEvent) validateLoyaltyAccountID(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEvent) validateOtherEvent(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OtherEvent) { // not required
 		return nil
 	}
@@ -279,7 +275,6 @@ func (m *LoyaltyEvent) validateOtherEvent(formats strfmt.Registry) error {
 }
 
 func (m *LoyaltyEvent) validateRedeemReward(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RedeemReward) { // not required
 		return nil
 	}
@@ -309,6 +304,142 @@ func (m *LoyaltyEvent) validateType(formats strfmt.Registry) error {
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this loyalty event based on the context it is used
+func (m *LoyaltyEvent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAccumulatePoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAdjustPoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCreateReward(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateDeleteReward(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateExpirePoints(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOtherEvent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateRedeemReward(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *LoyaltyEvent) contextValidateAccumulatePoints(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AccumulatePoints != nil {
+		if err := m.AccumulatePoints.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("accumulate_points")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEvent) contextValidateAdjustPoints(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AdjustPoints != nil {
+		if err := m.AdjustPoints.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("adjust_points")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEvent) contextValidateCreateReward(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreateReward != nil {
+		if err := m.CreateReward.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("create_reward")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEvent) contextValidateDeleteReward(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DeleteReward != nil {
+		if err := m.DeleteReward.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("delete_reward")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEvent) contextValidateExpirePoints(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ExpirePoints != nil {
+		if err := m.ExpirePoints.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("expire_points")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEvent) contextValidateOtherEvent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OtherEvent != nil {
+		if err := m.OtherEvent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("other_event")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *LoyaltyEvent) contextValidateRedeemReward(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.RedeemReward != nil {
+		if err := m.RedeemReward.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("redeem_reward")
+			}
+			return err
+		}
 	}
 
 	return nil

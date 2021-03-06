@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // ListEmployeeWagesResponse The response to a request for a set of `EmployeeWage` objects. Contains
 // a set of `EmployeeWage`.
+// Example: {"cursor":"2fofTniCgT0yIPAq26kmk0YyFQJZfbWkh73OOnlTHmTAx13NgED","employee_wages":[{"employee_id":"33fJchumvVdJwxV0H6L9","hourly_rate":{"amount":3250,"currency":"USD"},"id":"pXS3qCv7BERPnEGedM4S8mhm","title":"Manager"},{"employee_id":"33fJchumvVdJwxV0H6L9","hourly_rate":{"amount":2600,"currency":"USD"},"id":"rZduCkzYDUVL3ovh1sQgbue6","title":"Cook"},{"employee_id":"33fJchumvVdJwxV0H6L9","hourly_rate":{"amount":1600,"currency":"USD"},"id":"FxLbs5KpPUHa8wyt5ctjubDX","title":"Barista"},{"employee_id":"33fJchumvVdJwxV0H6L9","hourly_rate":{"amount":1700,"currency":"USD"},"id":"vD1wCgijMDR3cX5TPnu7VXto","title":"Cashier"}]}
 //
 // swagger:model ListEmployeeWagesResponse
 type ListEmployeeWagesResponse struct {
@@ -49,7 +51,6 @@ func (m *ListEmployeeWagesResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListEmployeeWagesResponse) validateEmployeeWages(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EmployeeWages) { // not required
 		return nil
 	}
@@ -74,7 +75,6 @@ func (m *ListEmployeeWagesResponse) validateEmployeeWages(formats strfmt.Registr
 }
 
 func (m *ListEmployeeWagesResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -86,6 +86,60 @@ func (m *ListEmployeeWagesResponse) validateErrors(formats strfmt.Registry) erro
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list employee wages response based on the context it is used
+func (m *ListEmployeeWagesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateEmployeeWages(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListEmployeeWagesResponse) contextValidateEmployeeWages(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.EmployeeWages); i++ {
+
+		if m.EmployeeWages[i] != nil {
+			if err := m.EmployeeWages[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("employee_wages" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListEmployeeWagesResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

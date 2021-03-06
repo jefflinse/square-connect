@@ -7,6 +7,7 @@ package models
 
 // DeleteCustomerRequest Defines the fields that are included in a request to the DeleteCustomer
 // endpoint.
+// Example: {}
 //
 // swagger:model DeleteCustomerRequest
 type DeleteCustomerRequest interface{}

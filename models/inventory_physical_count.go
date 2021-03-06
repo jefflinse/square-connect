@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -130,12 +132,11 @@ func (m *InventoryPhysicalCount) Validate(formats strfmt.Registry) error {
 }
 
 func (m *InventoryPhysicalCount) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 100); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 100); err != nil {
 		return err
 	}
 
@@ -143,12 +144,11 @@ func (m *InventoryPhysicalCount) validateCatalogObjectID(formats strfmt.Registry
 }
 
 func (m *InventoryPhysicalCount) validateCatalogObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectType) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_type", "body", string(m.CatalogObjectType), 14); err != nil {
+	if err := validate.MaxLength("catalog_object_type", "body", m.CatalogObjectType, 14); err != nil {
 		return err
 	}
 
@@ -156,12 +156,11 @@ func (m *InventoryPhysicalCount) validateCatalogObjectType(formats strfmt.Regist
 }
 
 func (m *InventoryPhysicalCount) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("created_at", "body", string(m.CreatedAt), 34); err != nil {
+	if err := validate.MaxLength("created_at", "body", m.CreatedAt, 34); err != nil {
 		return err
 	}
 
@@ -169,12 +168,11 @@ func (m *InventoryPhysicalCount) validateCreatedAt(formats strfmt.Registry) erro
 }
 
 func (m *InventoryPhysicalCount) validateEmployeeID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.EmployeeID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("employee_id", "body", string(m.EmployeeID), 100); err != nil {
+	if err := validate.MaxLength("employee_id", "body", m.EmployeeID, 100); err != nil {
 		return err
 	}
 
@@ -182,12 +180,11 @@ func (m *InventoryPhysicalCount) validateEmployeeID(formats strfmt.Registry) err
 }
 
 func (m *InventoryPhysicalCount) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 100); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 100); err != nil {
 		return err
 	}
 
@@ -195,12 +192,11 @@ func (m *InventoryPhysicalCount) validateID(formats strfmt.Registry) error {
 }
 
 func (m *InventoryPhysicalCount) validateLocationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 100); err != nil {
+	if err := validate.MaxLength("location_id", "body", m.LocationID, 100); err != nil {
 		return err
 	}
 
@@ -208,12 +204,11 @@ func (m *InventoryPhysicalCount) validateLocationID(formats strfmt.Registry) err
 }
 
 func (m *InventoryPhysicalCount) validateOccurredAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OccurredAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("occurred_at", "body", string(m.OccurredAt), 34); err != nil {
+	if err := validate.MaxLength("occurred_at", "body", m.OccurredAt, 34); err != nil {
 		return err
 	}
 
@@ -221,12 +216,11 @@ func (m *InventoryPhysicalCount) validateOccurredAt(formats strfmt.Registry) err
 }
 
 func (m *InventoryPhysicalCount) validateQuantity(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Quantity) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("quantity", "body", string(m.Quantity), 26); err != nil {
+	if err := validate.MaxLength("quantity", "body", m.Quantity, 26); err != nil {
 		return err
 	}
 
@@ -234,12 +228,11 @@ func (m *InventoryPhysicalCount) validateQuantity(formats strfmt.Registry) error
 }
 
 func (m *InventoryPhysicalCount) validateReferenceID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ReferenceID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("reference_id", "body", string(m.ReferenceID), 255); err != nil {
+	if err := validate.MaxLength("reference_id", "body", m.ReferenceID, 255); err != nil {
 		return err
 	}
 
@@ -247,13 +240,40 @@ func (m *InventoryPhysicalCount) validateReferenceID(formats strfmt.Registry) er
 }
 
 func (m *InventoryPhysicalCount) validateSource(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Source) { // not required
 		return nil
 	}
 
 	if m.Source != nil {
 		if err := m.Source.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this inventory physical count based on the context it is used
+func (m *InventoryPhysicalCount) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateSource(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *InventoryPhysicalCount) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Source != nil {
+		if err := m.Source.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("source")
 			}

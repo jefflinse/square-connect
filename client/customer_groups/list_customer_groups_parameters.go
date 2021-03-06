@@ -16,62 +16,76 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListCustomerGroupsParams creates a new ListCustomerGroupsParams object
-// with the default values initialized.
+// NewListCustomerGroupsParams creates a new ListCustomerGroupsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListCustomerGroupsParams() *ListCustomerGroupsParams {
-	var ()
 	return &ListCustomerGroupsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListCustomerGroupsParamsWithTimeout creates a new ListCustomerGroupsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListCustomerGroupsParamsWithTimeout(timeout time.Duration) *ListCustomerGroupsParams {
-	var ()
 	return &ListCustomerGroupsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListCustomerGroupsParamsWithContext creates a new ListCustomerGroupsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListCustomerGroupsParamsWithContext(ctx context.Context) *ListCustomerGroupsParams {
-	var ()
 	return &ListCustomerGroupsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListCustomerGroupsParamsWithHTTPClient creates a new ListCustomerGroupsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListCustomerGroupsParamsWithHTTPClient(client *http.Client) *ListCustomerGroupsParams {
-	var ()
 	return &ListCustomerGroupsParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListCustomerGroupsParams contains all the parameters to send to the API endpoint
-for the list customer groups operation typically these are written to a http.Request
+/* ListCustomerGroupsParams contains all the parameters to send to the API endpoint
+   for the list customer groups operation.
+
+   Typically these are written to a http.Request.
 */
 type ListCustomerGroupsParams struct {
 
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
+	/* Cursor.
+
+	     A pagination cursor returned by a previous call to this endpoint.
 	Provide this to retrieve the next set of results for your original query.
 
 	See the [Pagination guide](https://developer.squareup.com/docs/working-with-apis/pagination) for more information.
-
 	*/
 	Cursor *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list customer groups params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCustomerGroupsParams) WithDefaults() *ListCustomerGroupsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list customer groups params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListCustomerGroupsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list customer groups params
@@ -130,16 +144,17 @@ func (o *ListCustomerGroupsParams) WriteToRequest(r runtime.ClientRequest, reg s
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if len(res) > 0 {

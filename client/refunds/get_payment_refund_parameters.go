@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetPaymentRefundParams creates a new GetPaymentRefundParams object
-// with the default values initialized.
+// NewGetPaymentRefundParams creates a new GetPaymentRefundParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetPaymentRefundParams() *GetPaymentRefundParams {
-	var ()
 	return &GetPaymentRefundParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGetPaymentRefundParamsWithTimeout creates a new GetPaymentRefundParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGetPaymentRefundParamsWithTimeout(timeout time.Duration) *GetPaymentRefundParams {
-	var ()
 	return &GetPaymentRefundParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGetPaymentRefundParamsWithContext creates a new GetPaymentRefundParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGetPaymentRefundParamsWithContext(ctx context.Context) *GetPaymentRefundParams {
-	var ()
 	return &GetPaymentRefundParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGetPaymentRefundParamsWithHTTPClient creates a new GetPaymentRefundParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGetPaymentRefundParamsWithHTTPClient(client *http.Client) *GetPaymentRefundParams {
-	var ()
 	return &GetPaymentRefundParams{
 		HTTPClient: client,
 	}
 }
 
-/*GetPaymentRefundParams contains all the parameters to send to the API endpoint
-for the get payment refund operation typically these are written to a http.Request
+/* GetPaymentRefundParams contains all the parameters to send to the API endpoint
+   for the get payment refund operation.
+
+   Typically these are written to a http.Request.
 */
 type GetPaymentRefundParams struct {
 
-	/*RefundID
-	  Unique ID for the desired `PaymentRefund`.
+	/* RefundID.
 
+	   The unique ID for the desired `PaymentRefund`.
 	*/
 	RefundID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the get payment refund params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetPaymentRefundParams) WithDefaults() *GetPaymentRefundParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the get payment refund params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetPaymentRefundParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get payment refund params

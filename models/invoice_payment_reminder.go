@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -62,16 +64,15 @@ func (m *InvoicePaymentReminder) Validate(formats strfmt.Registry) error {
 }
 
 func (m *InvoicePaymentReminder) validateMessage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Message) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("message", "body", string(m.Message), 1); err != nil {
+	if err := validate.MinLength("message", "body", m.Message, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("message", "body", string(m.Message), 1000); err != nil {
+	if err := validate.MaxLength("message", "body", m.Message, 1000); err != nil {
 		return err
 	}
 
@@ -79,19 +80,23 @@ func (m *InvoicePaymentReminder) validateMessage(formats strfmt.Registry) error 
 }
 
 func (m *InvoicePaymentReminder) validateRelativeScheduledDays(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.RelativeScheduledDays) { // not required
 		return nil
 	}
 
-	if err := validate.MinimumInt("relative_scheduled_days", "body", int64(*m.RelativeScheduledDays), -32767, false); err != nil {
+	if err := validate.MinimumInt("relative_scheduled_days", "body", *m.RelativeScheduledDays, -32767, false); err != nil {
 		return err
 	}
 
-	if err := validate.MaximumInt("relative_scheduled_days", "body", int64(*m.RelativeScheduledDays), 32767, false); err != nil {
+	if err := validate.MaximumInt("relative_scheduled_days", "body", *m.RelativeScheduledDays, 32767, false); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this invoice payment reminder based on context it is used
+func (m *InvoicePaymentReminder) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

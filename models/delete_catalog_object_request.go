@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 // DeleteCatalogObjectRequest delete catalog object request
+// Example: {}
 //
 // swagger:model DeleteCatalogObjectRequest
 type DeleteCatalogObjectRequest interface{}

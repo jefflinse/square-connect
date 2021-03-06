@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,11 +15,12 @@ import (
 )
 
 // CancelTerminalCheckoutResponse cancel terminal checkout response
+// Example: {"checkout":{"amount_money":{"amount":123,"currency":"USD"},"app_id":"APP_ID","cancel_reason":"SELLER_CANCELED","created_at":"2020-03-16T15:31:19.934Z","deadline_duration":"PT10M","device_options":{"device_id":"dbb5d83a-7838-11ea-bc55-0242ac130003","skip_receipt_screen":true,"tip_settings":{"allow_tipping":true}},"id":"S1yDlPQx7slqO","reference_id":"id36815","status":"CANCELED","updated_at":"2020-03-16T15:31:45.787Z"}}
 //
 // swagger:model CancelTerminalCheckoutResponse
 type CancelTerminalCheckoutResponse struct {
 
-	// The updated `TerminalCheckout`
+	// The canceled `TerminalCheckout`
 	Checkout *TerminalCheckout `json:"checkout,omitempty"`
 
 	// Information on errors encountered during the request.
@@ -44,7 +46,6 @@ func (m *CancelTerminalCheckoutResponse) Validate(formats strfmt.Registry) error
 }
 
 func (m *CancelTerminalCheckoutResponse) validateCheckout(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Checkout) { // not required
 		return nil
 	}
@@ -62,7 +63,6 @@ func (m *CancelTerminalCheckoutResponse) validateCheckout(formats strfmt.Registr
 }
 
 func (m *CancelTerminalCheckoutResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -74,6 +74,56 @@ func (m *CancelTerminalCheckoutResponse) validateErrors(formats strfmt.Registry)
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this cancel terminal checkout response based on the context it is used
+func (m *CancelTerminalCheckoutResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCheckout(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CancelTerminalCheckoutResponse) contextValidateCheckout(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Checkout != nil {
+		if err := m.Checkout.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("checkout")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CancelTerminalCheckoutResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

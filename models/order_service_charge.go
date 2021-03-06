@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -153,7 +154,6 @@ func (m *OrderServiceCharge) Validate(formats strfmt.Registry) error {
 }
 
 func (m *OrderServiceCharge) validateAmountMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AmountMoney) { // not required
 		return nil
 	}
@@ -171,7 +171,6 @@ func (m *OrderServiceCharge) validateAmountMoney(formats strfmt.Registry) error 
 }
 
 func (m *OrderServiceCharge) validateAppliedMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedMoney) { // not required
 		return nil
 	}
@@ -189,7 +188,6 @@ func (m *OrderServiceCharge) validateAppliedMoney(formats strfmt.Registry) error
 }
 
 func (m *OrderServiceCharge) validateAppliedTaxes(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppliedTaxes) { // not required
 		return nil
 	}
@@ -214,12 +212,11 @@ func (m *OrderServiceCharge) validateAppliedTaxes(formats strfmt.Registry) error
 }
 
 func (m *OrderServiceCharge) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 192); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 192); err != nil {
 		return err
 	}
 
@@ -227,12 +224,11 @@ func (m *OrderServiceCharge) validateCatalogObjectID(formats strfmt.Registry) er
 }
 
 func (m *OrderServiceCharge) validateName(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Name) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("name", "body", string(m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", m.Name, 255); err != nil {
 		return err
 	}
 
@@ -240,12 +236,11 @@ func (m *OrderServiceCharge) validateName(formats strfmt.Registry) error {
 }
 
 func (m *OrderServiceCharge) validatePercentage(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Percentage) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("percentage", "body", string(m.Percentage), 10); err != nil {
+	if err := validate.MaxLength("percentage", "body", m.Percentage, 10); err != nil {
 		return err
 	}
 
@@ -253,7 +248,6 @@ func (m *OrderServiceCharge) validatePercentage(formats strfmt.Registry) error {
 }
 
 func (m *OrderServiceCharge) validateTotalMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalMoney) { // not required
 		return nil
 	}
@@ -271,7 +265,6 @@ func (m *OrderServiceCharge) validateTotalMoney(formats strfmt.Registry) error {
 }
 
 func (m *OrderServiceCharge) validateTotalTaxMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TotalTaxMoney) { // not required
 		return nil
 	}
@@ -289,13 +282,116 @@ func (m *OrderServiceCharge) validateTotalTaxMoney(formats strfmt.Registry) erro
 }
 
 func (m *OrderServiceCharge) validateUID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.UID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("uid", "body", string(m.UID), 60); err != nil {
+	if err := validate.MaxLength("uid", "body", m.UID, 60); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this order service charge based on the context it is used
+func (m *OrderServiceCharge) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAppliedMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAppliedTaxes(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTotalTaxMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *OrderServiceCharge) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderServiceCharge) contextValidateAppliedMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AppliedMoney != nil {
+		if err := m.AppliedMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("applied_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderServiceCharge) contextValidateAppliedTaxes(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.AppliedTaxes); i++ {
+
+		if m.AppliedTaxes[i] != nil {
+			if err := m.AppliedTaxes[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("applied_taxes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *OrderServiceCharge) contextValidateTotalMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalMoney != nil {
+		if err := m.TotalMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *OrderServiceCharge) contextValidateTotalTaxMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TotalTaxMoney != nil {
+		if err := m.TotalTaxMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("total_tax_money")
+			}
+			return err
+		}
 	}
 
 	return nil

@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // RenewTokenRequest renew token request
+// Example: {"request_body":{"access_token":"ACCESS_TOKEN"}}
 //
 // swagger:model RenewTokenRequest
 type RenewTokenRequest struct {
@@ -21,6 +24,11 @@ type RenewTokenRequest struct {
 
 // Validate validates this renew token request
 func (m *RenewTokenRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this renew token request based on context it is used
+func (m *RenewTokenRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

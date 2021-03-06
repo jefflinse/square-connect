@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -44,7 +45,7 @@ func init() {
 }
 
 func (m ShiftWorkdayMatcher) validateShiftWorkdayMatcherEnum(path, location string, value ShiftWorkdayMatcher) error {
-	if err := validate.Enum(path, location, value, shiftWorkdayMatcherEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, shiftWorkdayMatcherEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -62,5 +63,10 @@ func (m ShiftWorkdayMatcher) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this shift workday matcher based on context it is used
+func (m ShiftWorkdayMatcher) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

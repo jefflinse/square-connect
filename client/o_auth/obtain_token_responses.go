@@ -29,9 +29,8 @@ func (o *ObtainTokenReader) ReadResponse(response runtime.ClientResponse, consum
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewObtainTokenOK() *ObtainTokenOK {
 	return &ObtainTokenOK{}
 }
 
-/*ObtainTokenOK handles this case with default header values.
+/* ObtainTokenOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type ObtainTokenOK struct {
 func (o *ObtainTokenOK) Error() string {
 	return fmt.Sprintf("[POST /oauth2/token][%d] obtainTokenOK  %+v", 200, o.Payload)
 }
-
 func (o *ObtainTokenOK) GetPayload() *models.ObtainTokenResponse {
 	return o.Payload
 }

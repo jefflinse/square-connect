@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 
 // SearchOrdersResponse Only one of `order_entries` or `orders` fields will be set, depending on whether
 // `return_entries` was set on the [SearchOrdersRequest](#type-searchorderrequest).
+// Example: {"cursor":"123","order_entries":[{"location_id":"057P5VYJ4A5X1","order_id":"CAISEM82RcpmcFBM0TfOyiHV3es","version":1},{"location_id":"18YC4JDH91E1H","order_id":"CAISENgvlJ6jLWAzERDzjyHVybY"},{"location_id":"057P5VYJ4A5X1","order_id":"CAISEM52YcpmcWAzERDOyiWS3ty"}]}
 //
 // swagger:model SearchOrdersResponse
 type SearchOrdersResponse struct {
@@ -60,7 +62,6 @@ func (m *SearchOrdersResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchOrdersResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -85,7 +86,6 @@ func (m *SearchOrdersResponse) validateErrors(formats strfmt.Registry) error {
 }
 
 func (m *SearchOrdersResponse) validateOrderEntries(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.OrderEntries) { // not required
 		return nil
 	}
@@ -110,7 +110,6 @@ func (m *SearchOrdersResponse) validateOrderEntries(formats strfmt.Registry) err
 }
 
 func (m *SearchOrdersResponse) validateOrders(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Orders) { // not required
 		return nil
 	}
@@ -122,6 +121,82 @@ func (m *SearchOrdersResponse) validateOrders(formats strfmt.Registry) error {
 
 		if m.Orders[i] != nil {
 			if err := m.Orders[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("orders" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search orders response based on the context it is used
+func (m *SearchOrdersResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrderEntries(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOrders(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchOrdersResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersResponse) contextValidateOrderEntries(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.OrderEntries); i++ {
+
+		if m.OrderEntries[i] != nil {
+			if err := m.OrderEntries[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("order_entries" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchOrdersResponse) contextValidateOrders(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Orders); i++ {
+
+		if m.Orders[i] != nil {
+			if err := m.Orders[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("orders" + "." + strconv.Itoa(i))
 				}

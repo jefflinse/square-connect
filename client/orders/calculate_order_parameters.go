@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewCalculateOrderParams creates a new CalculateOrderParams object
-// with the default values initialized.
+// NewCalculateOrderParams creates a new CalculateOrderParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewCalculateOrderParams() *CalculateOrderParams {
-	var ()
 	return &CalculateOrderParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewCalculateOrderParamsWithTimeout creates a new CalculateOrderParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewCalculateOrderParamsWithTimeout(timeout time.Duration) *CalculateOrderParams {
-	var ()
 	return &CalculateOrderParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewCalculateOrderParamsWithContext creates a new CalculateOrderParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewCalculateOrderParamsWithContext(ctx context.Context) *CalculateOrderParams {
-	var ()
 	return &CalculateOrderParams{
-
 		Context: ctx,
 	}
 }
 
 // NewCalculateOrderParamsWithHTTPClient creates a new CalculateOrderParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewCalculateOrderParamsWithHTTPClient(client *http.Client) *CalculateOrderParams {
-	var ()
 	return &CalculateOrderParams{
 		HTTPClient: client,
 	}
 }
 
-/*CalculateOrderParams contains all the parameters to send to the API endpoint
-for the calculate order operation typically these are written to a http.Request
+/* CalculateOrderParams contains all the parameters to send to the API endpoint
+   for the calculate order operation.
+
+   Typically these are written to a http.Request.
 */
 type CalculateOrderParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.CalculateOrderRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the calculate order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CalculateOrderParams) WithDefaults() *CalculateOrderParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the calculate order params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *CalculateOrderParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the calculate order params
@@ -126,7 +140,6 @@ func (o *CalculateOrderParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

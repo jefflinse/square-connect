@@ -25,31 +25,34 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	BatchDeleteCatalogObjects(params *BatchDeleteCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchDeleteCatalogObjectsOK, error)
+	BatchDeleteCatalogObjects(params *BatchDeleteCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchDeleteCatalogObjectsOK, error)
 
-	BatchRetrieveCatalogObjects(params *BatchRetrieveCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveCatalogObjectsOK, error)
+	BatchRetrieveCatalogObjects(params *BatchRetrieveCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveCatalogObjectsOK, error)
 
-	BatchUpsertCatalogObjects(params *BatchUpsertCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchUpsertCatalogObjectsOK, error)
+	BatchUpsertCatalogObjects(params *BatchUpsertCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchUpsertCatalogObjectsOK, error)
 
-	CatalogInfo(params *CatalogInfoParams, authInfo runtime.ClientAuthInfoWriter) (*CatalogInfoOK, error)
+	CatalogInfo(params *CatalogInfoParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CatalogInfoOK, error)
 
-	DeleteCatalogObject(params *DeleteCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCatalogObjectOK, error)
+	DeleteCatalogObject(params *DeleteCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCatalogObjectOK, error)
 
-	ListCatalog(params *ListCatalogParams, authInfo runtime.ClientAuthInfoWriter) (*ListCatalogOK, error)
+	ListCatalog(params *ListCatalogParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCatalogOK, error)
 
-	RetrieveCatalogObject(params *RetrieveCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCatalogObjectOK, error)
+	RetrieveCatalogObject(params *RetrieveCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCatalogObjectOK, error)
 
-	SearchCatalogItems(params *SearchCatalogItemsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogItemsOK, error)
+	SearchCatalogItems(params *SearchCatalogItemsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchCatalogItemsOK, error)
 
-	SearchCatalogObjects(params *SearchCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogObjectsOK, error)
+	SearchCatalogObjects(params *SearchCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchCatalogObjectsOK, error)
 
-	UpdateItemModifierLists(params *UpdateItemModifierListsParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateItemModifierListsOK, error)
+	UpdateItemModifierLists(params *UpdateItemModifierListsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateItemModifierListsOK, error)
 
-	UpdateItemTaxes(params *UpdateItemTaxesParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateItemTaxesOK, error)
+	UpdateItemTaxes(params *UpdateItemTaxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateItemTaxesOK, error)
 
-	UpsertCatalogObject(params *UpsertCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter) (*UpsertCatalogObjectOK, error)
+	UpsertCatalogObject(params *UpsertCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpsertCatalogObjectOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -68,13 +71,12 @@ children.
 IDs can be deleted. The response will only include IDs that were
 actually deleted.
 */
-func (a *Client) BatchDeleteCatalogObjects(params *BatchDeleteCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchDeleteCatalogObjectsOK, error) {
+func (a *Client) BatchDeleteCatalogObjects(params *BatchDeleteCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchDeleteCatalogObjectsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBatchDeleteCatalogObjectsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BatchDeleteCatalogObjects",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/batch-delete",
@@ -86,7 +88,12 @@ func (a *Client) BatchDeleteCatalogObjects(params *BatchDeleteCatalogObjectsPara
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -110,13 +117,12 @@ child information including: all of its
 its [CatalogModifierList](#type-catalogmodifierlist) objects, and the ids of
 any [CatalogTax](#type-catalogtax) objects that apply to it.
 */
-func (a *Client) BatchRetrieveCatalogObjects(params *BatchRetrieveCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchRetrieveCatalogObjectsOK, error) {
+func (a *Client) BatchRetrieveCatalogObjects(params *BatchRetrieveCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchRetrieveCatalogObjectsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBatchRetrieveCatalogObjectsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BatchRetrieveCatalogObjects",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/batch-retrieve",
@@ -128,7 +134,12 @@ func (a *Client) BatchRetrieveCatalogObjects(params *BatchRetrieveCatalogObjects
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -155,13 +166,12 @@ batches will be processed in order as long as the total object count for the
 request (items, variations, modifier lists, discounts, and taxes) is no more
 than 10,000.
 */
-func (a *Client) BatchUpsertCatalogObjects(params *BatchUpsertCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*BatchUpsertCatalogObjectsOK, error) {
+func (a *Client) BatchUpsertCatalogObjects(params *BatchUpsertCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BatchUpsertCatalogObjectsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewBatchUpsertCatalogObjectsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "BatchUpsertCatalogObjects",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/batch-upsert",
@@ -173,7 +183,12 @@ func (a *Client) BatchUpsertCatalogObjects(params *BatchUpsertCatalogObjectsPara
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -193,13 +208,12 @@ func (a *Client) BatchUpsertCatalogObjects(params *BatchUpsertCatalogObjectsPara
   Retrieves information about the Square Catalog API, such as batch size
 limits that can be used by the `BatchUpsertCatalogObjects` endpoint.
 */
-func (a *Client) CatalogInfo(params *CatalogInfoParams, authInfo runtime.ClientAuthInfoWriter) (*CatalogInfoOK, error) {
+func (a *Client) CatalogInfo(params *CatalogInfoParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CatalogInfoOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCatalogInfoParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CatalogInfo",
 		Method:             "GET",
 		PathPattern:        "/v2/catalog/info",
@@ -211,7 +225,12 @@ func (a *Client) CatalogInfo(params *CatalogInfoParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -235,13 +254,12 @@ are also deleted. For example, deleting a [CatalogItem](#type-catalogitem)
 will also delete all of its
 [CatalogItemVariation](#type-catalogitemvariation) children.
 */
-func (a *Client) DeleteCatalogObject(params *DeleteCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter) (*DeleteCatalogObjectOK, error) {
+func (a *Client) DeleteCatalogObject(params *DeleteCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteCatalogObjectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewDeleteCatalogObjectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "DeleteCatalogObject",
 		Method:             "DELETE",
 		PathPattern:        "/v2/catalog/object/{object_id}",
@@ -253,7 +271,12 @@ func (a *Client) DeleteCatalogObject(params *DeleteCatalogObjectParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -277,16 +300,15 @@ is specified as a comma-separated list of valid [CatalogObject](#type-catalogobj
 `ITEM`, `ITEM_VARIATION`, `MODIFIER`, `MODIFIER_LIST`, `CATEGORY`, `DISCOUNT`, `TAX`, `IMAGE`.
 
 __Important:__ ListCatalog does not return deleted catalog items. To retrieve
-deleted catalog items, use SearchCatalogObjects and set `include_deleted_objects`
-to `true`.
+deleted catalog items, use [SearchCatalogObjects](#endpoint-Catalog-SearchCatalogObjects)
+and set the `include_deleted_objects` attribute value to `true`.
 */
-func (a *Client) ListCatalog(params *ListCatalogParams, authInfo runtime.ClientAuthInfoWriter) (*ListCatalogOK, error) {
+func (a *Client) ListCatalog(params *ListCatalogParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCatalogOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListCatalogParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListCatalog",
 		Method:             "GET",
 		PathPattern:        "/v2/catalog/list",
@@ -298,7 +320,12 @@ func (a *Client) ListCatalog(params *ListCatalogParams, authInfo runtime.ClientA
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -323,13 +350,12 @@ children, references to its
 [CatalogModifierList](#type-catalogmodifierlist) objects, and the ids of
 any [CatalogTax](#type-catalogtax) objects that apply to it.
 */
-func (a *Client) RetrieveCatalogObject(params *RetrieveCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveCatalogObjectOK, error) {
+func (a *Client) RetrieveCatalogObject(params *RetrieveCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveCatalogObjectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveCatalogObjectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveCatalogObject",
 		Method:             "GET",
 		PathPattern:        "/v2/catalog/object/{object_id}",
@@ -341,7 +367,12 @@ func (a *Client) RetrieveCatalogObject(params *RetrieveCatalogObjectParams, auth
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -359,7 +390,7 @@ func (a *Client) RetrieveCatalogObject(params *RetrieveCatalogObjectParams, auth
   SearchCatalogItems searches catalog items
 
   Searches for catalog items or item variations by matching supported search attribute values, including
-custom attribute values, against one or more of the specified query expressions,
+custom attribute values, against one or more of the specified query expressions.
 
 This (`SearchCatalogItems`) endpoint differs from the [SearchCatalogObjects](#endpoint-Catalog-SearchCatalogObjects)
 endpoint in the following aspects:
@@ -369,13 +400,12 @@ endpoint in the following aspects:
 - `SearchCatalogItems` does not support the `include_deleted_objects` filter to search for deleted items or item variations, whereas `SearchCatalogObjects` does.
 - The both endpoints use different call conventions, including the query filter formats.
 */
-func (a *Client) SearchCatalogItems(params *SearchCatalogItemsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogItemsOK, error) {
+func (a *Client) SearchCatalogItems(params *SearchCatalogItemsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchCatalogItemsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchCatalogItemsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchCatalogItems",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/search-catalog-items",
@@ -387,7 +417,12 @@ func (a *Client) SearchCatalogItems(params *SearchCatalogItemsParams, authInfo r
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -404,8 +439,8 @@ func (a *Client) SearchCatalogItems(params *SearchCatalogItemsParams, authInfo r
 /*
   SearchCatalogObjects searches catalog objects
 
-  Searches for [CatalogObject](#type-CatalogObject) of any types against supported search attribute values,
-excluding custom attribute values on items or item variations, against one or more of the specified query expressions,
+  Searches for [CatalogObject](#type-CatalogObject) of any type by matching supported search attribute values,
+excluding custom attribute values on items or item variations, against one or more of the specified query expressions.
 
 This (`SearchCatalogObjects`) endpoint differs from the [SearchCatalogItems](#endpoint-Catalog-SearchCatalogItems)
 endpoint in the following aspects:
@@ -415,13 +450,12 @@ endpoint in the following aspects:
 - `SearchCatalogItems` does not support the `include_deleted_objects` filter to search for deleted items or item variations, whereas `SearchCatalogObjects` does.
 - The both endpoints have different call conventions, including the query filter formats.
 */
-func (a *Client) SearchCatalogObjects(params *SearchCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter) (*SearchCatalogObjectsOK, error) {
+func (a *Client) SearchCatalogObjects(params *SearchCatalogObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*SearchCatalogObjectsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewSearchCatalogObjectsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "SearchCatalogObjects",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/search",
@@ -433,7 +467,12 @@ func (a *Client) SearchCatalogObjects(params *SearchCatalogObjectsParams, authIn
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -454,13 +493,12 @@ func (a *Client) SearchCatalogObjects(params *SearchCatalogObjectsParams, authIn
 that apply to the targeted [CatalogItem](#type-catalogitem) without having
 to perform an upsert on the entire item.
 */
-func (a *Client) UpdateItemModifierLists(params *UpdateItemModifierListsParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateItemModifierListsOK, error) {
+func (a *Client) UpdateItemModifierLists(params *UpdateItemModifierListsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateItemModifierListsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateItemModifierListsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateItemModifierLists",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/update-item-modifier-lists",
@@ -472,7 +510,12 @@ func (a *Client) UpdateItemModifierLists(params *UpdateItemModifierListsParams, 
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -493,13 +536,12 @@ func (a *Client) UpdateItemModifierLists(params *UpdateItemModifierListsParams, 
 targeted [CatalogItem](#type-catalogitem) without having to perform an
 upsert on the entire item.
 */
-func (a *Client) UpdateItemTaxes(params *UpdateItemTaxesParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateItemTaxesOK, error) {
+func (a *Client) UpdateItemTaxes(params *UpdateItemTaxesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateItemTaxesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateItemTaxesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateItemTaxes",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/update-item-taxes",
@@ -511,7 +553,12 @@ func (a *Client) UpdateItemTaxes(params *UpdateItemTaxesParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -530,13 +577,12 @@ func (a *Client) UpdateItemTaxes(params *UpdateItemTaxesParams, authInfo runtime
 
   Creates or updates the target [CatalogObject](#type-catalogobject).
 */
-func (a *Client) UpsertCatalogObject(params *UpsertCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter) (*UpsertCatalogObjectOK, error) {
+func (a *Client) UpsertCatalogObject(params *UpsertCatalogObjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpsertCatalogObjectOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpsertCatalogObjectParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpsertCatalogObject",
 		Method:             "POST",
 		PathPattern:        "/v2/catalog/object",
@@ -548,7 +594,12 @@ func (a *Client) UpsertCatalogObject(params *UpsertCatalogObjectParams, authInfo
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

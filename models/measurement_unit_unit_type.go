@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -53,7 +54,7 @@ func init() {
 }
 
 func (m MeasurementUnitUnitType) validateMeasurementUnitUnitTypeEnum(path, location string, value MeasurementUnitUnitType) error {
-	if err := validate.Enum(path, location, value, measurementUnitUnitTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, measurementUnitUnitTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -71,5 +72,10 @@ func (m MeasurementUnitUnitType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this measurement unit unit type based on context it is used
+func (m MeasurementUnitUnitType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // SearchTerminalCheckoutsResponse search terminal checkouts response
+// Example: {"checkouts":[{"amount_money":{"amount":2610,"currency":"USD"},"app_id":"APP_ID","created_at":"2020-03-31T18:13:15.921Z","deadline_duration":"PT10M","device_options":{"device_id":"dbb5d83a-7838-11ea-bc55-0242ac130003","skip_receipt_screen":false,"tip_settings":{"allow_tipping":false}},"id":"tsQPvzwBpMqqO","note":"A brief note","payment_ids":["rXnhZzywrEk4vR6pw76fPZfgvaB"],"reference_id":"id14467","status":"COMPLETED","updated_at":"2020-03-31T18:13:52.725Z"},{"amount_money":{"amount":2610,"currency":"USD"},"app_id":"APP_ID","created_at":"2020-03-31T18:08:31.882Z","deadline_duration":"PT10M","device_options":{"device_id":"dbb5d83a-7838-11ea-bc55-0242ac130003","skip_receipt_screen":true,"tip_settings":{"allow_tipping":false}},"id":"XlOPTgcEhrbqO","note":"A brief note","payment_ids":["VYBF861PaoKPP7Pih0TlbZiNvaB"],"reference_id":"id41623","status":"COMPLETED","updated_at":"2020-03-31T18:08:41.635Z"}],"cursor":"RiTJqBoTuXlbLmmrPvEkX9iG7XnQ4W4RjGnH"}
 //
 // swagger:model SearchTerminalCheckoutsResponse
 type SearchTerminalCheckoutsResponse struct {
@@ -50,7 +52,6 @@ func (m *SearchTerminalCheckoutsResponse) Validate(formats strfmt.Registry) erro
 }
 
 func (m *SearchTerminalCheckoutsResponse) validateCheckouts(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Checkouts) { // not required
 		return nil
 	}
@@ -75,7 +76,6 @@ func (m *SearchTerminalCheckoutsResponse) validateCheckouts(formats strfmt.Regis
 }
 
 func (m *SearchTerminalCheckoutsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -87,6 +87,60 @@ func (m *SearchTerminalCheckoutsResponse) validateErrors(formats strfmt.Registry
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search terminal checkouts response based on the context it is used
+func (m *SearchTerminalCheckoutsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCheckouts(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchTerminalCheckoutsResponse) contextValidateCheckouts(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Checkouts); i++ {
+
+		if m.Checkouts[i] != nil {
+			if err := m.Checkouts[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("checkouts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchTerminalCheckoutsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

@@ -29,9 +29,8 @@ func (o *CreateMobileAuthorizationCodeReader) ReadResponse(response runtime.Clie
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewCreateMobileAuthorizationCodeOK() *CreateMobileAuthorizationCodeOK {
 	return &CreateMobileAuthorizationCodeOK{}
 }
 
-/*CreateMobileAuthorizationCodeOK handles this case with default header values.
+/* CreateMobileAuthorizationCodeOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type CreateMobileAuthorizationCodeOK struct {
 func (o *CreateMobileAuthorizationCodeOK) Error() string {
 	return fmt.Sprintf("[POST /mobile/authorization-code][%d] createMobileAuthorizationCodeOK  %+v", 200, o.Payload)
 }
-
 func (o *CreateMobileAuthorizationCodeOK) GetPayload() *models.CreateMobileAuthorizationCodeResponse {
 	return o.Payload
 }

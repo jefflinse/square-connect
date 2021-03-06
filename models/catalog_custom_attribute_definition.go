@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -46,21 +48,21 @@ type CatalogCustomAttributeDefinition struct {
 	// The name of the desired custom attribute key that can be used to access
 	// the custom attribute value on catalog objects. Cannot be modified after the
 	// custom attribute definition has been created.
-	// Must be between 1 and 60 characters, and may only contain the characters [a-zA-Z0-9_-].
+	// Must be between 1 and 60 characters, and may only contain the characters `[a-zA-Z0-9_-]`.
 	// Max Length: 60
 	// Min Length: 1
 	// Pattern: ^[a-zA-Z0-9_-]*$
 	Key string `json:"key,omitempty"`
 
 	//  The name of this definition for API and seller-facing UI purposes.
-	// The name must be unique within the (merchant, application_id) pair. Required.
+	// The name must be unique within the (merchant, application) pair. Required.
 	// May not be empty and may not exceed 255 characters. Can be modified after creation.
 	// Required: true
 	// Max Length: 255
 	// Min Length: 1
 	Name *string `json:"name"`
 
-	// number config
+	// Optionally, populated when `type` = `NUMBER`, unset otherwise.
 	NumberConfig *CatalogCustomAttributeDefinitionNumberConfig `json:"number_config,omitempty"`
 
 	// Populated when `type` is set to `SELECTION`, unset otherwise.
@@ -141,12 +143,11 @@ func (m *CatalogCustomAttributeDefinition) validateAllowedObjectTypes(formats st
 }
 
 func (m *CatalogCustomAttributeDefinition) validateDescription(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Description) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("description", "body", string(m.Description), 255); err != nil {
+	if err := validate.MaxLength("description", "body", m.Description, 255); err != nil {
 		return err
 	}
 
@@ -154,20 +155,19 @@ func (m *CatalogCustomAttributeDefinition) validateDescription(formats strfmt.Re
 }
 
 func (m *CatalogCustomAttributeDefinition) validateKey(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Key) { // not required
 		return nil
 	}
 
-	if err := validate.MinLength("key", "body", string(m.Key), 1); err != nil {
+	if err := validate.MinLength("key", "body", m.Key, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("key", "body", string(m.Key), 60); err != nil {
+	if err := validate.MaxLength("key", "body", m.Key, 60); err != nil {
 		return err
 	}
 
-	if err := validate.Pattern("key", "body", string(m.Key), `^[a-zA-Z0-9_-]*$`); err != nil {
+	if err := validate.Pattern("key", "body", m.Key, `^[a-zA-Z0-9_-]*$`); err != nil {
 		return err
 	}
 
@@ -180,11 +180,11 @@ func (m *CatalogCustomAttributeDefinition) validateName(formats strfmt.Registry)
 		return err
 	}
 
-	if err := validate.MinLength("name", "body", string(*m.Name), 1); err != nil {
+	if err := validate.MinLength("name", "body", *m.Name, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("name", "body", string(*m.Name), 255); err != nil {
+	if err := validate.MaxLength("name", "body", *m.Name, 255); err != nil {
 		return err
 	}
 
@@ -192,7 +192,6 @@ func (m *CatalogCustomAttributeDefinition) validateName(formats strfmt.Registry)
 }
 
 func (m *CatalogCustomAttributeDefinition) validateNumberConfig(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NumberConfig) { // not required
 		return nil
 	}
@@ -210,7 +209,6 @@ func (m *CatalogCustomAttributeDefinition) validateNumberConfig(formats strfmt.R
 }
 
 func (m *CatalogCustomAttributeDefinition) validateSelectionConfig(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SelectionConfig) { // not required
 		return nil
 	}
@@ -228,7 +226,6 @@ func (m *CatalogCustomAttributeDefinition) validateSelectionConfig(formats strfm
 }
 
 func (m *CatalogCustomAttributeDefinition) validateSourceApplication(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.SourceApplication) { // not required
 		return nil
 	}
@@ -246,7 +243,6 @@ func (m *CatalogCustomAttributeDefinition) validateSourceApplication(formats str
 }
 
 func (m *CatalogCustomAttributeDefinition) validateStringConfig(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.StringConfig) { // not required
 		return nil
 	}
@@ -267,6 +263,88 @@ func (m *CatalogCustomAttributeDefinition) validateType(formats strfmt.Registry)
 
 	if err := validate.Required("type", "body", m.Type); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog custom attribute definition based on the context it is used
+func (m *CatalogCustomAttributeDefinition) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateNumberConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSelectionConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSourceApplication(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateStringConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogCustomAttributeDefinition) contextValidateNumberConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NumberConfig != nil {
+		if err := m.NumberConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("number_config")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogCustomAttributeDefinition) contextValidateSelectionConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SelectionConfig != nil {
+		if err := m.SelectionConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("selection_config")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogCustomAttributeDefinition) contextValidateSourceApplication(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SourceApplication != nil {
+		if err := m.SourceApplication.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("source_application")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CatalogCustomAttributeDefinition) contextValidateStringConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.StringConfig != nil {
+		if err := m.StringConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("string_config")
+			}
+			return err
+		}
 	}
 
 	return nil

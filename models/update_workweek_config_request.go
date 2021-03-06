@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 )
 
 // UpdateWorkweekConfigRequest A request to update a `WorkweekConfig` object
+// Example: {"request_body":{"workweek_config":{"start_of_day_local_time":"10:00","start_of_week":"MON","version":10}}}
 //
 // swagger:model UpdateWorkweekConfigRequest
 type UpdateWorkweekConfigRequest struct {
@@ -44,6 +47,34 @@ func (m *UpdateWorkweekConfigRequest) validateWorkweekConfig(formats strfmt.Regi
 
 	if m.WorkweekConfig != nil {
 		if err := m.WorkweekConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("workweek_config")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this update workweek config request based on the context it is used
+func (m *UpdateWorkweekConfigRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateWorkweekConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *UpdateWorkweekConfigRequest) contextValidateWorkweekConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WorkweekConfig != nil {
+		if err := m.WorkweekConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("workweek_config")
 			}

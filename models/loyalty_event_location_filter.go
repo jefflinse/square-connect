@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -48,12 +49,17 @@ func (m *LoyaltyEventLocationFilter) validateLocationIds(formats strfmt.Registry
 
 	for i := 0; i < len(m.LocationIds); i++ {
 
-		if err := validate.MinLength("location_ids"+"."+strconv.Itoa(i), "body", string(m.LocationIds[i]), 1); err != nil {
+		if err := validate.MinLength("location_ids"+"."+strconv.Itoa(i), "body", m.LocationIds[i], 1); err != nil {
 			return err
 		}
 
 	}
 
+	return nil
+}
+
+// ContextValidate validates this loyalty event location filter based on context it is used
+func (m *LoyaltyEventLocationFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

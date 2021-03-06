@@ -18,66 +18,81 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewV1CreateRefundParams creates a new V1CreateRefundParams object
-// with the default values initialized.
+// NewV1CreateRefundParams creates a new V1CreateRefundParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewV1CreateRefundParams() *V1CreateRefundParams {
-	var ()
 	return &V1CreateRefundParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewV1CreateRefundParamsWithTimeout creates a new V1CreateRefundParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewV1CreateRefundParamsWithTimeout(timeout time.Duration) *V1CreateRefundParams {
-	var ()
 	return &V1CreateRefundParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewV1CreateRefundParamsWithContext creates a new V1CreateRefundParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewV1CreateRefundParamsWithContext(ctx context.Context) *V1CreateRefundParams {
-	var ()
 	return &V1CreateRefundParams{
-
 		Context: ctx,
 	}
 }
 
 // NewV1CreateRefundParamsWithHTTPClient creates a new V1CreateRefundParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewV1CreateRefundParamsWithHTTPClient(client *http.Client) *V1CreateRefundParams {
-	var ()
 	return &V1CreateRefundParams{
 		HTTPClient: client,
 	}
 }
 
-/*V1CreateRefundParams contains all the parameters to send to the API endpoint
-for the v1 create refund operation typically these are written to a http.Request
+/* V1CreateRefundParams contains all the parameters to send to the API endpoint
+   for the v1 create refund operation.
+
+   Typically these are written to a http.Request.
 */
 type V1CreateRefundParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.V1CreateRefundRequest
-	/*LocationID
-	  The ID of the original payment's associated location.
 
+	/* LocationID.
+
+	   The ID of the original payment's associated location.
 	*/
 	LocationID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the v1 create refund params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1CreateRefundParams) WithDefaults() *V1CreateRefundParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the v1 create refund params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *V1CreateRefundParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the v1 create refund params
@@ -142,7 +157,6 @@ func (o *V1CreateRefundParams) WriteToRequest(r runtime.ClientRequest, reg strfm
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

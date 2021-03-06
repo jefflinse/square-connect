@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // RenewTokenResponse renew token response
+// Example: {"access_token":"ACCESS_TOKEN","expires_at":"2006-01-02T15:04:05Z","merchant_id":"MERCHANT_ID","token_type":"bearer"}
 //
 // swagger:model RenewTokenResponse
 type RenewTokenResponse struct {
@@ -43,6 +46,11 @@ type RenewTokenResponse struct {
 
 // Validate validates this renew token response
 func (m *RenewTokenResponse) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this renew token response based on context it is used
+func (m *RenewTokenResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

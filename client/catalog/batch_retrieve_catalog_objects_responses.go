@@ -29,9 +29,8 @@ func (o *BatchRetrieveCatalogObjectsReader) ReadResponse(response runtime.Client
 			return nil, err
 		}
 		return result, nil
-
 	default:
-		return nil, runtime.NewAPIError("unknown error", response, response.Code())
+		return nil, runtime.NewAPIError("response status code does not match any response statuses defined for this endpoint in the swagger spec", response, response.Code())
 	}
 }
 
@@ -40,7 +39,7 @@ func NewBatchRetrieveCatalogObjectsOK() *BatchRetrieveCatalogObjectsOK {
 	return &BatchRetrieveCatalogObjectsOK{}
 }
 
-/*BatchRetrieveCatalogObjectsOK handles this case with default header values.
+/* BatchRetrieveCatalogObjectsOK describes a response with status code 200, with default header values.
 
 Success
 */
@@ -51,7 +50,6 @@ type BatchRetrieveCatalogObjectsOK struct {
 func (o *BatchRetrieveCatalogObjectsOK) Error() string {
 	return fmt.Sprintf("[POST /v2/catalog/batch-retrieve][%d] batchRetrieveCatalogObjectsOK  %+v", 200, o.Payload)
 }
-
 func (o *BatchRetrieveCatalogObjectsOK) GetPayload() *models.BatchRetrieveCatalogObjectsResponse {
 	return o.Payload
 }

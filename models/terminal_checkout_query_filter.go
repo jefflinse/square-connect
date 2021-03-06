@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -25,7 +27,7 @@ type TerminalCheckoutQueryFilter struct {
 	DeviceID string `json:"device_id,omitempty"`
 
 	// Filtered results with the desired status of the `TerminalCheckout`
-	// Options: PENDING, IN\_PROGRESS, CANCELED, COMPLETED
+	// Options: PENDING, IN_PROGRESS, CANCELED, COMPLETED
 	Status string `json:"status,omitempty"`
 }
 
@@ -44,13 +46,40 @@ func (m *TerminalCheckoutQueryFilter) Validate(formats strfmt.Registry) error {
 }
 
 func (m *TerminalCheckoutQueryFilter) validateCreatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CreatedAt) { // not required
 		return nil
 	}
 
 	if m.CreatedAt != nil {
 		if err := m.CreatedAt.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("created_at")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this terminal checkout query filter based on the context it is used
+func (m *TerminalCheckoutQueryFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCreatedAt(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *TerminalCheckoutQueryFilter) contextValidateCreatedAt(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CreatedAt != nil {
+		if err := m.CreatedAt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("created_at")
 			}

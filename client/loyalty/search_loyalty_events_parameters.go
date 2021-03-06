@@ -18,61 +18,75 @@ import (
 	"github.com/jefflinse/square-connect/models"
 )
 
-// NewSearchLoyaltyEventsParams creates a new SearchLoyaltyEventsParams object
-// with the default values initialized.
+// NewSearchLoyaltyEventsParams creates a new SearchLoyaltyEventsParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewSearchLoyaltyEventsParams() *SearchLoyaltyEventsParams {
-	var ()
 	return &SearchLoyaltyEventsParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewSearchLoyaltyEventsParamsWithTimeout creates a new SearchLoyaltyEventsParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewSearchLoyaltyEventsParamsWithTimeout(timeout time.Duration) *SearchLoyaltyEventsParams {
-	var ()
 	return &SearchLoyaltyEventsParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewSearchLoyaltyEventsParamsWithContext creates a new SearchLoyaltyEventsParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewSearchLoyaltyEventsParamsWithContext(ctx context.Context) *SearchLoyaltyEventsParams {
-	var ()
 	return &SearchLoyaltyEventsParams{
-
 		Context: ctx,
 	}
 }
 
 // NewSearchLoyaltyEventsParamsWithHTTPClient creates a new SearchLoyaltyEventsParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewSearchLoyaltyEventsParamsWithHTTPClient(client *http.Client) *SearchLoyaltyEventsParams {
-	var ()
 	return &SearchLoyaltyEventsParams{
 		HTTPClient: client,
 	}
 }
 
-/*SearchLoyaltyEventsParams contains all the parameters to send to the API endpoint
-for the search loyalty events operation typically these are written to a http.Request
+/* SearchLoyaltyEventsParams contains all the parameters to send to the API endpoint
+   for the search loyalty events operation.
+
+   Typically these are written to a http.Request.
 */
 type SearchLoyaltyEventsParams struct {
 
-	/*Body
-	  An object containing the fields to POST for the request.
+	/* Body.
+
+	     An object containing the fields to POST for the request.
 
 	See the corresponding object definition for field details.
-
 	*/
 	Body *models.SearchLoyaltyEventsRequest
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the search loyalty events params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchLoyaltyEventsParams) WithDefaults() *SearchLoyaltyEventsParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the search loyalty events params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *SearchLoyaltyEventsParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the search loyalty events params
@@ -126,7 +140,6 @@ func (o *SearchLoyaltyEventsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
 	if o.Body != nil {
 		if err := r.SetBodyParam(o.Body); err != nil {
 			return err

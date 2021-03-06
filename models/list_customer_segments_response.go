@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // ListCustomerSegmentsResponse Defines the fields included in the response body for requests to __ListCustomerSegments__.
 //
 // One of `errors` or `segments` is present in a given response (never both).
+// Example: {"segments":[{"created_at":"2020-01-09T19:33:24.469Z","id":"GMNXRZVEXNQDF.CHURN_RISK","name":"Lapsed","updated_at":"2020-04-13T21:47:04Z"},{"created_at":"2020-01-09T19:33:24.486Z","id":"GMNXRZVEXNQDF.LOYAL","name":"Regulars","updated_at":"2020-04-13T21:47:04Z"},{"created_at":"2020-01-09T19:33:21.813Z","id":"GMNXRZVEXNQDF.REACHABLE","name":"Reachable","updated_at":"2020-04-13T21:47:04Z"},{"created_at":"2020-01-09T19:33:25Z","id":"gv2:KF92J19VXN5FK30GX2E8HSGQ20","name":"Instant Profile","updated_at":"2020-04-13T23:01:03Z"}]}
 //
 // swagger:model ListCustomerSegmentsResponse
 type ListCustomerSegmentsResponse struct {
@@ -53,7 +55,6 @@ func (m *ListCustomerSegmentsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ListCustomerSegmentsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -78,7 +79,6 @@ func (m *ListCustomerSegmentsResponse) validateErrors(formats strfmt.Registry) e
 }
 
 func (m *ListCustomerSegmentsResponse) validateSegments(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Segments) { // not required
 		return nil
 	}
@@ -90,6 +90,60 @@ func (m *ListCustomerSegmentsResponse) validateSegments(formats strfmt.Registry)
 
 		if m.Segments[i] != nil {
 			if err := m.Segments[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("segments" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this list customer segments response based on the context it is used
+func (m *ListCustomerSegmentsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSegments(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ListCustomerSegmentsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *ListCustomerSegmentsResponse) contextValidateSegments(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Segments); i++ {
+
+		if m.Segments[i] != nil {
+			if err := m.Segments[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("segments" + "." + strconv.Itoa(i))
 				}

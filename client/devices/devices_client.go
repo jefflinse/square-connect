@@ -25,13 +25,16 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateDeviceCode(params *CreateDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDeviceCodeOK, error)
+	CreateDeviceCode(params *CreateDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateDeviceCodeOK, error)
 
-	GetDeviceCode(params *GetDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter) (*GetDeviceCodeOK, error)
+	GetDeviceCode(params *GetDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetDeviceCodeOK, error)
 
-	ListDeviceCodes(params *ListDeviceCodesParams, authInfo runtime.ClientAuthInfoWriter) (*ListDeviceCodesOK, error)
+	ListDeviceCodes(params *ListDeviceCodesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListDeviceCodesOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -42,13 +45,12 @@ type ClientService interface {
   Creates a DeviceCode that can be used to login to a Square Terminal device to enter the connected
 terminal mode.
 */
-func (a *Client) CreateDeviceCode(params *CreateDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter) (*CreateDeviceCodeOK, error) {
+func (a *Client) CreateDeviceCode(params *CreateDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateDeviceCodeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateDeviceCodeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateDeviceCode",
 		Method:             "POST",
 		PathPattern:        "/v2/devices/codes",
@@ -60,7 +62,12 @@ func (a *Client) CreateDeviceCode(params *CreateDeviceCodeParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -79,13 +86,12 @@ func (a *Client) CreateDeviceCode(params *CreateDeviceCodeParams, authInfo runti
 
   Retrieves DeviceCode with the associated ID.
 */
-func (a *Client) GetDeviceCode(params *GetDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter) (*GetDeviceCodeOK, error) {
+func (a *Client) GetDeviceCode(params *GetDeviceCodeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetDeviceCodeOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewGetDeviceCodeParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "GetDeviceCode",
 		Method:             "GET",
 		PathPattern:        "/v2/devices/codes/{id}",
@@ -97,7 +103,12 @@ func (a *Client) GetDeviceCode(params *GetDeviceCodeParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -116,13 +127,12 @@ func (a *Client) GetDeviceCode(params *GetDeviceCodeParams, authInfo runtime.Cli
 
   Lists all DeviceCodes associated with the merchant.
 */
-func (a *Client) ListDeviceCodes(params *ListDeviceCodesParams, authInfo runtime.ClientAuthInfoWriter) (*ListDeviceCodesOK, error) {
+func (a *Client) ListDeviceCodes(params *ListDeviceCodesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListDeviceCodesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListDeviceCodesParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListDeviceCodes",
 		Method:             "GET",
 		PathPattern:        "/v2/devices/codes",
@@ -134,7 +144,12 @@ func (a *Client) ListDeviceCodes(params *ListDeviceCodesParams, authInfo runtime
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -14,6 +15,7 @@ import (
 )
 
 // SearchCatalogItemsResponse Defines the response body returned from the [SearchCatalogItems](#endpoint-Catalog-SearchCatalogItems) endpoint.
+// Example: {"items":[{"custom_attribute_values":{"BRAND":{"custom_attribute_definition_id":"BRAND_DEFINITION_ID","key":"BRAND","name":"Brand","string_value":"Dark Horse","type":"STRING"},"VARIETAL":{"custom_attribute_definition_id":"VARIETAL_DEFINITION_ID","key":"VARIETAL","name":"Varietal","selection_uid_values":["MERLOT_SELECTION_ID",null],"type":"SELECTION"},"VINTAGE":{"custom_attribute_definition_id":"EI7IJQDUKYSHULREPIPH6HNU","key":"VINTAGE","name":"Vintage","number_value":2018,"type":"NUMBER"}},"id":"GPOKJPTV2KDLVKCADJ7I77EZ","is_deleted":false,"item_data":{"description":"A nice red wine","name":"Dark Horse Merlot 2018","product_type":"REGULAR","variations":[{"id":"VBJNPHCOKDFECR6VU25WRJUD","is_deleted":false,"item_variation_data":{"item_id":"GPOKJPTV2KDLVKCADJ7I77EZ","name":"750 mL","ordinal":0,"price_money":{"amount":1000,"currency":"USD"},"pricing_type":"FIXED_PRICING"},"present_at_all_locations":true,"type":"ITEM_VARIATION","updated_at":"2020-06-18T17:55:56.646Z","version":1592502956646}]},"present_at_all_locations":true,"type":"ITEM","updated_at":"2020-06-18T17:55:56.646Z","version":1592502956646}],"matched_variation_ids":["VBJNPHCOKDFECR6VU25WRJUD"]}
 //
 // swagger:model SearchCatalogItemsResponse
 type SearchCatalogItemsResponse struct {
@@ -21,7 +23,7 @@ type SearchCatalogItemsResponse struct {
 	// Pagination token used in the next request to return more of the search result.
 	Cursor string `json:"cursor,omitempty"`
 
-	// Errors detected when the call to `SearchCatalogItems` endpoint fails.
+	// Any errors that occurred during the request.
 	Errors []*Error `json:"errors"`
 
 	// Returned items matching the specified query expressions.
@@ -50,7 +52,6 @@ func (m *SearchCatalogItemsResponse) Validate(formats strfmt.Registry) error {
 }
 
 func (m *SearchCatalogItemsResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -75,7 +76,6 @@ func (m *SearchCatalogItemsResponse) validateErrors(formats strfmt.Registry) err
 }
 
 func (m *SearchCatalogItemsResponse) validateItems(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Items) { // not required
 		return nil
 	}
@@ -87,6 +87,60 @@ func (m *SearchCatalogItemsResponse) validateItems(formats strfmt.Registry) erro
 
 		if m.Items[i] != nil {
 			if err := m.Items[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("items" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this search catalog items response based on the context it is used
+func (m *SearchCatalogItemsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateItems(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *SearchCatalogItemsResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *SearchCatalogItemsResponse) contextValidateItems(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Items); i++ {
+
+		if m.Items[i] != nil {
+			if err := m.Items[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("items" + "." + strconv.Itoa(i))
 				}

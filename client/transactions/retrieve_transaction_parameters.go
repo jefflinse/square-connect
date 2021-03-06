@@ -16,64 +16,79 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveTransactionParams creates a new RetrieveTransactionParams object
-// with the default values initialized.
+// NewRetrieveTransactionParams creates a new RetrieveTransactionParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveTransactionParams() *RetrieveTransactionParams {
-	var ()
 	return &RetrieveTransactionParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveTransactionParamsWithTimeout creates a new RetrieveTransactionParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveTransactionParamsWithTimeout(timeout time.Duration) *RetrieveTransactionParams {
-	var ()
 	return &RetrieveTransactionParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveTransactionParamsWithContext creates a new RetrieveTransactionParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveTransactionParamsWithContext(ctx context.Context) *RetrieveTransactionParams {
-	var ()
 	return &RetrieveTransactionParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveTransactionParamsWithHTTPClient creates a new RetrieveTransactionParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveTransactionParamsWithHTTPClient(client *http.Client) *RetrieveTransactionParams {
-	var ()
 	return &RetrieveTransactionParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveTransactionParams contains all the parameters to send to the API endpoint
-for the retrieve transaction operation typically these are written to a http.Request
+/* RetrieveTransactionParams contains all the parameters to send to the API endpoint
+   for the retrieve transaction operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveTransactionParams struct {
 
-	/*LocationID
-	  The ID of the transaction's associated location.
+	/* LocationID.
 
+	   The ID of the transaction's associated location.
 	*/
 	LocationID string
-	/*TransactionID
-	  The ID of the transaction to retrieve.
 
+	/* TransactionID.
+
+	   The ID of the transaction to retrieve.
 	*/
 	TransactionID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve transaction params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveTransactionParams) WithDefaults() *RetrieveTransactionParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve transaction params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveTransactionParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve transaction params

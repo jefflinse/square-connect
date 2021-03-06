@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewRetrieveEmployeeParams creates a new RetrieveEmployeeParams object
-// with the default values initialized.
+// NewRetrieveEmployeeParams creates a new RetrieveEmployeeParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewRetrieveEmployeeParams() *RetrieveEmployeeParams {
-	var ()
 	return &RetrieveEmployeeParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewRetrieveEmployeeParamsWithTimeout creates a new RetrieveEmployeeParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewRetrieveEmployeeParamsWithTimeout(timeout time.Duration) *RetrieveEmployeeParams {
-	var ()
 	return &RetrieveEmployeeParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewRetrieveEmployeeParamsWithContext creates a new RetrieveEmployeeParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewRetrieveEmployeeParamsWithContext(ctx context.Context) *RetrieveEmployeeParams {
-	var ()
 	return &RetrieveEmployeeParams{
-
 		Context: ctx,
 	}
 }
 
 // NewRetrieveEmployeeParamsWithHTTPClient creates a new RetrieveEmployeeParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewRetrieveEmployeeParamsWithHTTPClient(client *http.Client) *RetrieveEmployeeParams {
-	var ()
 	return &RetrieveEmployeeParams{
 		HTTPClient: client,
 	}
 }
 
-/*RetrieveEmployeeParams contains all the parameters to send to the API endpoint
-for the retrieve employee operation typically these are written to a http.Request
+/* RetrieveEmployeeParams contains all the parameters to send to the API endpoint
+   for the retrieve employee operation.
+
+   Typically these are written to a http.Request.
 */
 type RetrieveEmployeeParams struct {
 
-	/*ID
-	  UUID for the employee that was requested.
+	/* ID.
 
+	   UUID for the employee that was requested.
 	*/
 	ID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the retrieve employee params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveEmployeeParams) WithDefaults() *RetrieveEmployeeParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the retrieve employee params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *RetrieveEmployeeParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the retrieve employee params

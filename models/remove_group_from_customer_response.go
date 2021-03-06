@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -16,6 +17,7 @@ import (
 // RemoveGroupFromCustomerResponse Defines the fields that are included in the response body of
 // a request to the [RemoveGroupFromCustomer](#endpoint-removegroupfromcustomer)
 // endpoint.
+// Example: {}
 //
 // swagger:model RemoveGroupFromCustomerResponse
 type RemoveGroupFromCustomerResponse struct {
@@ -39,7 +41,6 @@ func (m *RemoveGroupFromCustomerResponse) Validate(formats strfmt.Registry) erro
 }
 
 func (m *RemoveGroupFromCustomerResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -51,6 +52,38 @@ func (m *RemoveGroupFromCustomerResponse) validateErrors(formats strfmt.Registry
 
 		if m.Errors[i] != nil {
 			if err := m.Errors[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this remove group from customer response based on the context it is used
+func (m *RemoveGroupFromCustomerResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RemoveGroupFromCustomerResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
 				}

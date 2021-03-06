@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -25,11 +26,6 @@ type CatalogItemOption struct {
 
 	// The item option's display name for the customer. This is a searchable attribute for use in applicable query filters.
 	DisplayName string `json:"display_name,omitempty"`
-
-	// The number of `CatalogItem`s currently associated
-	// with this item option. Present only if the `include_counts` was specified
-	// in the request. Any count over 100 will be returned as `100`.
-	ItemCount int64 `json:"item_count,omitempty"`
 
 	// The item option's display name for the seller. Must be unique across
 	// all item options. This is a searchable attribute for use in applicable query filters.
@@ -58,7 +54,6 @@ func (m *CatalogItemOption) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CatalogItemOption) validateValues(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Values) { // not required
 		return nil
 	}
@@ -70,6 +65,38 @@ func (m *CatalogItemOption) validateValues(formats strfmt.Registry) error {
 
 		if m.Values[i] != nil {
 			if err := m.Values[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("values" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this catalog item option based on the context it is used
+func (m *CatalogItemOption) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateValues(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CatalogItemOption) contextValidateValues(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Values); i++ {
+
+		if m.Values[i] != nil {
+			if err := m.Values[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("values" + "." + strconv.Itoa(i))
 				}

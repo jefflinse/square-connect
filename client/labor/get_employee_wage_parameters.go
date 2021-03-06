@@ -16,59 +16,73 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetEmployeeWageParams creates a new GetEmployeeWageParams object
-// with the default values initialized.
+// NewGetEmployeeWageParams creates a new GetEmployeeWageParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetEmployeeWageParams() *GetEmployeeWageParams {
-	var ()
 	return &GetEmployeeWageParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGetEmployeeWageParamsWithTimeout creates a new GetEmployeeWageParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGetEmployeeWageParamsWithTimeout(timeout time.Duration) *GetEmployeeWageParams {
-	var ()
 	return &GetEmployeeWageParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGetEmployeeWageParamsWithContext creates a new GetEmployeeWageParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGetEmployeeWageParamsWithContext(ctx context.Context) *GetEmployeeWageParams {
-	var ()
 	return &GetEmployeeWageParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGetEmployeeWageParamsWithHTTPClient creates a new GetEmployeeWageParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGetEmployeeWageParamsWithHTTPClient(client *http.Client) *GetEmployeeWageParams {
-	var ()
 	return &GetEmployeeWageParams{
 		HTTPClient: client,
 	}
 }
 
-/*GetEmployeeWageParams contains all the parameters to send to the API endpoint
-for the get employee wage operation typically these are written to a http.Request
+/* GetEmployeeWageParams contains all the parameters to send to the API endpoint
+   for the get employee wage operation.
+
+   Typically these are written to a http.Request.
 */
 type GetEmployeeWageParams struct {
 
-	/*ID
-	  UUID for the `EmployeeWage` being retrieved.
+	/* ID.
 
+	   UUID for the `EmployeeWage` being retrieved.
 	*/
 	ID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the get employee wage params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetEmployeeWageParams) WithDefaults() *GetEmployeeWageParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the get employee wage params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetEmployeeWageParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get employee wage params

@@ -25,15 +25,18 @@ type Client struct {
 	formats   strfmt.Registry
 }
 
+// ClientOption is the option for Client methods
+type ClientOption func(*runtime.ClientOperation)
+
 // ClientService is the interface for Client methods
 type ClientService interface {
-	CreateLocation(params *CreateLocationParams, authInfo runtime.ClientAuthInfoWriter) (*CreateLocationOK, error)
+	CreateLocation(params *CreateLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateLocationOK, error)
 
-	ListLocations(params *ListLocationsParams, authInfo runtime.ClientAuthInfoWriter) (*ListLocationsOK, error)
+	ListLocations(params *ListLocationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListLocationsOK, error)
 
-	RetrieveLocation(params *RetrieveLocationParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveLocationOK, error)
+	RetrieveLocation(params *RetrieveLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveLocationOK, error)
 
-	UpdateLocation(params *UpdateLocationParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateLocationOK, error)
+	UpdateLocation(params *UpdateLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateLocationOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -42,15 +45,13 @@ type ClientService interface {
   CreateLocation creates location
 
   Creates a location.
-For more information about locations, see [Locations API Overview](/locations-api).
 */
-func (a *Client) CreateLocation(params *CreateLocationParams, authInfo runtime.ClientAuthInfoWriter) (*CreateLocationOK, error) {
+func (a *Client) CreateLocation(params *CreateLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateLocationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewCreateLocationParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "CreateLocation",
 		Method:             "POST",
 		PathPattern:        "/v2/locations",
@@ -62,7 +63,12 @@ func (a *Client) CreateLocation(params *CreateLocationParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -81,17 +87,16 @@ func (a *Client) CreateLocation(params *CreateLocationParams, authInfo runtime.C
 
   Provides information of all locations of a business.
 
-Most other Connect API endpoints have a required `location_id` path parameter.
+Many Square API endpoints require a `location_id` parameter.
 The `id` field of the [`Location`](#type-location) objects returned by this
 endpoint correspond to that `location_id` parameter.
 */
-func (a *Client) ListLocations(params *ListLocationsParams, authInfo runtime.ClientAuthInfoWriter) (*ListLocationsOK, error) {
+func (a *Client) ListLocations(params *ListLocationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListLocationsOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListLocationsParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "ListLocations",
 		Method:             "GET",
 		PathPattern:        "/v2/locations",
@@ -103,7 +108,12 @@ func (a *Client) ListLocations(params *ListLocationsParams, authInfo runtime.Cli
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -122,16 +132,14 @@ func (a *Client) ListLocations(params *ListLocationsParams, authInfo runtime.Cli
 
   Retrieves details of a location. You can specify "main"
 as the location ID to retrieve details of the
-main location. For more information,
-see [Locations API Overview](/docs/locations-api).
+main location.
 */
-func (a *Client) RetrieveLocation(params *RetrieveLocationParams, authInfo runtime.ClientAuthInfoWriter) (*RetrieveLocationOK, error) {
+func (a *Client) RetrieveLocation(params *RetrieveLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RetrieveLocationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewRetrieveLocationParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "RetrieveLocation",
 		Method:             "GET",
 		PathPattern:        "/v2/locations/{location_id}",
@@ -143,7 +151,12 @@ func (a *Client) RetrieveLocation(params *RetrieveLocationParams, authInfo runti
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}
@@ -162,13 +175,12 @@ func (a *Client) RetrieveLocation(params *RetrieveLocationParams, authInfo runti
 
   Updates a location.
 */
-func (a *Client) UpdateLocation(params *UpdateLocationParams, authInfo runtime.ClientAuthInfoWriter) (*UpdateLocationOK, error) {
+func (a *Client) UpdateLocation(params *UpdateLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateLocationOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewUpdateLocationParams()
 	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
+	op := &runtime.ClientOperation{
 		ID:                 "UpdateLocation",
 		Method:             "PUT",
 		PathPattern:        "/v2/locations/{location_id}",
@@ -180,7 +192,12 @@ func (a *Client) UpdateLocation(params *UpdateLocationParams, authInfo runtime.C
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
-	})
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
 	if err != nil {
 		return nil, err
 	}

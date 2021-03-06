@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,6 +15,7 @@ import (
 
 // CreateCustomerRequest Defines the body parameters that can be provided in a request to the
 // CreateCustomer endpoint.
+// Example: {"request_body":{"address":{"address_line_1":"500 Electric Ave","address_line_2":"Suite 600","administrative_district_level_1":"NY","country":"US","locality":"New York","postal_code":"10003"},"email_address":"Amelia.Earhart@example.com","family_name":"Earhart","given_name":"Amelia","note":"a customer","phone_number":"1-212-555-4240","reference_id":"YOUR_REFERENCE_ID"}}
 //
 // swagger:model CreateCustomerRequest
 type CreateCustomerRequest struct {
@@ -20,7 +23,7 @@ type CreateCustomerRequest struct {
 	// The physical address associated with the customer profile.
 	Address *Address `json:"address,omitempty"`
 
-	// The birthday associated with the customer profile, in RFC-3339 format.
+	// The birthday associated with the customer profile, in RFC 3339 format.
 	// Year is optional, timezone and times are not allowed.
 	// For example: `0000-09-01T00:00:00-00:00` indicates a birthday on September 1st.
 	// `1998-09-01T00:00:00-00:00` indications a birthday on September 1st __1998__.
@@ -38,7 +41,7 @@ type CreateCustomerRequest struct {
 	// The given (i.e., first) name associated with the customer profile.
 	GivenName string `json:"given_name,omitempty"`
 
-	// The idempotency key for the request. See the
+	// The idempotency key for the request.	See the
 	// [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency) guide for more information.
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 
@@ -71,13 +74,40 @@ func (m *CreateCustomerRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CreateCustomerRequest) validateAddress(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Address) { // not required
 		return nil
 	}
 
 	if m.Address != nil {
 		if err := m.Address.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("address")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create customer request based on the context it is used
+func (m *CreateCustomerRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAddress(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateCustomerRequest) contextValidateAddress(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Address != nil {
+		if err := m.Address.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("address")
 			}

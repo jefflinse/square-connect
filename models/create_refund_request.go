@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -16,6 +18,7 @@ import (
 // a request to the [CreateRefund](#endpoint-createrefund) endpoint.
 //
 // Deprecated - recommend using [RefundPayment](#endpoint-refunds-refundpayment)
+// Example: {"request_body":{"amount_money":{"amount":100,"currency":"USD"},"idempotency_key":"86ae1696-b1e3-4328-af6d-f1e04d947ad2","reason":"a reason","tender_id":"MtZRYYdDrYNQbOvV7nbuBvMF"}}
 //
 // swagger:model CreateRefundRequest
 type CreateRefundRequest struct {
@@ -112,11 +115,11 @@ func (m *CreateRefundRequest) validateIdempotencyKey(formats strfmt.Registry) er
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("idempotency_key", "body", string(*m.IdempotencyKey), 192); err != nil {
+	if err := validate.MaxLength("idempotency_key", "body", *m.IdempotencyKey, 192); err != nil {
 		return err
 	}
 
@@ -124,12 +127,11 @@ func (m *CreateRefundRequest) validateIdempotencyKey(formats strfmt.Registry) er
 }
 
 func (m *CreateRefundRequest) validateReason(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Reason) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("reason", "body", string(m.Reason), 192); err != nil {
+	if err := validate.MaxLength("reason", "body", m.Reason, 192); err != nil {
 		return err
 	}
 
@@ -142,12 +144,40 @@ func (m *CreateRefundRequest) validateTenderID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("tender_id", "body", string(*m.TenderID), 1); err != nil {
+	if err := validate.MinLength("tender_id", "body", *m.TenderID, 1); err != nil {
 		return err
 	}
 
-	if err := validate.MaxLength("tender_id", "body", string(*m.TenderID), 192); err != nil {
+	if err := validate.MaxLength("tender_id", "body", *m.TenderID, 192); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create refund request based on the context it is used
+func (m *CreateRefundRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CreateRefundRequest) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
 	}
 
 	return nil

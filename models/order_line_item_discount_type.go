@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/go-openapi/errors"
@@ -50,7 +51,7 @@ func init() {
 }
 
 func (m OrderLineItemDiscountType) validateOrderLineItemDiscountTypeEnum(path, location string, value OrderLineItemDiscountType) error {
-	if err := validate.Enum(path, location, value, orderLineItemDiscountTypeEnum); err != nil {
+	if err := validate.EnumCase(path, location, value, orderLineItemDiscountTypeEnum, true); err != nil {
 		return err
 	}
 	return nil
@@ -68,5 +69,10 @@ func (m OrderLineItemDiscountType) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// ContextValidate validates this order line item discount type based on context it is used
+func (m OrderLineItemDiscountType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

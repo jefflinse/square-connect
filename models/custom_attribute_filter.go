@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -63,13 +65,40 @@ func (m *CustomAttributeFilter) Validate(formats strfmt.Registry) error {
 }
 
 func (m *CustomAttributeFilter) validateNumberFilter(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.NumberFilter) { // not required
 		return nil
 	}
 
 	if m.NumberFilter != nil {
 		if err := m.NumberFilter.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("number_filter")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this custom attribute filter based on the context it is used
+func (m *CustomAttributeFilter) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateNumberFilter(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CustomAttributeFilter) contextValidateNumberFilter(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NumberFilter != nil {
+		if err := m.NumberFilter.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("number_filter")
 			}

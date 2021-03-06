@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -13,46 +15,45 @@ import (
 )
 
 // RefundPaymentRequest Refunds a payment.
+// Example: {"request_body":{"amount_money":{"amount":100,"currency":"USD"},"idempotency_key":"a7e36d40-d24b-11e8-b568-0800200c9a66","payment_id":"UNOE3kv2BZwqHlJ830RCt5YCuaB"}}
 //
 // swagger:model RefundPaymentRequest
 type RefundPaymentRequest struct {
 
 	// The amount of money to refund.
 	//
-	// Cannot be more than the `total_money` value of the payment minus the total
+	// This amount cannot be more than the `total_money` value of the payment minus the total
 	// amount of all previously completed refunds for this payment.
 	//
-	// Must be specified in the smallest denomination of the applicable currency.
-	// For example, US dollar amounts are specified in cents. See
-	// [Working with monetary amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts) for details.
+	// This amount must be specified in the smallest denomination of the applicable currency
+	// (for example, US dollar amounts are specified in cents). For more information, see
+	// [Working with Monetary Amounts](https://developer.squareup.com/docs/build-basics/working-with-monetary-amounts).
 	//
 	// The currency code must match the currency associated with the business
 	// that is charging the card.
 	// Required: true
 	AmountMoney *Money `json:"amount_money"`
 
-	// Amount of money the developer will contribute to help cover the refunded amount.
-	// Specified in the smallest denomination of the applicable currency. For example, US
-	// dollar amounts are specified in cents.
+	// The amount of money the developer contributes to help cover the refunded amount.
+	// This amount is specified in the smallest denomination of the applicable currency (for example,
+	// US dollar amounts are specified in cents).
 	//
-	// Value cannot be more than the `amount_money`.
+	// The value cannot be more than the `amount_money`.
 	//
-	// You can specify this parameter in a refund request only if the
-	// same parameter was also included when taking the payment.
-	// This is part of the application fee  scenario the API supports.
-	// For more information, see
-	// [Collect Fees](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees)
+	// You can specify this parameter in a refund request only if the same parameter was also included
+	// when taking the payment. This is part of the application fee scenario the API supports. For more
+	// information, see [Take Payments and Collect Fees](https://developer.squareup.com/docs/payments-api/take-payments-and-collect-fees).
 	AppFeeMoney *Money `json:"app_fee_money,omitempty"`
 
-	//  A unique string that identifies this RefundPayment request. Key can be any valid string
-	// but must be unique for every RefundPayment request.
+	//  A unique string that identifies this `RefundPayment` request. The key can be any valid string
+	// but must be unique for every `RefundPayment` request.
 	//
-	// For more information, see [Idempotency keys](https://developer.squareup.com/docs/working-with-apis/idempotency).
+	// For more information, see [Idempotency](https://developer.squareup.com/docs/working-with-apis/idempotency).
 	// Required: true
 	// Min Length: 1
 	IdempotencyKey *string `json:"idempotency_key"`
 
-	// Unique ID of the payment being refunded.
+	// The unique ID of the payment being refunded.
 	// Required: true
 	// Min Length: 1
 	PaymentID *string `json:"payment_id"`
@@ -111,7 +112,6 @@ func (m *RefundPaymentRequest) validateAmountMoney(formats strfmt.Registry) erro
 }
 
 func (m *RefundPaymentRequest) validateAppFeeMoney(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.AppFeeMoney) { // not required
 		return nil
 	}
@@ -134,7 +134,7 @@ func (m *RefundPaymentRequest) validateIdempotencyKey(formats strfmt.Registry) e
 		return err
 	}
 
-	if err := validate.MinLength("idempotency_key", "body", string(*m.IdempotencyKey), 1); err != nil {
+	if err := validate.MinLength("idempotency_key", "body", *m.IdempotencyKey, 1); err != nil {
 		return err
 	}
 
@@ -147,7 +147,7 @@ func (m *RefundPaymentRequest) validatePaymentID(formats strfmt.Registry) error 
 		return err
 	}
 
-	if err := validate.MinLength("payment_id", "body", string(*m.PaymentID), 1); err != nil {
+	if err := validate.MinLength("payment_id", "body", *m.PaymentID, 1); err != nil {
 		return err
 	}
 
@@ -155,13 +155,58 @@ func (m *RefundPaymentRequest) validatePaymentID(formats strfmt.Registry) error 
 }
 
 func (m *RefundPaymentRequest) validateReason(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Reason) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("reason", "body", string(m.Reason), 192); err != nil {
+	if err := validate.MaxLength("reason", "body", m.Reason, 192); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this refund payment request based on the context it is used
+func (m *RefundPaymentRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateAmountMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateAppFeeMoney(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *RefundPaymentRequest) contextValidateAmountMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AmountMoney != nil {
+		if err := m.AmountMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("amount_money")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RefundPaymentRequest) contextValidateAppFeeMoney(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.AppFeeMoney != nil {
+		if err := m.AppFeeMoney.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("app_fee_money")
+			}
+			return err
+		}
 	}
 
 	return nil

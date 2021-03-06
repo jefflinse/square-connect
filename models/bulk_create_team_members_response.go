@@ -6,6 +6,7 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/go-openapi/errors"
@@ -15,6 +16,7 @@ import (
 )
 
 // BulkCreateTeamMembersResponse Represents a response from a bulk create request, containing the created `TeamMember` objects or error messages.
+// Example: {"team_members":{"idempotency-key-1":{"team_member":{"assigned_locations":{"assignment_type":"EXPLICIT_LOCATIONS","location_ids":["GA2Y9HSJ8KRYT","YSGH2WBKG94QZ"]},"email_address":"joe_doe@gmail.com","family_name":"Doe","given_name":"Joe","id":"ywhG1qfIOoqsHfVRubFV","is_owner":false,"phone_number":"+14159283333","reference_id":"reference_id_1","status":"ACTIVE"}},"idempotency-key-2":{"team_member":{"assigned_locations":{"assignment_type":"ALL_CURRENT_AND_FUTURE_LOCATIONS"},"email_address":"jane_smith@gmail.com","family_name":"Smith","given_name":"Jane","id":"IF_Ncrg7fHhCqxVI9T6R","is_owner":false,"phone_number":"+14159223334","reference_id":"reference_id_2","status":"ACTIVE"}}}}
 //
 // swagger:model BulkCreateTeamMembersResponse
 type BulkCreateTeamMembersResponse struct {
@@ -45,7 +47,6 @@ func (m *BulkCreateTeamMembersResponse) Validate(formats strfmt.Registry) error 
 }
 
 func (m *BulkCreateTeamMembersResponse) validateErrors(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Errors) { // not required
 		return nil
 	}
@@ -70,7 +71,6 @@ func (m *BulkCreateTeamMembersResponse) validateErrors(formats strfmt.Registry) 
 }
 
 func (m *BulkCreateTeamMembersResponse) validateTeamMembers(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.TeamMembers) { // not required
 		return nil
 	}
@@ -82,6 +82,57 @@ func (m *BulkCreateTeamMembersResponse) validateTeamMembers(formats strfmt.Regis
 		}
 		if val, ok := m.TeamMembers[k]; ok {
 			if err := val.Validate(formats); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this bulk create team members response based on the context it is used
+func (m *BulkCreateTeamMembersResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateErrors(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTeamMembers(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *BulkCreateTeamMembersResponse) contextValidateErrors(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Errors); i++ {
+
+		if m.Errors[i] != nil {
+			if err := m.Errors[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("errors" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *BulkCreateTeamMembersResponse) contextValidateTeamMembers(ctx context.Context, formats strfmt.Registry) error {
+
+	for k := range m.TeamMembers {
+
+		if val, ok := m.TeamMembers[k]; ok {
+			if err := val.ContextValidate(ctx, formats); err != nil {
 				return err
 			}
 		}

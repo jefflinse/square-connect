@@ -16,60 +16,74 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewGetBankAccountByV1IDParams creates a new GetBankAccountByV1IDParams object
-// with the default values initialized.
+// NewGetBankAccountByV1IDParams creates a new GetBankAccountByV1IDParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewGetBankAccountByV1IDParams() *GetBankAccountByV1IDParams {
-	var ()
 	return &GetBankAccountByV1IDParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewGetBankAccountByV1IDParamsWithTimeout creates a new GetBankAccountByV1IDParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewGetBankAccountByV1IDParamsWithTimeout(timeout time.Duration) *GetBankAccountByV1IDParams {
-	var ()
 	return &GetBankAccountByV1IDParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewGetBankAccountByV1IDParamsWithContext creates a new GetBankAccountByV1IDParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewGetBankAccountByV1IDParamsWithContext(ctx context.Context) *GetBankAccountByV1IDParams {
-	var ()
 	return &GetBankAccountByV1IDParams{
-
 		Context: ctx,
 	}
 }
 
 // NewGetBankAccountByV1IDParamsWithHTTPClient creates a new GetBankAccountByV1IDParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewGetBankAccountByV1IDParamsWithHTTPClient(client *http.Client) *GetBankAccountByV1IDParams {
-	var ()
 	return &GetBankAccountByV1IDParams{
 		HTTPClient: client,
 	}
 }
 
-/*GetBankAccountByV1IDParams contains all the parameters to send to the API endpoint
-for the get bank account by v1 Id operation typically these are written to a http.Request
+/* GetBankAccountByV1IDParams contains all the parameters to send to the API endpoint
+   for the get bank account by v1 Id operation.
+
+   Typically these are written to a http.Request.
 */
 type GetBankAccountByV1IDParams struct {
 
-	/*V1BankAccountID
-	  Connect V1 ID of the desired `BankAccount`. For more information, see
-	[Retrieve a bank account by using an ID issued by V1 Bank Accounts API](https://developer.squareup.com/docs/docs/bank-accounts-api#retrieve-a-bank-account-by-using-an-id-issued-by-v1-bank-accounts-api).
+	/* V1BankAccountID.
 
+	     Connect V1 ID of the desired `BankAccount`. For more information, see
+	[Retrieve a bank account by using an ID issued by V1 Bank Accounts API](https://developer.squareup.com/docs/docs/bank-accounts-api#retrieve-a-bank-account-by-using-an-id-issued-by-v1-bank-accounts-api).
 	*/
 	V1BankAccountID string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the get bank account by v1 Id params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetBankAccountByV1IDParams) WithDefaults() *GetBankAccountByV1IDParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the get bank account by v1 Id params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *GetBankAccountByV1IDParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the get bank account by v1 Id params

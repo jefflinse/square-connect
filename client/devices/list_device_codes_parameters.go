@@ -16,74 +16,97 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewListDeviceCodesParams creates a new ListDeviceCodesParams object
-// with the default values initialized.
+// NewListDeviceCodesParams creates a new ListDeviceCodesParams object,
+// with the default timeout for this client.
+//
+// Default values are not hydrated, since defaults are normally applied by the API server side.
+//
+// To enforce default values in parameter, use SetDefaults or WithDefaults.
 func NewListDeviceCodesParams() *ListDeviceCodesParams {
-	var ()
 	return &ListDeviceCodesParams{
-
 		timeout: cr.DefaultTimeout,
 	}
 }
 
 // NewListDeviceCodesParamsWithTimeout creates a new ListDeviceCodesParams object
-// with the default values initialized, and the ability to set a timeout on a request
+// with the ability to set a timeout on a request.
 func NewListDeviceCodesParamsWithTimeout(timeout time.Duration) *ListDeviceCodesParams {
-	var ()
 	return &ListDeviceCodesParams{
-
 		timeout: timeout,
 	}
 }
 
 // NewListDeviceCodesParamsWithContext creates a new ListDeviceCodesParams object
-// with the default values initialized, and the ability to set a context for a request
+// with the ability to set a context for a request.
 func NewListDeviceCodesParamsWithContext(ctx context.Context) *ListDeviceCodesParams {
-	var ()
 	return &ListDeviceCodesParams{
-
 		Context: ctx,
 	}
 }
 
 // NewListDeviceCodesParamsWithHTTPClient creates a new ListDeviceCodesParams object
-// with the default values initialized, and the ability to set a custom HTTPClient for a request
+// with the ability to set a custom HTTPClient for a request.
 func NewListDeviceCodesParamsWithHTTPClient(client *http.Client) *ListDeviceCodesParams {
-	var ()
 	return &ListDeviceCodesParams{
 		HTTPClient: client,
 	}
 }
 
-/*ListDeviceCodesParams contains all the parameters to send to the API endpoint
-for the list device codes operation typically these are written to a http.Request
+/* ListDeviceCodesParams contains all the parameters to send to the API endpoint
+   for the list device codes operation.
+
+   Typically these are written to a http.Request.
 */
 type ListDeviceCodesParams struct {
 
-	/*Cursor
-	  A pagination cursor returned by a previous call to this endpoint.
+	/* Cursor.
+
+	     A pagination cursor returned by a previous call to this endpoint.
 	Provide this to retrieve the next set of results for your original query.
 
 	See [Paginating results](#paginatingresults) for more information.
-
 	*/
 	Cursor *string
-	/*LocationID
-	  If specified, only returns DeviceCodes of the specified location.
-	Returns DeviceCodes of all locations if empty.
 
+	/* LocationID.
+
+	     If specified, only returns DeviceCodes of the specified location.
+	Returns DeviceCodes of all locations if empty.
 	*/
 	LocationID *string
-	/*ProductType
-	  If specified, only returns DeviceCodes targeting the specified product type.
-	Returns DeviceCodes of all product types if empty.
 
+	/* ProductType.
+
+	     If specified, only returns DeviceCodes targeting the specified product type.
+	Returns DeviceCodes of all product types if empty.
 	*/
 	ProductType *string
+
+	/* Status.
+
+	     If specified, returns DeviceCodes with the specified statuses.
+	Returns DeviceCodes of status `PAIRED` and `UNPAIRED` if empty.
+	*/
+	Status *string
 
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
+}
+
+// WithDefaults hydrates default values in the list device codes params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListDeviceCodesParams) WithDefaults() *ListDeviceCodesParams {
+	o.SetDefaults()
+	return o
+}
+
+// SetDefaults hydrates default values in the list device codes params (not the query body).
+//
+// All values with no default are reset to their zero value.
+func (o *ListDeviceCodesParams) SetDefaults() {
+	// no default values defined for this parameter
 }
 
 // WithTimeout adds the timeout to the list device codes params
@@ -152,6 +175,17 @@ func (o *ListDeviceCodesParams) SetProductType(productType *string) {
 	o.ProductType = productType
 }
 
+// WithStatus adds the status to the list device codes params
+func (o *ListDeviceCodesParams) WithStatus(status *string) *ListDeviceCodesParams {
+	o.SetStatus(status)
+	return o
+}
+
+// SetStatus adds the status to the list device codes params
+func (o *ListDeviceCodesParams) SetStatus(status *string) {
+	o.Status = status
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListDeviceCodesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -164,48 +198,68 @@ func (o *ListDeviceCodesParams) WriteToRequest(r runtime.ClientRequest, reg strf
 
 		// query param cursor
 		var qrCursor string
+
 		if o.Cursor != nil {
 			qrCursor = *o.Cursor
 		}
 		qCursor := qrCursor
 		if qCursor != "" {
+
 			if err := r.SetQueryParam("cursor", qCursor); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.LocationID != nil {
 
 		// query param location_id
 		var qrLocationID string
+
 		if o.LocationID != nil {
 			qrLocationID = *o.LocationID
 		}
 		qLocationID := qrLocationID
 		if qLocationID != "" {
+
 			if err := r.SetQueryParam("location_id", qLocationID); err != nil {
 				return err
 			}
 		}
-
 	}
 
 	if o.ProductType != nil {
 
 		// query param product_type
 		var qrProductType string
+
 		if o.ProductType != nil {
 			qrProductType = *o.ProductType
 		}
 		qProductType := qrProductType
 		if qProductType != "" {
+
 			if err := r.SetQueryParam("product_type", qProductType); err != nil {
 				return err
 			}
 		}
+	}
 
+	if o.Status != nil {
+
+		// query param status
+		var qrStatus string
+
+		if o.Status != nil {
+			qrStatus = *o.Status
+		}
+		qStatus := qrStatus
+		if qStatus != "" {
+
+			if err := r.SetQueryParam("status", qStatus); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {

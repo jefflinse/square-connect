@@ -6,11 +6,14 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
 // RetrieveInventoryCountRequest retrieve inventory count request
+// Example: {"request_params":"?location_ids=C6W5YS5QM06F5\u0026cursor="}
 //
 // swagger:model RetrieveInventoryCountRequest
 type RetrieveInventoryCountRequest struct {
@@ -28,6 +31,11 @@ type RetrieveInventoryCountRequest struct {
 
 // Validate validates this retrieve inventory count request
 func (m *RetrieveInventoryCountRequest) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this retrieve inventory count request based on context it is used
+func (m *RetrieveInventoryCountRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

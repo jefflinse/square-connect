@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -83,12 +85,11 @@ func (m *InventoryCount) Validate(formats strfmt.Registry) error {
 }
 
 func (m *InventoryCount) validateCalculatedAt(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CalculatedAt) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("calculated_at", "body", string(m.CalculatedAt), 34); err != nil {
+	if err := validate.MaxLength("calculated_at", "body", m.CalculatedAt, 34); err != nil {
 		return err
 	}
 
@@ -96,12 +97,11 @@ func (m *InventoryCount) validateCalculatedAt(formats strfmt.Registry) error {
 }
 
 func (m *InventoryCount) validateCatalogObjectID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_id", "body", string(m.CatalogObjectID), 100); err != nil {
+	if err := validate.MaxLength("catalog_object_id", "body", m.CatalogObjectID, 100); err != nil {
 		return err
 	}
 
@@ -109,12 +109,11 @@ func (m *InventoryCount) validateCatalogObjectID(formats strfmt.Registry) error 
 }
 
 func (m *InventoryCount) validateCatalogObjectType(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.CatalogObjectType) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("catalog_object_type", "body", string(m.CatalogObjectType), 14); err != nil {
+	if err := validate.MaxLength("catalog_object_type", "body", m.CatalogObjectType, 14); err != nil {
 		return err
 	}
 
@@ -122,12 +121,11 @@ func (m *InventoryCount) validateCatalogObjectType(formats strfmt.Registry) erro
 }
 
 func (m *InventoryCount) validateLocationID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.LocationID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("location_id", "body", string(m.LocationID), 100); err != nil {
+	if err := validate.MaxLength("location_id", "body", m.LocationID, 100); err != nil {
 		return err
 	}
 
@@ -135,15 +133,19 @@ func (m *InventoryCount) validateLocationID(formats strfmt.Registry) error {
 }
 
 func (m *InventoryCount) validateQuantity(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.Quantity) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("quantity", "body", string(m.Quantity), 26); err != nil {
+	if err := validate.MaxLength("quantity", "body", m.Quantity, 26); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this inventory count based on context it is used
+func (m *InventoryCount) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 

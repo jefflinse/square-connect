@@ -6,6 +6,8 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"context"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -93,7 +95,7 @@ func (m *BreakType) validateBreakName(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("break_name", "body", string(*m.BreakName), 1); err != nil {
+	if err := validate.MinLength("break_name", "body", *m.BreakName, 1); err != nil {
 		return err
 	}
 
@@ -106,7 +108,7 @@ func (m *BreakType) validateExpectedDuration(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("expected_duration", "body", string(*m.ExpectedDuration), 1); err != nil {
+	if err := validate.MinLength("expected_duration", "body", *m.ExpectedDuration, 1); err != nil {
 		return err
 	}
 
@@ -114,12 +116,11 @@ func (m *BreakType) validateExpectedDuration(formats strfmt.Registry) error {
 }
 
 func (m *BreakType) validateID(formats strfmt.Registry) error {
-
 	if swag.IsZero(m.ID) { // not required
 		return nil
 	}
 
-	if err := validate.MaxLength("id", "body", string(m.ID), 255); err != nil {
+	if err := validate.MaxLength("id", "body", m.ID, 255); err != nil {
 		return err
 	}
 
@@ -141,10 +142,15 @@ func (m *BreakType) validateLocationID(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.MinLength("location_id", "body", string(*m.LocationID), 1); err != nil {
+	if err := validate.MinLength("location_id", "body", *m.LocationID, 1); err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// ContextValidate validates this break type based on context it is used
+func (m *BreakType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
